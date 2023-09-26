@@ -9,7 +9,7 @@ public class Shooting : MonoBehaviour
 	[SerializeField] private GameObject _player;
 
 	/* Gun Properties */
-
+	 
 	/* Reference to the Pistol Script */
 	internal Pistol _pistolScript;
 
