@@ -82,7 +82,7 @@ public class Movement : MonoBehaviour
 			/*Dash direction to the left */
 			Vector2 dashDirection = Vector2.up;
 			/* Apply Dash Force */
-			Vector2 dashForce = dashDirection * _playerDashForce * Time.deltaTime;
+			Vector2 dashForce = dashDirection * _playerDashForce * 0.5f * Time.deltaTime;
 			transform.Translate(dashForce, Space.World);
 		}
 
@@ -91,17 +91,9 @@ public class Movement : MonoBehaviour
 			/*Dash direction to the left */
 			Vector2 dashDirection = Vector2.down;
 			/* Apply Dash Force */
-			Vector2 dashForce = dashDirection * _playerDashForce * Time.deltaTime;
+			Vector2 dashForce = dashDirection * _playerDashForce * 0.5f * Time.deltaTime;
 			transform.Translate(dashForce, Space.World);
 		}
-
-
-
 	}
-
-
-
-
-
 }
 
