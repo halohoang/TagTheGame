@@ -31,8 +31,6 @@ public class AnyStateAnimation : MonoBehaviour
 			}
 			else
 			{
-
-
 				_animator.SetBool("isMoving", false);
 
 

@@ -21,7 +21,7 @@ public class Movement : MonoBehaviour
 	void Update()
 	{
 		PlayerMovement();
-		PlayerDash();
+		//PlayerDash();
 
 	}
 
@@ -58,49 +58,49 @@ public class Movement : MonoBehaviour
 			_isMoving = false;
 		}
 	}
+	/* Player Dash */
+	//void PlayerDash()
+	//{
+	//	if (Input.GetKey(KeyCode.A) && Input.GetKeyDown(KeyCode.Space))
+	//	{
+	//		/*Dash direction to the left */
+	//		Vector2 dashDirection = Vector2.left;
+	//		/* Apply Dash Force */
+	//		Vector2 dashForce = dashDirection * _playerDashForce * Time.deltaTime;
+	//		transform.Translate(dashForce, Space.World);
+	//		_isMoving = true;
+	//	}
+	//	if (Input.GetKey(KeyCode.D) && Input.GetKeyDown(KeyCode.Space))
+	//	{
+	//		/*Dash direction to the left */
+	//		Vector2 dashDirection = Vector2.right;
+	//		/* Apply Dash Force */
+	//		Vector2 dashForce = dashDirection * _playerDashForce * Time.deltaTime;
+	//		transform.Translate(dashForce, Space.World);
+	//		_isMoving = true;
 
-	void PlayerDash()
-	{
-		if (Input.GetKey(KeyCode.A) && Input.GetKeyDown(KeyCode.Space))
-		{
-			/*Dash direction to the left */
-			Vector2 dashDirection = Vector2.left;
-			/* Apply Dash Force */
-			Vector2 dashForce = dashDirection * _playerDashForce * Time.deltaTime;
-			transform.Translate(dashForce, Space.World);
-			_isMoving = true;
-		}
-		if (Input.GetKey(KeyCode.D) && Input.GetKeyDown(KeyCode.Space))
-		{
-			/*Dash direction to the left */
-			Vector2 dashDirection = Vector2.right;
-			/* Apply Dash Force */
-			Vector2 dashForce = dashDirection * _playerDashForce * Time.deltaTime;
-			transform.Translate(dashForce, Space.World);
-			_isMoving = true;
+	//	}
+	//	if (Input.GetKey(KeyCode.W) && Input.GetKeyDown(KeyCode.Space))
+	//	{
+	//		/*Dash direction to the left */
+	//		Vector2 dashDirection = Vector2.up;
+	//		/* Apply Dash Force */
+	//		Vector2 dashForce = dashDirection * _playerDashForce * 0.5f * Time.deltaTime;
+	//		transform.Translate(dashForce, Space.World);
+	//		_isMoving = true;
 
-		}
-		if (Input.GetKey(KeyCode.W) && Input.GetKeyDown(KeyCode.Space))
-		{
-			/*Dash direction to the left */
-			Vector2 dashDirection = Vector2.up;
-			/* Apply Dash Force */
-			Vector2 dashForce = dashDirection * _playerDashForce * 0.5f * Time.deltaTime;
-			transform.Translate(dashForce, Space.World);
-			_isMoving = true;
+	//	}
 
-		}
+	//	if (Input.GetKey(KeyCode.S) && Input.GetKeyDown(KeyCode.Space))
+	//	{
+	//		/*Dash direction to the left */
+	//		Vector2 dashDirection = Vector2.down;
+	//		/* Apply Dash Force */
+	//		Vector2 dashForce = dashDirection * _playerDashForce * 0.5f * Time.deltaTime;
+	//		transform.Translate(dashForce, Space.World);
+	//		_isMoving = true;
 
-		if (Input.GetKey(KeyCode.S) && Input.GetKeyDown(KeyCode.Space))
-		{
-			/*Dash direction to the left */
-			Vector2 dashDirection = Vector2.down;
-			/* Apply Dash Force */
-			Vector2 dashForce = dashDirection * _playerDashForce * 0.5f * Time.deltaTime;
-			transform.Translate(dashForce, Space.World);
-			_isMoving = true;
-
-		}
-	}
+	//	}
+	//}
 }
 
