@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 51b7ed0da2dec1d409b80ecafbe05ac2
+guid: 3f0aba9c771994b43b898aa4a5b11c16
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -105,13 +105,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: uzi_0
+      name: smg_0
       rect:
         serializedVersion: 2
-        x: 27
-        y: 18
-        width: 11
-        height: 7
+        x: 29
+        y: 19
+        width: 7
+        height: 4
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -119,20 +119,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d42c3f67d5cafed4cb038a5a0b7089f8
-      internalID: -1663537784
+      spriteID: 416b1051800b96845965ecaa9d4159d1
+      internalID: -1451630036
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: uzi_1
+      name: smg_1
       rect:
         serializedVersion: 2
-        x: 81
-        y: 18
-        width: 11
-        height: 7
+        x: 83
+        y: 19
+        width: 8
+        height: 4
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,20 +140,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 055d07da2abd52645b1a88e9a9bc7f51
-      internalID: 2042418345
+      spriteID: 5f451187295efd84b8a816c0e86c110d
+      internalID: -1699841774
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: uzi_2
+      name: smg_2
       rect:
         serializedVersion: 2
-        x: 134
-        y: 18
-        width: 11
-        height: 7
+        x: 136
+        y: 19
+        width: 8
+        height: 4
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -161,20 +161,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6c016ba4570e7dd4f9d1f4070517bb7d
-      internalID: -747611920
+      spriteID: fd99854328dbe7b4995abcd4a07d3b5c
+      internalID: 1136960574
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: uzi_3
+      name: smg_3
       rect:
         serializedVersion: 2
-        x: 189
-        y: 18
-        width: 11
-        height: 7
+        x: 191
+        y: 19
+        width: 8
+        height: 4
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -182,20 +182,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2dd3ada2c1cf6fa499e76fe2ae96e124
-      internalID: 1713949969
+      spriteID: 48e3d07b6a0317e40a5111e084996698
+      internalID: -758494326
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: uzi_4
+      name: smg_4
       rect:
         serializedVersion: 2
-        x: 243
-        y: 18
-        width: 11
-        height: 7
+        x: 245
+        y: 19
+        width: 8
+        height: 4
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -203,20 +203,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a88aa76a31ec2cc44ada7ced5b3eccad
-      internalID: 1680735888
+      spriteID: 6a4a947d8fd1d264f99d0d63eee689af
+      internalID: -1458939805
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: uzi_5
+      name: smg_5
       rect:
         serializedVersion: 2
-        x: 298
-        y: 18
-        width: 11
-        height: 7
+        x: 300
+        y: 19
+        width: 8
+        height: 4
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -224,20 +224,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c5407aa762f2e0d4ca1356b847e84f6b
-      internalID: -42127966
+      spriteID: fead95c584703eb49aa11aa0658fc544
+      internalID: -43298728
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: uzi_6
+      name: smg_6
       rect:
         serializedVersion: 2
-        x: 353
-        y: 18
-        width: 11
-        height: 7
+        x: 355
+        y: 19
+        width: 8
+        height: 4
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -245,20 +245,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0743975b97c73ae42bebdaaf840342fd
-      internalID: -755793773
+      spriteID: 474f5bf9aee7f844faf2879526e0e347
+      internalID: 1588636071
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: uzi_7
+      name: smg_7
       rect:
         serializedVersion: 2
-        x: 406
-        y: 18
-        width: 11
-        height: 7
+        x: 408
+        y: 19
+        width: 8
+        height: 4
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -266,8 +266,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 95ee443eedf989044b253f816dcdcef8
-      internalID: -1284941191
+      spriteID: 71d6bb85a4946f3459658a11af3fdd1a
+      internalID: 671423202
       vertices: []
       indices: 
       edges: []
@@ -283,14 +283,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      uzi_0: -1663537784
-      uzi_1: 2042418345
-      uzi_2: -747611920
-      uzi_3: 1713949969
-      uzi_4: 1680735888
-      uzi_5: -42127966
-      uzi_6: -755793773
-      uzi_7: -1284941191
+      smg_0: -1451630036
+      smg_1: -1699841774
+      smg_2: 1136960574
+      smg_3: -758494326
+      smg_4: -1458939805
+      smg_5: -43298728
+      smg_6: 1588636071
+      smg_7: 671423202
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

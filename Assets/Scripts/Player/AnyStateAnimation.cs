@@ -36,11 +36,6 @@ public class AnyStateAnimation : MonoBehaviour
 				_isArmed = !_isArmed;
 				_animator.SetBool("Armed", _isArmed);
 			}
-			 if (Input.GetKeyDown(KeyCode.E))
-			{
-				_isArmed = !_isArmed;
-				_animator.SetBool("Armed", _isArmed);
-			}
 			if (!isMovingNow && !_isArmed)
 			{
 				_animator.SetBool("Armed", false);
