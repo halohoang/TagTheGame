@@ -9,7 +9,8 @@ public class Movement : MonoBehaviour
 	/* Player Movement Variables */
 	[SerializeField] private float _playerSpeed; //How fast the player move
 	[SerializeField] private float _playerDashForce;
-	private bool _isMoving;
+	internal bool _isMoving;
+
 
 	//Functions
 	void Start()
@@ -54,7 +55,6 @@ public class Movement : MonoBehaviour
 		// Check if none of the movement keys are pressed
 		if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
 		{
-
 			_isMoving = false;
 		}
 	}
@@ -68,6 +68,7 @@ public class Movement : MonoBehaviour
 			/* Apply Dash Force */
 			Vector2 dashForce = dashDirection * _playerDashForce * Time.deltaTime;
 			transform.Translate(dashForce, Space.World);
+			_isMoving = true;
 		}
 		if (Input.GetKey(KeyCode.D) && Input.GetKeyDown(KeyCode.Space))
 		{
@@ -76,6 +77,8 @@ public class Movement : MonoBehaviour
 			/* Apply Dash Force */
 			Vector2 dashForce = dashDirection * _playerDashForce * Time.deltaTime;
 			transform.Translate(dashForce, Space.World);
+			_isMoving = true;
+
 		}
 		if (Input.GetKey(KeyCode.W) && Input.GetKeyDown(KeyCode.Space))
 		{
@@ -84,6 +87,8 @@ public class Movement : MonoBehaviour
 			/* Apply Dash Force */
 			Vector2 dashForce = dashDirection * _playerDashForce * 0.5f * Time.deltaTime;
 			transform.Translate(dashForce, Space.World);
+			_isMoving = true;
+
 		}
 
 		if (Input.GetKey(KeyCode.S) && Input.GetKeyDown(KeyCode.Space))
@@ -93,6 +98,8 @@ public class Movement : MonoBehaviour
 			/* Apply Dash Force */
 			Vector2 dashForce = dashDirection * _playerDashForce * 0.5f * Time.deltaTime;
 			transform.Translate(dashForce, Space.World);
+			_isMoving = true;
+
 		}
 	}
 }
