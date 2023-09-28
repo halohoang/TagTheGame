@@ -250,6 +250,10 @@ PrefabInstance:
       propertyPath: scalePerSecond.z
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 3493521951034406025, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 3c1124122883b694380c0659c436b80b, type: 2}
     - target: {fileID: 3493521951034406027, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: _camera
       value: 

@@ -45,15 +45,6 @@ public class AnyStateAnimation : MonoBehaviour
 			{
 				_animator.SetBool("Armed", false);
 			}
-
-
-
-			//else
-			//{
-			//	_animator.SetBool("isMoving", false);
-
-
-			//}
 		}
 
 	}
