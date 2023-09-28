@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 33b065be897889345a68a48d7095fc59
+guid: 8a166af1966a67d4192af2d5b23258f0
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -33,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -42,9 +42,9 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
@@ -70,7 +70,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -103,28 +103,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: Pistol_0
-      rect:
-        serializedVersion: 2
-        x: 3
-        y: 4
-        width: 28
-        height: 18
-      alignment: 9
-      pivot: {x: -0.72, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 32fff6a8bcc50894b93ffe1a4e3f220d
-      internalID: -1714371137
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
@@ -135,22 +114,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      Pistol_0: -1714371137
-      Pistol_1: -1476341726
-      Pistol_10: 1629558046
-      Pistol_11: 1064718651
-      Pistol_12: -1388327094
-      Pistol_13: -103192749
-      Pistol_14: -179758540
-      Pistol_2: 426971449
-      Pistol_3: 1783902411
-      Pistol_4: 1347353397
-      Pistol_5: -2003285318
-      Pistol_6: -765003437
-      Pistol_7: 736976565
-      Pistol_8: -1127246788
-      Pistol_9: -1255724131
+    nameFileIdTable: {}
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
