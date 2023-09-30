@@ -326,8 +326,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 838298459, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 838298459, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: _gunTransform
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493521950240620797, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493521950240620799, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3493521951034406027, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: _camera
