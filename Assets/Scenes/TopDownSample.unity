@@ -134,6 +134,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81e1427e899a0da4d8709ae6b88207d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1230985085 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3493521951034406037, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+  m_PrefabInstance: {fileID: 3493521949982469659}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93c428396c23e86419c9f75a09f766d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1244885064
 GameObject:
   m_ObjectHideFlags: 0
@@ -764,6 +775,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3493521951034406024, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: _movement
+      value: 
+      objectReference: {fileID: 1230985085}
     - target: {fileID: 3493521951034406024, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: cloneDistance
       value: 0.1

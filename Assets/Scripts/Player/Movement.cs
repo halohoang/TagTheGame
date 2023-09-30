@@ -11,8 +11,12 @@ public class Movement : MonoBehaviour
 	[SerializeField] private float _minPlayerSpeed; //slowest the player move
 	[SerializeField] private float _maxPlayerSpeed; //fastest the player move
 
-	[SerializeField] private float _playerDashForce;
+	[SerializeField] internal float _playerDashForce;
 	[SerializeField] private Sandevistan _sandevistan;
+	[SerializeField] internal float _dashCooldown;
+	internal float _currentDashCooldown;
+
+
 
 
 
@@ -26,7 +30,7 @@ public class Movement : MonoBehaviour
 	{
 		PlayerMovement();
 		PlayerFast();
-		PlayerDash();
+		//PlayerDash();
 
 	}
 
@@ -73,49 +77,58 @@ public class Movement : MonoBehaviour
 	/* Player Dash */
 	void PlayerDash()
 	{
-		if (Input.GetKey(KeyCode.A) && Input.GetKeyDown(KeyCode.LeftShift))
+		if (_currentDashCooldown <= 0)
 		{
-			//StartCoroutine(_sandevistan.Trail());
-			/*Dash direction to the left */
-			Vector2 dashDirection = Vector2.left;
-			/* Apply Dash Force */
-			Vector2 dashForce = dashDirection * _playerDashForce * Time.deltaTime;
-			transform.Translate(dashForce, Space.World);
+
+			if (Input.GetKey(KeyCode.A) && Input.GetKeyDown(KeyCode.LeftShift))
+			{
+				//StartCoroutine(_sandevistan.Trail());
+				/*Dash direction to the left */
+				Vector2 dashDirection = Vector2.left;
+				/* Apply Dash Force */
+				Vector2 dashForce = dashDirection * _playerDashForce * Time.deltaTime;
+				transform.Translate(dashForce, Space.World);
+				_currentDashCooldown = _dashCooldown;
+			}
+			if (Input.GetKey(KeyCode.D) && Input.GetKeyDown(KeyCode.LeftShift))
+			{
+				//StartCoroutine(_sandevistan.Trail());
+				/*Dash direction to the left */
+				Vector2 dashDirection = Vector2.right;
+				/* Apply Dash Force */
+				Vector2 dashForce = dashDirection * _playerDashForce * Time.deltaTime;
+				transform.Translate(dashForce, Space.World);
+				_currentDashCooldown = _dashCooldown;
+
+			}
+			if (Input.GetKey(KeyCode.W) && Input.GetKeyDown(KeyCode.LeftShift))
+			{
+				//StartCoroutine(_sandevistan.Trail());
+				/*Dash direction to the left */
+				Vector2 dashDirection = Vector2.up;
+				/* Apply Dash Force */
+				Vector2 dashForce = dashDirection * _playerDashForce * 0.5f * Time.deltaTime;
+				transform.Translate(dashForce, Space.World);
+
+				_currentDashCooldown = _dashCooldown;
+			}
+
+			if (Input.GetKey(KeyCode.S) && Input.GetKeyDown(KeyCode.LeftShift))
+			{
+				//StartCoroutine(_sandevistan.Trail());
+				/*Dash direction to the left */
+				Vector2 dashDirection = Vector2.down;
+				/* Apply Dash Force */
+				Vector2 dashForce = dashDirection * _playerDashForce * 0.5f * Time.deltaTime;
+				transform.Translate(dashForce, Space.World);
+				_currentDashCooldown = _dashCooldown;
+
+			}
 
 		}
-		if (Input.GetKey(KeyCode.D) && Input.GetKeyDown(KeyCode.LeftShift))
+		else
 		{
-			//StartCoroutine(_sandevistan.Trail());
-			/*Dash direction to the left */
-			Vector2 dashDirection = Vector2.right;
-			/* Apply Dash Force */
-			Vector2 dashForce = dashDirection * _playerDashForce * Time.deltaTime;
-			transform.Translate(dashForce, Space.World);
-
-
-		}
-		if (Input.GetKey(KeyCode.W) && Input.GetKeyDown(KeyCode.LeftShift))
-		{
-			//StartCoroutine(_sandevistan.Trail());
-			/*Dash direction to the left */
-			Vector2 dashDirection = Vector2.up;
-			/* Apply Dash Force */
-			Vector2 dashForce = dashDirection * _playerDashForce * 0.5f * Time.deltaTime;
-			transform.Translate(dashForce, Space.World);
-
-
-		}
-
-		if (Input.GetKey(KeyCode.S) && Input.GetKeyDown(KeyCode.LeftShift))
-		{
-			//StartCoroutine(_sandevistan.Trail());
-			/*Dash direction to the left */
-			Vector2 dashDirection = Vector2.down;
-			/* Apply Dash Force */
-			Vector2 dashForce = dashDirection * _playerDashForce * 0.5f * Time.deltaTime;
-			transform.Translate(dashForce, Space.World);
-
-
+			_currentDashCooldown -= Time.deltaTime;
 		}
 	}
 }
