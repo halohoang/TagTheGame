@@ -12,7 +12,8 @@ public class Movement : MonoBehaviour
 	[SerializeField] private float _maxPlayerSpeed; //fastest the player move
 
 	[SerializeField] private float _playerDashForce;
-	
+	[SerializeField] private Sandevistan _sandevistan;
+
 
 
 	//Functions
@@ -38,7 +39,7 @@ public class Movement : MonoBehaviour
 		/* Horizontal Movement */
 		if (Input.GetKey(KeyCode.A))
 		{
-			
+
 			transform.Translate(Vector2.left * _currentPlayerSpeed * Time.deltaTime, Space.World);
 		}
 		if (Input.GetKey(KeyCode.D))
@@ -48,19 +49,14 @@ public class Movement : MonoBehaviour
 
 		if (Input.GetKey(KeyCode.W))
 		{
-			
+
 			transform.Translate(Vector2.up * _currentPlayerSpeed * Time.deltaTime, Space.World);
 		}
 		if (Input.GetKey(KeyCode.S))
 		{
-			
+
 			transform.Translate(Vector2.down * _currentPlayerSpeed * Time.deltaTime, Space.World);
 		}
-		// Check if none of the movement keys are pressed
-		//if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
-		//{
-			
-		//}
 	}
 
 	/* Player Sandevistan */
@@ -70,7 +66,7 @@ public class Movement : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
 			_currentPlayerSpeed = _maxPlayerSpeed;
-		} 
+		}
 		if (!Input.GetKey(KeyCode.Space)) { _currentPlayerSpeed = _minPlayerSpeed; } //Revert player back to normal speed
 	}
 
@@ -79,42 +75,46 @@ public class Movement : MonoBehaviour
 	{
 		if (Input.GetKey(KeyCode.A) && Input.GetKeyDown(KeyCode.LeftShift))
 		{
+			//StartCoroutine(_sandevistan.Trail());
 			/*Dash direction to the left */
 			Vector2 dashDirection = Vector2.left;
 			/* Apply Dash Force */
 			Vector2 dashForce = dashDirection * _playerDashForce * Time.deltaTime;
 			transform.Translate(dashForce, Space.World);
-			
+
 		}
 		if (Input.GetKey(KeyCode.D) && Input.GetKeyDown(KeyCode.LeftShift))
 		{
+			//StartCoroutine(_sandevistan.Trail());
 			/*Dash direction to the left */
 			Vector2 dashDirection = Vector2.right;
 			/* Apply Dash Force */
 			Vector2 dashForce = dashDirection * _playerDashForce * Time.deltaTime;
 			transform.Translate(dashForce, Space.World);
-			
+
 
 		}
 		if (Input.GetKey(KeyCode.W) && Input.GetKeyDown(KeyCode.LeftShift))
 		{
+			//StartCoroutine(_sandevistan.Trail());
 			/*Dash direction to the left */
 			Vector2 dashDirection = Vector2.up;
 			/* Apply Dash Force */
 			Vector2 dashForce = dashDirection * _playerDashForce * 0.5f * Time.deltaTime;
 			transform.Translate(dashForce, Space.World);
-			
+
 
 		}
 
 		if (Input.GetKey(KeyCode.S) && Input.GetKeyDown(KeyCode.LeftShift))
 		{
+			//StartCoroutine(_sandevistan.Trail());
 			/*Dash direction to the left */
 			Vector2 dashDirection = Vector2.down;
 			/* Apply Dash Force */
 			Vector2 dashForce = dashDirection * _playerDashForce * 0.5f * Time.deltaTime;
 			transform.Translate(dashForce, Space.World);
-			
+
 
 		}
 	}

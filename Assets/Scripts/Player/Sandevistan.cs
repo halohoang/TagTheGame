@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class Sandevistan : MonoBehaviour
 {
+	//Variables
 	[SerializeField] private int ClonesPerSecond = 10;
 	private SpriteRenderer sr;
 	private Animator animator;
@@ -21,17 +21,11 @@ public class Sandevistan : MonoBehaviour
 		clones = new List<GameObject>();
 		StartCoroutine(Trail());
 	}
-
-	private void Update()
-	{
-		// You can put other code here if needed
-	}
-
-	private IEnumerator Trail()
+	internal IEnumerator Trail()
 	{
 		for (; ; )
 		{
-			if (Input.GetKey(KeyCode.Space)) // Check if spacebar is held
+			if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.LeftShift)) // Check if spacebar is held
 			{
 				var clone = new GameObject("TrailClone");
 
