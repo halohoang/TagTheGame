@@ -9,7 +9,7 @@ public class PlayerHealth : MonoBehaviour
 	[SerializeField] internal float _currentHealth;
 	[SerializeField] GameObject _player;
 	[SerializeField] Transform _chargeBarTransform; // Reference to the scale of the bar
-	[SerializeField] float _chargeSpeed = 0.1f; // The rate at which bar depletes or charges
+	[SerializeField] float _chargeSpeed = 0.005f; // The rate at which bar depletes or charges
 
 	private Rigidbody2D _rb2D;
 
@@ -70,7 +70,7 @@ public class PlayerHealth : MonoBehaviour
 	{
 		if (_chargeBarTransform != null)
 		{
-			_chargeBarTransform.localScale += new Vector3(0f, _chargeSpeed * 0.3f, 0f) * Time.deltaTime; // Increase the Y scale of the charge bar by chargeSpeed
+			_chargeBarTransform.localScale += new Vector3(0f, _chargeSpeed * 0.2f, 0f) * Time.deltaTime; // Increase the Y scale of the charge bar by chargeSpeed
 			_chargeBarTransform.localScale = new Vector3(_chargeBarTransform.localScale.x, Mathf.Min(_chargeBarTransform.localScale.y, 0.16f), _chargeBarTransform.localScale.z); // Make sure scale does not go above 0
 
 		}

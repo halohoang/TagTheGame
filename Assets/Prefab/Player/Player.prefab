@@ -243,7 +243,7 @@ MonoBehaviour:
   _maxHealth: 100
   _currentHealth: 0
   _player: {fileID: 3493521951034406032}
-  _chargeBarTransform: {fileID: 0}
+  _chargeBarTransform: {fileID: 6563612138351710883}
   _chargeSpeed: 0.1
 --- !u!50 &3493521951034406036
 Rigidbody2D:
