@@ -5,8 +5,9 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
 	// Variables
-	[SerializeField] private int _maxHealth;
-	[SerializeField] internal int _currentHealth;
+	[SerializeField] private float _maxHealth;
+	[SerializeField] internal float _currentHealth;
+	[SerializeField] GameObject _player;
 
 	private Rigidbody2D _rb2D;
 
@@ -19,7 +20,7 @@ public class PlayerHealth : MonoBehaviour
 
 	void Update()
 	{
-
+		ReduceHP();
 	}
 
 	void GetDamage()
@@ -28,19 +29,27 @@ public class PlayerHealth : MonoBehaviour
 	}
 	void ReduceHP()
 	{
-		// If the player hold down Sandevistan his health bar will start to get depleted
-		if (Input.GetKeyDown(KeyCode.Space))
+		if (_player != null)
 		{
-			_currentHealth -= 1;
+
+			// If the player hold down Sandevistan his health bar will start to get depleted
+			if (Input.GetKey(KeyCode.Space))
+			{
+				_currentHealth -= 0.5f;
+			}
+
+			// Ensure _currentHealth does not go below 0
+			_currentHealth = Mathf.Clamp(_currentHealth, 0f, _maxHealth);
+
+
+			//Testing whether the player heals. Regenerate 1 HP per frame
+			if (!Input.GetKey(KeyCode.Space) && _currentHealth != _maxHealth)
+			{
+				_currentHealth += 0.1f;
+			}
+
+			_currentHealth = Mathf.Clamp(_currentHealth, 0f, _maxHealth);
+
 		}
-
-
-		//Testing whether the player heals. Regenerate 1 HP per frame
-		if (Input.GetKeyUp(KeyCode.Space))
-		{
-			_currentHealth += 1;
-		}
-
-
 	}
 }
