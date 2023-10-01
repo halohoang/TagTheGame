@@ -130,10 +130,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3418635257247461372, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: _chargeBarTransform
-      value: 
-      objectReference: {fileID: 1584016397}
     - target: {fileID: 3493521951034406032, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_Name
       value: Player
@@ -718,11 +714,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!4 &1584016397 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6563612138351710883, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-  m_PrefabInstance: {fileID: 337073311}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1709582092
 GameObject:
   m_ObjectHideFlags: 0
