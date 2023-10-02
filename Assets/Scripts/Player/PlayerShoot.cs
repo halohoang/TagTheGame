@@ -23,6 +23,11 @@ public class PlayerShoot : MonoBehaviour
 	
 	private float _mouseButtonReleaseTime; // Time when the mouse button was last released
 
+	/* Camera Shake */
+	[SerializeField] private CameraRecoilShake cameraShake;
+	private float _triggerHoldStartTime = 0f;
+
+
 	// Functions
 	private void Update()
 	{
@@ -75,6 +80,9 @@ public class PlayerShoot : MonoBehaviour
 			GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, bulletRotation);
 			Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
 			_nextFireTime = Time.time + _firerate;
+			float startShakeDuration = 0.1f; 
+			float startShakeAmount = 0.15f; 
+			cameraShake.StartShake(startShakeDuration, startShakeAmount);
 		}
 	}
 }

@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &84789318 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3493521950240620799, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+  m_PrefabInstance: {fileID: 337073311}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &319128917 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8411590538500528137, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
@@ -190,15 +195,47 @@ PrefabInstance:
     - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: _gun
       value: 
-      objectReference: {fileID: 3100799005256689600, guid: 2ec837d87fff1394d95d7f06509fe1b3, type: 3}
+      objectReference: {fileID: 84789318}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: _firerate
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: cameraShake
+      value: 
+      objectReference: {fileID: 1486141125}
     - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: _bulletPrefab
       value: 
       objectReference: {fileID: 6070599304756626328, guid: 582f4e55be49c9c46856539ba8ae9868, type: 3}
     - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: _bulletScript
+      value: 
+      objectReference: {fileID: -2388219009178345197, guid: 582f4e55be49c9c46856539ba8ae9868, type: 3}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: _bulletSpawnPoint
       value: 
       objectReference: {fileID: 319128917}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: _maxDeviationAngle
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: _whenDeviationKicksIn
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: _deviationIncreaseSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8411590538500528137, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.108
+      objectReference: {fileID: 0}
+    - target: {fileID: 8411590538500528137, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.003
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
 --- !u!1 &808463762
@@ -524,6 +561,7 @@ GameObject:
   - component: {fileID: 1486141124}
   - component: {fileID: 1486141123}
   - component: {fileID: 1486141122}
+  - component: {fileID: 1486141125}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -566,7 +604,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 7.59
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -597,6 +635,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1486141125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1486141121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ce5f3f440902b448a8e19642242e405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxShakeDuration: 0.1
+  maxShakeAmount: 3
 --- !u!1 &1526969877
 GameObject:
   m_ObjectHideFlags: 0

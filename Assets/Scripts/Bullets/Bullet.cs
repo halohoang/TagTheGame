@@ -53,7 +53,6 @@ public class Bullet : MonoBehaviour
 		{
 			_currentBulletLiveTime -= Time.deltaTime;
 			if (_currentBulletLiveTime <= 0) { gameObject.SetActive(false); }
-			Debug.Log(_currentBulletLiveTime);
 		}
 	}
 }
