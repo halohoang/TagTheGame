@@ -8,7 +8,6 @@ public class AnyStateAnimation : MonoBehaviour
 	private Animator _animator;
 	/* Reference to Movement script */
 	internal Movement _movementScript;
-	private bool _isMoving = false;
 
 	private bool _isArmed = false;
 

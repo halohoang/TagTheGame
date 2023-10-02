@@ -5,7 +5,7 @@ public class Sandevistan : MonoBehaviour
 {
 	//Variables
 	[SerializeField] private int ClonesPerSecond = 10;
-	[SerializeField] private int ClonesDashPerSecond = 10;
+	//[SerializeField] private int ClonesDashPerSecond = 10;
 
 	private SpriteRenderer sr;
 	private Animator animator;

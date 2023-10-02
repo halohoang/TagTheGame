@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!4 &319128917 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8411590538500528137, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+  m_PrefabInstance: {fileID: 337073311}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &337073311
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -130,6 +135,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3493521950240620799, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3493521951034406032, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_Name
       value: Player
@@ -178,6 +187,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: _gun
+      value: 
+      objectReference: {fileID: 3100799005256689600, guid: 2ec837d87fff1394d95d7f06509fe1b3, type: 3}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: _bulletPrefab
+      value: 
+      objectReference: {fileID: 6070599304756626328, guid: 582f4e55be49c9c46856539ba8ae9868, type: 3}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: _bulletSpawnPoint
+      value: 
+      objectReference: {fileID: 319128917}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
 --- !u!1 &808463762
