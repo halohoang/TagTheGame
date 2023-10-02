@@ -20,12 +20,16 @@ public class PlayerShoot : MonoBehaviour
 	/* Recoil */
 	[SerializeField] private float _maxDeviationAngle = 5f; // Maximum deviation the bullet will be off from the straight line
 	[SerializeField] private float _whenDeviationKicksIn;
-	
+
 	private float _mouseButtonReleaseTime; // Time when the mouse button was last released
 
 	/* Camera Shake */
 	[SerializeField] private CameraRecoilShake cameraShake;
 	private float _triggerHoldStartTime = 0f;
+
+	/* Muzzle Flash */
+	[SerializeField] private GameObject _muzzleFlash;
+	[SerializeField] private Animator _animator;
 
 
 	// Functions
@@ -40,7 +44,12 @@ public class PlayerShoot : MonoBehaviour
 			}
 			else if (Input.GetMouseButton(0) && CanFire())
 			{
+				_animator.SetBool("Firing", true);
 				Shoot();
+			}
+			else
+			{
+			_animator.SetBool("Firing", false);
 			}
 		}
 	}
@@ -79,10 +88,12 @@ public class PlayerShoot : MonoBehaviour
 
 			GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, bulletRotation);
 			Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
+			_animator.SetBool("Firing", true);
 			_nextFireTime = Time.time + _firerate;
-			float startShakeDuration = 0.1f; 
-			float startShakeAmount = 0.15f; 
+			float startShakeDuration = 0.1f;
+			float startShakeAmount = 0.15f;
 			cameraShake.StartShake(startShakeDuration, startShakeAmount);
 		}
+
 	}
 }
