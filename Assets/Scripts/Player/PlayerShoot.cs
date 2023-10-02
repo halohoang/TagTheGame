@@ -19,7 +19,8 @@ public class PlayerShoot : MonoBehaviour
 
 	/* Recoil */
 	[SerializeField] private float _maxDeviationAngle = 5f; // Maximum deviation the bullet will be off from the straight line
-
+	[SerializeField] private float _whenDeviationKicksIn;
+	
 	private float _mouseButtonReleaseTime; // Time when the mouse button was last released
 
 	// Functions
@@ -55,7 +56,7 @@ public class PlayerShoot : MonoBehaviour
 
 	float CalculateDeviation()
 	{
-		float holdTriggerDuration = Mathf.Clamp01((Time.time - _mouseButtonReleaseTime) / 5f); // Normalize the duration between 0 and 1, with a maximum of 5 seconds
+		float holdTriggerDuration = Mathf.Clamp01((Time.time - _mouseButtonReleaseTime) / _whenDeviationKicksIn); // Normalize the duration between 0 and 1, with a maximum of 5 seconds
 		return _maxDeviationAngle * holdTriggerDuration;
 	}
 
