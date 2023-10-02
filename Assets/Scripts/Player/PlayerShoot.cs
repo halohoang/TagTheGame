@@ -25,7 +25,7 @@ public class PlayerShoot : MonoBehaviour
 
 	/* Camera Shake */
 	[SerializeField] private CameraRecoilShake cameraShake;
-	private float _triggerHoldStartTime = 0f;
+	//private float _triggerHoldStartTime = 0f;
 
 	/* Muzzle Flash */
 	[SerializeField] private GameObject _muzzleFlash;
@@ -38,7 +38,7 @@ public class PlayerShoot : MonoBehaviour
 		SwitchWeapon();
 		if (_isArmed)
 		{
-			if (Input.GetMouseButtonDown(0))
+			if (Input.GetMouseButtonUp(0))
 			{
 				_mouseButtonReleaseTime = Time.time; // Record the time when the mouse button was released
 			}
@@ -91,7 +91,7 @@ public class PlayerShoot : MonoBehaviour
 			_animator.SetBool("Firing", true);
 			_nextFireTime = Time.time + _firerate;
 			float startShakeDuration = 0.1f;
-			float startShakeAmount = 0.15f;
+			float startShakeAmount = 0.4f;
 			cameraShake.StartShake(startShakeDuration, startShakeAmount);
 		}
 

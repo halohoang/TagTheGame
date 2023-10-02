@@ -15,10 +15,6 @@ public class Movement : MonoBehaviour
 	[SerializeField] private Sandevistan _sandevistan;
 	[SerializeField] internal float _dashCooldown;
 	internal float _currentDashCooldown;
-	
-
-
-
 
 
 	//Functions
@@ -27,12 +23,12 @@ public class Movement : MonoBehaviour
 		_currentPlayerSpeed = _minPlayerSpeed;
 	}
 
-	void Update()
+	void FixedUpdate()
 	{
 		PlayerMovement();
 		PlayerFast();
 		//PlayerDash();
-
+		
 	}
 
 
@@ -71,9 +67,12 @@ public class Movement : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
 			_currentPlayerSpeed = _maxPlayerSpeed;
+			
 		}
 		if (!Input.GetKey(KeyCode.Space)) { _currentPlayerSpeed = _minPlayerSpeed; } //Revert player back to normal speed
 	}
+
+	
 
 	/* Player Dash */
 	void PlayerDash()
