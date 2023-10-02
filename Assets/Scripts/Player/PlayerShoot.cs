@@ -8,8 +8,8 @@ public class PlayerShoot : MonoBehaviour
 
 	/* Gun properties */
 	[SerializeField] GameObject _gun;
-	[SerializeField] private Transform _bulletSpawnPoint; //Transform of the gun
-	private bool _isArmed; //Checking whether the player is armed or not
+	[SerializeField] private Transform _bulletSpawnPoint; // Transform of the gun
+	private bool _isArmed; // Checking whether the player is armed or not
 	[SerializeField] private GameObject _bulletPrefab;
 	[SerializeField] internal Bullet _bulletScript;
 
@@ -17,22 +17,27 @@ public class PlayerShoot : MonoBehaviour
 	[SerializeField] private float _firerate = 0.5f;
 	private float _nextFireTime;
 
+	/* Recoil */
+	[SerializeField] private float _maxDeviationAngle = 5f; // Maximum deviation the bullet will be off from the straight line
+
+	private float _mouseButtonReleaseTime; // Time when the mouse button was last released
+
 	// Functions
 	private void Update()
 	{
 		SwitchWeapon();
-		if (_isArmed && Input.GetMouseButton(0) && CanFire())
+		if (_isArmed)
 		{
-			Shoot();
+			if (Input.GetMouseButtonDown(0))
+			{
+				_mouseButtonReleaseTime = Time.time; // Record the time when the mouse button was released
+			}
+			else if (Input.GetMouseButton(0) && CanFire())
+			{
+				Shoot();
+			}
 		}
-
 	}
-
-	bool CanFire()
-	{
-		return Time.time > _nextFireTime;
-	}
-
 
 	void SwitchWeapon()
 	{
@@ -43,12 +48,30 @@ public class PlayerShoot : MonoBehaviour
 		}
 	}
 
+	bool CanFire()
+	{
+		return Time.time > _nextFireTime;
+	}
+
+	float CalculateDeviation()
+	{
+		float holdTriggerDuration = Mathf.Clamp01((Time.time - _mouseButtonReleaseTime) / 5f); // Normalize the duration between 0 and 1, with a maximum of 5 seconds
+		return _maxDeviationAngle * holdTriggerDuration;
+	}
+
 	void Shoot()
 	{
 		if (CanFire())
 		{
+			// Calculate Deviation during the shooting
+			float deviation = CalculateDeviation();
 
-			GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, _bulletSpawnPoint.rotation);
+			Quaternion bulletRotation = _bulletSpawnPoint.rotation; // Apply deviation to the bullet's rotation
+			float randomAngle = Random.Range(-deviation, deviation); // Randomize the deviation angle
+
+			bulletRotation *= Quaternion.Euler(0f, 0f, randomAngle); // Apply rotation around the Z-axis
+
+			GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, bulletRotation);
 			Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
 			_nextFireTime = Time.time + _firerate;
 		}
