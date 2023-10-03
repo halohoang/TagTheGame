@@ -387,6 +387,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2101916203}
     - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: _ammoCounterScript
+      value: 
+      objectReference: {fileID: 1868721430}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: _maximumBulletCount
       value: 30
       objectReference: {fileID: 0}
@@ -443,7 +447,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2114971625}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3177,7 +3181,7 @@ Transform:
   - {fileID: 287116285}
   - {fileID: 757885212}
   m_Father: {fileID: 2114971625}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1868721430
 MonoBehaviour:
@@ -3191,6 +3195,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 908d0ad9f6d35c3438b9fd4567d107d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentAmmo: 30
+  bulletSprites:
+  - {fileID: 525375098}
+  - {fileID: 1938852253}
+  - {fileID: 1427921764}
+  - {fileID: 1566725676}
+  - {fileID: 1673657787}
+  - {fileID: 2050724415}
+  - {fileID: 443695237}
+  - {fileID: 1728787140}
+  - {fileID: 1366889297}
+  - {fileID: 677971997}
+  - {fileID: 1297488477}
+  - {fileID: 1107224388}
+  - {fileID: 1540638647}
+  - {fileID: 1570183596}
+  - {fileID: 1919932786}
+  - {fileID: 1541946133}
+  - {fileID: 553973808}
+  - {fileID: 1344268559}
+  - {fileID: 206880608}
+  - {fileID: 983044571}
+  - {fileID: 1386506708}
+  - {fileID: 1624737804}
+  - {fileID: 1667243511}
+  - {fileID: 2006747115}
+  - {fileID: 1079837180}
+  - {fileID: 963030977}
+  - {fileID: 2001499268}
+  - {fileID: 942794979}
+  - {fileID: 287116285}
+  - {fileID: 757885212}
+  _waitForReload: 0.1
 --- !u!1 &1919932785
 GameObject:
   m_ObjectHideFlags: 0
@@ -3633,7 +3670,6 @@ GameObject:
   - component: {fileID: 2114971624}
   - component: {fileID: 2114971623}
   - component: {fileID: 2114971622}
-  - component: {fileID: 2114971626}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -3714,8 +3750,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1868721429}
   - {fileID: 416754908}
+  - {fileID: 1868721429}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3724,20 +3760,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &2114971626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2114971621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d2c2fa9dea93e94cac7520438e93dcc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 1102109059}
-  offset: {x: 0, y: 0, z: 0}
 --- !u!1 &2146606690
 GameObject:
   m_ObjectHideFlags: 0

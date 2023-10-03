@@ -19,6 +19,8 @@ public class PlayerShoot : MonoBehaviour
 	//[SerializeField] internal int _minimumBulletCount; // Will use to do sound for low ammo  sound
 	private bool _isReloading = false;
 	[SerializeField] private float _reloadTime; // To sync with how long the reload animation is
+	[SerializeField] AmmoCounter _ammoCounterScript; // Link to the AmmoCounter script
+
 
 	/* Firerate */
 	[SerializeField] private float _firerate = 0.5f;
@@ -57,7 +59,7 @@ public class PlayerShoot : MonoBehaviour
 			{
 				_mouseButtonReleaseTime = Time.time; // Record the time when the mouse button was released
 			}
-			else if (Input.GetMouseButton(0) && CanFire() && _currentBulletCount > 0)
+			else if (Input.GetMouseButton(0) && CanFire() && _currentBulletCount > 0 && _isReloading == false)
 			{
 				_animator.SetBool("Firing", true);
 				Shoot();
@@ -73,6 +75,7 @@ public class PlayerShoot : MonoBehaviour
 		{
 			if (_currentBulletCount < _maximumBulletCount)
 			{
+				_ammoCounterScript.Reload();
 				StartCoroutine(Reload());
 			}
 		}
@@ -112,6 +115,7 @@ public class PlayerShoot : MonoBehaviour
 
 			GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, bulletRotation);
 			Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
+			_ammoCounterScript.DecreaseAmmo(); //Call the Decrease Ammo function from the AmmoCounter script;
 			_animator.SetBool("Firing", true);
 			_nextFireTime = Time.time + _firerate;
 			if (Input.GetKey(KeyCode.Space))
@@ -147,6 +151,7 @@ public class PlayerShoot : MonoBehaviour
 			{
 				_currentBulletCount = _maximumBulletCount;
 			}
+
 		}
 		_isReloading = false;
 	}
