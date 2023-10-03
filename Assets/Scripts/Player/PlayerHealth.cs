@@ -61,7 +61,6 @@ public class PlayerHealth : MonoBehaviour
 	{
 		if (_chargeBarTransform != null)
 		{
-			Debug.Log("reduce");
 			_chargeBarTransform.localScale -= new Vector3(0f, _chargeSpeed, 0f) * Time.deltaTime; // Reduce the Y scale of the charge bar by chargeSpeed
 			_chargeBarTransform.localScale = new Vector3(_chargeBarTransform.localScale.x, Mathf.Max(0f, _chargeBarTransform.localScale.y), _chargeBarTransform.localScale.z); // Make sure scale does not go below 0
 		}

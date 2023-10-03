@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-	private float defaultTimeScale = 1.2f; // The default time scale (normal speed).
-	private float slowTimeScale = 0.8f;    // The slow time scale (50% speed).
+	private float defaultTimeScale = 1.0f; // The default time scale (normal speed).
+	private float slowTimeScale = 0.5f;    // The slow time scale (50% speed).
 
 	private void Update()
 	{

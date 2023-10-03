@@ -23,7 +23,7 @@ public class Movement : MonoBehaviour
 		_currentPlayerSpeed = _minPlayerSpeed;
 	}
 
-	void FixedUpdate()
+	void Update()
 	{
 		PlayerMovement();
 		PlayerFast();

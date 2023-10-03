@@ -13,6 +13,13 @@ public class PlayerShoot : MonoBehaviour
 	[SerializeField] private GameObject _bulletPrefab;
 	[SerializeField] internal Bullet _bulletScript;
 
+	/* Reload system */
+	[SerializeField] internal int _maximumBulletCount;
+	[SerializeField] internal int _currentBulletCount;
+	//[SerializeField] internal int _minimumBulletCount; // Will use to do sound for low ammo  sound
+	private bool _isReloading = false;
+	[SerializeField] private float _reloadTime; // To sync with how long the reload animation is
+
 	/* Firerate */
 	[SerializeField] private float _firerate = 0.5f;
 	private float _nextFireTime;
@@ -26,6 +33,9 @@ public class PlayerShoot : MonoBehaviour
 	/* Camera Shake */
 	[SerializeField] private CameraRecoilShake cameraShake;
 	//private float _triggerHoldStartTime = 0f;
+	float startShakeDuration;
+	float startShakeAmount;
+
 
 	/* Muzzle Flash */
 	[SerializeField] private GameObject _muzzleFlash;
@@ -33,6 +43,11 @@ public class PlayerShoot : MonoBehaviour
 
 
 	// Functions
+	private void Start()
+	{
+		_currentBulletCount = _maximumBulletCount;
+	}
+
 	private void Update()
 	{
 		SwitchWeapon();
@@ -42,14 +57,23 @@ public class PlayerShoot : MonoBehaviour
 			{
 				_mouseButtonReleaseTime = Time.time; // Record the time when the mouse button was released
 			}
-			else if (Input.GetMouseButton(0) && CanFire())
+			else if (Input.GetMouseButton(0) && CanFire() && _currentBulletCount > 0)
 			{
 				_animator.SetBool("Firing", true);
 				Shoot();
+				_currentBulletCount--;
+				Debug.Log(_currentBulletCount);
 			}
 			else
 			{
-			_animator.SetBool("Firing", false);
+				_animator.SetBool("Firing", false);
+			}
+		}
+		if (Input.GetKeyDown(KeyCode.R) && _isReloading == false && !Input.GetMouseButton(0))
+		{
+			if (_currentBulletCount < _maximumBulletCount)
+			{
+				StartCoroutine(Reload());
 			}
 		}
 	}
@@ -90,10 +114,40 @@ public class PlayerShoot : MonoBehaviour
 			Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
 			_animator.SetBool("Firing", true);
 			_nextFireTime = Time.time + _firerate;
-			float startShakeDuration = 0.1f;
-			float startShakeAmount = 0.4f;
+			if (Input.GetKey(KeyCode.Space))
+			{
+				startShakeDuration = 0.01f;
+				startShakeAmount = 0.00000005f;
+			}
+			else
+			{
+				startShakeDuration = 0.1f;
+				startShakeAmount = 0.2f;
+			}
 			cameraShake.StartShake(startShakeDuration, startShakeAmount);
 		}
+	}
 
+	IEnumerator Reload()
+	{
+		_isReloading = true;
+		// Play reload animation
+
+
+		yield return new WaitForSeconds(_reloadTime);
+		int bulletsLeftToFullMag = _maximumBulletCount - _currentBulletCount;
+		if (bulletsLeftToFullMag > 0)
+		{
+
+			if (bulletsLeftToFullMag <= _currentBulletCount)
+			{
+				_currentBulletCount += bulletsLeftToFullMag;
+			}
+			else
+			{
+				_currentBulletCount = _maximumBulletCount;
+			}
+		}
+		_isReloading = false;
 	}
 }

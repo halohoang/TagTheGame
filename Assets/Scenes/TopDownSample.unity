@@ -132,7 +132,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3493521951034406024, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: ClonesPerSecond
-      value: 7
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493521951034406024, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: scalePerSecond.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493521951034406024, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: scalePerSecond.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493521951034406024, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: scalePerSecond.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3493521951034406032, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_Name
@@ -140,7 +152,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3493521951034406037, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: _maxPlayerSpeed
-      value: 12
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3493521951034406038, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_RootOrder
