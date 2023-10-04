@@ -136,9 +136,7 @@ public class PlayerShoot : MonoBehaviour
 	{
 		_isReloading = true;
 		// Play reload animation
-
-
-		yield return new WaitForSeconds(_reloadTime);
+		
 		int bulletsLeftToFullMag = _maximumBulletCount - _currentBulletCount;
 		if (bulletsLeftToFullMag > 0)
 		{
@@ -153,6 +151,7 @@ public class PlayerShoot : MonoBehaviour
 			}
 
 		}
+		yield return new WaitForSeconds(_reloadTime);
 		_isReloading = false;
 	}
 }

@@ -376,7 +376,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: _reloadTime
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: cameraShake
