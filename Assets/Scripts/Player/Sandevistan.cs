@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Sandevistan : MonoBehaviour
 {
-	//Variables
-	[SerializeField] private int ClonesPerSecond = 10;
+    //Variables
+    [Header("References")]
+    [SerializeField] private InputReaderSO _inputReader;
+	[Space(5)]
+
+    [SerializeField] private int ClonesPerSecond = 10;
 	//[SerializeField] private int ClonesDashPerSecond = 10;
 
 	private SpriteRenderer sr;
@@ -18,7 +22,25 @@ public class Sandevistan : MonoBehaviour
 
 	[SerializeField] private Movement _movement;
 
-	private void Start()
+    //--------------- Methods ---------------
+    //---------- Unity-Executed Methods ----------
+    private void Awake()
+    {
+        if (_inputReader == null)
+            _inputReader = Resources.Load("ScriptableObjects/InputReader") as InputReaderSO;
+    }
+
+    //private void OnEnable()
+    //{
+    //    _inputReader.OnDashInput += ;
+    //}
+
+    //private void OnDisable()
+    //{
+    //    _inputReader.OnDashInput -= ;
+    //}
+
+    private void Start()
 	{
 		sr = GetComponent<SpriteRenderer>();
 		animator = GetComponent<Animator>();

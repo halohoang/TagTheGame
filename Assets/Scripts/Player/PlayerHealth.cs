@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
+	[Header("References")]
+	[SerializeField] private InputReaderSO _inputReader;
+	[Space(5)]
+
 	// Variables
 	[SerializeField] private float _maxHealth;
 	[SerializeField] internal float _currentHealth;
@@ -16,7 +20,23 @@ public class PlayerHealth : MonoBehaviour
 
 	private Rigidbody2D _rb2D;
 
-	// Functions
+    //Functions
+    private void Awake()
+    {
+		if (_inputReader == null)
+			_inputReader = Resources.Load("ScriptableObjects/InputReader") as InputReaderSO;
+    }
+
+	//private void OnEnable()
+	//{
+	//  _inputReader.OnDashInput += ReduceHP;
+	//}
+
+	//private void OnDisable()
+	//{
+	//  _inputReader.OnDashInput -= ReduceHP;
+	//}
+
 	void Start()
 	{
 		_rb2D = GetComponent<Rigidbody2D>();
@@ -36,7 +56,6 @@ public class PlayerHealth : MonoBehaviour
 	{
 		if (_player != null)
 		{
-
 			// If the player hold down Sandevistan his health bar will start to get depleted
 			if (Input.GetKey(KeyCode.Space))
 			{
