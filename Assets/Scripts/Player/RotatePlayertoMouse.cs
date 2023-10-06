@@ -4,26 +4,27 @@ using UnityEngine;
 
 public class RotatePlayertoMouse : MonoBehaviour
 {
-    // Variables
-    private Vector3 _mousePos;
-   [SerializeField] private Camera _camera;
-    private Rigidbody2D _rb2D;
+	// Variables
+	private Rigidbody2D _rb2D;
+	[SerializeField] private Transform _playerTransform; // Reference to the player's transform.
 
-    //Functions
-    void Start()
-    {
-        _rb2D =GetComponent<Rigidbody2D>();
-        _camera = Camera.main; // Gets the main camera
-    }
+	void Start()
+	{
+		_rb2D = GetComponent<Rigidbody2D>();
+		/*_playerTransform = transform.parent;*/ // Get the player's transform from the parent.
+	}
 
-	// Functions
+	//Functions
 	void Update()
 	{
-		RotateCamera();
+		RotateToMousePosition();
 	}
-	void RotateCamera()
+
+	void RotateToMousePosition()
 	{
-		_mousePos = _camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z - _camera.transform.position.z));
-		_rb2D.transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2((_mousePos.y - transform.position.y), (_mousePos.x - transform.position.x)) * Mathf.Rad2Deg);
+		Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		Vector2 direction = (mousePos - _playerTransform.position).normalized; // Use player's position.
+		float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+		_rb2D.rotation = angle;
 	}
 }
