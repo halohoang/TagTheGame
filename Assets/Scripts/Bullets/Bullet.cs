@@ -14,6 +14,8 @@ public class Bullet : MonoBehaviour
 	internal float _currentBulletLiveTime; // Current time until the bullet is destroyed
 	private GameObject _bullet;
 
+
+
 	// Function
 	void Start()
 	{
@@ -26,10 +28,8 @@ public class Bullet : MonoBehaviour
 
 	void Update()
 	{
-		
 
 		BulletDeactive();
-
 	}
 
 	private void OnCollisionEnter2D(Collision2D collision)
@@ -39,10 +39,32 @@ public class Bullet : MonoBehaviour
 			gameObject.SetActive(false);
 		}
 
-		if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Enemy"))
+		if (collision.gameObject.CompareTag("Player"))
 		{
+			PlayerHealth playerHealth;
+			playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
+			if (playerHealth != null)
+			{
+				/* Deal Damage */
+				playerHealth.GetDamage();
+				Debug.Log(playerHealth._currentHealth);
+				gameObject.SetActive(false );
+			}
 			// Call deal damage function
-			gameObject.SetActive(false);
+			
+		}
+
+
+		if (collision.gameObject.CompareTag("Enemy"))
+		{
+			EnemyHealth enemyHealth;
+			enemyHealth = collision.gameObject.GetComponent<EnemyHealth>();
+			if (enemyHealth != null)
+			{
+				enemyHealth.GetDamage();
+				Debug.Log(enemyHealth._currentHealth);
+				gameObject.SetActive(false);
+			}
 		}
 	}
 	private void BulletDeactive()

@@ -100,8 +100,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bulletSpeed: 40
-  _maxBounce: 3
   _maxBulletAliveTime: 1
+  playerHealth: {fileID: 3418635257247461372, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
 --- !u!50 &928762794185296225
 Rigidbody2D:
   serializedVersion: 4

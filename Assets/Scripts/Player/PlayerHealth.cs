@@ -11,6 +11,9 @@ public class PlayerHealth : MonoBehaviour
 	[SerializeField] Transform _chargeBarTransform; // Reference to the scale of the bar
 	[SerializeField] float _chargeSpeed = 0.005f; // The rate at which bar depletes or charges
 
+	/* Health System */
+	[SerializeField] internal float _takenDamage = 1f;
+
 	private Rigidbody2D _rb2D;
 
 	// Functions
@@ -25,9 +28,9 @@ public class PlayerHealth : MonoBehaviour
 		ReduceHP();
 	}
 
-	void GetDamage()
+	internal void GetDamage()
 	{
-
+		_currentHealth = _currentHealth - _takenDamage;
 	}
 	void ReduceHP()
 	{
@@ -61,17 +64,35 @@ public class PlayerHealth : MonoBehaviour
 	{
 		if (_chargeBarTransform != null)
 		{
-			_chargeBarTransform.localScale -= new Vector3(0f, _chargeSpeed, 0f) * Time.deltaTime; // Reduce the Y scale of the charge bar by chargeSpeed
-			_chargeBarTransform.localScale = new Vector3(_chargeBarTransform.localScale.x, Mathf.Max(0f, _chargeBarTransform.localScale.y), _chargeBarTransform.localScale.z); // Make sure scale does not go below 0
+			// Calculate the proportional health scale
+			float healthScale = _currentHealth / _maxHealth;
+
+			// Calculate the scaled health bar value based on the proportional scale
+			float scaledHealthBar = healthScale * 0.16f;
+
+			// Clamp the scaled health bar value between 0 and 0.16
+			float clampedScale = Mathf.Clamp(scaledHealthBar, 0f, 0.16f);
+
+			// Update health bar scale based on clamped value
+			_chargeBarTransform.localScale = new Vector3(_chargeBarTransform.localScale.x, clampedScale, _chargeBarTransform.localScale.z);
 		}
 	}
+
 	void RegenCharge()
 	{
 		if (_chargeBarTransform != null)
 		{
-			_chargeBarTransform.localScale += new Vector3(0f, _chargeSpeed * 0.2f, 0f) * Time.deltaTime; // Increase the Y scale of the charge bar by chargeSpeed
-			_chargeBarTransform.localScale = new Vector3(_chargeBarTransform.localScale.x, Mathf.Min(_chargeBarTransform.localScale.y, 0.16f), _chargeBarTransform.localScale.z); // Make sure scale does not go above 0
+			// Calculate the proportional health scale
+			float healthScale = _currentHealth / _maxHealth;
 
+			// Calculate the scaled health bar value based on the proportional scale
+			float scaledHealthBar = healthScale * 0.16f;
+
+			// Clamp the scaled health bar value between 0 and 0.16
+			float clampedScale = Mathf.Clamp(scaledHealthBar, 0f, 0.16f);
+
+			// Update health bar scale based on clamped value
+			_chargeBarTransform.localScale = new Vector3(_chargeBarTransform.localScale.x, clampedScale, _chargeBarTransform.localScale.z);
 		}
 	}
 
