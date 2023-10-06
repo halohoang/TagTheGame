@@ -354,6 +354,18 @@ PrefabInstance:
       propertyPath: _ammoCounterScript
       value: 
       objectReference: {fileID: 1868721430}
+    - target: {fileID: 6005425601539551869, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6005425601539551869, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6005425601539551869, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
 --- !u!1 &416754907
@@ -865,7 +877,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3418635257247461372, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: _maxHealth
-      value: 200
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3418635257247461372, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: _chargeSpeed
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 3418635257247461372, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: _takenDamage
