@@ -314,6 +314,10 @@ PrefabInstance:
       propertyPath: scalePerSecond.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3493521951034406027, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: _playerTransform
+      value: 
+      objectReference: {fileID: 1102109059}
     - target: {fileID: 3493521951034406032, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_Name
       value: Player
