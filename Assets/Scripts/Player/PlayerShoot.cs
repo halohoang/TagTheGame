@@ -33,10 +33,10 @@ public class PlayerShoot : MonoBehaviour
 	private float _mouseButtonReleaseTime; // Time when the mouse button was last released
 
 	/* Camera Shake */
-	[SerializeField] private CameraRecoilShake cameraShake;
-	//private float _triggerHoldStartTime = 0f;
-	float startShakeDuration;
-	float startShakeAmount;
+	//[SerializeField] private CameraRecoilShake cameraShake;
+	////private float _triggerHoldStartTime = 0f;
+	//float startShakeDuration;
+	//float startShakeAmount;
 
 
 	/* Muzzle Flash */
@@ -64,7 +64,7 @@ public class PlayerShoot : MonoBehaviour
 				_animator.SetBool("Firing", true);
 				Shoot();
 				_currentBulletCount--;
-				Debug.Log(_currentBulletCount);
+				
 			}
 			else
 			{
@@ -118,17 +118,17 @@ public class PlayerShoot : MonoBehaviour
 			_ammoCounterScript.DecreaseAmmo(); //Call the Decrease Ammo function from the AmmoCounter script;
 			_animator.SetBool("Firing", true);
 			_nextFireTime = Time.time + _firerate;
-			if (Input.GetKey(KeyCode.Space))
-			{
-				startShakeDuration = 0.01f;
-				startShakeAmount = 0.00000005f;
-			}
-			else
-			{
-				startShakeDuration = 0.1f;
-				startShakeAmount = 0.2f;
-			}
-			cameraShake.StartShake(startShakeDuration, startShakeAmount);
+			//if (Input.GetKey(KeyCode.Space))
+			//{
+			//	startShakeDuration = 0.01f;
+			//	startShakeAmount = 0.00000005f;
+			//}
+			//else
+			//{
+			//	startShakeDuration = 0.1f;
+			//	startShakeAmount = 0.2f;
+			//}
+		
 		}
 	}
 
@@ -136,9 +136,7 @@ public class PlayerShoot : MonoBehaviour
 	{
 		_isReloading = true;
 		// Play reload animation
-
-
-		yield return new WaitForSeconds(_reloadTime);
+		
 		int bulletsLeftToFullMag = _maximumBulletCount - _currentBulletCount;
 		if (bulletsLeftToFullMag > 0)
 		{
@@ -153,6 +151,7 @@ public class PlayerShoot : MonoBehaviour
 			}
 
 		}
+		yield return new WaitForSeconds(_reloadTime);
 		_isReloading = false;
 	}
 }

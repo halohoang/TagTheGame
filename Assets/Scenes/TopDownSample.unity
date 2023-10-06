@@ -376,12 +376,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: _reloadTime
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: cameraShake
       value: 
-      objectReference: {fileID: 1486141125}
+      objectReference: {fileID: 0}
     - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: _muzzleFlash
       value: 
@@ -2080,7 +2080,6 @@ GameObject:
   - component: {fileID: 1486141124}
   - component: {fileID: 1486141123}
   - component: {fileID: 1486141122}
-  - component: {fileID: 1486141125}
   - component: {fileID: 1486141126}
   m_Layer: 0
   m_Name: Main Camera
@@ -2155,20 +2154,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1486141125
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1486141121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ce5f3f440902b448a8e19642242e405, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxShakeDuration: 0.2
-  maxShakeAmount: 10
 --- !u!114 &1486141126
 MonoBehaviour:
   m_ObjectHideFlags: 0
