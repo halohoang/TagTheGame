@@ -36,7 +36,13 @@ public class Bullet : MonoBehaviour
 	{
 		if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Bullet"))
 		{
-			Destroy(gameObject);
+			gameObject.SetActive(false);
+		}
+
+		if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Enemy"))
+		{
+			// Call deal damage function
+			gameObject.SetActive(false);
 		}
 	}
 	private void BulletDeactive()

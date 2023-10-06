@@ -398,6 +398,10 @@ PrefabInstance:
       propertyPath: _maximumBulletCount
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: _whenDeviationKicksIn
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6304203630275845576, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_Size.x
       value: 0.13
