@@ -21,6 +21,10 @@ public class PlayerShoot : MonoBehaviour
 	[SerializeField] private float _reloadTime; // To sync with how long the reload animation is
 	[SerializeField] AmmoCounter _ammoCounterScript; // Link to the AmmoCounter script
 
+	/* Bullet Casing Spawning */
+	[SerializeField] private GameObject _bulletCasingPrefab; // Prefab of the bullet casing
+	[SerializeField] private Transform _casingSpawnPosition;
+
 
 	/* Firerate */
 	[SerializeField] private float _firerate = 0.5f;
@@ -64,6 +68,7 @@ public class PlayerShoot : MonoBehaviour
 				_animator.SetBool("Firing", true);
 				Shoot();
 				_currentBulletCount--;
+				SpawnBulletCasing();
 				
 			}
 			else
@@ -153,5 +158,11 @@ public class PlayerShoot : MonoBehaviour
 		}
 		yield return new WaitForSeconds(_reloadTime);
 		_isReloading = false;
+	}
+
+	private void SpawnBulletCasing()
+	{
+		// Instantiate a bullet casing at the specified spawn point
+		Instantiate(_bulletCasingPrefab, _casingSpawnPosition.position, Quaternion.identity);
 	}
 }

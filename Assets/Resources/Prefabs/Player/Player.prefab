@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &758390772
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 758390773}
+  m_Layer: 0
+  m_Name: CasingExhaustPort
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &758390773
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 758390772}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.03, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3493521950240620798}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2625756935860439556
 GameObject:
   m_ObjectHideFlags: 0
@@ -99,6 +130,7 @@ GameObject:
   - component: {fileID: 3493521951034406026}
   - component: {fileID: 3493521951034406024}
   - component: {fileID: 4783424759540013841}
+  - component: {fileID: 890478963225180234}
   - component: {fileID: 3418635257247461372}
   - component: {fileID: 4930503924211928506}
   - component: {fileID: 3493521951034406036}
@@ -231,11 +263,28 @@ MonoBehaviour:
   _currentBulletCount: 0
   _reloadTime: 5
   _ammoCounterScript: {fileID: 0}
+  _bulletCasingPrefab: {fileID: 4110486833003962727, guid: c623dc40facf5174f8f2f8941678b345, type: 3}
+  _casingSpawnPosition: {fileID: 758390773}
   _firerate: 0.1
   _maxDeviationAngle: 30
   _whenDeviationKicksIn: 3
   _muzzleFlash: {fileID: 6304203630275845578}
   _animator: {fileID: 6304203630275845577}
+--- !u!114 &890478963225180234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3493521951034406032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00c8f7eb05ad5eb40baa9fc126742d38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletCasingPrefab: {fileID: 0}
+  casingSpawnPoint: {fileID: 0}
+  casingSpawnDelay: 0.1
 --- !u!114 &3418635257247461372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -646,6 +695,10 @@ PrefabInstance:
     - target: {fileID: 3100799005256689602, guid: 2ec837d87fff1394d95d7f06509fe1b3, type: 3}
       propertyPath: m_SortingOrder
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3100799005256689603, guid: 2ec837d87fff1394d95d7f06509fe1b3, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ec837d87fff1394d95d7f06509fe1b3, type: 3}
