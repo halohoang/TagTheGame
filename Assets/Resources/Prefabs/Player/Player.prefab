@@ -100,6 +100,7 @@ GameObject:
   - component: {fileID: 3493521951034406024}
   - component: {fileID: 4783424759540013841}
   - component: {fileID: 3418635257247461372}
+  - component: {fileID: 4930503924211928506}
   - component: {fileID: 3493521951034406036}
   - component: {fileID: 3493521951034406039}
   - component: {fileID: 1652874657}
@@ -204,6 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81e1427e899a0da4d8709ae6b88207d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inputReader: {fileID: 0}
   ClonesPerSecond: 10
   scalePerSecond: {x: 1, y: 1, z: 1}
   colorPerSecond: {r: 0.8932955, g: 1, b: 0, a: 0.8509804}
@@ -246,12 +248,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8993526cbf2e4814c9a99ae0ca8e28b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inputReader: {fileID: 0}
   _maxHealth: 100
-  _currentHealth: -27
+  _currentHealth: 0
   _player: {fileID: 3493521951034406032}
   _chargeBarTransform: {fileID: 6563612138351710883}
-  _chargeSpeed: 0.1
+  _chargeSpeed: 0.05
   _takenDamage: 1
+--- !u!114 &4930503924211928506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3493521951034406032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e28b497d972cb6b43bf13176102d6351, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _flashingSpeed: 0
+  _flashDuration: 0.1
 --- !u!50 &3493521951034406036
 Rigidbody2D:
   serializedVersion: 4

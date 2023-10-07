@@ -15,6 +15,10 @@ public class PlayerHealth : MonoBehaviour
 	[SerializeField] Transform _chargeBarTransform; // Reference to the scale of the bar
 	[SerializeField] float _chargeSpeed = 0.005f; // The rate at which bar depletes or charges
 
+
+	/* Taking Damage Effect */
+	private TakingDamage _takingDamageScript;
+
 	/* Health System */
 	[SerializeField] internal float _takenDamage = 1f;
 
@@ -41,6 +45,7 @@ public class PlayerHealth : MonoBehaviour
 	{
 		_rb2D = GetComponent<Rigidbody2D>();
 		_currentHealth = _maxHealth;
+		_takingDamageScript = GetComponent<TakingDamage>();
 	}
 
 	void Update()
@@ -51,6 +56,10 @@ public class PlayerHealth : MonoBehaviour
 	internal void GetDamage()
 	{
 		_currentHealth = _currentHealth - _takenDamage;
+		if (_takingDamageScript != null)
+		{
+			_takingDamageScript.FlashOnce();
+		}
 	}
 	void ReduceHP()
 	{
