@@ -277,14 +277,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3493521951034406032}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00c8f7eb05ad5eb40baa9fc126742d38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletCasingPrefab: {fileID: 0}
-  casingSpawnPoint: {fileID: 0}
-  casingSpawnDelay: 0.1
+  ejectionForce: 2
 --- !u!114 &3418635257247461372
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,48 +4,31 @@ using UnityEngine;
 
 public class BulletCasing : MonoBehaviour
 {
-	// Variables
-	[SerializeField] private GameObject bulletCasingPrefab; // Prefab of the bullet casing
-	[SerializeField] private Transform casingSpawnPoint; // The point where casings are spawned
-	[SerializeField] private float casingSpawnDelay = 0.1f; // Delay between spawning casings
+	//Variables
+	[SerializeField] private float ejectionForce = 2.0f; // The force applied to the casing when spawned
 
-	private GameObject[] bulletPool; // Array of bullet objects
+	[SerializeField] private float _despawnTime = 5.0f; // The time in seconds before the casing is destroyed
 
-	// Funcctions
 	private void Start()
 	{
-		// Initialize your bullet pool here; make sure to populate it with GameObjects
+		// Apply an initial force to simulate ejection from the gun
+		Rigidbody2D rb = GetComponent<Rigidbody2D>();
+		if (rb != null)
+		{
+			Vector2 ejectionDirection = Random.insideUnitCircle.normalized;
+			rb.AddForce(ejectionDirection * ejectionForce, ForceMode2D.Impulse);
+		}
 	}
 
 	private void Update()
 	{
-		// Check for player input to spawn casings
-		if (Input.GetMouseButtonDown(0)) // Adjust the input condition as needed
-		{
-			SpawnBulletCasings();
-		}
+		// Destroy the casing after a set amount of time
+		Invoke("DeactiveObject", _despawnTime);
 	}
 
-	private void SpawnBulletCasings()
+	void DeactiveObject()
 	{
-		// Loop through the bullet pool
-		for (int i = 0; i < bulletPool.Length; i++)
-		{
-			if (!bulletPool[i].activeSelf) // Check if the bullet is deactivated
-			{
-				// Spawn a bullet casing at the specified spawn point
-				Instantiate(bulletCasingPrefab, casingSpawnPoint.position, Quaternion.identity);
-				// Delay between spawning casings (optional)
-				StartCoroutine(DelayCasingSpawn(i));
-			}
-		}
+		gameObject.SetActive(false);
 	}
 
-	private IEnumerator DelayCasingSpawn(int index)
-	{
-		yield return new WaitForSeconds(casingSpawnDelay);
-
-		// Reactivate the bullet after a delay (if needed)
-		bulletPool[index].SetActive(true);
-	}
 }

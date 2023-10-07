@@ -25,7 +25,6 @@ public class PlayerShoot : MonoBehaviour
 	[SerializeField] private GameObject _bulletCasingPrefab; // Prefab of the bullet casing
 	[SerializeField] private Transform _casingSpawnPosition;
 
-
 	/* Firerate */
 	[SerializeField] private float _firerate = 0.5f;
 	private float _nextFireTime;
@@ -37,10 +36,10 @@ public class PlayerShoot : MonoBehaviour
 	private float _mouseButtonReleaseTime; // Time when the mouse button was last released
 
 	/* Camera Shake */
-	//[SerializeField] private CameraRecoilShake cameraShake;
+	[SerializeField] private CameraRecoilShake cameraShake;
 	////private float _triggerHoldStartTime = 0f;
-	//float startShakeDuration;
-	//float startShakeAmount;
+	[SerializeField]float duration;
+	[SerializeField]float amount;
 
 
 	/* Muzzle Flash */
@@ -69,7 +68,9 @@ public class PlayerShoot : MonoBehaviour
 				Shoot();
 				_currentBulletCount--;
 				SpawnBulletCasing();
-				
+				cameraShake.StartShake( duration, amount);
+				Debug.Log("Shake");
+
 			}
 			else
 			{
@@ -133,7 +134,7 @@ public class PlayerShoot : MonoBehaviour
 			//	startShakeDuration = 0.1f;
 			//	startShakeAmount = 0.2f;
 			//}
-		
+
 		}
 	}
 
@@ -141,7 +142,7 @@ public class PlayerShoot : MonoBehaviour
 	{
 		_isReloading = true;
 		// Play reload animation
-		
+
 		int bulletsLeftToFullMag = _maximumBulletCount - _currentBulletCount;
 		if (bulletsLeftToFullMag > 0)
 		{
@@ -163,6 +164,7 @@ public class PlayerShoot : MonoBehaviour
 	private void SpawnBulletCasing()
 	{
 		// Instantiate a bullet casing at the specified spawn point
-		Instantiate(_bulletCasingPrefab, _casingSpawnPosition.position, Quaternion.identity);
+		Quaternion casingRotation = Quaternion.Euler(0f,0f,Random.Range(0,360f));
+		Instantiate(_bulletCasingPrefab, _casingSpawnPosition.position, casingRotation);
 	}
 }
