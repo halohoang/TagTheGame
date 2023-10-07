@@ -1003,11 +1003,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3493521951034406038, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -5.34
       objectReference: {fileID: 0}
     - target: {fileID: 3493521951034406038, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -2.6
       objectReference: {fileID: 0}
     - target: {fileID: 3493521951034406038, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3919,6 +3919,14 @@ PrefabInstance:
     - target: {fileID: 1108644999211655062, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 1807849734675487193, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
+      propertyPath: _flashDuration
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 1807849734675487193, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
+      propertyPath: _flashingSpeed
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}

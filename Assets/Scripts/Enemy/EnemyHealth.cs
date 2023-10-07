@@ -8,12 +8,14 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private float _maximumHealth;
     [SerializeField] internal float _currentHealth;
     [SerializeField] private float _takenDamage;
+    private TakingDamage _takingDamageScript;
     // Functions
 
 
     void Start()
     {
         _currentHealth = _maximumHealth;
+        _takingDamageScript = GetComponent<TakingDamage>();
     }
 
 
@@ -25,5 +27,9 @@ public class EnemyHealth : MonoBehaviour
     internal void GetDamage()
     {
         _currentHealth -= _takenDamage;
+        if (_takingDamageScript != null)
+        {
+            _takingDamageScript.FlashOnce();
+        }
     }
 }
