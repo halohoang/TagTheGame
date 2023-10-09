@@ -34,7 +34,7 @@ public class Bullet : MonoBehaviour
 
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
-		if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Bullet"))
+		if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Door") || collision.gameObject.CompareTag("Bullet"))
 		{
 			gameObject.SetActive(false);
 		}

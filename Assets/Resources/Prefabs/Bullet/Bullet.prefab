@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: -1120603786, guid: fcfd15f128dbc114b95013002341b3e5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -101,7 +101,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bulletSpeed: 40
   _maxBulletAliveTime: 1
-  playerHealth: {fileID: 3418635257247461372, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
 --- !u!50 &928762794185296225
 Rigidbody2D:
   serializedVersion: 4
