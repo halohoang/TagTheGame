@@ -660,6 +660,10 @@ PrefabInstance:
       propertyPath: _inputReader
       value: 
       objectReference: {fileID: 11400000, guid: bac5360f5a3523940978876b6731d1d6, type: 2}
+    - target: {fileID: 3493521950240620799, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3493521951034406024, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: ClonesPerSecond
       value: 10
@@ -775,6 +779,14 @@ PrefabInstance:
     - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: _whenDeviationKicksIn
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6304203630275845175, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.095
+      objectReference: {fileID: 0}
+    - target: {fileID: 6304203630275845175, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.005
       objectReference: {fileID: 0}
     - target: {fileID: 6304203630275845576, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_Size.x
