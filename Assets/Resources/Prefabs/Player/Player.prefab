@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 758390772}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.03, z: 0}
+  m_LocalPosition: {x: -0, y: -0.0771, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 3493521951034406036}
   - component: {fileID: 3493521951034406039}
   - component: {fileID: 1652874657}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -261,13 +261,16 @@ MonoBehaviour:
   _bulletScript: {fileID: -2388219009178345197, guid: 582f4e55be49c9c46856539ba8ae9868, type: 3}
   _maximumBulletCount: 30
   _currentBulletCount: 0
-  _reloadTime: 5
+  _reloadTime: 4
   _ammoCounterScript: {fileID: 0}
   _bulletCasingPrefab: {fileID: 4110486833003962727, guid: c623dc40facf5174f8f2f8941678b345, type: 3}
   _casingSpawnPosition: {fileID: 758390773}
   _firerate: 0.1
   _maxDeviationAngle: 30
   _whenDeviationKicksIn: 3
+  cameraShake: {fileID: 0}
+  duration: 0.05
+  amount: 0.08
   _muzzleFlash: {fileID: 6304203630275845578}
   _animator: {fileID: 6304203630275845577}
 --- !u!114 &890478963225180234
@@ -283,6 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ejectionForce: 2
+  _despawnTime: 5
 --- !u!114 &3418635257247461372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -698,7 +702,8 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3100799005256689603, guid: 2ec837d87fff1394d95d7f06509fe1b3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2ec837d87fff1394d95d7f06509fe1b3, type: 3}
 --- !u!4 &3493521950240620798 stripped
 Transform:

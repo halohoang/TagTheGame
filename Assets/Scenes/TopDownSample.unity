@@ -298,29 +298,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 758390773, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 758390773, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.0771
-      objectReference: {fileID: 0}
-    - target: {fileID: 890478963225180234, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: _bulletCasing
-      value: 
-      objectReference: {fileID: 4110486833003962727, guid: c623dc40facf5174f8f2f8941678b345, type: 3}
-    - target: {fileID: 890478963225180234, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: _bulletCasingSpawnPoint
-      value: 
-      objectReference: {fileID: 758390772}
     - target: {fileID: 3493521951034406032, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 3493521951034406032, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: m_Layer
-      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3493521951034406038, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_RootOrder
@@ -367,22 +347,6 @@ PrefabInstance:
       value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: amount
-      value: 0.08
-      objectReference: {fileID: 0}
-    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: offset
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: duration
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: _reloadTime
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: cameraShake
       value: 
       objectReference: {fileID: 1486141127}
@@ -390,7 +354,8 @@ PrefabInstance:
       propertyPath: _ammoCounterScript
       value: 
       objectReference: {fileID: 1868721430}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 890478963225180234, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
 --- !u!1 &351523139
 GameObject:
@@ -950,11 +915,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &758390772 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 758390772, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-  m_PrefabInstance: {fileID: 337073311}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &782530839
 PrefabInstance:
   m_ObjectHideFlags: 0
