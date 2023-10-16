@@ -14,6 +14,9 @@ public class PlayerHealth : MonoBehaviour
 	[SerializeField] GameObject _player;
 	[SerializeField] Transform _chargeBarTransform; // Reference to the scale of the bar
 	[SerializeField] float _chargeSpeed = 0.005f; // The rate at which bar depletes or charges
+	/* Spawning Blood upon impact  */
+	[SerializeField] GameObject _bloodHitSpawnPrefab; //Spawning blood 
+	[SerializeField] Transform _bloodHitSpawnTransform; // Where does it spawn
 
 
 	/* Taking Damage Effect */
@@ -59,6 +62,8 @@ public class PlayerHealth : MonoBehaviour
 		if (_takingDamageScript != null)
 		{
 			_takingDamageScript.FlashOnce();
+			Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+			Instantiate(_bloodHitSpawnPrefab,_bloodHitSpawnTransform.position, bloodRotation);
 		}
 	}
 	void ReduceHP()
