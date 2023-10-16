@@ -31,6 +31,37 @@ Transform:
   m_Father: {fileID: 3493521950240620798}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1578513964
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1578513965}
+  m_Layer: 8
+  m_Name: BloodHitTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1578513965
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578513964}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.002, y: 0, z: -1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3493521951034406038}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2625756935860439556
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,7 +161,6 @@ GameObject:
   - component: {fileID: 3493521951034406026}
   - component: {fileID: 3493521951034406024}
   - component: {fileID: 4783424759540013841}
-  - component: {fileID: 890478963225180234}
   - component: {fileID: 3418635257247461372}
   - component: {fileID: 4930503924211928506}
   - component: {fileID: 3493521951034406036}
@@ -158,6 +188,7 @@ Transform:
   - {fileID: 3493521950240620798}
   - {fileID: 7427382207461366253}
   - {fileID: 6563612138351710883}
+  - {fileID: 1578513965}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -261,32 +292,18 @@ MonoBehaviour:
   _bulletScript: {fileID: -2388219009178345197, guid: 582f4e55be49c9c46856539ba8ae9868, type: 3}
   _maximumBulletCount: 30
   _currentBulletCount: 0
-  _reloadTime: 4
+  _reloadTime: 5
   _ammoCounterScript: {fileID: 0}
   _bulletCasingPrefab: {fileID: 4110486833003962727, guid: c623dc40facf5174f8f2f8941678b345, type: 3}
   _casingSpawnPosition: {fileID: 758390773}
   _firerate: 0.1
-  _maxDeviationAngle: 30
-  _whenDeviationKicksIn: 3
+  _maxDeviationAngle: 20
+  _whenDeviationKicksIn: 5
   cameraShake: {fileID: 0}
   duration: 0.05
   amount: 0.08
   _muzzleFlash: {fileID: 6304203630275845578}
   _animator: {fileID: 6304203630275845577}
---- !u!114 &890478963225180234
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3493521951034406032}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00c8f7eb05ad5eb40baa9fc126742d38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ejectionForce: 2
-  _despawnTime: 5
 --- !u!114 &3418635257247461372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,12 +316,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8993526cbf2e4814c9a99ae0ca8e28b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputReader: {fileID: 0}
+  _inputReader: {fileID: 11400000, guid: bac5360f5a3523940978876b6731d1d6, type: 2}
   _maxHealth: 100
   _currentHealth: 0
   _player: {fileID: 3493521951034406032}
   _chargeBarTransform: {fileID: 6563612138351710883}
   _chargeSpeed: 0.05
+  _bloodHitSpawnPrefab: {fileID: 1471398999119722488, guid: 3e6cf606eb96c8c489d93206732bdb13, type: 3}
+  _bloodHitSpawnTransform: {fileID: 1578513965}
   _takenDamage: 1
 --- !u!114 &4930503924211928506
 MonoBehaviour:
@@ -381,7 +400,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -1396960279, guid: 6fb70707453591447bba005771cf3a11, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -475,11 +494,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6346405036840355404, guid: dc01a567e01223e4f99502066f5cd154, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.062453244
+      value: 0.095
       objectReference: {fileID: 0}
     - target: {fileID: 6346405036840355404, guid: dc01a567e01223e4f99502066f5cd154, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.007151908
+      value: 0.005
       objectReference: {fileID: 0}
     - target: {fileID: 6346405036840355404, guid: dc01a567e01223e4f99502066f5cd154, type: 3}
       propertyPath: m_LocalPosition.z
@@ -533,6 +552,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -1728636831, guid: b090b7e98d4a0074ab556ed0972c66d7, type: 3}
+    - target: {fileID: 6346405036840355763, guid: dc01a567e01223e4f99502066f5cd154, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc01a567e01223e4f99502066f5cd154, type: 3}
 --- !u!95 &6304203630275845577 stripped
