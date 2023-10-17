@@ -13,6 +13,7 @@ public class EnemyHealth : MonoBehaviour
 
 	/* Animation */
 	[SerializeField] Animator _animator;
+	private BoxCollider2D _boxCollider2D;
 
 	/* Spawning Blood Variables */
 	[SerializeField] GameObject _bloodHitSpawnPrefab; //Spawning blood 
@@ -24,15 +25,13 @@ public class EnemyHealth : MonoBehaviour
 		_currentHealth = _maximumHealth;
 		_takingDamageScript = GetComponent<TakingDamage>();
 		_animator = GetComponent<Animator>();
+		_boxCollider2D = GetComponent<BoxCollider2D>();
 	}
 
 
 	void Update()
 	{
-		if (_currentHealth == 0)
-		{
-			Dead();
-		}
+		
 	}
 
 	internal void GetDamage()
@@ -48,9 +47,16 @@ public class EnemyHealth : MonoBehaviour
 				Instantiate(_bloodHitSpawnPrefab, _bloodHitSpawnTransform.position, bloodRotation);
 			}
 		}
+		if (_currentHealth == 0)
+		{
+			Dead();
+			_boxCollider2D.enabled = false;
+		}
+
 	}
 	internal void Dead()
 	{
+		this.transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0,360f));
 		_animator.SetTrigger("Dead");
 	}
 }
