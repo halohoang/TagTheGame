@@ -14,6 +14,10 @@ public class Bullet : MonoBehaviour
 	internal float _currentBulletLiveTime; // Current time until the bullet is destroyed
 	private GameObject _bullet;
 
+	/* Spawning Blood */
+	[SerializeField] private GameObject _bloodPrefab;
+	
+
 
 
 	// Function
@@ -43,6 +47,12 @@ public class Bullet : MonoBehaviour
 		{
 			PlayerHealth playerHealth;
 			playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
+
+			/* Contact points spawning blood */
+			ContactPoint2D[] contacts = collision.contacts;
+			Vector2 collisionPoint = contacts[0].point;
+			Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+			Instantiate(_bloodPrefab, collisionPoint, bloodRotation);
 			if (playerHealth != null)
 			{
 				/* Deal Damage */
@@ -59,6 +69,12 @@ public class Bullet : MonoBehaviour
 		{
 			EnemyHealth enemyHealth;
 			enemyHealth = collision.gameObject.GetComponent<EnemyHealth>();
+
+			/* Contact points spawning blood */
+			ContactPoint2D[] contacts = collision.contacts;
+			Vector2 collisionPoint = contacts[0].point;
+			Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+			Instantiate(_bloodPrefab, collisionPoint, bloodRotation);
 			if (enemyHealth != null)
 			{
 				enemyHealth.GetDamage();
