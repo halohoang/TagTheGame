@@ -553,6 +553,14 @@ PrefabInstance:
       value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: amount
+      value: 0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: duration
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: cameraShake
       value: 
       objectReference: {fileID: 1486141127}
@@ -2725,6 +2733,10 @@ PrefabInstance:
       value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: cameraShake
       value: 
       objectReference: {fileID: 1486141127}
@@ -2973,6 +2985,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4ee1a7fb4ccf3e40b1e9dd15b7c9567, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cameraShake: {fileID: 1486141127}
 --- !u!4 &1624112541
 Transform:
   m_ObjectHideFlags: 0

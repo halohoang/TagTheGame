@@ -38,8 +38,8 @@ public class PlayerShoot : MonoBehaviour
 	/* Camera Shake */
 	[SerializeField] private CameraRecoilShake cameraShake;
 	////private float _triggerHoldStartTime = 0f;
-	[SerializeField]float duration;
-	[SerializeField]float amount;
+	[SerializeField] internal float duration;
+	[SerializeField]internal float amount;
 
 
 	/* Muzzle Flash */
