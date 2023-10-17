@@ -504,10 +504,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1578513965, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3493521951034406032, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_Name
       value: Player
@@ -555,6 +551,14 @@ PrefabInstance:
     - target: {fileID: 3493521951034406038, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: amount
+      value: 0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: duration
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: cameraShake
@@ -1518,6 +1522,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 761835356923920264, guid: 175a2a9a7a4de6641818dd7ff6ac8d9d, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4361380091175105721, guid: 175a2a9a7a4de6641818dd7ff6ac8d9d, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -2353,9 +2361,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1268659712, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
+      propertyPath: _takenDamage
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1108644999211655059, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
       propertyPath: m_Name
       value: enemy_range_white
+      objectReference: {fileID: 0}
+    - target: {fileID: 1108644999211655061, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1108644999211655062, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
       propertyPath: m_RootOrder
@@ -2728,6 +2744,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 3493521951034406039, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: cameraShake
       value: 
@@ -2977,6 +3001,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4ee1a7fb4ccf3e40b1e9dd15b7c9567, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cameraShake: {fileID: 1486141127}
 --- !u!4 &1624112541
 Transform:
   m_ObjectHideFlags: 0
