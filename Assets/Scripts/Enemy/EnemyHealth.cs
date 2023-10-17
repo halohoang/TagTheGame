@@ -14,6 +14,7 @@ public class EnemyHealth : MonoBehaviour
 	/* Animation */
 	[SerializeField] Animator _animator;
 	private BoxCollider2D _boxCollider2D;
+	private bool _isDead = false;
 
 	/* Spawning Blood Variables */
 	[SerializeField] GameObject _bloodHitSpawnPrefab; //Spawning blood 
@@ -31,7 +32,7 @@ public class EnemyHealth : MonoBehaviour
 
 	void Update()
 	{
-		
+
 	}
 
 	internal void GetDamage()
@@ -43,20 +44,17 @@ public class EnemyHealth : MonoBehaviour
 			if (_takingDamageScript != null)
 			{
 				_takingDamageScript.FlashOnce();
-				Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
-				Instantiate(_bloodHitSpawnPrefab, _bloodHitSpawnTransform.position, bloodRotation);
+
 			}
 		}
-		if (_currentHealth == 0)
+		if (_currentHealth == 0 && _isDead == false)
 		{
-			Dead();
-			_boxCollider2D.enabled = false;
+			this.transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+			_animator.SetTrigger("Dead");
+			_isDead = true;
 		}
+		Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+		Instantiate(_bloodHitSpawnPrefab, _bloodHitSpawnTransform.position, bloodRotation);
 
-	}
-	internal void Dead()
-	{
-		this.transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0,360f));
-		_animator.SetTrigger("Dead");
 	}
 }

@@ -2369,6 +2369,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: enemy_range_white
       objectReference: {fileID: 0}
+    - target: {fileID: 1108644999211655061, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1108644999211655062, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
       propertyPath: m_RootOrder
       value: 11
@@ -2739,6 +2743,10 @@ PrefabInstance:
     - target: {fileID: 3493521951034406038, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3493521951034406039, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4783424759540013841, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_Enabled
