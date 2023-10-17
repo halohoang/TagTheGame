@@ -45,6 +45,8 @@ public class EnemyHealth : MonoBehaviour
 			if (_takingDamageScript != null)
 			{
 				_takingDamageScript.FlashOnce();
+				Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+				Instantiate(_bloodHitSpawnPrefab, _bloodHitSpawnTransform.position, bloodRotation);
 			}
 		}
 		if (_currentHealth == 0 && _isDead == false)
