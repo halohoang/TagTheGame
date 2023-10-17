@@ -1,13 +1,16 @@
 using NaughtyAttributes;
+using EnumLibrary;
 using UnityEngine;
+using UnityEngine.AI;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(NavMeshAgent))]
 public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
 {
     [Header("References")]
     [Space(2)]
     [SerializeField, ReadOnly] private Rigidbody2D _rb2d;
     [SerializeField, ReadOnly] private Transform _playerTransform;
+    [SerializeField, ReadOnly] private NavMeshAgent _navAgent;
     [Space(5)]
 
     [Header("Perception Settings")]
@@ -22,17 +25,40 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
     [Header("Movement Settings")]
     [Space(2)]
     [SerializeField] private float _movementSpeed;
+    [Space(5)]
+
+    [Header("Behavioour Settings (just for QuickfixSolution so far)")]
+    [Space(2)]
+    [SerializeField] private Enum_Lib.EEnemyType _enemyType;
 
     private void Awake()
     {
         _rb2d = GetComponent<Rigidbody2D>();
+        _navAgent = GetComponent<NavMeshAgent>();
         _playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    private void Start()
     {
-        _rb2d.MovePosition(_playerTransform.position - transform.position * Time.deltaTime/* * _movementSpeed*/);
+        // fixing buggy rotation and transform that happens due to NavMeshAgent on EnemyObjects
+        _navAgent.updateRotation = false;
+        _navAgent.updateUpAxis = false;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // Quickfix Behaviour for different Enemy Types
+        switch (_enemyType)
+        {
+            case Enum_Lib.EEnemyType.Melee_Enemy:
+                _navAgent.destination = _playerTransform.position;
+                break;
+
+            case Enum_Lib.EEnemyType.Range_Enemy:
+                // todo: fill with logic yet; JM (17.10.2023)
+                break;
+        }
 
         if (Physics2D.Raycast(transform.position, transform.right, _viewDistance, _playerDetectionMask))
         {
