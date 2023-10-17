@@ -10,7 +10,7 @@ namespace Interactables
     public class Interactable : InteractionController
     {
         //------------------------------ Events ------------------------------
-        public static event UnityAction OnDoorKickIn;
+        public static event UnityAction OnDoorKickIn;       // for sending message to NavMeshBuilder.cs to update NavMeshSurface
 
         //------------------------------ Fields ------------------------------
         [Header("Needed References to GameObjects")]
@@ -72,6 +72,9 @@ namespace Interactables
 
                     gameObject.SetActive(false);    // todo: exchange this later to switching the GameObjects from intact door to broken door; JM (09.Oct.2023)
 
+                    OnDoorKickIn?.Invoke();
+
+                    // todo: send physics.sphereoverlap from specific door gameobject so that every enemy within a certain radius can react to the door-kick-in-event; JM (13.Oct.2023)
                     // todo: (!)start runtime baking of nw nav mesh so the new accured walkable space (where once the door was) is walkable for the AI; JM (09.Oct.2023)
 
                     break;
