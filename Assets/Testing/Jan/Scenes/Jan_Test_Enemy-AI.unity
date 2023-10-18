@@ -2359,38 +2359,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 522917036, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
-      propertyPath: m_Name
-      value: BloodDeadTransform
-      objectReference: {fileID: 0}
-    - target: {fileID: 522917037, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 522917037, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 522917037, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1268659712, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
-      propertyPath: _bloodDeadPrefab
-      value: 
-      objectReference: {fileID: 5459322947420741018, guid: 56f040fc343074640ba7ce86ec08968c, type: 3}
-    - target: {fileID: 1268659712, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
-      propertyPath: _bloodDeadSpawnTransform
-      value: 
-      objectReference: {fileID: 1511402089}
-    - target: {fileID: 1465482242, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
-      propertyPath: m_Mass
-      value: 1000000
-      objectReference: {fileID: 0}
-    - target: {fileID: 1465482242, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1108644999211655059, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
       propertyPath: m_Name
       value: enemy_range_white
@@ -2555,11 +2523,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxShakeDuration: 0.08
   maxShakeAmount: 0.1
---- !u!4 &1511402089 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 522917037, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
-  m_PrefabInstance: {fileID: 1465482239}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1526969877
 GameObject:
   m_ObjectHideFlags: 0
