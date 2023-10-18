@@ -18,8 +18,8 @@ public class EnemyHealth : MonoBehaviour
 	SpriteRenderer _spriteRenderer;
 
 	/* Spawning Blood Variables */
-	[SerializeField] GameObject _bloodHitSpawnPrefab; //Spawning blood 
-	[SerializeField] Transform _bloodHitSpawnTransform; // Where does it spawn
+	[SerializeField] List<GameObject> _bloodPoolSpawn; //Spawning blood pool when hit
+	[SerializeField] GameObject _bloodDeadPrefab; //Spawning blood pool at where enemy die
 
 	// Functions
 	void Start()
@@ -31,12 +31,6 @@ public class EnemyHealth : MonoBehaviour
 		SpriteRenderer _spriteRenderer = GetComponent<SpriteRenderer>();
 	}
 
-
-	void Update()
-	{
-
-	}
-
 	internal void GetDamage()
 	{
 		if (_currentHealth > 0)
@@ -45,10 +39,16 @@ public class EnemyHealth : MonoBehaviour
 			if (_takingDamageScript != null)
 			{
 				_takingDamageScript.FlashOnce();
+
+				/* Spawn blood and stay on the ground while enemy moving*/
+				int randomIndex = Random.Range(0, _bloodPoolSpawn.Count);
+				Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+				Instantiate(_bloodPoolSpawn[randomIndex], transform.position, bloodRotation);
 			}
 		}
 		if (_currentHealth == 0 && _isDead == false)
 		{
+			// Randomize dead rotation
 			this.transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
 			_animator.SetTrigger("Dead");
 			_isDead = true;
@@ -57,7 +57,8 @@ public class EnemyHealth : MonoBehaviour
 	}
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
+		/* Spawn blood where enemy die */
 		Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
-		Instantiate(_bloodHitSpawnPrefab, _bloodHitSpawnTransform.position, bloodRotation);
+		Instantiate(_bloodDeadPrefab, transform.position, bloodRotation);
 	}
 }
