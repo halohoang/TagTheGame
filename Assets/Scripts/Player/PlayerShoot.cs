@@ -38,8 +38,8 @@ public class PlayerShoot : MonoBehaviour
 	/* Camera Shake */
 	[SerializeField] private CameraRecoilShake cameraShake;
 	////private float _triggerHoldStartTime = 0f;
-	[SerializeField] internal float duration;
-	[SerializeField]internal float amount;
+	[SerializeField] internal float duration = 0.05f;
+	[SerializeField]internal float amount = 0.08f;
 
 
 	/* Muzzle Flash */
@@ -124,16 +124,15 @@ public class PlayerShoot : MonoBehaviour
 			_ammoCounterScript.DecreaseAmmo(); //Call the Decrease Ammo function from the AmmoCounter script;
 			_animator.SetBool("Firing", true);
 			_nextFireTime = Time.time + _firerate;
-			//if (Input.GetKey(KeyCode.Space))
-			//{
-			//	startShakeDuration = 0.01f;
-			//	startShakeAmount = 0.00000005f;
-			//}
-			//else
-			//{
-			//	startShakeDuration = 0.1f;
-			//	startShakeAmount = 0.2f;
-			//}
+			if (Input.GetKey(KeyCode.Space))
+			{
+				duration = 0;
+				amount = 0;
+			}else if (!Input.GetKeyUp(KeyCode.Space))
+				{
+					duration = 0.05f;
+						amount = 0.08f;
+				}
 
 		}
 	}
