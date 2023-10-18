@@ -18,13 +18,13 @@ public class NavMeshBuilder : MonoBehaviour
 
     private void OnEnable()
     {
-        Interactable.OnDoorKickIn += BakeNewNavMesh;
+        Interactable.OnDoorStatusChange += BakeNewNavMesh;
         CheatInput.OnResetDoors += BakeNewNavMesh;
     }
 
     private void OnDisable()
     {
-        Interactable.OnDoorKickIn -= BakeNewNavMesh;
+        Interactable.OnDoorStatusChange -= BakeNewNavMesh;
         CheatInput.OnResetDoors -= BakeNewNavMesh;
     }
 

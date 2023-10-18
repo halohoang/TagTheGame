@@ -2,6 +2,8 @@ using NaughtyAttributes;
 using EnumLibrary;
 using UnityEngine;
 using UnityEngine.AI;
+using Interactables;
+using System;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(NavMeshAgent))]
 public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
@@ -20,6 +22,8 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
     [SerializeField] private float _viewDistance;
     [SerializeField] private LayerMask _playerDetectionMask;
     [SerializeField, ReadOnly] private bool _isPlayerInFOV;
+    [Space(2)]
+    [SerializeField, Range(0.0f, 10.0f)] private float _auditoryPerceptionRadius;
     [Space(5)]
 
     [Header("Movement Settings")]
@@ -38,6 +42,16 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
         _playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     }
 
+    private void OnEnable()
+    {
+        Interactable.OnDoorKickIn += FaceAgentTowardsDoor;
+    }
+
+    private void OnDisable()
+    {
+        Interactable.OnDoorKickIn -= FaceAgentTowardsDoor;
+    }    
+
     private void Start()
     {
         // fixing buggy rotation and transform that happens due to NavMeshAgent on EnemyObjects
@@ -52,7 +66,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
         switch (_enemyType)
         {
             case Enum_Lib.EEnemyType.Melee_Enemy:
-                _navAgent.destination = _playerTransform.position;
+                //_navAgent.destination = _playerTransform.position;
                 break;
 
             case Enum_Lib.EEnemyType.Range_Enemy:
@@ -68,11 +82,17 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(transform.position, _auditoryPerceptionRadius);
     }
 
     private bool CheckIfPlayerIsInFOV(Vector2 position)
     {
         return _isPlayerInFOV = Vector2.Angle(transform.right, position - (Vector2)transform.position) <= _fOVAngle;
+    }
+
+    private void FaceAgentTowardsDoor(Vector2 doorPosition)
+    {        
+        Collider2D doorCollider = Physics2D.OverlapCircle(transform.position, _auditoryPerceptionRadius);
     }
 }

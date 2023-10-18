@@ -508,6 +508,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3493521951034406036, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_UseFullKinematicContacts
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3493521951034406038, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -1578,6 +1582,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: enemy_melee_red
       objectReference: {fileID: 0}
+    - target: {fileID: 4361380091175105727, guid: 175a2a9a7a4de6641818dd7ff6ac8d9d, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 175a2a9a7a4de6641818dd7ff6ac8d9d, type: 3}
 --- !u!1 &1046136351 stripped
@@ -1606,6 +1614,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   _isPlayerInFOV: 0
+  _auditoryPerceptionRadius: 0
   _movementSpeed: 1
   _enemyType: 0
 --- !u!50 &1046136353
@@ -2530,6 +2539,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   _isPlayerInFOV: 0
+  _auditoryPerceptionRadius: 0
   _movementSpeed: 1
   _enemyType: 1
 --- !u!50 &1465482242
