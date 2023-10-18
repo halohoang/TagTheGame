@@ -18,9 +18,8 @@ public class Sandevistan : MonoBehaviour
 	[SerializeField] private Vector3 scalePerSecond = new Vector3(1f, 1f, 1f);
 	[SerializeField] private Color colorPerSecond = new Color(0f, 0f, 0f, 0.1f); // Adjust alpha value here
 	[SerializeField] private float cloneSpaceDistance = 0.2f; // Adjust the distance between clones
-															  //[SerializeField] private float cloneDashDistance = 0.2f; // Adjust the distance between clones
 
-	[SerializeField] private Movement _movement;
+	//[SerializeField] private Movement _movement;
 
 	//--------------- Methods ---------------
 	//---------- Unity-Executed Methods ----------

@@ -130,6 +130,6 @@ public class Movement : MonoBehaviour
 		{
 			_currentDashCooldown -= Time.deltaTime;
 		}
-	}
+	} //Not currently used
 }
 
