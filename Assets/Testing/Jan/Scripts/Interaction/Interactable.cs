@@ -11,7 +11,7 @@ namespace Interactables
     {
         //------------------------------ Events ------------------------------
         public static event UnityAction OnDoorStatusChange;       // for sending message to NavMeshBuilder.cs to update NavMeshSurface
-        public static event UnityAction<Vector2> OnDoorKickIn;    // for sending message to EnemyQuickFixSolution_ForTesting.cs to ifnorm about DoorKickIn and DoorPosition
+        public static event UnityAction<Vector3, float> OnDoorKickIn;    // for sending message to EnemyQuickFixSolution_ForTesting.cs to ifnorm about DoorKickIn and DoorPosition
 
         //------------------------------ Fields ------------------------------
         [Header("Needed References to GameObjects")]
@@ -25,6 +25,7 @@ namespace Interactables
         [Header("Settings")]
         [Tooltip("Set which type of Interactable this Object is for appropriate Interaction-Logic")]
         [SerializeField] private Enum_Lib.EInteractableType _interactableType;
+        [SerializeField, Range(0.0f, 10.0f)] private float _doorKickInNoiseRange = 10.0f;
 
 
         //------------------------------ Methods ------------------------------
@@ -51,6 +52,11 @@ namespace Interactables
             #endregion
         }
 
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, _doorKickInNoiseRange);
+        }
 
         //---------- Custom Methods ----------
         /// <summary>
@@ -71,7 +77,7 @@ namespace Interactables
                     
                     PlaySFX("...");                 // Play DoorKickIn Sound
 
-                    OnDoorKickIn?.Invoke(gameObject.transform.position); // Event for Informing Enemies that Door was Kicked in to react to
+                    OnDoorKickIn?.Invoke(transform.position, _doorKickInNoiseRange); // Event for Informing Enemies that Door was Kicked in to react to
 
                     gameObject.SetActive(false);    // todo: exchange this later to switching the GameObjects from intact door to broken door; JM (09.Oct.2023)
 

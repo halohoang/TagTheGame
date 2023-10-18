@@ -1576,11 +1576,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4361380091175105721, guid: 175a2a9a7a4de6641818dd7ff6ac8d9d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -14.85
+      value: -11.51
       objectReference: {fileID: 0}
     - target: {fileID: 4361380091175105721, guid: 175a2a9a7a4de6641818dd7ff6ac8d9d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.16
+      value: 8.21
       objectReference: {fileID: 0}
     - target: {fileID: 4361380091175105721, guid: 175a2a9a7a4de6641818dd7ff6ac8d9d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1622,6 +1622,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: enemy_melee_red
       objectReference: {fileID: 0}
+    - target: {fileID: 4361380091175105727, guid: 175a2a9a7a4de6641818dd7ff6ac8d9d, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 761835356923920264, guid: 175a2a9a7a4de6641818dd7ff6ac8d9d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 175a2a9a7a4de6641818dd7ff6ac8d9d, type: 3}
@@ -1653,6 +1657,7 @@ MonoBehaviour:
   _isPlayerInFOV: 0
   _movementSpeed: 1
   _enemyType: 0
+  _rotationModifier: 90
 --- !u!50 &1046136353
 Rigidbody2D:
   serializedVersion: 4
@@ -2499,6 +2504,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: enemy_range_white
       objectReference: {fileID: 0}
+    - target: {fileID: 1108644999211655059, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 1108644999211655061, guid: f2515cb02c9ad0a43b7b5e7d7fa47c93, type: 3}
       propertyPath: m_SortingOrder
       value: 2
@@ -2577,6 +2586,7 @@ MonoBehaviour:
   _isPlayerInFOV: 0
   _movementSpeed: 1
   _enemyType: 1
+  _rotationModifier: 90
 --- !u!50 &1465482242
 Rigidbody2D:
   serializedVersion: 4
