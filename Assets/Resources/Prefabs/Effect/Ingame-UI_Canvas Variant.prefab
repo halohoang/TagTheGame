@@ -7,6 +7,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2582154426008035742, guid: 9059afef3eab73a40827502136af202e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 253.3479
+      objectReference: {fileID: 0}
+    - target: {fileID: 2582154426008035742, guid: 9059afef3eab73a40827502136af202e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -62.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2582154426008035742, guid: 9059afef3eab73a40827502136af202e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -106.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2582154426008035743, guid: 9059afef3eab73a40827502136af202e, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -315596483, guid: 644d24474d7aaa84c98f18d039691e6d, type: 3}
+    - target: {fileID: 2582154426052968137, guid: 9059afef3eab73a40827502136af202e, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2582154426613010472, guid: 9059afef3eab73a40827502136af202e, type: 3}
       propertyPath: _mainCamera
       value: 

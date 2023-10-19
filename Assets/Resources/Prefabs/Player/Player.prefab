@@ -269,9 +269,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 0}
-  ClonesPerSecond: 5
-  scalePerSecond: {x: 0.5, y: 0.5, z: 0.5}
-  colorPerSecond: {r: 0.8932955, g: 1, b: 0, a: 1}
+  ClonesPerSecond: 8
+  scalePerSecond: {x: 1, y: 1, z: 1}
+  colorPerSecond: {r: 0, g: 0, b: 0, a: 0.9019608}
   cloneSpaceDistance: 0
 --- !u!114 &4783424759540013841
 MonoBehaviour:
