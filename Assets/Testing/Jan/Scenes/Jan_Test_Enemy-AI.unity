@@ -504,34 +504,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3493521951034406024, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: ClonesPerSecond
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 3493521951034406024, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: colorPerSecond.a
-      value: 0.9019608
-      objectReference: {fileID: 0}
-    - target: {fileID: 3493521951034406024, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: colorPerSecond.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3493521951034406024, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: colorPerSecond.r
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3493521951034406024, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: scalePerSecond.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3493521951034406024, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: scalePerSecond.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3493521951034406024, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
-      propertyPath: scalePerSecond.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3493521951034406032, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_Name
       value: Player
@@ -2492,7 +2464,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 10.03
+  orthographic size: 11
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3855,38 +3827,6 @@ PrefabInstance:
       propertyPath: _transformToFollow
       value: 
       objectReference: {fileID: 1102109059}
-    - target: {fileID: 5672901901861164280, guid: 49aeb32cfa405c9449f52b6dde9df78c, type: 3}
-      propertyPath: m_Type
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5672901901861164280, guid: 49aeb32cfa405c9449f52b6dde9df78c, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -315596483, guid: 644d24474d7aaa84c98f18d039691e6d, type: 3}
-    - target: {fileID: 5672901901861164280, guid: 49aeb32cfa405c9449f52b6dde9df78c, type: 3}
-      propertyPath: m_UseSpriteMesh
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5672901901861164281, guid: 49aeb32cfa405c9449f52b6dde9df78c, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 253.3479
-      objectReference: {fileID: 0}
-    - target: {fileID: 5672901901861164281, guid: 49aeb32cfa405c9449f52b6dde9df78c, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -62.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5672901901861164281, guid: 49aeb32cfa405c9449f52b6dde9df78c, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -106.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5672901902085196718, guid: 49aeb32cfa405c9449f52b6dde9df78c, type: 3}
-      propertyPath: m_Type
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5672901902085196718, guid: 49aeb32cfa405c9449f52b6dde9df78c, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 5672901902443634624, guid: 49aeb32cfa405c9449f52b6dde9df78c, type: 3}
       propertyPath: m_Name
       value: Ingame-UI_Canvas
