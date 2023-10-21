@@ -206,7 +206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _currentPlayerSpeed: 0
   _minPlayerSpeed: 3
-  _maxPlayerSpeed: 20
+  _maxPlayerSpeed: 10
   _playerDashForce: 200
   _sandevistan: {fileID: 3493521951034406024}
   _dashCooldown: 1
@@ -269,11 +269,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 0}
-  ClonesPerSecond: 10
+  ClonesPerSecond: 8
   scalePerSecond: {x: 1, y: 1, z: 1}
-  colorPerSecond: {r: 0.8932955, g: 1, b: 0, a: 0.8509804}
-  cloneSpaceDistance: -0.1
-  _movement: {fileID: 3493521951034406037}
+  colorPerSecond: {r: 0, g: 0, b: 0, a: 0.9019608}
+  cloneSpaceDistance: 0
 --- !u!114 &4783424759540013841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,8 +321,6 @@ MonoBehaviour:
   _player: {fileID: 3493521951034406032}
   _chargeBarTransform: {fileID: 6563612138351710883}
   _chargeSpeed: 0.05
-  _bloodHitSpawnPrefab: {fileID: 1471398999119722488, guid: 3e6cf606eb96c8c489d93206732bdb13, type: 3}
-  _bloodHitSpawnTransform: {fileID: 1578513965}
   _takenDamage: 1
 --- !u!114 &4930503924211928506
 MonoBehaviour:
@@ -347,18 +344,18 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3493521951034406032}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 10000
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!212 &3493521951034406039
 SpriteRenderer:
@@ -400,7 +397,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: -1396960279, guid: 6fb70707453591447bba005771cf3a11, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

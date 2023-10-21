@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &522917036
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 522917037}
-  m_Layer: 0
-  m_Name: BloodHitTransform
-  m_TagString: Untagged
-  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &522917037
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 522917036}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1108644999211655062}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1108644999211655059
 GameObject:
   m_ObjectHideFlags: 0
@@ -45,6 +14,9 @@ GameObject:
   - component: {fileID: 1108644999211655063}
   - component: {fileID: 1268659712}
   - component: {fileID: 1807849734675487193}
+  - component: {fileID: 1465482242}
+  - component: {fileID: 1465482241}
+  - component: {fileID: 1465482243}
   m_Layer: 0
   m_Name: enemy_range_white
   m_TagString: Enemy
@@ -63,8 +35,7 @@ Transform:
   m_LocalPosition: {x: -0.017295599, y: 1.6049683, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 522917037}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 270}
@@ -108,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 1276895412, guid: 152033cfaee8a7949b4b52f93e31def9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -181,10 +152,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maximumHealth: 10
   _currentHealth: 0
-  _takenDamage: 0.5
+  _takenDamage: 1
   _animator: {fileID: 1108644999211655060}
-  _bloodHitSpawnPrefab: {fileID: 1471398999119722488, guid: 3e6cf606eb96c8c489d93206732bdb13, type: 3}
-  _bloodHitSpawnTransform: {fileID: 522917037}
+  _bloodPoolSpawn:
+  - {fileID: 3044862607823702276, guid: ef5550f6add88d942b04d90e365378c4, type: 3}
+  - {fileID: 7784901274924939644, guid: 78e9458eac6487141921a0fda951a639, type: 3}
+  - {fileID: 5169151268200698254, guid: da58d847e6380c44eb0a2b2a58ee2b1e, type: 3}
+  - {fileID: 1387189892773440931, guid: 6b10275c7991d6e4fb30a507d922ef24, type: 3}
+  _bloodDeadPrefab: {fileID: 5459322947420741018, guid: 56f040fc343074640ba7ce86ec08968c, type: 3}
 --- !u!114 &1807849734675487193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,3 +174,69 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _flashingSpeed: 0
   _flashDuration: 0.05
+--- !u!50 &1465482242
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108644999211655059}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1000000
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4
+--- !u!114 &1465482241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108644999211655059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e83020a8029d51343a5ac949db8b0248, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rb2d: {fileID: 0}
+  _playerTransform: {fileID: 0}
+  _navAgent: {fileID: 0}
+  _fOVAngle: 180
+  _viewDistance: 0
+  _playerDetectionMask:
+    serializedVersion: 2
+    m_Bits: 256
+  _isPlayerInFOV: 0
+  _movementSpeed: 1
+  _enemyType: 1
+--- !u!195 &1465482243
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108644999211655059}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.1
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 0.26
+  m_BaseOffset: 0.13
+  m_WalkableMask: 1
+  m_ObstacleAvoidanceType: 4
