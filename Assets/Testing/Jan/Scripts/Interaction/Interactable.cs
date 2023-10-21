@@ -64,7 +64,6 @@ namespace Interactables
         /// </summary>
         protected override void ReadInteractionInput()
         {
-
             // disable Interaction-Feedback-UI
             for (int i = 0; i < _interactionFeedbackUI.Length; i++)
                 _interactionFeedbackUI[i].SetActive(false);

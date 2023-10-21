@@ -14,13 +14,14 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
     [SerializeField, ReadOnly] private Rigidbody2D _rb2d;
     [SerializeField, ReadOnly] private Transform _playerTransform;
     [SerializeField, ReadOnly] private NavMeshAgent _navAgent;
+    [SerializeField] private Transform _viewDirectionHelperTrans;
     [Space(5)]
 
     [Header("Perception Settings")]
     [Space(2)]
     [Tooltip("Angle of the field of view.")]
     [SerializeField, Range(0.0f, 360.0f)] private float _fOVAngle = 180.0f;
-    [SerializeField] private float _viewDistance;
+    [SerializeField, Range(0.0f, 50.0f)] private float _viewDistance = 10.0f;
     [SerializeField] private LayerMask _playerDetectionMask;
     [SerializeField, ReadOnly] private bool _isPlayerInFOV;
     //[Space(2)]
@@ -42,6 +43,9 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
         _rb2d = GetComponent<Rigidbody2D>();
         _navAgent = GetComponent<NavMeshAgent>();
         _playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+
+        if (_viewDirectionHelperTrans == null)
+            _viewDirectionHelperTrans = gameObject.transform.GetChild(0).GetComponent<Transform>();
     }
 
     private void OnEnable()
@@ -64,28 +68,57 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Quickfix Behaviour for different Enemy Types
-        switch (_enemyType)
+        if (Physics2D.Raycast(transform.position, _viewDirectionHelperTrans.position - transform.position, _viewDistance, _playerDetectionMask))
         {
-            case Enum_Lib.EEnemyType.Melee_Enemy:
-                _navAgent.SetDestination(_playerTransform.position);
-                break;
+            //look towards player
+            //Vector2 lookDirection = (_playerTransform.position - transform.position).normalized;
+            //float angle = Mathf.Atan2(lookDirection.x, lookDirection.y) * Mathf.Rad2Deg;
+            //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            transform.right = _playerTransform.position - transform.position;
 
-            case Enum_Lib.EEnemyType.Range_Enemy:
-                // todo: fill with logic yet; JM (17.10.2023)
-                break;
-        }
+            Debug.Log($"Player was detected by '<color=magenta>{gameObject.name}</color>'");
 
-        if (Physics2D.Raycast(transform.position, transform.right, _viewDistance, _playerDetectionMask))
-        {
+            // Quickfix Behaviour for different Enemy Types
+            switch (_enemyType)
+            {
+                case Enum_Lib.EEnemyType.Melee_Enemy:
+                    _navAgent.speed = _movementSpeed;
+                    _navAgent.SetDestination(_playerTransform.position);
+                    break;
 
+                case Enum_Lib.EEnemyType.Range_Enemy:
+                    
+                    // shoot bullet
+                    //// Calculate Deviation during the shooting
+                    //float deviation = CalculateDeviation();
+
+                    //Quaternion bulletRotation = _bulletSpawnPoint.rotation; // Apply deviation to the bullet's rotation
+                    //float randomAngle = UnityEngine.Random.Range(-deviation, deviation); // Randomize the deviation angle
+
+                    //bulletRotation *= Quaternion.Euler(0f, 0f, randomAngle); // Apply rotation around the Z-axis
+
+                    //GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, bulletRotation);
+                    //Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
+                    //_ammoCounterScript.DecreaseAmmo(); //Call the Decrease Ammo function from the AmmoCounter script;
+                    //_animator.SetBool("Firing", true);
+                    //_nextFireTime = Time.time + _firerate;
+
+                    break;
+            }
         }
     }
 
-    private bool CheckIfPlayerIsInFOV(Vector2 position)
+    private void OnDrawGizmos()
     {
-        return _isPlayerInFOV = Vector2.Angle(transform.right, position - (Vector2)transform.position) <= _fOVAngle;
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, _viewDirectionHelperTrans.position);
     }
+
+    //private bool CheckIfPlayerIsInFOV(Vector2 position)
+    //{
+    //    return _isPlayerInFOV = Vector2.Angle(transform.right, position - (Vector2)transform.position) <= _fOVAngle;
+    //}
+
 
     private void FaceAgentTowardsDoor(Vector3 doorPosition, float doorKickInNoiseRange)
     {
@@ -93,13 +126,26 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
         Collider2D[] enemieColliders = Physics2D.OverlapCircleAll(doorPosition, doorKickInNoiseRange, LayerMask.GetMask("Enemy"));
         for (int i = 0; i < enemieColliders.Length; i++)
         {
-            // calculate rotation angle (does not work as intended yet tho); JM (18.10.2023)
-            Vector2 lookDirection = (doorPosition - transform.position).normalized;
-            float angle = Mathf.Atan2(lookDirection.x, lookDirection.y) * Mathf.Rad2Deg - _rotationModifier;
-            Quaternion quart = Quaternion.AngleAxis(angle, Vector3.forward);
+            enemieColliders[i].gameObject.transform.right = doorPosition - enemieColliders[i].gameObject.transform.position;
 
-            // rotat enemy-object
-            enemieColliders[i].gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, quart, 360);
+            //alternate solution (does not work properly)
+            //Vector2 directionToDoor = (doorPosition - transform.position).normalized;
+            //float alphaAngle = Mathf.Atan2(directionToDoor.x, directionToDoor.y);
+            //float angleToRotate = (Mathf.PI - alphaAngle) * Mathf.Rad2Deg;
+            //Quaternion quart = Quaternion.AngleAxis(angleToRotate, Vector3.forward);
+
+            //enemieColliders[i].gameObject.transform.rotation = quart;
+            //Debug.Log($"<color=orange> {enemieColliders[i].name} was rotated by {angleToRotate}° on its Z-Axis </color>");
+
+
+            //alternate solution (does not work properly)
+            //// calculate rotation angle (does not work as intended yet tho); JM (18.10.2023)
+            //Vector2 lookDirection = (doorPosition - transform.position).normalized;
+            //float angle = Mathf.Atan2(lookDirection.x, lookDirection.y) * Mathf.Rad2Deg - _rotationModifier;
+            //Quaternion quart = Quaternion.AngleAxis(angle, Vector3.forward);
+
+            //// rotat enemy-object
+            //enemieColliders[i].gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, quart, 360);
         }
     }
 }
