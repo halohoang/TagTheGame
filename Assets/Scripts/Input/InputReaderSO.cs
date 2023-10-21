@@ -64,7 +64,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
     public void OnDashing(InputAction.CallbackContext context)
     {
         OnDashInput?.Invoke();
-        Debug.Log($"space was pressed");
+        //Debug.Log($"space was pressed");
     }
 
     public void OnInteraction(InputAction.CallbackContext context)

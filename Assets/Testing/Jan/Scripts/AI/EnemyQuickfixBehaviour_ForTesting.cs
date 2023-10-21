@@ -66,7 +66,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (Physics2D.Raycast(transform.position, _viewDirectionHelperTrans.position - transform.position, _viewDistance, _playerDetectionMask))
         {
@@ -76,7 +76,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
             //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
             transform.right = _playerTransform.position - transform.position;
 
-            Debug.Log($"Player was detected by '<color=magenta>{gameObject.name}</color>'");
+            //Debug.Log($"Player was detected by '<color=magenta>{gameObject.name}</color>'");
 
             // Quickfix Behaviour for different Enemy Types
             switch (_enemyType)

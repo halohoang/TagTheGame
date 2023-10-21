@@ -64,7 +64,7 @@ namespace Interactables
             // On Collision with Player store the Transform of the Player into '_playerTransform' for possible later usage
             if (collision.CompareTag("Player"))
             {
-                Debug.Log($"<color=lime>Player stays in interactable zone -> ready for Interaction! (PRESS 'E')</color>");
+                //Debug.Log($"<color=lime>Player stays in interactable zone -> ready for Interaction! (PRESS 'E')</color>");
 
                 _playerTransform = collision.GetComponent<Transform>(); // needs to stay in OnTriggerStay since the PlayerPosition can also still change when the Player moves inside the Triggerzone; JM
             }
