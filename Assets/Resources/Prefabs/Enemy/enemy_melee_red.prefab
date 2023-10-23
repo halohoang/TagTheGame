@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 1046136353}
   - component: {fileID: 1046136352}
   - component: {fileID: 1046136354}
+  - component: {fileID: 1508150158}
   m_Layer: 9
   m_Name: enemy_melee_red
   m_TagString: Enemy
@@ -197,7 +198,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.2, y: 0.3}
+  m_Size: {x: 0.14, y: 0.26}
   m_EdgeRadius: 0
 --- !u!50 &1046136353
 Rigidbody2D:
@@ -237,12 +238,14 @@ MonoBehaviour:
   _navAgent: {fileID: 0}
   _viewDirectionHelperTrans: {fileID: 1816798256}
   _raycastingCollider: {fileID: 0}
+  _animtor: {fileID: 0}
   _fOVAngle: 180
   _viewDistance: 10
   _playerDetectionMask:
     serializedVersion: 2
     m_Bits: 256
   _isPlayerInFOV: 0
+  _wasPlayerDetected: 0
   _movementSpeed: 3.5
   _enemyType: 0
   _rotationModifier: 1
@@ -268,3 +271,24 @@ NavMeshAgent:
   m_BaseOffset: 0.13000003
   m_WalkableMask: 1
   m_ObstacleAvoidanceType: 4
+--- !u!95 &1508150158
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4361380091175105727}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c43827eae041b304ebb5cc2d08f45538, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

@@ -53,6 +53,7 @@ public class EnemyHealth : MonoBehaviour
 			_animator.SetTrigger("Dead");
 			_isDead = true;
 			_boxCollider2D.isTrigger = true;
+
 		}
 	}
 	private void OnTriggerEnter2D(Collider2D collision)

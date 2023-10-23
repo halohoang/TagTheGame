@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0676d3a222a4a9748ad75db9290a1bb2
+guid: 4dacd65ce79c8214886dd8fa6418e072
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -105,7 +105,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: EnemyRed_Knife_0
+      name: EnemyRed_Knife-export_0
       rect:
         serializedVersion: 2
         x: 7
@@ -119,20 +119,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8b5862f130b28c24db578a3a88cbcd7d
-      internalID: 1305622194
+      spriteID: 0247dc8042ce2bb4ab1683cb2f20e510
+      internalID: -1253677244
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: EnemyRed_Knife_1
+      name: EnemyRed_Knife-export_1
       rect:
         serializedVersion: 2
-        x: 38
-        y: 17
-        width: 23
-        height: 18
+        x: 64
+        y: 14
+        width: 25
+        height: 21
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,20 +140,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: da46d93f041dc3c4c99394c8ca940cf7
-      internalID: 1184903289
+      spriteID: e48c570e6b886f442a63f42b60703b0f
+      internalID: -2019127172
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: EnemyRed_Knife_2
+      name: EnemyRed_Knife-export_2
       rect:
         serializedVersion: 2
-        x: 82
-        y: 5
-        width: 16
-        height: 31
+        x: 111
+        y: 1
+        width: 18
+        height: 35
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -161,41 +161,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3e02c87bc9bd91144a82982db5fece2d
-      internalID: 527396708
+      spriteID: 8221d926c5916cd4c86ff9805a08f144
+      internalID: 1138633613
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: EnemyRed_Knife_3
+      name: EnemyRed_Knife-export_3
       rect:
         serializedVersion: 2
-        x: 119
-        y: 12
-        width: 36
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3134d1a18c6828e40900d92d70f4a814
-      internalID: 2072222144
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: EnemyRed_Knife_4
-      rect:
-        serializedVersion: 2
-        x: 184
+        x: 152
         y: 9
-        width: 32
-        height: 32
+        width: 39
+        height: 26
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -203,20 +182,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3e07c0375f43346488a4634a8f62226b
-      internalID: 1343201058
+      spriteID: 454d24301c6c7154bb5a93f6e6f5bf96
+      internalID: 1441574364
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: EnemyRed_Knife_5
+      name: EnemyRed_Knife-export_4
       rect:
         serializedVersion: 2
-        x: 256
-        y: 13
-        width: 23
-        height: 34
+        x: 222
+        y: 5
+        width: 35
+        height: 37
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -224,8 +203,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1466d797809414844bc1f7b09062f707
-      internalID: -1321564104
+      spriteID: c41c30628c8f4d94d987ccd4d649373c
+      internalID: -1698408920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyRed_Knife-export_5
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 10
+        width: 25
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5d013ec340efd4449327e29ca717c03
+      internalID: 2135762685
       vertices: []
       indices: 
       edges: []
@@ -241,12 +241,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      EnemyRed_Knife_0: 1305622194
-      EnemyRed_Knife_1: 1184903289
-      EnemyRed_Knife_2: 527396708
-      EnemyRed_Knife_3: 2072222144
-      EnemyRed_Knife_4: 1343201058
-      EnemyRed_Knife_5: -1321564104
+      EnemyRed_Knife-export_0: -1253677244
+      EnemyRed_Knife-export_1: -2019127172
+      EnemyRed_Knife-export_2: 1138633613
+      EnemyRed_Knife-export_3: 1441574364
+      EnemyRed_Knife-export_4: -1698408920
+      EnemyRed_Knife-export_5: 2135762685
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
