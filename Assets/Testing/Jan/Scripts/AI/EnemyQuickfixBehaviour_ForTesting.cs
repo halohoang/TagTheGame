@@ -150,7 +150,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
 
         if (_wasPlayerDetected)
         {
-
+            // todo: fill with logic; JM (23.10.2023)
         }
     }
 
