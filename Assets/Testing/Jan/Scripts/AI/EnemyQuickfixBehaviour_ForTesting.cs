@@ -18,7 +18,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
     [SerializeField, ReadOnly] private NavMeshAgent _navAgent;
     [SerializeField] private Transform _viewDirectionHelperTrans;
     [SerializeField] private Collider2D _raycastingCollider;
-    [SerializeField] private Animator _anim;
+    [SerializeField] private Animator _animtor;
     [Space(5)]
 
     [Header("Perception Settings")]
@@ -49,7 +49,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
         _rb2d = GetComponent<Rigidbody2D>();
         _navAgent = GetComponent<NavMeshAgent>();
         _playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        _anim = GetComponent<Animator>();
+        _animtor = GetComponent<Animator>();
 
         if (_viewDirectionHelperTrans == null)
             _viewDirectionHelperTrans = gameObject.transform.GetChild(0).GetComponent<Transform>();
@@ -78,7 +78,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        _anim.SetBool("Attack", true);
+        _animtor.SetBool("Attack", true);
 
         // Dealing Damage to Player when Player enters Trigger-Zone around Enemy        
         if (collision.TryGetComponent(out PlayerHealth playerHealth))
@@ -86,7 +86,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        _anim.SetBool("Attack", false);
+        _animtor.SetBool("Attack", false);
     }
 
     // Update is called once per frame
