@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EnemyHealth : MonoBehaviour
 {
@@ -53,6 +54,8 @@ public class EnemyHealth : MonoBehaviour
 			_animator.SetTrigger("Dead");
 			_isDead = true;
 			_boxCollider2D.isTrigger = true;
+			// disable EnemyBehaviour and therefore also Raycasting
+			gameObject.GetComponent<EnemyQuickfixBehaviour_ForTesting>().enabled = false;	// todo: maybe find a more clean solution, 'cause this is now more like spagetti; JM (23.10.2023)
 		}
 	}
 	private void OnTriggerEnter2D(Collider2D collision)
