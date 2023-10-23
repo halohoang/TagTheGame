@@ -18,6 +18,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
     [SerializeField, ReadOnly] private NavMeshAgent _navAgent;
     [SerializeField] private Transform _viewDirectionHelperTrans;
     [SerializeField] private Collider2D _raycastingCollider;
+    [SerializeField] private Animator _anim;
     [Space(5)]
 
     [Header("Perception Settings")]
@@ -27,6 +28,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
     [SerializeField, Range(0.0f, 50.0f)] private float _viewDistance = 10.0f;
     [SerializeField] private LayerMask _playerDetectionMask;
     [SerializeField, ReadOnly] private bool _isPlayerInFOV;
+    [SerializeField, ReadOnly] private bool _wasPlayerDetected = false;     // needed for estimating if player was detected so if so, the enemy will be 'searching' for the player
     //[Space(2)]
     //[SerializeField, Range(0.0f, 50.0f)] private float _auditoryPerceptionRadius = 10.0f;
     [Space(5)]
@@ -47,6 +49,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
         _rb2d = GetComponent<Rigidbody2D>();
         _navAgent = GetComponent<NavMeshAgent>();
         _playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        _anim = GetComponent<Animator>();
 
         if (_viewDirectionHelperTrans == null)
             _viewDirectionHelperTrans = gameObject.transform.GetChild(0).GetComponent<Transform>();
@@ -75,9 +78,15 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+        _anim.SetBool("Attack", true);
+
         // Dealing Damage to Player when Player enters Trigger-Zone around Enemy        
         if (collision.TryGetComponent(out PlayerHealth playerHealth))
             playerHealth.GetDamage();
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        _anim.SetBool("Attack", false);
     }
 
     // Update is called once per frame
@@ -96,7 +105,8 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
             if (numHits > 0)
                 Debug.Log($"RayCast-Detections: '<color=orange>{hitResults[i].collider.gameObject.name}</color>'");
 
-            if (hitResults[i].collider.gameObject != null && hitResults[i].collider.gameObject.CompareTag("Player"))
+
+            if (hitResults[i] != false && hitResults[i].collider.gameObject.CompareTag("Player"))
             {
                 //look towards player
                 //Vector2 lookDirection = (_playerTransform.position - transform.position).normalized;
@@ -137,6 +147,11 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
                 }
             }
         }
+
+        if (_wasPlayerDetected)
+        {
+
+        }
     }
 
     private void OnDrawGizmos()
@@ -144,12 +159,6 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, _viewDirectionHelperTrans.position);
     }
-
-    //private bool CheckIfPlayerIsInFOV(Vector2 position)
-    //{
-    //    return _isPlayerInFOV = Vector2.Angle(transform.right, position - (Vector2)transform.position) <= _fOVAngle;
-    //}
-
 
     private void FaceAgentTowardsDoor(Vector3 doorPosition, float doorKickInNoiseRange)
     {
@@ -178,6 +187,5 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
             //// rotat enemy-object
             //enemieColliders[i].gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, quart, 360);
         }
-
     }
 }
