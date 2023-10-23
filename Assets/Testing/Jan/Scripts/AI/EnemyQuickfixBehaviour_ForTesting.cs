@@ -5,6 +5,8 @@ using UnityEngine.AI;
 using Interactables;
 using System;
 using UnityEngine.Animations;
+using Unity.VisualScripting;
+using System.IO;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(NavMeshAgent))]
 public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
@@ -15,6 +17,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
     [SerializeField, ReadOnly] private Transform _playerTransform;
     [SerializeField, ReadOnly] private NavMeshAgent _navAgent;
     [SerializeField] private Transform _viewDirectionHelperTrans;
+    [SerializeField] private Collider2D _raycastingCollider;
     [Space(5)]
 
     [Header("Perception Settings")]
@@ -40,6 +43,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
 
     private void Awake()
     {
+        // Auto-referencing
         _rb2d = GetComponent<Rigidbody2D>();
         _navAgent = GetComponent<NavMeshAgent>();
         _playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
@@ -50,11 +54,13 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
 
     private void OnEnable()
     {
+        // subscribing to Events
         Interactable.OnDoorKickIn += FaceAgentTowardsDoor;
     }
 
     private void OnDisable()
     {
+        // unsubscribing to Events
         Interactable.OnDoorKickIn -= FaceAgentTowardsDoor;
     }
 
@@ -63,47 +69,72 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
         // fixing buggy rotation and transform that happens due to NavMeshAgent on EnemyObjects
         _navAgent.updateRotation = false;
         _navAgent.updateUpAxis = false;
+
+        _raycastingCollider = GetComponent<Collider2D>();
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        // Dealing Damage to Player when Player enters Trigger-Zone around Enemy        
+        if (collision.TryGetComponent(out PlayerHealth playerHealth))
+            playerHealth.GetDamage();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (Physics2D.Raycast(transform.position, _viewDirectionHelperTrans.position - transform.position, _viewDistance, _playerDetectionMask))
+        // simple AI-Logic (as long as Player is detected via Raycast) execute specific Enemy-Behaviour-Logic
+
+        RaycastHit2D[] hitResults = new RaycastHit2D[1];
+
+        Debug.DrawRay(transform.position, _viewDirectionHelperTrans.position - transform.position, Color.magenta, 0.1f);
+        int numHits = _raycastingCollider.Raycast(_viewDirectionHelperTrans.position - transform.position, hitResults, _viewDistance);
+
+        for (int i = 0; i < hitResults.Length; i++)
         {
-            //look towards player
-            //Vector2 lookDirection = (_playerTransform.position - transform.position).normalized;
-            //float angle = Mathf.Atan2(lookDirection.x, lookDirection.y) * Mathf.Rad2Deg;
-            //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-            transform.right = _playerTransform.position - transform.position;
+            // debuging
+            if (numHits > 0)
+                Debug.Log($"RayCast-Detections: '<color=orange>{hitResults[i].collider.gameObject.name}</color>'");
 
-            //Debug.Log($"Player was detected by '<color=magenta>{gameObject.name}</color>'");
-
-            // Quickfix Behaviour for different Enemy Types
-            switch (_enemyType)
+            if (hitResults[i].collider.gameObject != null && hitResults[i].collider.gameObject.CompareTag("Player"))
             {
-                case Enum_Lib.EEnemyType.Melee_Enemy:
-                    _navAgent.speed = _movementSpeed;
-                    _navAgent.SetDestination(_playerTransform.position);
-                    break;
+                //look towards player
+                //Vector2 lookDirection = (_playerTransform.position - transform.position).normalized;
+                //float angle = Mathf.Atan2(lookDirection.x, lookDirection.y) * Mathf.Rad2Deg;
+                //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+                transform.right = _playerTransform.position - transform.position;
 
-                case Enum_Lib.EEnemyType.Range_Enemy:
-                    
-                    // shoot bullet
-                    //// Calculate Deviation during the shooting
-                    //float deviation = CalculateDeviation();
+                //Debug.Log($"Player was detected by '<color=magenta>{gameObject.name}</color>'");
 
-                    //Quaternion bulletRotation = _bulletSpawnPoint.rotation; // Apply deviation to the bullet's rotation
-                    //float randomAngle = UnityEngine.Random.Range(-deviation, deviation); // Randomize the deviation angle
+                // Quickfix Behaviour for different Enemy Types
+                switch (_enemyType)
+                {
+                    // case 1: Melee-Enemy-Behaviour-Logic
+                    case Enum_Lib.EEnemyType.Melee_Enemy:
+                        _navAgent.speed = _movementSpeed;
+                        _navAgent.SetDestination(_playerTransform.position);
+                        break;
 
-                    //bulletRotation *= Quaternion.Euler(0f, 0f, randomAngle); // Apply rotation around the Z-axis
+                    // case 2: Range-Enemy-Behaviour-Logic
+                    case Enum_Lib.EEnemyType.Range_Enemy:
 
-                    //GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, bulletRotation);
-                    //Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
-                    //_ammoCounterScript.DecreaseAmmo(); //Call the Decrease Ammo function from the AmmoCounter script;
-                    //_animator.SetBool("Firing", true);
-                    //_nextFireTime = Time.time + _firerate;
+                        // shoot bullet
+                        //// Calculate Deviation during the shooting
+                        //float deviation = CalculateDeviation();
 
-                    break;
+                        //Quaternion bulletRotation = _bulletSpawnPoint.rotation; // Apply deviation to the bullet's rotation
+                        //float randomAngle = UnityEngine.Random.Range(-deviation, deviation); // Randomize the deviation angle
+
+                        //bulletRotation *= Quaternion.Euler(0f, 0f, randomAngle); // Apply rotation around the Z-axis
+
+                        //GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, bulletRotation);
+                        //Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
+                        //_ammoCounterScript.DecreaseAmmo(); //Call the Decrease Ammo function from the AmmoCounter script;
+                        //_animator.SetBool("Firing", true);
+                        //_nextFireTime = Time.time + _firerate;
+
+                        break;
+                }
             }
         }
     }
@@ -122,7 +153,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
 
     private void FaceAgentTowardsDoor(Vector3 doorPosition, float doorKickInNoiseRange)
     {
-        // Rotate the Enemy-Object so it's facing the Kicked in Door Object when Door was kicked in        
+        // Rotate the Enemy-Object so it's facing the Kicked in Door Object when Door was kicked in 
         Collider2D[] enemieColliders = Physics2D.OverlapCircleAll(doorPosition, doorKickInNoiseRange, LayerMask.GetMask("Enemy"));
         for (int i = 0; i < enemieColliders.Length; i++)
         {
@@ -147,5 +178,6 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
             //// rotat enemy-object
             //enemieColliders[i].gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, quart, 360);
         }
+
     }
 }
