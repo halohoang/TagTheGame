@@ -221,7 +221,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.2, y: 0.3}
+  m_Size: {x: 0.14, y: 0.26}
   m_EdgeRadius: 0
 --- !u!114 &1268659712
 MonoBehaviour:
@@ -237,7 +237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maximumHealth: 10
   _currentHealth: 0
-  _takenDamage: 1
+  _takenDamage: 3
   _animator: {fileID: 1108644999211655060}
   _bloodPoolSpawn:
   - {fileID: 3044862607823702276, guid: ef5550f6add88d942b04d90e365378c4, type: 3}
@@ -297,12 +297,14 @@ MonoBehaviour:
   _navAgent: {fileID: 0}
   _viewDirectionHelperTrans: {fileID: 1202474002}
   _raycastingCollider: {fileID: 0}
+  _animtor: {fileID: 0}
   _fOVAngle: 180
   _viewDistance: 10
   _playerDetectionMask:
     serializedVersion: 2
     m_Bits: 256
   _isPlayerInFOV: 0
+  _wasPlayerDetected: 0
   _movementSpeed: 1
   _enemyType: 1
   _rotationModifier: 0

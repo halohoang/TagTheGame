@@ -94,9 +94,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4361380091175105721}
   - component: {fileID: 4361380091175105726}
+  - component: {fileID: 8490934405458039553}
+  - component: {fileID: 5494017835162820621}
+  - component: {fileID: 1046136352}
   - component: {fileID: 4361380091175105720}
   - component: {fileID: 1046136353}
-  - component: {fileID: 1046136352}
   - component: {fileID: 1046136354}
   - component: {fileID: 1508150158}
   m_Layer: 9
@@ -174,6 +176,70 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8490934405458039553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4361380091175105727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6b19f4a116f9441899304199b75be9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maximumHealth: 10
+  _currentHealth: 0
+  _takenDamage: 4
+  _animator: {fileID: 1508150158}
+  _bloodPoolSpawn:
+  - {fileID: 3044862607823702276, guid: ef5550f6add88d942b04d90e365378c4, type: 3}
+  - {fileID: 7784901274924939644, guid: 78e9458eac6487141921a0fda951a639, type: 3}
+  - {fileID: 5169151268200698254, guid: da58d847e6380c44eb0a2b2a58ee2b1e, type: 3}
+  - {fileID: 1387189892773440931, guid: 6b10275c7991d6e4fb30a507d922ef24, type: 3}
+  _bloodDeadPrefab: {fileID: 5459322947420741018, guid: 56f040fc343074640ba7ce86ec08968c, type: 3}
+--- !u!114 &5494017835162820621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4361380091175105727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e28b497d972cb6b43bf13176102d6351, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _flashingSpeed: 0
+  _flashDuration: 0.1
+--- !u!114 &1046136352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4361380091175105727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e83020a8029d51343a5ac949db8b0248, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rb2d: {fileID: 0}
+  _playerTransform: {fileID: 0}
+  _navAgent: {fileID: 0}
+  _viewDirectionHelperTrans: {fileID: 1816798256}
+  _raycastingCollider: {fileID: 0}
+  _animtor: {fileID: 0}
+  _fOVAngle: 180
+  _viewDistance: 10
+  _playerDetectionMask:
+    serializedVersion: 2
+    m_Bits: 256
+  _isPlayerInFOV: 0
+  _wasPlayerDetected: 0
+  _movementSpeed: 3.5
+  _enemyType: 0
+  _rotationModifier: 1
 --- !u!61 &4361380091175105720
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -221,34 +287,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &1046136352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4361380091175105727}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e83020a8029d51343a5ac949db8b0248, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rb2d: {fileID: 0}
-  _playerTransform: {fileID: 0}
-  _navAgent: {fileID: 0}
-  _viewDirectionHelperTrans: {fileID: 1816798256}
-  _raycastingCollider: {fileID: 0}
-  _animtor: {fileID: 0}
-  _fOVAngle: 180
-  _viewDistance: 10
-  _playerDetectionMask:
-    serializedVersion: 2
-    m_Bits: 256
-  _isPlayerInFOV: 0
-  _wasPlayerDetected: 0
-  _movementSpeed: 3.5
-  _enemyType: 0
-  _rotationModifier: 1
 --- !u!195 &1046136354
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -259,8 +297,8 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.1
-  m_Speed: 3.5
-  m_Acceleration: 8
+  m_Speed: 100
+  m_Acceleration: 10
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0

@@ -46,14 +46,14 @@ public class EnemyHealth : MonoBehaviour
 				Instantiate(_bloodPoolSpawn[randomIndex], transform.position, bloodRotation);
 			}
 		}
-		if (_currentHealth == 0 && _isDead == false)
+		if (_currentHealth <= 0 && _isDead == false)
 		{
 			// Randomize dead rotation
 			this.transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
 			_animator.SetTrigger("Dead");
 			_isDead = true;
 			_boxCollider2D.isTrigger = true;
-
+			gameObject.GetComponent<EnemyQuickfixBehaviour_ForTesting>().enabled = false;
 		}
 	}
 	private void OnTriggerEnter2D(Collider2D collision)
