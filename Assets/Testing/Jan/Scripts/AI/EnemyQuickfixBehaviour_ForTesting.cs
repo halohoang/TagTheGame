@@ -4,9 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Interactables;
 using System;
-using UnityEngine.Animations;
-using Unity.VisualScripting;
-using System.IO;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(NavMeshAgent))]
 public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
@@ -29,6 +27,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
     [SerializeField] private LayerMask _playerDetectionMask;
     [SerializeField, ReadOnly] private bool _isPlayerInFOV;
     [SerializeField, ReadOnly] private bool _wasPlayerDetected = false;     // needed for estimating if player was detected so if so, the enemy will be 'searching' for the player
+    [SerializeField, ReadOnly] private bool _isEnemyDead;
     //[Space(2)]
     //[SerializeField, Range(0.0f, 50.0f)] private float _auditoryPerceptionRadius = 10.0f;
     [Space(5)]
@@ -42,6 +41,8 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
     [Space(2)]
     [SerializeField] private Enum_Lib.EEnemyType _enemyType;
     [SerializeField] private float _rotationModifier;
+
+    public bool IsEnemyDead { get => _isEnemyDead; internal set => _isEnemyDead = value; }
 
     private void Awake()
     {
@@ -106,15 +107,18 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
                 Debug.Log($"RayCast-Detections: '<color=orange>{hitResults[i].collider.gameObject.name}</color>'");
 
 
-            if (hitResults[i] != false && hitResults[i].collider.gameObject.CompareTag("Player"))
+            if (hitResults[i] != false && hitResults[i].collider.gameObject.CompareTag("Player") && !_isEnemyDead)
             {
+                _wasPlayerDetected = true;
+
                 //look towards player
+                #region old code
                 //Vector2 lookDirection = (_playerTransform.position - transform.position).normalized;
                 //float angle = Mathf.Atan2(lookDirection.x, lookDirection.y) * Mathf.Rad2Deg;
                 //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+                #endregion
                 transform.right = _playerTransform.position - transform.position;
 
-                //Debug.Log($"Player was detected by '<color=magenta>{gameObject.name}</color>'");
 
                 // Quickfix Behaviour for different Enemy Types
                 switch (_enemyType)
@@ -146,12 +150,23 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
                         break;
                 }
             }
+            else if (_wasPlayerDetected && !_isEnemyDead && (hitResults[i] == false || !hitResults[i].collider.gameObject.CompareTag("Player")))
+            {
+                //StartCoroutine(ILookForPlayer(hitResults, i));
+                Debug.Log($"Player was detected by '<color=orange>{gameObject.name}</color>'");
+            }
         }
 
-        if (_wasPlayerDetected)
+    }
+
+    IEnumerator ILookForPlayer(RaycastHit2D[] hitResults, int elementOfHitResults)
+    {
+        do
         {
-            // todo: fill with logic; JM (23.10.2023)
-        }
+            transform.right = UnityEngine.Random.insideUnitCircle;
+            yield return new WaitForSeconds(10.0f);                   // todo: fix -> the Enemy turns into a Helicopter if doing it like that; JM (24.10.2023)
+        } 
+        while (hitResults[elementOfHitResults] == false || !hitResults[elementOfHitResults].collider.gameObject.CompareTag("Player"));
     }
 
     private void OnDrawGizmos()
@@ -168,6 +183,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
         {
             enemieColliders[i].gameObject.transform.right = doorPosition - enemieColliders[i].gameObject.transform.position;
 
+            #region old code
             //alternate solution (does not work properly)
             //Vector2 directionToDoor = (doorPosition - transform.position).normalized;
             //float alphaAngle = Mathf.Atan2(directionToDoor.x, directionToDoor.y);
@@ -186,6 +202,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
 
             //// rotat enemy-object
             //enemieColliders[i].gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, quart, 360);
+            #endregion
         }
     }
 }

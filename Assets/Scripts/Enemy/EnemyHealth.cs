@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyHealth : MonoBehaviour
 {
@@ -53,7 +54,12 @@ public class EnemyHealth : MonoBehaviour
 			_animator.SetTrigger("Dead");
 			_isDead = true;
 			_boxCollider2D.isTrigger = true;
+
+			// Setup Enemy-Behaviour to EnemyDead
+			gameObject.GetComponent<EnemyQuickfixBehaviour_ForTesting>().IsEnemyDead = _isDead;
+			gameObject.GetComponent<NavMeshAgent>().isStopped = true;			
 			gameObject.GetComponent<EnemyQuickfixBehaviour_ForTesting>().enabled = false;
+			gameObject.GetComponent<BoxCollider2D>().enabled = false;
 		}
 	}
 	private void OnTriggerEnter2D(Collider2D collision)
