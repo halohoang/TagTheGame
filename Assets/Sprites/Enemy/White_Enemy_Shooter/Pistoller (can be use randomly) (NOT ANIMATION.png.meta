@@ -105,7 +105,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Pistoller_0
+      name: Pistoller (can be use randomly) (NOT ANIMATION_0
       rect:
         serializedVersion: 2
         x: 28
@@ -119,14 +119,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 18f75f7e3323f234ea417d348932874e
-      internalID: 2044345456
+      spriteID: 1678254601eaa804d92a7b2724fb08ee
+      internalID: -842524618
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pistoller_1
+      name: Pistoller (can be use randomly) (NOT ANIMATION_1
       rect:
         serializedVersion: 2
         x: 73
@@ -140,14 +140,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d79b5d89170e08643936a4ca29e81a23
-      internalID: -515807155
+      spriteID: 8dd3f7a435d46e547a443b619c4c503f
+      internalID: 2130948385
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Pistoller_2
+      name: Pistoller (can be use randomly) (NOT ANIMATION_2
       rect:
         serializedVersion: 2
         x: 118
@@ -161,8 +161,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: be2f5f99506ba6d4d8960446e009edf0
-      internalID: 564448173
+      spriteID: 93ba027e16a37444a82c32fdd1bec23f
+      internalID: -308071237
       vertices: []
       indices: 
       edges: []
@@ -178,9 +178,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Pistoller_0: 2044345456
-      Pistoller_1: -515807155
-      Pistoller_2: 564448173
+      Pistoller (can be use randomly) (NOT ANIMATION_0: -842524618
+      Pistoller (can be use randomly) (NOT ANIMATION_1: 2130948385
+      Pistoller (can be use randomly) (NOT ANIMATION_2: -308071237
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
