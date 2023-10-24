@@ -298,8 +298,8 @@ MonoBehaviour:
   _viewDirectionHelperTrans: {fileID: 1202474002}
   _raycastingCollider: {fileID: 0}
   _animtor: {fileID: 0}
-  _fOVAngle: 180
-  _viewDistance: 10
+  _fOVAngle: 360
+  _viewDistance: 50
   _playerDetectionMask:
     serializedVersion: 2
     m_Bits: 256
