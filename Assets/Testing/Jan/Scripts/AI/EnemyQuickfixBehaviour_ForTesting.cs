@@ -118,6 +118,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
                 //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
                 #endregion
                 transform.right = _playerTransform.position - transform.position;
+                _animtor.SetBool("Engage", true);
 
 
                 // Quickfix Behaviour for different Enemy Types
@@ -154,6 +155,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
             {
                 //StartCoroutine(ILookForPlayer(hitResults, i));
                 Debug.Log($"Player was detected by '<color=orange>{gameObject.name}</color>'");
+                _animtor.SetBool("Engage", false);
             }
         }
 
