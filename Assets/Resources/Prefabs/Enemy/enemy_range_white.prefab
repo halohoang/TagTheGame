@@ -164,7 +164,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 1
   m_Sprite: {fileID: 1276895412, guid: 152033cfaee8a7949b4b52f93e31def9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -305,6 +305,7 @@ MonoBehaviour:
     m_Bits: 256
   _isPlayerInFOV: 0
   _wasPlayerDetected: 0
+  _isEnemyDead: 0
   _movementSpeed: 1
   _enemyType: 1
   _rotationModifier: 0
