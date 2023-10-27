@@ -17,5 +17,18 @@ namespace EnumLibrary
             Melee_Enemy,
             Range_Enemy
         }
+
+        // That are first simple Basic-Behaviour-Types that are not all implemented into the Prototype yet; JM (27.10.2023)
+        public enum EBasicEnemyBehaviourType
+        {
+            Patroling,
+            StandingGuard,
+            StandingLookingAround
+        }
+
+        public enum EAnimationTriggerType
+        {
+            // todo: maybe setup some TriggerTypes for specific Animations to be triggered on specifi Events; JM (27.10.2023)
+        }
     }
 }
