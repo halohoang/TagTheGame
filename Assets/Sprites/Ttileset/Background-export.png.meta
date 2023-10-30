@@ -108,7 +108,7 @@ TextureImporter:
       name: Background-export_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 32
         y: 80
         width: 16
         height: 16
@@ -129,7 +129,7 @@ TextureImporter:
       name: Background-export_1
       rect:
         serializedVersion: 2
-        x: 32
+        x: 64
         y: 80
         width: 16
         height: 16
@@ -150,7 +150,7 @@ TextureImporter:
       name: Background-export_2
       rect:
         serializedVersion: 2
-        x: 64
+        x: 96
         y: 80
         width: 16
         height: 16
@@ -171,7 +171,7 @@ TextureImporter:
       name: Background-export_3
       rect:
         serializedVersion: 2
-        x: 96
+        x: 128
         y: 80
         width: 16
         height: 16
@@ -192,7 +192,7 @@ TextureImporter:
       name: Background-export_4
       rect:
         serializedVersion: 2
-        x: 128
+        x: 160
         y: 80
         width: 16
         height: 16
@@ -213,7 +213,7 @@ TextureImporter:
       name: Background-export_5
       rect:
         serializedVersion: 2
-        x: 160
+        x: 192
         y: 80
         width: 16
         height: 16
@@ -234,7 +234,7 @@ TextureImporter:
       name: Background-export_6
       rect:
         serializedVersion: 2
-        x: 0
+        x: 32
         y: 48
         width: 16
         height: 16
@@ -255,7 +255,7 @@ TextureImporter:
       name: Background-export_7
       rect:
         serializedVersion: 2
-        x: 32
+        x: 64
         y: 48
         width: 16
         height: 16
@@ -276,7 +276,7 @@ TextureImporter:
       name: Background-export_8
       rect:
         serializedVersion: 2
-        x: 64
+        x: 96
         y: 48
         width: 16
         height: 16
@@ -297,7 +297,7 @@ TextureImporter:
       name: Background-export_9
       rect:
         serializedVersion: 2
-        x: 96
+        x: 128
         y: 48
         width: 16
         height: 16
@@ -318,7 +318,7 @@ TextureImporter:
       name: Background-export_10
       rect:
         serializedVersion: 2
-        x: 128
+        x: 160
         y: 48
         width: 16
         height: 16
@@ -339,7 +339,7 @@ TextureImporter:
       name: Background-export_11
       rect:
         serializedVersion: 2
-        x: 160
+        x: 192
         y: 48
         width: 16
         height: 16
@@ -350,77 +350,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 28c0ade6afe86384ba0a5c89d7613289
-      internalID: 973679922
+      spriteID: d4246eef3939d134881966e9a1868b46
+      internalID: 1188060648
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
       name: Background-export_12
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 16
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8e3b87e64ace7514eb141f712a5406e5
-      internalID: 1775499640
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Background-export_13
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 16
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: aba79da9e49dd1f4cafb297e3e1f599e
-      internalID: -2058264893
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Background-export_14
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 16
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 084b221f29f0c6e4394a04030383dadc
-      internalID: 978668437
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Background-export_15
       rect:
         serializedVersion: 2
         x: 96
@@ -434,8 +371,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 483c8fd614490644882a1862228531a2
-      internalID: 1035741063
+      spriteID: 9c2e3f233496cef4ca3c0cb96a3d71ca
+      internalID: -851292148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Background-export_13
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: caa553bb12328b5468864e63808746d5
+      internalID: 1431632251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Background-export_14
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ddf1a015c9301e478afb28ed69c1cd6
+      internalID: 1815389386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Background-export_15
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 443504a1926537b439d0b925b76ae40d
+      internalID: -1005549351
       vertices: []
       indices: 
       edges: []
@@ -454,11 +454,11 @@ TextureImporter:
       Background-export_0: -637062685
       Background-export_1: 1468509550
       Background-export_10: 1834948969
-      Background-export_11: 973679922
-      Background-export_12: 1775499640
-      Background-export_13: -2058264893
-      Background-export_14: 978668437
-      Background-export_15: 1035741063
+      Background-export_11: 1188060648
+      Background-export_12: -851292148
+      Background-export_13: 1431632251
+      Background-export_14: 1815389386
+      Background-export_15: -1005549351
       Background-export_2: -238980650
       Background-export_3: -824541418
       Background-export_4: -422848836
