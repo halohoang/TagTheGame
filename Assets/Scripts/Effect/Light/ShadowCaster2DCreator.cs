@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-//[RequireComponent(typeof(CompositeCollider2D))]
+[RequireComponent(typeof(CompositeCollider2D))]
 
 public class ShadowCaster2DCreator : MonoBehaviour
 {
@@ -59,27 +59,27 @@ public class ShadowCaster2DCreator : MonoBehaviour
 	}
 }
 
-[CustomEditor(typeof(ShadowCaster2DCreator))]
-public class ShadowCaster2DTileMapEditor : Editor
-{
-	public override void OnInspectorGUI()
-	{
-		DrawDefaultInspector();
+//[CustomEditor(typeof(ShadowCaster2DCreator))]
+//public class ShadowCaster2DTileMapEditor : Editor
+//{
+//	public override void OnInspectorGUI()
+//	{
+//		DrawDefaultInspector();
 
-		EditorGUILayout.BeginHorizontal();
-		if (GUILayout.Button("Create"))
-		{
-			var creator = (ShadowCaster2DCreator)target;
-			creator.Create();
-		}
+//		EditorGUILayout.BeginHorizontal();
+//		if (GUILayout.Button("Create"))
+//		{
+//			var creator = (ShadowCaster2DCreator)target;
+//			creator.Create();
+//		}
 
-		if (GUILayout.Button("Remove Shadows"))
-		{
-			var creator = (ShadowCaster2DCreator)target;
-			creator.DestroyOldShadowCasters();
-		}
-		EditorGUILayout.EndHorizontal();
-	}
+//		if (GUILayout.Button("Remove Shadows"))
+//		{
+//			var creator = (ShadowCaster2DCreator)target;
+//			creator.DestroyOldShadowCasters();
+//		}
+//		EditorGUILayout.EndHorizontal();
+//	}
 
-}
+//}
 

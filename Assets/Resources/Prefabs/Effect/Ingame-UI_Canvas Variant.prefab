@@ -49,7 +49,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2582154427589831335, guid: 9059afef3eab73a40827502136af202e, type: 3}
       propertyPath: m_Name
-      value: Ingame-UI_Canvas
+      value: Ingame-UI_Canvas Variant
       objectReference: {fileID: 0}
     - target: {fileID: 2582154427589831338, guid: 9059afef3eab73a40827502136af202e, type: 3}
       propertyPath: m_Camera
@@ -166,7 +166,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
