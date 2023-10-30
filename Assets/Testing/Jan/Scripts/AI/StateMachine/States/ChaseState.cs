@@ -23,6 +23,12 @@ namespace StateMashine
         public override void FrameUpdate()
         {
             base.FrameUpdate();
+
+            if (!_enemyBehaviour.IsPlayerDetected)
+            {
+                _enemyBehaviour.StateMachine.Transition(_enemyBehaviour.IdleState);
+                Debug.Log($"State-Transition from '<color=orange>Chase</color>' to '<color=orange>Idle</color>' should have been happend now!");
+            }
         }
 
         public override void PhysicsUpdate()

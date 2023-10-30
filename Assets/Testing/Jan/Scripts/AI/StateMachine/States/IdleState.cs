@@ -27,6 +27,13 @@ namespace StateMashine
         public override void FrameUpdate()
         {
             base.FrameUpdate();
+
+            // Switch State from Idle to ChaseState when Player is Detected
+            if (_enemyBehaviour.IsPlayerDetected)
+            {
+                _enemyBehaviour.StateMachine.Transition(_enemyBehaviour.ChaseState);
+                Debug.Log($"State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
+            }
         }
 
         public override void PhysicsUpdate()

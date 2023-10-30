@@ -42,7 +42,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
     [SerializeField] private Enum_Lib.EEnemyType _enemyType;
     [SerializeField] private float _rotationModifier;
 
-    public bool IsEnemyDead { get => _isEnemyDead; internal set => _isEnemyDead = value; }
+    public bool IsEnemyDead { get => _isEnemyDead; set => _isEnemyDead = value; }
 
     private void Awake()
     {
@@ -64,7 +64,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
 
     private void OnDisable()
     {
-        // unsubscribing to Events
+        // unsubscribing from Events
         Interactable.OnDoorKickIn -= FaceAgentTowardsDoor;
     }
 
@@ -89,8 +89,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
     {
         _animtor.SetBool("Attack", false);
     }
-
-    // Update is called once per frame
+        
     void FixedUpdate()
     {
         // simple AI-Logic (as long as Player is detected via Raycast) execute specific Enemy-Behaviour-Logic

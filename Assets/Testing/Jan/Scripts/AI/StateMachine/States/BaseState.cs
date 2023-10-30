@@ -6,13 +6,13 @@ namespace StateMashine
 {
     public class BaseState
     {
-        protected BaseEnemyBehaviour _enemy;
+        protected BaseEnemyBehaviour _enemyBehaviour;
         protected EnemyStateMachine _enemyStateMachine;
 
         public BaseState(BaseEnemyBehaviour enemy, EnemyStateMachine enemySM)
         {
             // setup Variables (using 'this'-Keyword just for visible clarification and simpler understanding)
-            this._enemy = enemy;
+            this._enemyBehaviour = enemy;
             this._enemyStateMachine = enemySM;
         }
 
