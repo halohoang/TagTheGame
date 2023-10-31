@@ -9,11 +9,11 @@ namespace StateMashine
         protected BaseEnemyBehaviour _enemyBehaviour;
         protected EnemyStateMachine _enemyStateMachine;
 
-        public BaseState(BaseEnemyBehaviour enemy, EnemyStateMachine enemySM)
+        public BaseState(BaseEnemyBehaviour enemyBehav, EnemyStateMachine enemyStaMa)
         {
             // setup Variables (using 'this'-Keyword just for visible clarification and simpler understanding)
-            this._enemyBehaviour = enemy;
-            this._enemyStateMachine = enemySM;
+            this._enemyBehaviour = enemyBehav;
+            this._enemyStateMachine = enemyStaMa;
         }
 
         public virtual void EnterState() { }

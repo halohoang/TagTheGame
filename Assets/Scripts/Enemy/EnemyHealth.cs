@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using StateMashine;
+using Enemies;
 
 public class EnemyHealth : MonoBehaviour
 {
@@ -66,8 +67,9 @@ public class EnemyHealth : MonoBehaviour
             }
             else
             {
-                gameObject.GetComponent<ConditionPlayerDetectionCheck>().IsEnemyDead = _isDead;
+                gameObject.GetComponent<ConditionPlayerDetectionCheck>().SetIsEnemyDead(_isDead);
                 gameObject.GetComponent<ConditionPlayerDetectionCheck>().enabled = false;
+                gameObject.GetComponent<BaseEnemyBehaviour>().enabled = false;
             }
 
             gameObject.GetComponent<NavMeshAgent>().isStopped = true;

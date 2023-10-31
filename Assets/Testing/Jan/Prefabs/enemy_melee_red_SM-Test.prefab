@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 9041522107886845471}
   - component: {fileID: 8148806726351926112}
   - component: {fileID: 651277549322432989}
+  - component: {fileID: 7863152602013986024}
   - component: {fileID: 624922453605182268}
   - component: {fileID: 3550908463246678064}
   m_Layer: 9
@@ -196,7 +197,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _navAgent: {fileID: 0}
+  _animator: {fileID: 0}
+  _playerObject: {fileID: 0}
+  _condPlayerDetectionCheck: {fileID: 0}
+  _condMeleeAttackCheck: {fileID: 0}
+  _movementSpeed: 3.5
+  _chasingSpeed: 10
   _isPlayerDetected: 0
+  _isInAttackRange: 0
 --- !u!114 &651277549322432989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,14 +220,22 @@ MonoBehaviour:
   _playerObj: {fileID: 0}
   _viewDirectionHelperTrans: {fileID: 9041522106579246093}
   _raycastingCollider: {fileID: 4755603732962905221}
-  _fOVAngle: 180
   _viewDistance: 10
-  _playerDetectionMask:
-    serializedVersion: 2
-    m_Bits: 0
-  _isPlayerInFOV: 0
-  _wasPlayerDetected: 0
+  _isPlayerDetected: 0
   _isEnemyDead: 0
+--- !u!114 &7863152602013986024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4755603732962905218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27da4b982688fbd4db3434f7615018fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isInAttackRange: 0
 --- !u!114 &624922453605182268
 MonoBehaviour:
   m_ObjectHideFlags: 0

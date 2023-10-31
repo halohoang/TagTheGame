@@ -196,6 +196,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _navAgent: {fileID: 0}
+  _animator: {fileID: 0}
+  _playerObject: {fileID: 0}
+  _movementSpeed: 3.5
+  _chasingSpeed: 10
   _isPlayerDetected: 0
   _isPlayerInShootingRange: 0
 --- !u!114 &1081506221864220094
@@ -213,13 +217,8 @@ MonoBehaviour:
   _playerObj: {fileID: 0}
   _viewDirectionHelperTrans: {fileID: 841498252964922071}
   _raycastingCollider: {fileID: 346540721961718098}
-  _fOVAngle: 180
   _viewDistance: 10
-  _playerDetectionMask:
-    serializedVersion: 2
-    m_Bits: 0
-  _isPlayerInFOV: 0
-  _wasPlayerDetected: 0
+  _isPlayerDetected: 0
   _isEnemyDead: 0
 --- !u!114 &841498252764543173
 MonoBehaviour:

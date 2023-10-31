@@ -3833,6 +3833,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: enemy_range_white_SM_Test
       objectReference: {fileID: 0}
+    - target: {fileID: 1081506221864220094, guid: 77dd9f6cc8558c9428cf78a4b29a2ce0, type: 3}
+      propertyPath: _playerDetectionMask.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 2211002698019633586, guid: 77dd9f6cc8558c9428cf78a4b29a2ce0, type: 3}
+      propertyPath: _chasingSpeed
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77dd9f6cc8558c9428cf78a4b29a2ce0, type: 3}
 --- !u!1001 &9041522106153144648
@@ -3842,6 +3850,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 651277549322432989, guid: 84ff266ce8955e34981840f36b5e39ce, type: 3}
+      propertyPath: _playerDetectionMask.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
     - target: {fileID: 4755603732962905218, guid: 84ff266ce8955e34981840f36b5e39ce, type: 3}
       propertyPath: m_Name
       value: enemy_melee_red_SM-Test
@@ -3889,6 +3901,14 @@ PrefabInstance:
     - target: {fileID: 4755603732962905220, guid: 84ff266ce8955e34981840f36b5e39ce, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8148806726351926112, guid: 84ff266ce8955e34981840f36b5e39ce, type: 3}
+      propertyPath: _chasingSpeed
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8148806726351926112, guid: 84ff266ce8955e34981840f36b5e39ce, type: 3}
+      propertyPath: _movementSpeed
+      value: 3.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84ff266ce8955e34981840f36b5e39ce, type: 3}
