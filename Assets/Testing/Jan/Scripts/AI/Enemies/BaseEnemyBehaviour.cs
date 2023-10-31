@@ -17,7 +17,7 @@ namespace Enemies
         [SerializeField, ReadOnly] private Animator _animator;
         [SerializeField, ReadOnly] private GameObject _playerObject;
         [SerializeField, ReadOnly] private ConditionPlayerDetectionCheck _condPlayerDetectionCheck;
-        [SerializeField, ReadOnly] private ConditionIsInMeleeAttackRangeCheck _condMeleeAttackCheck;    // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
+        //[SerializeField, ReadOnly] private ConditionIsInMeleeAttackRangeCheck _condMeleeAttackCheck;    // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
         [Space(5)]
 
         [Header("Behaviour-related Settings")]
@@ -26,7 +26,7 @@ namespace Enemies
 
         [Header("Monitoring for Debugging")]
         [SerializeField, ReadOnly] private bool _isPlayerDetected;
-        [SerializeField, ReadOnly] private bool _isInAttackRange;   // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
+        //[SerializeField, ReadOnly] private bool _isInAttackRange;   // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
 
 
 
@@ -35,7 +35,6 @@ namespace Enemies
         private IdleState _idleState;
         //private AlertState _alertState;
         private ChaseState _chaseState;
-        private MeleeAttackState _meleeAttackState;
 
 
         // Properties
@@ -51,13 +50,12 @@ namespace Enemies
         public EnemyStateMachine StateMachine { get => _stateMachine; set => _stateMachine = value; }
         public IdleState IdleState { get => _idleState; set => _idleState = value; }
         //public AlertState AlertState { get => _alertState; set => _alertState = value; }
-        public ChaseState ChaseState { get => _chaseState; set => _chaseState = value; }
-        public MeleeAttackState MeleeAttackState { get => _meleeAttackState; set => _meleeAttackState = value; }
+        public ChaseState ChaseState { get => _chaseState; set => _chaseState = value; }        
 
 
         // put that later inside the 'MeleeEnemyBehaviour.cs': ; JM (31.10.2023)
-        public ConditionIsInMeleeAttackRangeCheck CondMeleeAttackCheck { get => _condMeleeAttackCheck; private set => _condMeleeAttackCheck = value; }
-        public bool IsInAttackRange { get => _isInAttackRange; private set => _isInAttackRange = value; }
+        //public ConditionIsInMeleeAttackRangeCheck CondMeleeAttackCheck { get => _condMeleeAttackCheck; private set => _condMeleeAttackCheck = value; }
+        //public bool IsInAttackRange { get => _isInAttackRange; private set => _isInAttackRange = value; }
 
         // ---------- Methods ----------
         protected void Awake()
@@ -67,14 +65,13 @@ namespace Enemies
             _animator = GetComponent<Animator>();
             _condPlayerDetectionCheck = GetComponent<ConditionPlayerDetectionCheck>();
 
-            CondMeleeAttackCheck = GetComponent<ConditionIsInMeleeAttackRangeCheck>(); // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
+            //CondMeleeAttackCheck = GetComponent<ConditionIsInMeleeAttackRangeCheck>(); // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
 
             // Variable Initialization
             StateMachine = new EnemyStateMachine();
             IdleState = new IdleState(this, StateMachine);
             //AlertState = new AlertState(this, StateMachine);
             ChaseState = new ChaseState(this, StateMachine);
-            MeleeAttackState = new MeleeAttackState(this, StateMachine);
         }
 
         protected void OnEnable()
@@ -83,7 +80,7 @@ namespace Enemies
             Interactable.OnDoorKickIn += FaceAgentTowardsDoor;
             _condPlayerDetectionCheck.OnPlayerDetection += SetIsPlayerDetected;
 
-            _condMeleeAttackCheck.OnMeleeAttack += SetIsInAttackRangePlayer;        // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
+            //_condMeleeAttackCheck.OnMeleeAttack += SetIsInAttackRangePlayer;        // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
         }
 
         protected void OnDisable()
@@ -92,7 +89,7 @@ namespace Enemies
             Interactable.OnDoorKickIn -= FaceAgentTowardsDoor;
             _condPlayerDetectionCheck.OnPlayerDetection -= SetIsPlayerDetected;
 
-            _condMeleeAttackCheck.OnMeleeAttack -= SetIsInAttackRangePlayer;        // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
+            //_condMeleeAttackCheck.OnMeleeAttack -= SetIsInAttackRangePlayer;        // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
         }
 
         // Start is called before the first frame update
@@ -170,10 +167,10 @@ namespace Enemies
         /// </summary>
         /// <param name="isAttackingPlayer"></param>
         /// <param name="playerObj"></param>
-        private void SetIsInAttackRangePlayer(bool isAttackingPlayer, GameObject playerObj)
-        {
-            IsInAttackRange = isAttackingPlayer;
-            PlayerObject = playerObj;
-        }
+        //private void SetIsInAttackRangePlayer(bool isAttackingPlayer, GameObject playerObj)
+        //{
+        //    IsInAttackRange = isAttackingPlayer;
+        //    PlayerObject = playerObj;
+        //}
     }
 }

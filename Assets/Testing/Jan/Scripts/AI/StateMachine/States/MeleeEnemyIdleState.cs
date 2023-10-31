@@ -1,18 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
+using Enemies;
+using EnumLibrary;
 using UnityEngine;
 
-public class MeleeEnemyIdleState : MonoBehaviour
+namespace StateMashine
 {
-    // Start is called before the first frame update
-    void Start()
+    public class MeleeEnemyIdleState : IdleState
     {
-        
-    }
+        public MeleeEnemyIdleState(MeleeEnemyBehaviour enemy, EnemyStateMachine enemySM) : base(enemy, enemySM)
+        {
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public override void EnterState()
+        {
+            base.EnterState();
+        }
+
+        public override void ExitState()
+        {
+            base.ExitState();
+        }
+
+        public override void FrameUpdate()
+        {
+            base.FrameUpdate();
+        }
+
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+        }
+
+        public override void AnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerType)
+        {
+            base.AnimationTriggerEvent(animTriggerType);
+        }
     }
 }

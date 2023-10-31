@@ -7,46 +7,54 @@ namespace Enemies
     public class MeleeEnemyBehaviour : BaseEnemyBehaviour
     {
         // todo: find a solution for a proper defining of the MeleeEnemyBehaviour-Class and seperating the specific logic form it sparent class, make proper usage of polymorphism
-        //// ---------- Fields ----------
+        // ---------- Fields ----------
 
-        //[Header("References specific for (Melee-Enemy-Behaviour)")]
-        //[SerializeField, ReadOnly] private ConditionIsInMeleeAttackRangeCheck _condMeleeAttackCheck;
-        //[Space(5)]
+        [Header("References specific for (Melee-Enemy-Behaviour)")]
+        [SerializeField, ReadOnly] private ConditionIsInMeleeAttackRangeCheck _condMeleeAttackCheck;
+        [Space(5)]
 
-        //[Header("Monitoring for Debugging (specific for Melee-Enemy-Behaviour)")]
-        //[SerializeField, ReadOnly] private bool _isInAttackRange;
+        [Header("Monitoring for Debugging (specific for Melee-Enemy-Behaviour)")]
+        [SerializeField, ReadOnly] private bool _isInAttackRange;
 
 
-        //// --- Properties ---
-        //public ConditionIsInMeleeAttackRangeCheck CondMeleeAttackCheck { get => _condMeleeAttackCheck; private set => _condMeleeAttackCheck = value; }
-        //public bool IsInAttackRange { get => _isInAttackRange; private set => _isInAttackRange = value; }
+        // StateMachine-Related Variables
+        private MeleeAttackState _meleeAttackState;
 
-        //// ---------- Methods ----------
-        //new private void Awake()
-        //{
-        //    base.Awake();
+        // --- Properties ---
+        public ConditionIsInMeleeAttackRangeCheck CondMeleeAttackCheck { get => _condMeleeAttackCheck; private set => _condMeleeAttackCheck = value; }
 
-        //    CondMeleeAttackCheck = GetComponent<ConditionIsInMeleeAttackRangeCheck>();
-        //}
+        public bool IsInAttackRange { get => _isInAttackRange; private set => _isInAttackRange = value; }
 
-        //new private void OnEnable()
-        //{
-        //    base.OnEnable();
+        public MeleeAttackState MeleeAttackState { get => _meleeAttackState; set => _meleeAttackState = value; }
 
-        //    _condMeleeAttackCheck.OnMeleeAttack += SetIsInAttackRangePlayer;
-        //}
+        // ---------- Methods ----------
+        new private void Awake()
+        {
+            base.Awake();
 
-        //new private void OnDisable()
-        //{
-        //    base.OnDisable();
+            MeleeAttackState = new MeleeAttackState(this, StateMachine);
 
-        //    _condMeleeAttackCheck.OnMeleeAttack -= SetIsInAttackRangePlayer;
-        //}
+            CondMeleeAttackCheck = GetComponent<ConditionIsInMeleeAttackRangeCheck>();
+        }
 
-        //private void SetIsInAttackRangePlayer(bool isAttackingPlayer, GameObject playerObj)
-        //{
-        //    IsInAttackRange = isAttackingPlayer;
-        //    PlayerObject = playerObj;
-        //}
+        new private void OnEnable()
+        {
+            base.OnEnable();
+
+            _condMeleeAttackCheck.OnMeleeAttack += SetIsInAttackRangePlayer;
+        }
+
+        new private void OnDisable()
+        {
+            base.OnDisable();
+
+            _condMeleeAttackCheck.OnMeleeAttack -= SetIsInAttackRangePlayer;
+        }
+
+        private void SetIsInAttackRangePlayer(bool isAttackingPlayer, GameObject playerObj)
+        {
+            IsInAttackRange = isAttackingPlayer;
+            PlayerObject = playerObj;
+        }
     }
 }

@@ -42,20 +42,6 @@ namespace StateMashine
 
             // facing Player Position
             _enemyBehaviour.gameObject.transform.right = _enemyBehaviour.PlayerObject.transform.position - _enemyBehaviour.gameObject.transform.position;
-            
-
-            // Check StateTransition-Conditions
-            if (!_enemyBehaviour.IsPlayerDetected)
-            {
-                _enemyBehaviour.StateMachine.Transition(_enemyBehaviour.IdleState);                
-
-                Debug.Log($"State-Transition from '<color=orange>Chase</color>' to '<color=orange>Idle</color>' should have been happend now!");
-            }
-            else if (_enemyBehaviour.IsInAttackRange)
-            {
-                _enemyBehaviour.StateMachine.Transition(_enemyBehaviour.MeleeAttackState);
-                Debug.Log($"State-Transition from '<color=orange>Chase</color>' to '<color=orange>MeleeAttack</color>' should have been happend now!");
-            }
         }
 
         public override void PhysicsUpdate()
