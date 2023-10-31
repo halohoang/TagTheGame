@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: EnvironmentAtlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: f5c7472606ba4584a89a72846a269974, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: -1615017852, guid: f5c7472606ba4584a89a72846a269974, type: 3}
+  - {fileID: -822606213, guid: f5c7472606ba4584a89a72846a269974, type: 3}
+  - {fileID: 149072588, guid: f5c7472606ba4584a89a72846a269974, type: 3}
+  - {fileID: -1160950663, guid: f5c7472606ba4584a89a72846a269974, type: 3}
+  - {fileID: 222180409, guid: f5c7472606ba4584a89a72846a269974, type: 3}
+  - {fileID: -532462242, guid: f5c7472606ba4584a89a72846a269974, type: 3}
+  - {fileID: -1509037023, guid: f5c7472606ba4584a89a72846a269974, type: 3}
+  - {fileID: -2071531607, guid: f5c7472606ba4584a89a72846a269974, type: 3}
+  - {fileID: -1262367347, guid: f5c7472606ba4584a89a72846a269974, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - CornerwALL_1
+  - CornerwALL_0
+  - CornerwALL_3
+  - CornerwALL_2
+  - CornerwALL_5
+  - CornerwALL_4
+  - CornerwALL_7
+  - CornerwALL_6
+  - CornerwALL_8
+  m_RenderDataMap: {}
+  m_Tag: EnvironmentAtlas
+  m_IsVariant: 0

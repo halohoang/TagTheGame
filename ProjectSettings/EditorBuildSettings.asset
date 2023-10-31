@@ -14,7 +14,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Testing/Jan/Scenes/Jan_Test_Enemy-AI.unity
     guid: cc62647ff8f627e469487f1e42841441
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Light/Light.unity
     guid: 08e0cf9e0f36bae4daf9b03db3c30bd3
+  - enabled: 1
+    path: Assets/Scenes/Level 1.unity
+    guid: e506d9239a802114e8885236f2cdde5f
   m_configObjects: {}

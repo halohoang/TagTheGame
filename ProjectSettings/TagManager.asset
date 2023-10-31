@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - UserUIFeedback
   - Door
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -49,18 +50,18 @@ TagManager:
   - name: Background
     uniqueID: 3345804249
     locked: 0
-  - name: Cover
-    uniqueID: 3576116733
-    locked: 0
-  - name: Player/Enemy
-    uniqueID: 1371216919
-    locked: 0
-  - name: Weapon
-    uniqueID: 1424803905
+  - name: Wall
+    uniqueID: 3638666861
     locked: 0
   - name: Bullet
     uniqueID: 2196117293
     locked: 0
   - name: Player/Player
     uniqueID: 2953598183
+    locked: 0
+  - name: Player/Enemy
+    uniqueID: 1371216919
+    locked: 0
+  - name: Weapon
+    uniqueID: 1424803905
     locked: 0
