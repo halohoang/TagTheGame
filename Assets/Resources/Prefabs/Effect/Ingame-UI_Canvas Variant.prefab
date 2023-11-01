@@ -49,7 +49,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2582154427589831335, guid: 9059afef3eab73a40827502136af202e, type: 3}
       propertyPath: m_Name
-      value: Ingame-UI_Canvas Variant
+      value: Ingame-UI_Canvas
       objectReference: {fileID: 0}
     - target: {fileID: 2582154427589831338, guid: 9059afef3eab73a40827502136af202e, type: 3}
       propertyPath: m_Camera
@@ -187,7 +187,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 2121773456, guid: 0befe320e755b454f83bd04fbf4fcb1d, type: 3}
+  m_Sprite: {fileID: -315596483, guid: 644d24474d7aaa84c98f18d039691e6d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

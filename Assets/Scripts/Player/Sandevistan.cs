@@ -64,6 +64,7 @@ public class Sandevistan : MonoBehaviour
 
 				var cloneRend = clone.AddComponent<SpriteRenderer>();
 				cloneRend.sprite = GetCurrentSprite(); // Set the current sprite
+				cloneRend.material = sr.material; // Use the same material as the character // this right here fix why the sprite is not affected by light
 
 				cloneRend.sortingOrder = sr.sortingOrder - 1;
 
