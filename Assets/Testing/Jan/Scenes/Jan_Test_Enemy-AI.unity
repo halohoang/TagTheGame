@@ -4582,18 +4582,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 552889996, guid: 49aeb32cfa405c9449f52b6dde9df78c, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -315596483, guid: 644d24474d7aaa84c98f18d039691e6d, type: 3}
-    - target: {fileID: 552889996, guid: 49aeb32cfa405c9449f52b6dde9df78c, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 552889996, guid: 49aeb32cfa405c9449f52b6dde9df78c, type: 3}
-      propertyPath: m_DrawMode
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5672901901524624719, guid: 49aeb32cfa405c9449f52b6dde9df78c, type: 3}
       propertyPath: _mainCamera
       value: 
@@ -4602,14 +4590,6 @@ PrefabInstance:
       propertyPath: _transformToFollow
       value: 
       objectReference: {fileID: 1102109059}
-    - target: {fileID: 5672901901861164280, guid: 49aeb32cfa405c9449f52b6dde9df78c, type: 3}
-      propertyPath: m_Type
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5672901901861164280, guid: 49aeb32cfa405c9449f52b6dde9df78c, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5672901902443634624, guid: 49aeb32cfa405c9449f52b6dde9df78c, type: 3}
       propertyPath: m_Name
       value: Ingame-UI_Canvas
