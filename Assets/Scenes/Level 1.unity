@@ -8940,7 +8940,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.9528302, g: 0.41650718, b: 0.09438412, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -8981,7 +8981,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919833473}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 21.47, y: 13.61, z: -10}
+  m_LocalPosition: {x: -2.48, y: 8.88, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -26458,8 +26458,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1807013100}
   - component: {fileID: 1807013101}
+  - component: {fileID: 1807013102}
   m_Layer: 0
-  m_Name: Exit Elevator Light
+  m_Name: Exit Elevator Directional  Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26473,7 +26474,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1807013099}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 32.53, y: 3.43, z: 0}
+  m_LocalPosition: {x: 32.53, y: 5.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -26497,7 +26498,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.78
+  m_Intensity: 0
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
   m_ApplyToSortingLayers: 00000000d9eb6cc76da6e1d82d17e682e7540cb0171cbb5141c8ec54fd35591b
@@ -26530,6 +26531,21 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &1807013102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807013099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c973108b25748242b3fe377e34cfd1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minIntensity: 0
+  _maxIntensity: 1
+  _changeSpeed: 10
 --- !u!1 &1826541060
 GameObject:
   m_ObjectHideFlags: 0
@@ -26540,6 +26556,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1826541061}
   - component: {fileID: 1826541062}
+  - component: {fileID: 1826541063}
   m_Layer: 0
   m_Name: 'Spawn Elevator Light '
   m_TagString: Untagged
@@ -26579,7 +26596,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.24
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.69
+  m_Intensity: 0
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
   m_ApplyToSortingLayers: 00000000d9eb6cc76da6e1d82d17e682e7540cb0171cbb5141c8ec54fd35591b
@@ -26612,6 +26629,21 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &1826541063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826541060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c973108b25748242b3fe377e34cfd1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minIntensity: 0
+  _maxIntensity: 1
+  _changeSpeed: 10
 --- !u!1 &1948060885
 GameObject:
   m_ObjectHideFlags: 0
