@@ -350,6 +350,18 @@ PrefabInstance:
       propertyPath: m_LocalBounds.m_Extent.y
       value: 0.99853027
       objectReference: {fileID: 0}
+    - target: {fileID: 2613393703629874967, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2613393703629874967, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_Intensity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2613393703629874967, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_FalloffIntensity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3493521951034406032, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_Name
       value: Player
@@ -410,6 +422,14 @@ PrefabInstance:
       propertyPath: _ammoCounterScript
       value: 
       objectReference: {fileID: 1660187016}
+    - target: {fileID: 6304203630275845576, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_SortingLayer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6304203630275845576, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1424803905
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
 --- !u!1 &613371186
