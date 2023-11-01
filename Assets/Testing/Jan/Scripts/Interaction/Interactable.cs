@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using EnumLibrary;
+using NaughtyAttributes;
 
 namespace Interactables
 {
@@ -11,7 +12,7 @@ namespace Interactables
     {
         //------------------------------ Events ------------------------------
         public static event UnityAction OnDoorStatusChange;       // for sending message to NavMeshBuilder.cs to update NavMeshSurface
-        public static event UnityAction<Vector3, float> OnDoorKickIn;    // for sending message to EnemyQuickFixSolution_ForTesting.cs to ifnorm about DoorKickIn and DoorPosition
+        public static event UnityAction<bool, Vector3, float> OnDoorKickIn;    // for sending message to EnemyQuickFixSolution_ForTesting.cs to ifnorm about DoorKickIn and DoorPosition
 
         //------------------------------ Fields ------------------------------
         [Header("Needed References to GameObjects")]
@@ -26,7 +27,10 @@ namespace Interactables
         [Tooltip("Set which type of Interactable this Object is for appropriate Interaction-Logic")]
         [SerializeField] private Enum_Lib.EInteractableType _interactableType;
         [SerializeField, Range(0.0f, 10.0f)] private float _doorKickInNoiseRange = 10.0f;
+        [Space(5)]
 
+        [Header("Monitoring values")]
+        [SerializeField, ReadOnly] private bool _wasDoorKickedIn;
 
         //------------------------------ Methods ------------------------------
 
@@ -72,6 +76,8 @@ namespace Interactables
             {
                 case Enum_Lib.EInteractableType.Door:
 
+                    _wasDoorKickedIn = true;
+
                     PlayAnimation("...");           // todo: if Door-KickIn-ANimation for Player is implemented fill out the Name-sting; JM (09.Oct.2023)
                     
                     PlaySFX("...");                 // Play DoorKickIn Sound
@@ -80,7 +86,7 @@ namespace Interactables
 
                     OnDoorStatusChange?.Invoke();
 
-                    OnDoorKickIn?.Invoke(transform.position, _doorKickInNoiseRange); // Event for Informing Enemies that Door was Kicked in to react to
+                    OnDoorKickIn?.Invoke(_wasDoorKickedIn, transform.position, _doorKickInNoiseRange); // Event for Informing Enemies that Door was Kicked in to react to
 
                     // todo: send physics.sphereoverlap from specific door gameobject so that every enemy within a certain radius can react to the door-kick-in-event; JM (13.Oct.2023)
                     // todo: (!)start runtime baking of nw nav mesh so the new accured walkable space (where once the door was) is walkable for the AI; JM (09.Oct.2023)

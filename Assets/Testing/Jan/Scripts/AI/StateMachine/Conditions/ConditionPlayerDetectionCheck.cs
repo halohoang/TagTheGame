@@ -54,8 +54,8 @@ namespace StateMashine
             for (int i = 0; i < hitResults.Length; i++)
             {
                 // debuging
-                if (numHits > 0)
-                    Debug.Log($"RayCast-Detections: '<color=orange>{hitResults[i].collider.gameObject.name}</color>'");
+                //if (numHits > 0)
+                //    Debug.Log($"RayCast-Detections: '<color=orange>{hitResults[i].collider.gameObject.name}</color>'");
 
 
                 if (hitResults[i] != false && hitResults[i].collider.gameObject.CompareTag("Player") && !IsEnemyDead)

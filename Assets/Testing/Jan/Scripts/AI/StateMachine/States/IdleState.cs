@@ -17,33 +17,50 @@ namespace StateMashine
         public override void EnterState()
         {
             base.EnterState();
+
+            // caling the actual Behaviour of the State-ScriptableObjects
+            _enemyBehaviour.BaseEnemyIdleStateSOInstance.ExecuteEnterLogic();
         }
 
         public override void ExitState()
         {
             base.ExitState();
+
+            // caling the actual Behaviour of the State-ScriptableObjects
+            _enemyBehaviour.BaseEnemyIdleStateSOInstance.ExecuteExitLogic();
         }
 
         public override void FrameUpdate()
         {
             base.FrameUpdate();
 
-            // Switch State from Idle to ChaseState when Player is Detected
-            if (_enemyBehaviour.IsPlayerDetected)
-            {
-                _enemyBehaviour.StateMachine.Transition(_enemyBehaviour.ChaseState);
-                Debug.Log($"State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
-            }
+            // caling the actual Behaviour of the State-ScriptableObjects
+            _enemyBehaviour.BaseEnemyIdleStateSOInstance.ExecuteFrameUpdateLogic();
+
+            #region OldCode
+            //// Switch State from Idle to ChaseState when Player is Detected
+            //if (_enemyBehaviour.IsPlayerDetected)
+            //{
+            //    _enemyBehaviour.StateMachine.Transition(_enemyBehaviour.ChaseState);
+            //    Debug.Log($"State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
+            //}
+            #endregion
         }
 
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
+
+            // caling the actual Behaviour of the State-ScriptableObjects
+            _enemyBehaviour.BaseEnemyIdleStateSOInstance.ExecutePhysicsUpdateLogic();
         }
 
         public override void AnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerType)
         {
             base.AnimationTriggerEvent(animTriggerType);
+
+            // caling the actual Behaviour of the State-ScriptableObjects
+            _enemyBehaviour.BaseEnemyIdleStateSOInstance.ExecuteAnimationTriggerEventLogic(animTriggerType);
         }
     }
 }

@@ -176,7 +176,7 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
         Gizmos.DrawLine(transform.position, _viewDirectionHelperTrans.position);
     }
 
-    private void FaceAgentTowardsDoor(Vector3 doorPosition, float doorKickInNoiseRange)
+    private void FaceAgentTowardsDoor(bool isDoorKickedIn, Vector3 doorPosition, float doorKickInNoiseRange)
     {
         // Rotate the Enemy-Object so it's facing the Kicked in Door Object when Door was kicked in 
         Collider2D[] enemieColliders = Physics2D.OverlapCircleAll(doorPosition, doorKickInNoiseRange, LayerMask.GetMask("Enemy"));
