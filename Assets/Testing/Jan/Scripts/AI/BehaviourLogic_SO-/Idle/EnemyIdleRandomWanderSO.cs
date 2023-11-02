@@ -7,7 +7,7 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "Enemy-Idle-RadomWander", menuName = "Scriptable Objects/Enemy Logic/Idle Logic/Random Wander")]
     public class EnemyIdleRandomWanderSO : BaseEnemyIdleSO
     {
-        // this are just Placeholder Values at the moment (will be replaced by proper logic later); JM (01.11.2023)        
+        [Header("Behaviour Settings")]
         [SerializeField] private float _wanderSpeed = 1.0f;
         [Tooltip("The minimum time the Enemy shall wander before choosing a new wander direction, note this will be set by random between min and max value")]
         [SerializeField, Range(0.0f, 10.0f)] private float _minRandomWalkingTime = 2.0f;
@@ -23,7 +23,7 @@ namespace ScriptableObjects
         private Vector3 _moveTargedPos;
         private float _timer = 0.0f;
         private bool _isMoving;
-        private bool _isTurningFromObstacle = false;
+        private bool _isMovingTOCloseToObstacle = false;
 
         public bool IsMoving { get => _isMoving; private set => _isMoving = value; }
 
@@ -69,16 +69,14 @@ namespace ScriptableObjects
 
             float rndWalktime = Random.Range(_minRandomWalkingTime, _maxRandomWalkingTime);
 
-            if (_timer > rndWalktime /*&& !_isTurningFromObstacle*/)
+            if (_timer > rndWalktime)
             {
                 _moveTargedPos = GetRndMoveDirection();
                 _timer = 0.0f;
             }
-            else if (_timer <= rndWalktime /*&& currentwalkeddeistanc < rndmovementrange*/)
-            {
-                //_baseEnemyBehaviour.Animator.SetBool("Engage", false);
-            }
-            //_baseEnemyBehaviour.Animator.SetBool("Engage", true);
+
+            if (_isMovingTOCloseToObstacle)
+                _moveTargedPos *= -1.5f;            
         }
 
         public override void ExecutePhysicsUpdateLogic()
@@ -91,21 +89,19 @@ namespace ScriptableObjects
             // change Movementdirection if moving to close towards wall
             if (Physics2D.Raycast(_baseEnemyBehaviour.transform.position, _moveTargedPos - _baseEnemyBehaviour.transform.position, _distanceTowardsWall, LayerMask.GetMask("Wall")))
             {
-                _moveTargedPos *= -1.5f;
-                _isTurningFromObstacle = true;
+                _isMovingTOCloseToObstacle = true;
             }
             else if (Physics2D.Raycast(_baseEnemyBehaviour.transform.position, _moveTargedPos - _baseEnemyBehaviour.transform.position, _distanceTowardsWall, LayerMask.GetMask("Door")))
             {
-                _moveTargedPos *= -1.5f;
-                _isTurningFromObstacle = true;
+                _isMovingTOCloseToObstacle = true;
             }
             else if (Physics2D.Raycast(raycastOrigin.normalized, _moveTargedPos - _baseEnemyBehaviour.transform.position, _distanceTowardsWall, LayerMask.GetMask("Enemy")))
             {
-                _moveTargedPos *= -1.5f;
-                _isTurningFromObstacle = true;
+                _isMovingTOCloseToObstacle = true;
             }
             else
-                _isTurningFromObstacle = false;
+                _isMovingTOCloseToObstacle = false;
+
         }
 
         public override void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe)
