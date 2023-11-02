@@ -10,6 +10,7 @@ TagManager:
   - UserUIFeedback
   - Door
   - Ground
+  - Roof
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - Enemy
   - Door
   - Casing
-  - 
+  - Roof
   - 
   - 
   - 
