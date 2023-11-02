@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 490bb0ffe61fcb5418f20f2fc8c60a55, type: 3}
   m_Name: Enemy-Idle-RadomWander
   m_EditorClassIdentifier: 
-  RandomMovementRange: 5
-  RandomMovementSpeed: 1
+  _wanderSpeed: 1
+  _minRandomWalkingTime: 3.28
+  _maxRandomWalkingTime: 6.96
+  _minRandomWalkingRange: 1
+  _maxRandomWalkingRange: 5
+  _distanceTowardsWall: 1.5

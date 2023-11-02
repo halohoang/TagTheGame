@@ -7,14 +7,23 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "Enemy-Idle-RadomWander", menuName = "Scriptable Objects/Enemy Logic/Idle Logic/Random Wander")]
     public class EnemyIdleRandomWanderSO : BaseEnemyIdleSO
     {
-        // this are just Placeholder Values at the moment (will be replaced by proper logic later); JM (01.11.2023)
-        [SerializeField] private float _movementRange = 5.0f;
-        [SerializeField] private float _wanderMovementSpeed = 1.0f;
+        // this are just Placeholder Values at the moment (will be replaced by proper logic later); JM (01.11.2023)        
+        [SerializeField] private float _wanderSpeed = 1.0f;
+        [Tooltip("The minimum time the Enemy shall wander before choosing a new wander direction, note this will be set by random between min and max value")]
+        [SerializeField, Range(0.0f, 10.0f)] private float _minRandomWalkingTime = 2.0f;
+        [Tooltip("The maximum time the Enemy shall wander before choosing a new wander direction, note this will be set by random between min and max value")]
+        [SerializeField, Range(0.0f, 10.0f)] private float _maxRandomWalkingTime = 6.0f;
+        [Tooltip("The minimum range the Enemy shall be able to wander, note this will be set by random between min and max value")]
+        [SerializeField, Range(0.0f, 20.0f)] private float _minRandomWalkingRange = 1.0f;
+        [Tooltip("The maximum range the Enemy shall be able to wander, note this will be set by random between min and max value")]
+        [SerializeField, Range(0.0f, 20.0f)] private float _maxRandomWalkingRange = 5.0f;
+        [Tooltip("Defines the Distance to an Obstacle at wich an EnemyObject shall turn away when previously walking towards the obstacle")]
+        [SerializeField, Range(1.5f, 5.0f)] private float _distanceTowardsWall = 2.0f;
 
-        private Vector3 _targedPos;
-        private Vector3 _direction;
+        private Vector3 _moveTargedPos;
         private float _timer = 0.0f;
         private bool _isMoving;
+        private bool _isTurningFromObstacle = false;
 
         public bool IsMoving { get => _isMoving; private set => _isMoving = value; }
 
@@ -29,8 +38,8 @@ namespace ScriptableObjects
 
             _isMoving = true;
 
-            _targedPos = GetRandomPointInCircle();
-            _baseEnemyBehaviour.NavAgent.speed = _wanderMovementSpeed;
+            _moveTargedPos = GetRndMoveDirection();
+            _baseEnemyBehaviour.NavAgent.speed = _wanderSpeed;
 
             // setup walking animation
             _baseEnemyBehaviour.Animator.SetBool("Engage", true);
@@ -49,30 +58,54 @@ namespace ScriptableObjects
         public override void ExecuteFrameUpdateLogic()
         {
             base.ExecuteFrameUpdateLogic();
-            
+
             _timer += Time.deltaTime;
 
-            // todo: replace logic by better logic for random movement; JM (01.11.2023)
-            _direction = (_targedPos - _baseEnemyBehaviour.transform.position).normalized;
-
             // setting facing to walk direction
-            _baseEnemyBehaviour.transform.right = _direction;
+            _baseEnemyBehaviour.transform.right = _moveTargedPos - _baseEnemyBehaviour.transform.position;
 
             // actual walking
-            _baseEnemyBehaviour.NavAgent.SetDestination(_targedPos);
+            _baseEnemyBehaviour.NavAgent.SetDestination(_moveTargedPos);
 
-            float rndWalktime = Random.Range(2.0f, 6.0f);
+            float rndWalktime = Random.Range(_minRandomWalkingTime, _maxRandomWalkingTime);
 
-            if (_timer > rndWalktime || (_baseEnemyBehaviour.transform.position - _targedPos).sqrMagnitude < 0.01f)
+            if (_timer > rndWalktime /*&& !_isTurningFromObstacle*/)
             {
-                _targedPos = GetRandomPointInCircle();
+                _moveTargedPos = GetRndMoveDirection();
                 _timer = 0.0f;
             }
+            else if (_timer <= rndWalktime /*&& currentwalkeddeistanc < rndmovementrange*/)
+            {
+                //_baseEnemyBehaviour.Animator.SetBool("Engage", false);
+            }
+            //_baseEnemyBehaviour.Animator.SetBool("Engage", true);
         }
 
         public override void ExecutePhysicsUpdateLogic()
         {
             base.ExecutePhysicsUpdateLogic();
+
+            Vector3 raycastOrigin = _baseEnemyBehaviour.transform.position + (_moveTargedPos - _baseEnemyBehaviour.transform.position);
+
+            // todo: (!) maybe exchange following code by more preformance friendly solution; JM (02.11.2023)
+            // change Movementdirection if moving to close towards wall
+            if (Physics2D.Raycast(_baseEnemyBehaviour.transform.position, _moveTargedPos - _baseEnemyBehaviour.transform.position, _distanceTowardsWall, LayerMask.GetMask("Wall")))
+            {
+                _moveTargedPos *= -1.5f;
+                _isTurningFromObstacle = true;
+            }
+            else if (Physics2D.Raycast(_baseEnemyBehaviour.transform.position, _moveTargedPos - _baseEnemyBehaviour.transform.position, _distanceTowardsWall, LayerMask.GetMask("Door")))
+            {
+                _moveTargedPos *= -1.5f;
+                _isTurningFromObstacle = true;
+            }
+            else if (Physics2D.Raycast(raycastOrigin.normalized, _moveTargedPos - _baseEnemyBehaviour.transform.position, _distanceTowardsWall, LayerMask.GetMask("Enemy")))
+            {
+                _moveTargedPos *= -1.5f;
+                _isTurningFromObstacle = true;
+            }
+            else
+                _isTurningFromObstacle = false;
         }
 
         public override void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe)
@@ -85,9 +118,10 @@ namespace ScriptableObjects
             base.ResetValues();
         }
 
-        private Vector3 GetRandomPointInCircle()
+        private Vector3 GetRndMoveDirection()
         {
-            return _baseEnemyBehaviour.transform.position + (Vector3)UnityEngine.Random.insideUnitCircle * _movementRange;
+            float rndWalkingRange = Random.Range(_minRandomWalkingRange, _maxRandomWalkingRange);
+            return _baseEnemyBehaviour.transform.position + (Vector3)Random.insideUnitCircle * rndWalkingRange;
         }
     }
 }
