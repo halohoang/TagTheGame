@@ -4,16 +4,19 @@ using UnityEngine;
 
 namespace ScriptableObjects
 {
-    [CreateAssetMenu(fileName = "Idle-Radom-Wander State", menuName = "Scriptable Objects/Enemy Logic/Idle Logic/Random Wander")]
+    [CreateAssetMenu(fileName = "Enemy-Idle-RadomWander", menuName = "Scriptable Objects/Enemy Logic/Idle Logic/Random Wander")]
     public class EnemyIdleRandomWanderSO : BaseEnemyIdleSO
     {
         // this are just Placeholder Values at the moment (will be replaced by proper logic later); JM (01.11.2023)
-        [SerializeField] private float RandomMovementRange = 5.0f;
-        [SerializeField] private float RandomMovementSpeed = 1.0f;
+        [SerializeField] private float _movementRange = 5.0f;
+        [SerializeField] private float _wanderMovementSpeed = 1.0f;
 
         private Vector3 _targedPos;
         private Vector3 _direction;
-        private float timer = 0.0f;
+        private float _timer = 0.0f;
+        private bool _isMoving;
+
+        public bool IsMoving { get => _isMoving; private set => _isMoving = value; }
 
         public override void Initialize(GameObject enemyObj, BaseEnemyBehaviour enemyBehav)
         {
@@ -24,8 +27,10 @@ namespace ScriptableObjects
         {
             base.ExecuteEnterLogic();
 
+            _isMoving = true;
+
             _targedPos = GetRandomPointInCircle();
-            _baseEnemyBehaviour.NavAgent.speed = RandomMovementSpeed;
+            _baseEnemyBehaviour.NavAgent.speed = _wanderMovementSpeed;
 
             // setup walking animation
             _baseEnemyBehaviour.Animator.SetBool("Engage", true);
@@ -35,6 +40,8 @@ namespace ScriptableObjects
         {
             base.ExecuteExitLogic();
 
+            _isMoving = false;
+
             // setup walking animation
             _baseEnemyBehaviour.Animator.SetBool("Engage", false);
         }
@@ -43,7 +50,7 @@ namespace ScriptableObjects
         {
             base.ExecuteFrameUpdateLogic();
             
-            timer += Time.deltaTime;
+            _timer += Time.deltaTime;
 
             // todo: replace logic by better logic for random movement; JM (01.11.2023)
             _direction = (_targedPos - _baseEnemyBehaviour.transform.position).normalized;
@@ -56,10 +63,10 @@ namespace ScriptableObjects
 
             float rndWalktime = Random.Range(2.0f, 6.0f);
 
-            if (timer > rndWalktime || (_baseEnemyBehaviour.transform.position - _targedPos).sqrMagnitude < 0.01f)
+            if (_timer > rndWalktime || (_baseEnemyBehaviour.transform.position - _targedPos).sqrMagnitude < 0.01f)
             {
                 _targedPos = GetRandomPointInCircle();
-                timer = 0.0f;
+                _timer = 0.0f;
             }
         }
 
@@ -80,7 +87,7 @@ namespace ScriptableObjects
 
         private Vector3 GetRandomPointInCircle()
         {
-            return _baseEnemyBehaviour.transform.position + (Vector3)UnityEngine.Random.insideUnitCircle * RandomMovementRange;
+            return _baseEnemyBehaviour.transform.position + (Vector3)UnityEngine.Random.insideUnitCircle * _movementRange;
         }
     }
 }

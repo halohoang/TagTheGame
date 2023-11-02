@@ -3,8 +3,7 @@ using EnumLibrary;
 using UnityEngine;
 
 namespace ScriptableObjects
-{
-    [CreateAssetMenu(fileName = "Enemy-Alert State", menuName = "Scriptable Objects/Enemy Logic/Alert Logic/Alert State")]
+{    
     public class BaseEnemyAlertSO : ScriptableObject
     {
         protected BaseEnemyBehaviour _baseEnemyBehaviour;
@@ -32,6 +31,7 @@ namespace ScriptableObjects
 
         public virtual void ExecuteFrameUpdateLogic()
         {
+            // todo: if implementing more ALert-Behaviour maybe move following logic to 'EnemyAlertStandingSO'; JM (02.11.2023)
             FaceAgentTowardsAlarmingEvent(_baseEnemyBehaviour.PositionOfAlarmingEvent, _baseEnemyBehaviour.NoiseRangeOfAlarmingEvent);
 
             // Transition-Condition-Check
@@ -46,6 +46,7 @@ namespace ScriptableObjects
         public virtual void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe) { }
         public virtual void ResetValues() { }
 
+        // todo: if implementing more ALert-Behaviour maybe move following logic to 'EnemyAlertStandingSO'; JM (02.11.2023)
         /// <summary>
         /// Sets the Facing direction of the enemy-object towards the position of an alarming Event that is happening (e.g. door kick in)
         /// if the enemy-object is within the noise-range of the alarming event

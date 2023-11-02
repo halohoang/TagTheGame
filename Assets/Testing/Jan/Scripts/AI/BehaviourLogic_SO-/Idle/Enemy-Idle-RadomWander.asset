@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 490bb0ffe61fcb5418f20f2fc8c60a55, type: 3}
-  m_Name: Idle-Radom Wander
+  m_Name: Enemy-Idle-RadomWander
   m_EditorClassIdentifier: 
   RandomMovementRange: 5
   RandomMovementSpeed: 1
