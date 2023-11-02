@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 1036063250}
   - component: {fileID: 1036063251}
   m_Layer: 8
-  m_Name: Light 2D
+  m_Name: Goggle light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,8 +78,8 @@ MonoBehaviour:
   m_ComponentVersion: 1
   m_LightType: 3
   m_BlendStyleIndex: 0
-  m_FalloffIntensity: 0
-  m_Color: {r: 0, g: 1, b: 0.054832935, a: 1}
+  m_FalloffIntensity: 0.776
+  m_Color: {r: 0.3589325, g: 1, b: 0, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
@@ -101,8 +101,8 @@ MonoBehaviour:
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
   m_PointLightInnerAngle: 50.47
   m_PointLightOuterAngle: 50.47
-  m_PointLightInnerRadius: 3.95
-  m_PointLightOuterRadius: 7.37
+  m_PointLightInnerRadius: 0.09
+  m_PointLightOuterRadius: 10.27
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -353,9 +353,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 0}
-  ClonesPerSecond: 8
-  scalePerSecond: {x: 1, y: 1, z: 1}
-  colorPerSecond: {r: 0.6173204, g: 0.9339623, b: 0.58592916, a: 0.9019608}
+  ClonesPerSecond: 15
+  scalePerSecond: {x: 5, y: 5, z: 5}
+  colorPerSecond: {r: 1, g: 1, b: 1, a: 1}
   cloneSpaceDistance: 0
 --- !u!114 &4783424759540013841
 MonoBehaviour:
@@ -586,6 +586,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5431849795902495492}
   - component: {fileID: 6257531966712258264}
+  - component: {fileID: 1253488534}
   m_Layer: 8
   m_Name: Back Light
   m_TagString: Untagged
@@ -601,7 +602,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5419344618252784355}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.001, y: -0.008, z: 0}
+  m_LocalPosition: {x: -0.065, y: -0.008, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -624,8 +625,8 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.46
-  m_Color: {r: 0, g: 1, b: 0.05490196, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 0.36078432, g: 1, b: 0, a: 1}
+  m_Intensity: 0.35
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
   m_ApplyToSortingLayers: 00000000d9eb6cc72d17e682e7540cb0171cbb5141c8ec54
@@ -647,7 +648,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 1
+  m_PointLightOuterRadius: 1.63
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -658,6 +659,21 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &1253488534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5419344618252784355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c973108b25748242b3fe377e34cfd1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minIntensity: 0
+  _maxIntensity: 1
+  _changeSpeed: 10
 --- !u!1001 &1112373772441049723
 PrefabInstance:
   m_ObjectHideFlags: 0
