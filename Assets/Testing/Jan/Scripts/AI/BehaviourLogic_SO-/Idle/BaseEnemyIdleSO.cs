@@ -3,8 +3,7 @@ using EnumLibrary;
 using UnityEngine;
 
 namespace ScriptableObjects
-{
-    [CreateAssetMenu(fileName = "Base-Enemy-Idle-State", menuName = "Scriptable Objects/Enemy Logic/Idle Logic/Base Idle (Just Standing Idle)")]
+{    
     public class BaseEnemyIdleSO : ScriptableObject
     {
         protected BaseEnemyBehaviour _baseEnemyBehaviour;

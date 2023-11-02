@@ -201,8 +201,8 @@ MonoBehaviour:
   _playerObject: {fileID: 0}
   _condPlayerDetectionCheck: {fileID: 0}
   _condMeleeAttackCheck: {fileID: 0}
-  _baseEnemyIdleStateSO: {fileID: 11400000, guid: 7819caf7720e89c40a07c43d28923d88, type: 2}
-  _baseEnemyAlertStateSO: {fileID: 11400000, guid: e5b07e4ae536d71419f1f0dbee56025d, type: 2}
+  _baseEnemyIdleStateSO: {fileID: 11400000, guid: e2f9122969f405a488f70f90701d3d7d, type: 2}
+  _baseEnemyAlertStateSO: {fileID: 11400000, guid: 3846a16cac923194dad85324de682020, type: 2}
   _baseEnemyChaseStateSO: {fileID: 11400000, guid: b58cbcaeb70b8064e8441b42b8985050, type: 2}
   _baseEnemyAttackStateSO: {fileID: 11400000, guid: 6ebc51d86238c4e4ea025132c0e68de9, type: 2}
   _movementSpeed: 3.5

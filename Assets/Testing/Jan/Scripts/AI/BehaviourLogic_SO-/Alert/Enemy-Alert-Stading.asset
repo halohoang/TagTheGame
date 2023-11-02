@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 490bb0ffe61fcb5418f20f2fc8c60a55, type: 3}
-  m_Name: Idle-Radom Wander
+  m_Script: {fileID: 11500000, guid: d24cc34a1de34b745aeb8ec942a47914, type: 3}
+  m_Name: Enemy-Alert-Stading
   m_EditorClassIdentifier: 
-  RandomMovementRange: 5
-  RandomMovementSpeed: 1
+  _stayAlertTime: 10
