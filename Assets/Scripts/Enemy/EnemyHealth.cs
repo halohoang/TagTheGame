@@ -13,6 +13,8 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private float _takenDamage;
     private TakingDamage _takingDamageScript;
 
+    [SerializeField] GameObject _light2d;
+
 
     /* Animation */
     [SerializeField] Animator _animator;
@@ -56,6 +58,7 @@ public class EnemyHealth : MonoBehaviour
             _animator.SetTrigger("Dead");
             _isDead = true;
             _boxCollider2D.isTrigger = true;
+            _light2d.SetActive(false);
 
             // Setup Enemy-Behaviour to EnemyDead
             // todo: if AI-Logic/StateMachine is fully implemented, adjust following Logic accordingly; JM (30.10.23)
