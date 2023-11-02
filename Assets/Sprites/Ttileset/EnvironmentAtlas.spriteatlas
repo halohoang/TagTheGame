@@ -48,11 +48,14 @@ SpriteAtlas:
     - {fileID: 2800000, guid: afccc1dd7dbc0af4c855d8679f469df2, type: 3}
     - {fileID: 2800000, guid: 84137d1649fe2724daf22d6c8b36d997, type: 3}
     - {fileID: 2800000, guid: 3ee4f08b4dd7b5a4586212095f4e4d27, type: 3}
+    - {fileID: 2800000, guid: 2cb7934212ffcef4aa1cc9451dc83a2e, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
+  - {fileID: 1725862917, guid: 2cb7934212ffcef4aa1cc9451dc83a2e, type: 3}
+  - {fileID: 706152746, guid: 2cb7934212ffcef4aa1cc9451dc83a2e, type: 3}
   - {fileID: 1422215087, guid: 84137d1649fe2724daf22d6c8b36d997, type: 3}
   - {fileID: 1745551488, guid: 84137d1649fe2724daf22d6c8b36d997, type: 3}
   - {fileID: 2098350913, guid: 84137d1649fe2724daf22d6c8b36d997, type: 3}
@@ -63,12 +66,9 @@ SpriteAtlas:
   - {fileID: 1407951258, guid: 84137d1649fe2724daf22d6c8b36d997, type: 3}
   - {fileID: -1351377945, guid: 84137d1649fe2724daf22d6c8b36d997, type: 3}
   - {fileID: 132030706, guid: 84137d1649fe2724daf22d6c8b36d997, type: 3}
-  - {fileID: 678829457, guid: 84137d1649fe2724daf22d6c8b36d997, type: 3}
   - {fileID: 496969196, guid: 84137d1649fe2724daf22d6c8b36d997, type: 3}
   - {fileID: 1377813808, guid: 84137d1649fe2724daf22d6c8b36d997, type: 3}
   - {fileID: 2035904973, guid: 84137d1649fe2724daf22d6c8b36d997, type: 3}
-  - {fileID: 939160076, guid: 84137d1649fe2724daf22d6c8b36d997, type: 3}
-  - {fileID: 1888579834, guid: 84137d1649fe2724daf22d6c8b36d997, type: 3}
   - {fileID: -1615017852, guid: f5c7472606ba4584a89a72846a269974, type: 3}
   - {fileID: -822606213, guid: f5c7472606ba4584a89a72846a269974, type: 3}
   - {fileID: 149072588, guid: f5c7472606ba4584a89a72846a269974, type: 3}
@@ -86,6 +86,8 @@ SpriteAtlas:
   - {fileID: 730888966, guid: afccc1dd7dbc0af4c855d8679f469df2, type: 3}
   - {fileID: 1645162167, guid: afccc1dd7dbc0af4c855d8679f469df2, type: 3}
   m_PackedSpriteNamesToIndex:
+  - Wall 2_0
+  - Wall 2_1
   - Floor 2_0
   - Floor 2_1
   - Floor 2_2
@@ -96,12 +98,9 @@ SpriteAtlas:
   - Floor 2_7
   - Floor 2_8
   - Floor 2_9
-  - Floor 2_13
   - Floor 2_12
   - Floor 2_11
   - Floor 2_10
-  - Floor 2_15
-  - Floor 2_14
   - CornerwALL_1
   - CornerwALL_0
   - CornerwALL_3
