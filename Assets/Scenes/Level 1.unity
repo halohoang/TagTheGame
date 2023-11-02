@@ -703,6 +703,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1036063251, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036063251, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.data[2]
+      value: 1371216919
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036063251, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.data[3]
+      value: 1424803905
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036063251, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.data[4]
+      value: -2098850003
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036063251, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.data[5]
+      value: -1341369113
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036063251, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.data[6]
+      value: -1499667513
+      objectReference: {fileID: 0}
+    - target: {fileID: 1036063251, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
+      propertyPath: m_ApplyToSortingLayers.Array.data[7]
+      value: -656300435
+      objectReference: {fileID: 0}
     - target: {fileID: 3493521951034406032, guid: 0d018b87cea29b041b364e6d668b1dbf, type: 3}
       propertyPath: m_Name
       value: Player
