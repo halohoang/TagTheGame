@@ -1,8 +1,5 @@
-using Enemies;
 using NaughtyAttributes;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.Events;
 
 namespace StateMashine
@@ -21,17 +18,17 @@ namespace StateMashine
         [Header("Perception Settings")]
         [Space(2)]
         [Tooltip("Angle of the field of view.")]
-        [SerializeField, Range(0.0f, 10.0f)] private float _fOVRadius;
+        [SerializeField, Range(0.0f, 20.0f)] private float _fOVRadius;
         [SerializeField, Range(0.0f, 360.0f), ReadOnly] private float _fOVAngle = 180.0f;   // todo: disable 'Readonly' on real implementation; JM (30.10.2023)
         [SerializeField, Range(0.0f, 50.0f)] private float _viewDistance = 10.0f;
         [SerializeField] private LayerMask _targetDetectionMask;
         [SerializeField] private LayerMask _obstructionMask;
-        //[SerializeField, ReadOnly] private bool _isPlayerInFOV;
         [SerializeField, ReadOnly] private bool _isPlayerDetected = false;     // needed for estimating if player was detected
         [SerializeField, ReadOnly] private bool _isEnemyDead;
 
         // Properties
-        //public bool IsPlayerInFOV { get => _isPlayerInFOV; set => _isPlayerInFOV = value; }
+        public float FOVAngle { get => _fOVAngle; private set => _fOVAngle = value; }
+        public float FOVRadius { get => _fOVRadius; private set => _fOVRadius = value; }
         public bool IsEnemyDead { get => _isEnemyDead; private set => _isEnemyDead = value; }
         public bool IsPlayerDetected { get => _isPlayerDetected; private set => _isPlayerDetected = value; }
 
@@ -49,16 +46,14 @@ namespace StateMashine
 
         void FixedUpdate()
         {
-
-
             #region notworking solution of YTGuy
-            Collider2D targetCollider = Physics2D.OverlapCircle(transform.position, _fOVRadius, _targetDetectionMask);
+            Collider2D targetCollider = Physics2D.OverlapCircle(transform.position, FOVRadius, _targetDetectionMask);
 
             if (targetCollider != false)
             {
                 Vector2 directionToTarget = (targetCollider.transform.position - transform.position).normalized;
 
-                if (Vector2.Angle(transform.right, directionToTarget) < _fOVAngle * 0.5)
+                if (Vector2.Angle(transform.right, directionToTarget) < FOVAngle * 0.5)
                 {
                     float distanceToTarget = Vector2.Distance(transform.position, targetCollider.transform.position);   // todo: maybe cahnge 'V2.Distance()' to (a-b).sqrMagnitude for performance reasons?; JM (03.11.2023)
 

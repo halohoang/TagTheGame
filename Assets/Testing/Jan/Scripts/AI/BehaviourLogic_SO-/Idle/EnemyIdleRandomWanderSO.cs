@@ -17,8 +17,10 @@ namespace ScriptableObjects
         [SerializeField, Range(0.0f, 20.0f)] private float _minRandomWalkingRange = 1.0f;
         [Tooltip("The maximum range the Enemy shall be able to wander, note this will be set by random between min and max value")]
         [SerializeField, Range(0.0f, 20.0f)] private float _maxRandomWalkingRange = 5.0f;
-        [Tooltip("Defines the Distance to an Obstacle at wich an EnemyObject shall turn away when previously walking towards the obstacle")]
-        [SerializeField, Range(1.0f, 5.0f)] private float _distanceTowardsWall = 2.0f;
+        [Tooltip("Defines the how far the EnemyObject shall check for obstacles in front of it")]
+        [SerializeField, Range(1.0f, 5.0f)] private float _distanceToCheckForObstacles = 2.0f;
+        [Tooltip("The Objects the Enemy that shall be recognized as obstacles by the EnemyObject")]
+        [SerializeField] private LayerMask _obstacleMask;
 
         private Rigidbody2D _thisEnemyRB2D;
         private Vector3 _walkTargedPos;
@@ -93,25 +95,12 @@ namespace ScriptableObjects
         {
             base.ExecutePhysicsUpdateLogic();
 
-            Vector3 raycastOrigin = _baseEnemyBehaviour.transform.position + (_walkTargedPos - _baseEnemyBehaviour.transform.position);
-
             // todo: (!) maybe exchange following code by more preformance friendly solution; JM (02.11.2023)
             // change Movementdirection if moving to close towards wall
-            if (Physics2D.Raycast(_baseEnemyBehaviour.transform.position, _walkTargedPos - _baseEnemyBehaviour.transform.position, _distanceTowardsWall, LayerMask.GetMask("Wall")))
-            {
+            if (Physics2D.Raycast(_baseEnemyBehaviour.transform.position, _walkTargedPos - _baseEnemyBehaviour.transform.position, _distanceToCheckForObstacles, _obstacleMask))
                 _isMovingTOCloseToObstacle = true;
-            }
-            else if (Physics2D.Raycast(_baseEnemyBehaviour.transform.position, _walkTargedPos - _baseEnemyBehaviour.transform.position, _distanceTowardsWall, LayerMask.GetMask("Door")))
-            {
-                _isMovingTOCloseToObstacle = true;
-            }
-            else if (Physics2D.Raycast(raycastOrigin.normalized, _walkTargedPos - _baseEnemyBehaviour.transform.position, _distanceTowardsWall, LayerMask.GetMask("Enemy")))
-            {
-                _isMovingTOCloseToObstacle = true;
-            }
             else
                 _isMovingTOCloseToObstacle = false;
-
         }
 
         public override void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe)

@@ -350,7 +350,15 @@ MonoBehaviour:
   _playerObj: {fileID: 0}
   _viewDirectionHelperTrans: {fileID: 1816798256}
   _raycastingCollider: {fileID: 4361380091175105720}
+  _fOVRadius: 12
+  _fOVAngle: 70
   _viewDistance: 50
+  _targetDetectionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _obstructionMask:
+    serializedVersion: 2
+    m_Bits: 0
   _isPlayerDetected: 0
   _isEnemyDead: 0
 --- !u!114 &4595668582295458502
