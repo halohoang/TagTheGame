@@ -26,7 +26,7 @@ namespace Interactables
         [Header("Settings")]
         [Tooltip("Set which type of Interactable this Object is for appropriate Interaction-Logic")]
         [SerializeField] private Enum_Lib.EInteractableType _interactableType;
-        [SerializeField, Range(0.0f, 10.0f)] private float _doorKickInNoiseRange = 10.0f;
+        [SerializeField, Range(0.0f, 20.0f), EnableIf("_interactableType", Enum_Lib.EInteractableType.Door)] private float _doorKickInNoiseRange = 10.0f;
         [Space(5)]
 
         [Header("Monitoring values")]

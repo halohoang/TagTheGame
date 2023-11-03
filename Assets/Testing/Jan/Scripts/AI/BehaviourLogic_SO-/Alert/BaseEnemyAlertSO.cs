@@ -61,6 +61,8 @@ namespace ScriptableObjects
             {
                 enemieColliders[i].gameObject.transform.right = positionOfAlarmingEvent - enemieColliders[i].gameObject.transform.position;
 
+                // todo: use 'Vector3.Angle()/Vector2.Angle()' for calculating the Angle between two Vectors; JM(03.11.2023)                
+
                 #region old code
                 //alternate solution (does not work properly)
                 //Vector2 directionToDoor = (doorPosition - transform.position).normalized;
