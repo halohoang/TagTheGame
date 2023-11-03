@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using StateMashine;
 using Enemies;
+using UnityEngine.Rendering.Universal;
 
 public class EnemyHealth : MonoBehaviour
 {
@@ -13,9 +14,13 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private float _takenDamage;
     private TakingDamage _takingDamageScript;
 
+    // Light & Shadow //
+    [SerializeField] GameObject _light2d;
+    ShadowCaster2D _shadowCaster2D;
 
-    /* Animation */
-    [SerializeField] Animator _animator;
+
+	/* Animation */
+	[SerializeField] Animator _animator;
     private BoxCollider2D _boxCollider2D;
     private bool _isDead = false;
     SpriteRenderer _spriteRenderer;
@@ -32,6 +37,7 @@ public class EnemyHealth : MonoBehaviour
         _animator = GetComponent<Animator>();
         _boxCollider2D = GetComponent<BoxCollider2D>();
         SpriteRenderer _spriteRenderer = GetComponent<SpriteRenderer>();
+         _shadowCaster2D = GetComponent<ShadowCaster2D>();
     }
 
     internal void GetDamage()
@@ -56,6 +62,8 @@ public class EnemyHealth : MonoBehaviour
             _animator.SetTrigger("Dead");
             _isDead = true;
             _boxCollider2D.isTrigger = true;
+            _light2d.SetActive(false);
+            _shadowCaster2D.enabled = false;
 
             // Setup Enemy-Behaviour to EnemyDead
             // todo: if AI-Logic/StateMachine is fully implemented, adjust following Logic accordingly; JM (30.10.23)
