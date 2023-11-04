@@ -350,15 +350,15 @@ MonoBehaviour:
   _playerObj: {fileID: 0}
   _viewDirectionHelperTrans: {fileID: 1816798256}
   _raycastingCollider: {fileID: 4361380091175105720}
-  _fOVRadius: 12
-  _fOVAngle: 70
+  _fOVRadius: 5.4
+  _fOVAngle: 193
   _viewDistance: 50
   _targetDetectionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   _obstructionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   _isPlayerDetected: 0
   _isEnemyDead: 0
 --- !u!114 &4595668582295458502
@@ -400,7 +400,7 @@ MonoBehaviour:
   - {x: 0.07000005, y: -0.13, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 111184
+  m_InstanceId: 51862
   m_LocalBounds:
     m_Center: {x: 0.000000059604645, y: 0, z: 0}
     m_Extent: {x: 0.06999999, y: 0.13, z: 0}
