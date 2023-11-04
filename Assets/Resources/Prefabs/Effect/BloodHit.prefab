@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1471398999119722494}
   - component: {fileID: 1471398999119722495}
   - component: {fileID: -8061259776148960897}
-  - component: {fileID: 4301947503311051045}
+  - component: {fileID: 7034249848856298260}
   m_Layer: 0
   m_Name: BloodHit
   m_TagString: Untagged
@@ -55,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5ae0e49ed88bf8a4199a4c91b17edec5, type: 2}
+  - {fileID: 2100000, guid: 4ef618b0e8c34684aa0e2dd28b852e17, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -120,19 +120,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2836e1425abf4e4b9d771c1542c23b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4301947503311051045
+--- !u!114 &7034249848856298260
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1471398999119722488}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee158225ee1e59f4791627785501d950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shaderTypes: 3
+  shaderTypes: 4
   normalStrength: 5
   normalSmoothing: 1
   computingNormal: 0
