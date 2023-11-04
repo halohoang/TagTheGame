@@ -8,7 +8,8 @@ namespace EnumLibrary
         // Interactablt Types
         public enum EInteractableType
         {
-            Door
+            Door,
+            PlaceHolder
         }
 
         // todo: maybe change the naming of the Enemy-Type-Enums yet (if more types of Enemy will be implementet), maybe to EnemyType_one or so; JM (17.10.2023)

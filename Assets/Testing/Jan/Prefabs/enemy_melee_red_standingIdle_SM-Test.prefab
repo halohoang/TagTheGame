@@ -62,7 +62,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5ae0e49ed88bf8a4199a4c91b17edec5, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -227,7 +227,15 @@ MonoBehaviour:
   _playerObj: {fileID: 0}
   _viewDirectionHelperTrans: {fileID: 9041522106579246093}
   _raycastingCollider: {fileID: 4755603732962905221}
+  _fOVRadius: 12
+  _fOVAngle: 70
   _viewDistance: 10
+  _targetDetectionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _obstructionMask:
+    serializedVersion: 2
+    m_Bits: 0
   _isPlayerDetected: 0
   _isEnemyDead: 0
 --- !u!114 &7863152602013986024
@@ -258,6 +266,7 @@ MonoBehaviour:
   _maximumHealth: 4
   _currentHealth: 0
   _takenDamage: 2
+  _light2d: {fileID: 0}
   _animator: {fileID: 9041522106232337331}
   _bloodPoolSpawn:
   - {fileID: 3044862607823702276, guid: ef5550f6add88d942b04d90e365378c4, type: 3}
