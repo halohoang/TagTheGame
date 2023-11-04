@@ -26,7 +26,7 @@ TagManager:
   - Casing
   - Roof
   - Post Processing
-  - 
+  - Button
   - 
   - 
   - 
@@ -53,6 +53,9 @@ TagManager:
     locked: 0
   - name: Wall
     uniqueID: 3638666861
+    locked: 0
+  - name: Button
+    uniqueID: 662439449
     locked: 0
   - name: Bullet
     uniqueID: 2196117293
