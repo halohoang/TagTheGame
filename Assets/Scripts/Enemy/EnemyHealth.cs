@@ -18,7 +18,6 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] GameObject _light2d;
     ShadowCaster2D _shadowCaster2D;
 
-
 	/* Animation */
 	[SerializeField] Animator _animator;
     private BoxCollider2D _boxCollider2D;
@@ -38,6 +37,7 @@ public class EnemyHealth : MonoBehaviour
         _boxCollider2D = GetComponent<BoxCollider2D>();
         SpriteRenderer _spriteRenderer = GetComponent<SpriteRenderer>();
          _shadowCaster2D = GetComponent<ShadowCaster2D>();
+      
     }
 
     internal void GetDamage()

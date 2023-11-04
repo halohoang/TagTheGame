@@ -61,7 +61,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3493521951034406038}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 270}
 --- !u!114 &1036063251
 MonoBehaviour:
@@ -271,8 +271,8 @@ Transform:
   - {fileID: 7427382207461366253}
   - {fileID: 6563612138351710883}
   - {fileID: 1578513965}
-  - {fileID: 1036063250}
   - {fileID: 5431849795902495492}
+  - {fileID: 1036063250}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -294,6 +294,7 @@ MonoBehaviour:
   _playerDashForce: 200
   _sandevistan: {fileID: 3493521951034406024}
   _dashCooldown: 1
+  _light2D: {fileID: 0}
 --- !u!114 &3493521951034406027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -607,7 +608,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3493521951034406038}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6257531966712258264
 MonoBehaviour:

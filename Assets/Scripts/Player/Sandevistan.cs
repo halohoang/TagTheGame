@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
+
 public class Sandevistan : MonoBehaviour
 {
 	//Variables
@@ -18,6 +20,8 @@ public class Sandevistan : MonoBehaviour
 	[SerializeField] private Vector3 scalePerSecond = new Vector3(1f, 1f, 1f);
 	[SerializeField] private Color colorPerSecond = new Color(0f, 0f, 0f, 0.1f); // Adjust alpha value here
 	[SerializeField] private float cloneSpaceDistance = 0.2f; // Adjust the distance between clones
+
+
 
 	//[SerializeField] private Movement _movement;
 
@@ -47,6 +51,7 @@ public class Sandevistan : MonoBehaviour
 		clones = new List<GameObject>();
 		StartCoroutine(SpaceTrail());
 		//StartCoroutine(DashTrail());
+		
 	}
 	internal IEnumerator SpaceTrail()
 	{
@@ -54,6 +59,7 @@ public class Sandevistan : MonoBehaviour
 		{
 			if (Input.GetKey(KeyCode.Space)) // Check if spacebar is held
 			{
+				
 				var clone = new GameObject("TrailClone");
 
 				// Calculate the new position based on the character's direction and clone distance
@@ -79,6 +85,7 @@ public class Sandevistan : MonoBehaviour
 				// Start a coroutine for fading and scaling the clone
 				StartCoroutine(FadeAndScale(cloneRend));
 			}
+			
 
 			yield return new WaitForSeconds(1f / ClonesPerSecond);
 		}

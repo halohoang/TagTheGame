@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
+using UnityEngine.Rendering.Universal;
 
 public class Movement : MonoBehaviour
 {
@@ -16,11 +18,13 @@ public class Movement : MonoBehaviour
 	[SerializeField] internal float _dashCooldown;
 	internal float _currentDashCooldown;
 
+	[SerializeField] Light2D _light2D;
 
 	//Functions
 	void Start()
 	{
 		_currentPlayerSpeed = _minPlayerSpeed;
+		_light2D = GetComponentInChildren<Light2D>();
 	}
 
 	void Update()
@@ -67,9 +71,13 @@ public class Movement : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
 			_currentPlayerSpeed = _maxPlayerSpeed;
-			
+			_light2D.falloffIntensity = 0.1f;
+			_light2D.pointLightOuterRadius = 1.6f;
 		}
-		if (!Input.GetKey(KeyCode.Space)) { _currentPlayerSpeed = _minPlayerSpeed; } //Revert player back to normal speed
+		if (!Input.GetKey(KeyCode.Space)) { _currentPlayerSpeed = _minPlayerSpeed;
+			_light2D.falloffIntensity = 0.14f;
+			_light2D.pointLightOuterRadius = 0.86f;
+		} //Revert player back to normal speed
 	}
 
 	
