@@ -211,8 +211,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00c8f7eb05ad5eb40baa9fc126742d38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ejectionForce: 10
-  _despawnTime: 20
+  ejectionForce: 5
+  _despawnTime: 200
 --- !u!50 &-4546890457570054001
 Rigidbody2D:
   serializedVersion: 4
