@@ -380,7 +380,7 @@ MonoBehaviour:
   - {x: 16.218779, y: 6.59375, z: 0}
   m_ShapePathHash: 1080917633
   m_Mesh: {fileID: 1884372815}
-  m_InstanceId: 72238
+  m_InstanceId: 109398
   m_LocalBounds:
     m_Center: {x: 16.499992, y: 6.75, z: 0}
     m_Extent: {x: 0.28124237, y: 0.15624976, z: 0}
@@ -734,7 +734,7 @@ MonoBehaviour:
   - {x: 13.500029, y: 0, z: 0}
   m_ShapePathHash: -466966533
   m_Mesh: {fileID: 1293591218}
-  m_InstanceId: 72282
+  m_InstanceId: 109442
   m_LocalBounds:
     m_Center: {x: 14, y: 0.5, z: 0}
     m_Extent: {x: 1, y: 0.5, z: 0}
@@ -842,7 +842,7 @@ MonoBehaviour:
   - {x: -12.99997, y: -5, z: 0}
   m_ShapePathHash: -1648130565
   m_Mesh: {fileID: 925067418}
-  m_InstanceId: 72288
+  m_InstanceId: 109448
   m_LocalBounds:
     m_Center: {x: -1.75, y: 9.5, z: 0}
     m_Extent: {x: 13.75, y: 14.5, z: 0}
@@ -1851,6 +1851,7 @@ Material:
   m_Name: AllIn1SpriteShader/AllIn1SpriteShader
   m_Shader: {fileID: 4800000, guid: a36b7719ff0465b42ab1407d67672c5f, type: 3}
   m_ValidKeywords:
+  - GLITCH_ON
   - GLOW_ON
   - HOLOGRAM_ON
   m_InvalidKeywords: []
@@ -1958,8 +1959,8 @@ Material:
     - _GhostBlend: 1
     - _GhostColorBoost: 1
     - _GhostTransparency: 0
-    - _GlitchAmount: 3
-    - _GlitchSize: 1
+    - _GlitchAmount: 3.49
+    - _GlitchSize: 1.29
     - _Glow: 14.4
     - _GlowGlobal: 1
     - _GradBlend: 1
@@ -1979,9 +1980,9 @@ Material:
     - _HitEffectBlend: 1
     - _HitEffectGlow: 5
     - _HologramBlend: 1
-    - _HologramMaxAlpha: 0
+    - _HologramMaxAlpha: 2.5
     - _HologramMinAlpha: 1
-    - _HologramStripesAmount: 0.391
+    - _HologramStripesAmount: 0.687
     - _HologramStripesSpeed: 6.6
     - _HologramUnmodAmount: 0
     - _HsvBright: 1
@@ -2068,7 +2069,7 @@ Material:
     - _GradTopRightCol: {r: 1, g: 1, b: 0, a: 1}
     - _GreyscaleTintColor: {r: 1, g: 1, b: 1, a: 1}
     - _HitEffectColor: {r: 1, g: 1, b: 1, a: 1}
-    - _HologramStripeColor: {r: 1, g: 0.13927601, b: 0, a: 1}
+    - _HologramStripeColor: {r: 1, g: 0.17763595, b: 0.042452812, a: 1}
     - _InnerOutlineColor: {r: 1, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
     - _OverlayColor: {r: 1, g: 1, b: 1, a: 1}
@@ -2738,7 +2739,7 @@ MonoBehaviour:
   - {x: 11.00003, y: -5, z: 0}
   m_ShapePathHash: -439936283
   m_Mesh: {fileID: 149897846}
-  m_InstanceId: 72364
+  m_InstanceId: 109524
   m_LocalBounds:
     m_Center: {x: 15, y: 3.5, z: 0}
     m_Extent: {x: 8, y: 8.5, z: 0}
@@ -3028,7 +3029,7 @@ MonoBehaviour:
   - {x: 15.000029, y: 7.2187505, z: 0}
   m_ShapePathHash: -1234847632
   m_Mesh: {fileID: 753601306}
-  m_InstanceId: 72398
+  m_InstanceId: 109558
   m_LocalBounds:
     m_Center: {x: 15.296861, y: 7.5, z: 0}
     m_Extent: {x: 0.2968607, y: 0.28124952, z: 0}
@@ -3127,7 +3128,7 @@ MonoBehaviour:
   - {x: 16.281261, y: 6.09375, z: 0}
   m_ShapePathHash: -1597243829
   m_Mesh: {fileID: 2050492626}
-  m_InstanceId: 72408
+  m_InstanceId: 109568
   m_LocalBounds:
     m_Center: {x: 16.5, y: 6.328125, z: 0}
     m_Extent: {x: 0.34375, y: 0.234375, z: 0}
@@ -6693,7 +6694,7 @@ MonoBehaviour:
   - {x: 18.218779, y: 6.59375, z: 0}
   m_ShapePathHash: -596592574
   m_Mesh: {fileID: 1844055033}
-  m_InstanceId: 72674
+  m_InstanceId: 109834
   m_LocalBounds:
     m_Center: {x: 18.499992, y: 6.75, z: 0}
     m_Extent: {x: 0.28124237, y: 0.15624976, z: 0}
@@ -7287,7 +7288,7 @@ MonoBehaviour:
   - {x: 20.281261, y: 6.09375, z: 0}
   m_ShapePathHash: 1540421828
   m_Mesh: {fileID: 1786253968}
-  m_InstanceId: 72708
+  m_InstanceId: 109868
   m_LocalBounds:
     m_Center: {x: 20.5, y: 6.328125, z: 0}
     m_Extent: {x: 0.34375, y: 0.234375, z: 0}
@@ -7552,7 +7553,7 @@ MonoBehaviour:
   - {x: -9.99997, y: -5, z: 0}
   m_ShapePathHash: 598853665
   m_Mesh: {fileID: 1190570475}
-  m_InstanceId: 72720
+  m_InstanceId: 109880
   m_LocalBounds:
     m_Center: {x: -7.0000143, y: -3, z: 0}
     m_Extent: {x: 2.9999855, y: 2, z: 0}
@@ -8541,7 +8542,7 @@ MonoBehaviour:
   - {x: 0.07000017, y: -0.12999988, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 292925358}
-  m_InstanceId: 72764
+  m_InstanceId: 109924
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.07000017, y: 0.12999988, z: 0}
@@ -8801,7 +8802,7 @@ MonoBehaviour:
   - {x: 14.2812605, y: 9.093751, z: 0}
   m_ShapePathHash: 379667457
   m_Mesh: {fileID: 1115396282}
-  m_InstanceId: 72800
+  m_InstanceId: 109960
   m_LocalBounds:
     m_Center: {x: 14.5, y: 9.328125, z: 0}
     m_Extent: {x: 0.34375048, y: 0.23437452, z: 0}
@@ -8871,7 +8872,7 @@ MonoBehaviour:
   - {x: 4.000029, y: -5, z: 0}
   m_ShapePathHash: 410714063
   m_Mesh: {fileID: 1369233877}
-  m_InstanceId: 72816
+  m_InstanceId: 109976
   m_LocalBounds:
     m_Center: {x: 6.999985, y: -3, z: 0}
     m_Extent: {x: 2.9999852, y: 2, z: 0}
@@ -8945,7 +8946,7 @@ MonoBehaviour:
   - {x: 14.21878, y: 9.593751, z: 0}
   m_ShapePathHash: 2110861969
   m_Mesh: {fileID: 1547701467}
-  m_InstanceId: 72860
+  m_InstanceId: 110020
   m_LocalBounds:
     m_Center: {x: 14.499993, y: 9.75, z: 0}
     m_Extent: {x: 0.28124237, y: 0.15624952, z: 0}
@@ -9203,7 +9204,7 @@ MonoBehaviour:
   - {x: 20.218779, y: 6.59375, z: 0}
   m_ShapePathHash: -1472118175
   m_Mesh: {fileID: 897790127}
-  m_InstanceId: 72894
+  m_InstanceId: 110054
   m_LocalBounds:
     m_Center: {x: 20.499992, y: 6.75, z: 0}
     m_Extent: {x: 0.28124237, y: 0.15624976, z: 0}
@@ -10467,7 +10468,7 @@ MonoBehaviour:
   - {x: 18.281261, y: 6.09375, z: 0}
   m_ShapePathHash: 2040593301
   m_Mesh: {fileID: 15556637}
-  m_InstanceId: 72978
+  m_InstanceId: 110138
   m_LocalBounds:
     m_Center: {x: 18.5, y: 6.328125, z: 0}
     m_Extent: {x: 0.34375, y: 0.234375, z: 0}
@@ -20589,7 +20590,7 @@ MonoBehaviour:
   - {x: -2.999971, y: -5, z: 0}
   m_ShapePathHash: 1161285143
   m_Mesh: {fileID: 1513161791}
-  m_InstanceId: 73294
+  m_InstanceId: 110454
   m_LocalBounds:
     m_Center: {x: -0.000014543533, y: -3, z: 0}
     m_Extent: {x: 2.9999855, y: 2, z: 0}
@@ -20605,7 +20606,6 @@ Material:
   m_ValidKeywords:
   - ATLAS_ON
   - HOLOGRAM_ON
-  - OUTBASE8DIR_ON
   - OUTBASE_ON
   m_InvalidKeywords:
   - _GLOWAFFECTLIGHT_ON
@@ -20679,7 +20679,7 @@ Material:
     - _Alpha: 1
     - _AlphaCutoffValue: 0.25
     - _AlphaOutlineBlend: 0.415
-    - _AlphaOutlineGlow: 2
+    - _AlphaOutlineGlow: 1
     - _AlphaOutlineMinAlpha: 0
     - _AlphaOutlinePower: 1
     - _AlphaRoundThreshold: 0.5
@@ -20769,15 +20769,15 @@ Material:
     - _OffsetUvY: 0
     - _OnlyInnerOutline: 0
     - _OnlyOutline: 0
-    - _OutlineAlpha: 0.685
+    - _OutlineAlpha: 0.705
     - _OutlineDistortAmount: 0.5
     - _OutlineDistortTexXSpeed: 5
     - _OutlineDistortTexYSpeed: 5
-    - _OutlineGlow: 10.7
+    - _OutlineGlow: 8.2
     - _OutlinePixelWidth: 1
     - _OutlineTexXSpeed: 10
     - _OutlineTexYSpeed: 0
-    - _OutlineWidth: 0.002
+    - _OutlineWidth: 0.0049
     - _OverlayBlend: 1
     - _OverlayGlow: 1
     - _PinchUvAmount: 0.35
@@ -25749,7 +25749,7 @@ MonoBehaviour:
   - {x: 12.00003, y: 17.5, z: 0}
   m_ShapePathHash: -274035893
   m_Mesh: {fileID: 385033272}
-  m_InstanceId: 73468
+  m_InstanceId: 110628
   m_LocalBounds:
     m_Center: {x: 18.499985, y: 17.75, z: 0}
     m_Extent: {x: 6.4999857, y: 0.25, z: 0}
@@ -25888,7 +25888,7 @@ MonoBehaviour:
   - {x: 28.000029, y: 8.5, z: 0}
   m_ShapePathHash: 2124889952
   m_Mesh: {fileID: 1168993963}
-  m_InstanceId: 73478
+  m_InstanceId: 110638
   m_LocalBounds:
     m_Center: {x: 21.25, y: 15.25, z: 0}
     m_Extent: {x: 14.25, y: 6.75, z: 0}
@@ -26033,11 +26033,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5603002411706856770, guid: df65b4b10c689054ebcf68a63e8ecfeb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.45
+      value: -1.37
       objectReference: {fileID: 0}
     - target: {fileID: 5603002411706856770, guid: df65b4b10c689054ebcf68a63e8ecfeb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.27
+      value: -9.34
       objectReference: {fileID: 0}
     - target: {fileID: 5603002411706856770, guid: df65b4b10c689054ebcf68a63e8ecfeb, type: 3}
       propertyPath: m_LocalPosition.z
