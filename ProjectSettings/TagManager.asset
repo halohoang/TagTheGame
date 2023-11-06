@@ -27,8 +27,8 @@ TagManager:
   - Roof
   - Post Processing
   - Button
-  - 
-  - 
+  - Casing
+  - Screen
   - 
   - 
   - 
@@ -57,6 +57,9 @@ TagManager:
   - name: Button
     uniqueID: 662439449
     locked: 0
+  - name: Casing
+    uniqueID: 3005683949
+    locked: 0
   - name: Bullet
     uniqueID: 2196117293
     locked: 0
@@ -74,4 +77,7 @@ TagManager:
     locked: 0
   - name: Roof
     uniqueID: 2795299783
+    locked: 0
+  - name: Screen
+    uniqueID: 26210833
     locked: 0

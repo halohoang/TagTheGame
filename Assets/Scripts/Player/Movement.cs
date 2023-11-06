@@ -79,7 +79,7 @@ public class Movement : MonoBehaviour
 		}
 		if (!Input.GetKey(KeyCode.Space)) { _currentPlayerSpeed = _minPlayerSpeed;
 			_light2D.falloffIntensity = 0.148f;
-			_light2D.pointLightOuterRadius = 1.39f;
+			_light2D.pointLightOuterRadius = 1.12f;
 			_light2D.intensity = 1;
 			_light2D.GetComponent<LightControl>().enabled = true;
 		} //Revert player back to normal speed
