@@ -1,5 +1,6 @@
 using Enemies;
 using EnumLibrary;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ScriptableObjects
@@ -24,11 +25,18 @@ namespace ScriptableObjects
 
         private Rigidbody2D _thisEnemyRB2D;
         private Vector3 _walkTargedPos;
+        private Vector2 _lastPositionOringin;
         private float _timer = 0.0f;
+        private float _rndWalktime;
+        private float _rndWalkRange;
         private bool _isMoving;
         private bool _isMovingTOCloseToObstacle = false;
 
+        public float Timer { get => _timer; private set => _timer = value; }
+        public float RndWalkRange { get => _rndWalkRange; private set => _rndWalkRange = value; }
         public bool IsMoving { get => _isMoving; private set => _isMoving = value; }
+        public bool IsMovingTOCloseToObstacle { get => _isMovingTOCloseToObstacle; private set => _isMovingTOCloseToObstacle = value; }
+        public Vector3 WalkTargedPos { get => _walkTargedPos; private set => _walkTargedPos = value; }
 
         public override void Initialize(GameObject enemyObj, BaseEnemyBehaviour enemyBehav)
         {
@@ -43,7 +51,13 @@ namespace ScriptableObjects
 
             _isMoving = true;
 
-            _walkTargedPos = GetRndMoveDirection();
+            // Setup the time the Agent shall walk max in one direction
+            _rndWalktime = Random.Range(_minRandomWalkingTime, _maxRandomWalkingTime);
+
+            // Setup Walking Direction/Target Pos
+            WalkTargedPos = GetRndMoveDirection();
+
+            // Setup NavMeshAgent-Properties
             _baseEnemyBehaviour.NavAgent.speed = _wanderSpeed;
 
             // setup walking animation
@@ -64,10 +78,51 @@ namespace ScriptableObjects
         {
             base.ExecuteFrameUpdateLogic();
 
-            _timer += Time.deltaTime;
+            // Setup Timer
+            Timer += Time.deltaTime;            
+
+            //// controll structures regarding walking behaviour
+            //if (_baseEnemyBehaviour.IsCollidingWithWall)
+            //{
+            //    // Set new walking direction to the opposite of the direction to the CollisionObject and move EnemyObj towards new direction
+            //    WalkTargedPos = -(_baseEnemyBehaviour.CollisionObjectPos - (Vector2)_baseEnemyBehaviour.transform.position * RndWalkRange);
+            //    _baseEnemyBehaviour.NavAgent.SetDestination(WalkTargedPos);
+            //    Debug.Log($"'<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>': since EnemyObj collided with a Wall another MovementDirection was chosen " +
+            //        $"and Movement was continued");
+
+            //    _baseEnemyBehaviour.SetIsCollidingWithWall(false);
+            //}
+
+            if (Timer > _rndWalktime)               // is Timmer out of Time
+            {
+                // Reset Timer and rnd WalkTime
+                Timer = 0.0f;
+                _rndWalktime = Random.Range(_minRandomWalkingTime, _maxRandomWalkingTime);
+
+                // reset Walking Direction/TargetPos
+                WalkTargedPos = GetRndMoveDirection();
+
+                // Setup Walking Animation
+                _baseEnemyBehaviour.Animator.SetBool("Engage", true);
+
+                Debug.Log($"'<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>': rnd-Walking-Timer ended and was set to 0.0f again; New MovingDirection was calculated and set");
+            }
+            else if (Timer <= _rndWalktime && Vector2.Distance(_lastPositionOringin, WalkTargedPos) >= RndWalkRange)    // todo: (!!!) continue here with Debugging; JM (06.11.23) 
+            {
+                _baseEnemyBehaviour.NavAgent.isStopped = true;
+                _baseEnemyBehaviour.Animator.SetBool("Engage", false);
+
+                Debug.Log($"'<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>': rnd-Walking-Timer still running; rnd-Walking-Range was reached");
+            }
+            else if (IsMovingTOCloseToObstacle)
+            {
+                WalkTargedPos = -(WalkTargedPos - _baseEnemyBehaviour.transform.position);
+                Debug.Log($"'<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>': Walking Direction was Changed due to walking to close towards obstacle");
+                IsMovingTOCloseToObstacle = false;
+            }
 
             // setting facing to walk direction
-            Vector2 direction = (_walkTargedPos - _baseEnemyBehaviour.transform.position).normalized;
+            Vector2 direction = (WalkTargedPos - _baseEnemyBehaviour.transform.position).normalized;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             _thisEnemyRB2D.rotation = angle;
             #region altern rotation for facing direction
@@ -76,31 +131,23 @@ namespace ScriptableObjects
             //_baseEnemyBehaviour.transform.rotation = quart;
             #endregion
 
-            // actual walking
-            _baseEnemyBehaviour.NavAgent.SetDestination(_walkTargedPos);
-
-            float rndWalktime = Random.Range(_minRandomWalkingTime, _maxRandomWalkingTime);
-
-            if (_timer > rndWalktime)
-            {
-                _walkTargedPos = GetRndMoveDirection();
-                _timer = 0.0f;
-            }
-
-            if (_isMovingTOCloseToObstacle)
-                _walkTargedPos *= -1.5f;            
+            // execute actual walking
+            _baseEnemyBehaviour.NavAgent.isStopped = false;
+            _baseEnemyBehaviour.NavAgent.SetDestination(WalkTargedPos);
         }
 
         public override void ExecutePhysicsUpdateLogic()
         {
             base.ExecutePhysicsUpdateLogic();
 
-            // todo: (!) maybe exchange following code by more preformance friendly solution; JM (02.11.2023)
-            // change Movementdirection if moving to close towards wall
-            if (Physics2D.Raycast(_baseEnemyBehaviour.transform.position, _walkTargedPos - _baseEnemyBehaviour.transform.position, _distanceToCheckForObstacles, _obstacleMask))
-                _isMovingTOCloseToObstacle = true;
+            if (Physics2D.Raycast(_baseEnemyBehaviour.transform.position, WalkTargedPos - _baseEnemyBehaviour.transform.position, _distanceToCheckForObstacles, _obstacleMask))
+            {
+                IsMovingTOCloseToObstacle = true;
+                Debug.DrawRay(_baseEnemyBehaviour.transform.position, WalkTargedPos - _baseEnemyBehaviour.transform.position, Color.cyan, 1.5f);
+                Debug.Log($"'<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>' is moving to close to Obstacle: '<color=cyan>{IsMovingTOCloseToObstacle}</color>'");
+            }
             else
-                _isMovingTOCloseToObstacle = false;
+                IsMovingTOCloseToObstacle = false;
         }
 
         public override void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe)
@@ -115,8 +162,9 @@ namespace ScriptableObjects
 
         private Vector3 GetRndMoveDirection()
         {
-            float rndWalkingRange = Random.Range(_minRandomWalkingRange, _maxRandomWalkingRange);
-            return _baseEnemyBehaviour.transform.position + (Vector3)Random.insideUnitCircle * rndWalkingRange;
+            _lastPositionOringin = _baseEnemyBehaviour.transform.position;      // caching position before calculating new walkdirection/-range
+            RndWalkRange = Random.Range(_minRandomWalkingRange, _maxRandomWalkingRange);
+            return _baseEnemyBehaviour.transform.position + (Vector3)Random.insideUnitCircle * RndWalkRange;
         }
     }
 }

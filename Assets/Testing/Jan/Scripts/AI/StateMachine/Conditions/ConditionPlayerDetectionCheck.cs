@@ -27,6 +27,7 @@ namespace StateMashine
         [SerializeField, ReadOnly] private bool _isEnemyDead;
 
         // Properties
+        public GameObject PlayerObj { get => _playerObj; private set => _playerObj = value; }
         public float FOVAngle { get => _fOVAngle; private set => _fOVAngle = value; }
         public float FOVRadius { get => _fOVRadius; private set => _fOVRadius = value; }
         public bool IsEnemyDead { get => _isEnemyDead; private set => _isEnemyDead = value; }
@@ -35,7 +36,7 @@ namespace StateMashine
         private void Awake()
         {
             // autoreferencing
-            _playerObj = GameObject.FindGameObjectWithTag("Player");
+            PlayerObj = GameObject.FindGameObjectWithTag("Player");
 
             if (_raycastingCollider == null)
                 _raycastingCollider = GetComponent<Collider2D>();
@@ -114,7 +115,7 @@ namespace StateMashine
 
         private void FirePlayerDetectionEvent()
         {
-            OnPlayerDetection?.Invoke(IsPlayerDetected, _playerObj);
+            OnPlayerDetection?.Invoke(IsPlayerDetected, PlayerObj);
             
             if (IsPlayerDetected)
                 Debug.Log($"Player is detected by '<color=orange>{gameObject.name}</color>'");

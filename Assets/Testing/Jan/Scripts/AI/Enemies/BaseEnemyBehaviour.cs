@@ -40,9 +40,11 @@ namespace Enemies
         [Header("Monitoring of importang values")]
         [SerializeField, ReadOnly] private bool _isPlayerDetected;
         [SerializeField, ReadOnly] private bool _isSomethingAlarmingHappening;
-        [SerializeField, ReadOnly] private bool _isInAttackRange;   // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
+        [SerializeField, ReadOnly] private bool _isInAttackRange;                   // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
+        [SerializeField, ReadOnly] private bool _isCollidingWithWall;
         [SerializeField, ReadOnly] private float _noiseRangeOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector3 _positionOfAlarmingEvent;
+        [SerializeField, ReadOnly] private Vector2 _collisionObjectPos;
 
 
         // StateMachine-Related Variables
@@ -65,8 +67,10 @@ namespace Enemies
         public float ChasingSpeed { get => _chasingSpeed; private set => _chasingSpeed = value; }
         public bool IsPlayerDetected { get => _isPlayerDetected; private set => _isPlayerDetected = value; }
         public bool IsSomethingAlarmingHappening { get => _isSomethingAlarmingHappening; private set => _isSomethingAlarmingHappening = value; }
+        public bool IsCollidingWithWall { get => _isCollidingWithWall; private set => _isCollidingWithWall = value; }
         public float NoiseRangeOfAlarmingEvent { get => _noiseRangeOfAlarmingEvent; set => _noiseRangeOfAlarmingEvent = value; }
         public Vector3 PositionOfAlarmingEvent { get => _positionOfAlarmingEvent; set => _positionOfAlarmingEvent = value; }
+        public Vector2 CollisionObjectPos { get => _collisionObjectPos; private set => _collisionObjectPos = value; }
 
         // StateMachine-Related
         public EnemyStateMachine StateMachine { get => _stateMachine; set => _stateMachine = value; }
@@ -144,16 +148,32 @@ namespace Enemies
             StateMachine.CurrentState.PhysicsUpdate();
         }
 
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.CompareTag("Wall"))
+            {
+                IsCollidingWithWall = true;
+                NavAgent.isStopped = true;
+                CollisionObjectPos = collision.transform.position;
+
+                Debug.Log($"'<color=orange>{gameObject.name}</color>': ´collided with a wall (wall position: {CollisionObjectPos});");
+            }
+        }
+
         // Update is called once per frame
         void Update()
         {
             StateMachine.CurrentState.FrameUpdate();
         }
 
-        private void AnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerType)
+        internal void SetIsSomethingAlarmingHappening(bool isSomethinAlarmingHappening)
         {
-            // todo: maybe fill with logic for playing specific Animations on specific AnimationEvents if needed; JM (27.10.2023)
-            StateMachine.CurrentState.AnimationTriggerEvent(animTriggerType);
+            IsSomethingAlarmingHappening = isSomethinAlarmingHappening;
+        }
+
+        internal void SetIsCollidingWithWall(bool isCollidingWithWall)
+        {
+            IsCollidingWithWall = isCollidingWithWall;
         }
 
         private void SetIsPlayerDetected(bool isPlayerDetected, GameObject playerObj)
@@ -174,11 +194,6 @@ namespace Enemies
             }
         }
 
-        internal void SetIsSomethingAlarmingHappening(bool isSomethinAlarmingHappening)
-        {
-            IsSomethingAlarmingHappening = isSomethinAlarmingHappening;
-        }
-
         /// <summary>
         /// put that later inside the 'MeleeEnemyBehaviour.cs; JM (31.10.2023)
         /// </summary>
@@ -188,6 +203,12 @@ namespace Enemies
         {
             IsInAttackRange = isAttackingPlayer;
             PlayerObject = playerObj;
+        }
+
+        private void AnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerType)
+        {
+            // todo: maybe fill with logic for playing specific Animations on specific AnimationEvents if needed; JM (27.10.2023)
+            StateMachine.CurrentState.AnimationTriggerEvent(animTriggerType);
         }
     }
 }
