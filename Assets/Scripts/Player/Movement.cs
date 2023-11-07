@@ -13,7 +13,7 @@ public class Movement : MonoBehaviour
 	[SerializeField] private float _minPlayerSpeed; //slowest the player move
 	[SerializeField] private float _maxPlayerSpeed; //fastest the player move
 
-	private bool _isFast = false;
+	
 
 	[SerializeField] internal float _playerDashForce;
 	[SerializeField] private Sandevistan _sandevistan;
@@ -77,7 +77,7 @@ public class Movement : MonoBehaviour
 			_light2D.pointLightOuterRadius = 1.6f;
 			_light2D.intensity = 2;
 			_light2D.GetComponent<LightControl>().enabled = false;
-			_isFast = true;
+			
 			
 		}
 		if (!Input.GetKey(KeyCode.Space)) { _currentPlayerSpeed = _minPlayerSpeed;
@@ -85,9 +85,9 @@ public class Movement : MonoBehaviour
 			_light2D.pointLightOuterRadius = 1.12f;
 			_light2D.intensity = 1;
 			_light2D.GetComponent<LightControl>().enabled = true;
-			_isFast = false;
+			
 		} //Revert player back to normal speed
-		_currentPlayerSpeed = _isFast? _maxPlayerSpeed: _minPlayerSpeed;
+		
 	}
 
 	
