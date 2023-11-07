@@ -8,8 +8,9 @@ using UnityEngine;
 public class EnemyFieldOfViewVisualization_Editor : Editor
 {
     private void OnSceneGUI()
-    {
+    {       
         ConditionPlayerDetectionCheck condPlayerDetection = (ConditionPlayerDetectionCheck)target;
+
         Handles.color = Color.white;
         Handles.DrawWireArc(condPlayerDetection.transform.position, -Vector3.forward, Vector3.right, 360.0f, condPlayerDetection.FOVRadius);
 
@@ -19,6 +20,12 @@ public class EnemyFieldOfViewVisualization_Editor : Editor
         Handles.color = Color.yellow;
         Handles.DrawLine(condPlayerDetection.transform.position, condPlayerDetection.transform.position + viewAngle01 * condPlayerDetection.FOVRadius);
         Handles.DrawLine(condPlayerDetection.transform.position, condPlayerDetection.transform.position + viewAngle02 * condPlayerDetection.FOVRadius);
+
+        if (condPlayerDetection.IsPlayerDetected)
+        {
+            Handles.color = Color.green;
+            Handles.DrawLine(condPlayerDetection.transform.position, condPlayerDetection.PlayerObj.transform.position);
+        }
     }
 
     private Vector3 DirectionFromAngle(float eulerZ, float angleInDegrees)
