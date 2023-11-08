@@ -35,13 +35,14 @@ namespace Enemies
         [Header("Behaviour-related Settings")]
         [SerializeField] private float _movementSpeed;
         [SerializeField] private float _chasingSpeed;
+        //[SerializeField] private Vector3[] _directionsToCheckToAvoidObstacle;
         [Space(5)]
 
         [Header("Monitoring of importang values")]
         [SerializeField, ReadOnly] private bool _isPlayerDetected;
         [SerializeField, ReadOnly] private bool _isSomethingAlarmingHappening;
         [SerializeField, ReadOnly] private bool _isInAttackRange;                   // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
-        [SerializeField, ReadOnly] private bool _isCollidingWithWall;
+        [SerializeField, ReadOnly] private bool _isCollidingWithObstacle;
         [SerializeField, ReadOnly] private float _noiseRangeOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector3 _positionOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector2 _collisionObjectPos;
@@ -65,9 +66,11 @@ namespace Enemies
         // Behaviourrelated-Settings
         public float MovementSpeed { get => _movementSpeed; private set => _movementSpeed = value; }
         public float ChasingSpeed { get => _chasingSpeed; private set => _chasingSpeed = value; }
+        //public Vector3[] DirectionsToCheckToAvoidObstacle { get => _directionsToCheckToAvoidObstacle; private set => _directionsToCheckToAvoidObstacle = value; }
+
         public bool IsPlayerDetected { get => _isPlayerDetected; private set => _isPlayerDetected = value; }
         public bool IsSomethingAlarmingHappening { get => _isSomethingAlarmingHappening; private set => _isSomethingAlarmingHappening = value; }
-        public bool IsCollidingWithWall { get => _isCollidingWithWall; private set => _isCollidingWithWall = value; }
+        public bool IsCollidingWithOtherEnemy { get => _isCollidingWithObstacle; private set => _isCollidingWithObstacle = value; }
         public float NoiseRangeOfAlarmingEvent { get => _noiseRangeOfAlarmingEvent; set => _noiseRangeOfAlarmingEvent = value; }
         public Vector3 PositionOfAlarmingEvent { get => _positionOfAlarmingEvent; set => _positionOfAlarmingEvent = value; }
         public Vector2 CollisionObjectPos { get => _collisionObjectPos; private set => _collisionObjectPos = value; }
@@ -112,6 +115,7 @@ namespace Enemies
         {
             // subscribing to Events
             Interactable.OnDoorKickIn += SetAlarmingEventValues;
+            PlayerShoot.OnPlayerShoot += SetAlarmingEventValues;
             _condPlayerDetectionCheck.OnPlayerDetection += SetIsPlayerDetected;
 
             _condMeleeAttackCheck.OnMeleeAttack += SetIsInAttackRangePlayer;        // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
@@ -121,6 +125,7 @@ namespace Enemies
         {
             // unsubscribing from Events
             Interactable.OnDoorKickIn -= SetAlarmingEventValues;
+            PlayerShoot.OnPlayerShoot -= SetAlarmingEventValues;
             _condPlayerDetectionCheck.OnPlayerDetection -= SetIsPlayerDetected;
 
             _condMeleeAttackCheck.OnMeleeAttack -= SetIsInAttackRangePlayer;        // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
@@ -147,16 +152,16 @@ namespace Enemies
         {
             StateMachine.CurrentState.PhysicsUpdate();
         }
-
-        private void OnCollisionEnter(Collision collision)
+       
+        private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.gameObject.CompareTag("Wall"))
+            if (collision.gameObject.CompareTag("Enemy"))
             {
-                IsCollidingWithWall = true;
+                IsCollidingWithOtherEnemy = true;
                 NavAgent.isStopped = true;
                 CollisionObjectPos = collision.transform.position;
 
-                Debug.Log($"'<color=orange>{gameObject.name}</color>': ´collided with a wall (wall position: {CollisionObjectPos});");
+                Debug.Log($"'<color=lime>{gameObject.name}</color>': collided with a wall (wall position: {CollisionObjectPos});");
             }
         }
 
@@ -173,7 +178,7 @@ namespace Enemies
 
         internal void SetIsCollidingWithWall(bool isCollidingWithWall)
         {
-            IsCollidingWithWall = isCollidingWithWall;
+            IsCollidingWithOtherEnemy = isCollidingWithWall;
         }
 
         private void SetIsPlayerDetected(bool isPlayerDetected, GameObject playerObj)

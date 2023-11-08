@@ -1,9 +1,11 @@
+using NaughtyAttributes;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerShoot : MonoBehaviour
 {
+	public static event UnityAction<bool, Vector3, float> OnPlayerShoot;
 	// Variables
 
 	/* Gun properties */
@@ -35,6 +37,9 @@ public class PlayerShoot : MonoBehaviour
 
 	private float _mouseButtonReleaseTime; // Time when the mouse button was last released
 
+	/* Shooting Noise Range */
+	[SerializeField, Range(0.0f, 25.0f)] private float _shootingNoiseRange = 10.0f;
+
 	/* Camera Shake */
 	[SerializeField] private CameraRecoilShake cameraShake;
 	////private float _triggerHoldStartTime = 0f;
@@ -47,8 +52,17 @@ public class PlayerShoot : MonoBehaviour
 	[SerializeField] private Animator _animator;
 
 
-	// Functions
-	private void Start()
+	[Header("Monitoring Values")]
+	[SerializeField, ReadOnly] private bool _isShooting;
+
+    // Functions
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+		Gizmos.DrawWireSphere(transform.position, _shootingNoiseRange);
+    }
+
+    private void Start()
 	{
 		_currentBulletCount = _maximumBulletCount;
 	}
@@ -64,17 +78,20 @@ public class PlayerShoot : MonoBehaviour
 			}
 			else if (Input.GetMouseButton(0) && CanFire() && _currentBulletCount > 0 && _isReloading == false)
 			{
-				_animator.SetBool("Firing", true);
+				_isShooting = true;
+				_animator.SetBool("Firing", _isShooting);
 				Shoot();
 				_currentBulletCount--;
 				SpawnBulletCasing();
 				cameraShake.StartShake( duration, amount);
 				Debug.Log("Shake");
 
+				OnPlayerShoot?.Invoke(_isShooting, transform.position, _shootingNoiseRange);
 			}
 			else
 			{
-				_animator.SetBool("Firing", false);
+                _isShooting = false;
+                _animator.SetBool("Firing", _isShooting);
 			}
 		}
 		if (Input.GetKeyDown(KeyCode.R) && _isReloading == false && !Input.GetMouseButton(0))
@@ -85,7 +102,7 @@ public class PlayerShoot : MonoBehaviour
 				StartCoroutine(Reload());
 			}
 		}
-	}
+	}	
 
 	void SwitchWeapon()
 	{

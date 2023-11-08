@@ -59,30 +59,12 @@ namespace ScriptableObjects
             Collider2D[] enemieColliders = Physics2D.OverlapCircleAll(positionOfAlarmingEvent, noiseRangeOfAlarmingEvent, LayerMask.GetMask("Enemy"));
             for (int i = 0; i < enemieColliders.Length; i++)
             {
-                enemieColliders[i].gameObject.transform.right = positionOfAlarmingEvent - enemieColliders[i].gameObject.transform.position;
+                //enemieColliders[i].gameObject.transform.right = positionOfAlarmingEvent - enemieColliders[i].gameObject.transform.position;
 
-                // todo: use 'Vector3.Angle()/Vector2.Angle()' for calculating the Angle between two Vectors; JM(03.11.2023)                
-
-                #region old code
-                //alternate solution (does not work properly)
-                //Vector2 directionToDoor = (doorPosition - transform.position).normalized;
-                //float alphaAngle = Mathf.Atan2(directionToDoor.x, directionToDoor.y);
-                //float angleToRotate = (Mathf.PI - alphaAngle) * Mathf.Rad2Deg;
-                //Quaternion quart = Quaternion.AngleAxis(angleToRotate, Vector3.forward);
-
-                //enemieColliders[i].gameObject.transform.rotation = quart;
-                //Debug.Log($"<color=orange> {enemieColliders[i].name} was rotated by {angleToRotate}° on its Z-Axis </color>");
-
-
-                //alternate solution (does not work properly)
-                //// calculate rotation angle (does not work as intended yet tho); JM (18.10.2023)
-                //Vector2 lookDirection = (doorPosition - transform.position).normalized;
-                //float angle = Mathf.Atan2(lookDirection.x, lookDirection.y) * Mathf.Rad2Deg - _rotationModifier;
-                //Quaternion quart = Quaternion.AngleAxis(angle, Vector3.forward);
-
-                //// rotat enemy-object
-                //enemieColliders[i].gameObject.transform.rotation = Quaternion.Slerp(transform.rotation, quart, 360);
-                #endregion
+                // setting facing to walk direction if walking timer has ended and was setup anew
+                Vector2 direction = (positionOfAlarmingEvent - enemieColliders[i].gameObject.transform.position).normalized;
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                enemieColliders[i].gameObject.GetComponent<Rigidbody2D>().rotation = angle;
             }
         }
     }

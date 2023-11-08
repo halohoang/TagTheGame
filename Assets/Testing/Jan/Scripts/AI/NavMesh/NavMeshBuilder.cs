@@ -30,7 +30,7 @@ public class NavMeshBuilder : MonoBehaviour
 
     private void Start()
     {
-        // buiklding the NavMesh on GameStart new (so if it was updated during runtime it is set to deafault (don't bake over doors))
+        // building the NavMesh on GameStart new (so if it was updated during runtime it is set to deafault (doesn't bake over doors))
         _navSurface.BuildNavMeshAsync();
     }
 
