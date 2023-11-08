@@ -49,6 +49,8 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 84137d1649fe2724daf22d6c8b36d997, type: 3}
     - {fileID: 2800000, guid: 3ee4f08b4dd7b5a4586212095f4e4d27, type: 3}
     - {fileID: 2800000, guid: 2cb7934212ffcef4aa1cc9451dc83a2e, type: 3}
+    - {fileID: 2800000, guid: ce071eb97836b25448a75eddd157d18c, type: 3}
+    - {fileID: 2800000, guid: d8d46c3d19db2634c9ff6a0e1187c5ac, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -80,11 +82,17 @@ SpriteAtlas:
   - {fileID: 1291991329, guid: f5c7472606ba4584a89a72846a269974, type: 3}
   - {fileID: -1262367347, guid: f5c7472606ba4584a89a72846a269974, type: 3}
   - {fileID: 1794418351, guid: f5c7472606ba4584a89a72846a269974, type: 3}
+  - {fileID: 1463252473, guid: ce071eb97836b25448a75eddd157d18c, type: 3}
+  - {fileID: -1726814055, guid: ce071eb97836b25448a75eddd157d18c, type: 3}
   - {fileID: 1986494391, guid: 3ee4f08b4dd7b5a4586212095f4e4d27, type: 3}
+  - {fileID: 1633236643, guid: d8d46c3d19db2634c9ff6a0e1187c5ac, type: 3}
   - {fileID: 806527797, guid: afccc1dd7dbc0af4c855d8679f469df2, type: 3}
   - {fileID: -589263190, guid: afccc1dd7dbc0af4c855d8679f469df2, type: 3}
   - {fileID: 730888966, guid: afccc1dd7dbc0af4c855d8679f469df2, type: 3}
   - {fileID: 1645162167, guid: afccc1dd7dbc0af4c855d8679f469df2, type: 3}
+  - {fileID: -10496007, guid: afccc1dd7dbc0af4c855d8679f469df2, type: 3}
+  - {fileID: 1094351211, guid: afccc1dd7dbc0af4c855d8679f469df2, type: 3}
+  - {fileID: 1927301506, guid: afccc1dd7dbc0af4c855d8679f469df2, type: 3}
   m_PackedSpriteNamesToIndex:
   - Wall 2_0
   - Wall 2_1
@@ -112,11 +120,17 @@ SpriteAtlas:
   - CornerwALL_9
   - CornerwALL_8
   - CornerwALL_10
+  - Prop 2_1
+  - Prop 2_0
   - Button_0
+  - Alert Text_0
   - Floor _0
   - Floor _1
   - Floor _2
   - Floor _3
+  - Floor _4
+  - Floor _5
+  - Floor _6
   m_RenderDataMap: {}
   m_Tag: EnvironmentAtlas
   m_IsVariant: 0
