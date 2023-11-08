@@ -29,7 +29,7 @@ TagManager:
   - Button
   - Casing
   - Screen
-  - 
+  - Props
   - 
   - 
   - 
@@ -53,6 +53,9 @@ TagManager:
     locked: 0
   - name: Wall
     uniqueID: 3638666861
+    locked: 0
+  - name: Props
+    uniqueID: 1552412017
     locked: 0
   - name: Button
     uniqueID: 662439449
