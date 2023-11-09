@@ -40,6 +40,10 @@ public class PlayerShoot : MonoBehaviour
 	/* Shooting Noise Range */
 	[SerializeField, Range(0.0f, 25.0f)] private float _shootingNoiseRange = 10.0f;
 
+	[SerializeField] private AudioClip _fireSound; //Fire sound
+	[SerializeField] private AudioClip _reloadSound; // Reload sound
+	private AudioSource _audioSource;
+
 	/* Camera Shake */
 	[SerializeField] private CameraRecoilShake cameraShake;
 	////private float _triggerHoldStartTime = 0f;
@@ -65,6 +69,7 @@ public class PlayerShoot : MonoBehaviour
     private void Start()
 	{
 		_currentBulletCount = _maximumBulletCount;
+		_audioSource = GetComponent<AudioSource>();
 	}
 
 	private void Update()
@@ -136,6 +141,8 @@ public class PlayerShoot : MonoBehaviour
 
 			bulletRotation *= Quaternion.Euler(0f, 0f, randomAngle); // Apply rotation around the Z-axis
 
+			/* Play FIre Sound */
+			if (_fireSound != null) { _audioSource.PlayOneShot(_fireSound); }
 			GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, bulletRotation);
 			Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
 			_ammoCounterScript.DecreaseAmmo(); //Call the Decrease Ammo function from the AmmoCounter script;
@@ -162,6 +169,7 @@ public class PlayerShoot : MonoBehaviour
 		int bulletsLeftToFullMag = _maximumBulletCount - _currentBulletCount;
 		if (bulletsLeftToFullMag > 0)
 		{
+			_audioSource.PlayOneShot(_reloadSound);
 
 			if (bulletsLeftToFullMag <= _currentBulletCount)
 			{
