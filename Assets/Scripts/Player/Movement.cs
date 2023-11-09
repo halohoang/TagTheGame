@@ -22,8 +22,6 @@ public class Movement : MonoBehaviour
 
 	internal PlayerHealth _playerHealthScript;
 
-	[SerializeField] private float _healthThresholdStopBoost;
-
 	[SerializeField] Light2D _light2D;
 
 	//Functions
@@ -74,19 +72,17 @@ public class Movement : MonoBehaviour
 	/* Player Sandevistan */
 	void PlayerFast()
 	{
-		if (_playerHealthScript._currentHealth >= _healthThresholdStopBoost) // Check if health is greater than or equal to 2
+		if (Input.GetKeyDown(KeyCode.Space)) // Check if health is greater than or equal to 2
 		{
 			// Player can move faster
-			if (Input.GetKeyDown(KeyCode.Space))
-			{
 				_currentPlayerSpeed = _maxPlayerSpeed;
 				_light2D.falloffIntensity = 0.1f;
 				_light2D.pointLightOuterRadius = 1.6f;
 				_light2D.intensity = 2;
 				_light2D.GetComponent<LightControl>().enabled = false;
-			}
+			
 		}
-		else
+		if (_playerHealthScript._currentHealth < 2 || Input.GetKeyUp(KeyCode.Space))
 		{
 			// Player's health is below 2, so they can't use "Space" for increased speed
 			_currentPlayerSpeed = _minPlayerSpeed;
