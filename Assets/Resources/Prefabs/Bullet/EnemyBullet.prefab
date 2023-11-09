@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: -7281322431818092433}
   - component: {fileID: 6869705717791879748}
   m_Layer: 7
-  m_Name: Bullet
+  m_Name: EnemyBullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -196,7 +196,7 @@ MonoBehaviour:
     m_Bits: 1216
   _targedMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 256
   _bloodPrefab: {fileID: 1471398999119722488, guid: 3e6cf606eb96c8c489d93206732bdb13, type: 3}
   _maxBulletAliveTime: 1
 --- !u!50 &928762794185296225

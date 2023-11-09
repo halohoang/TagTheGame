@@ -46,6 +46,7 @@ namespace Enemies
         [SerializeField, ReadOnly] private float _noiseRangeOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector3 _positionOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector2 _collisionObjectPos;
+        [SerializeField, ReadOnly] private Vector3 _lastKnownPlayerPos;
 
 
         // StateMachine-Related Variables
@@ -71,9 +72,10 @@ namespace Enemies
         public bool IsPlayerDetected { get => _isPlayerDetected; private set => _isPlayerDetected = value; }
         public bool IsSomethingAlarmingHappening { get => _isSomethingAlarmingHappening; private set => _isSomethingAlarmingHappening = value; }
         public bool IsCollidingWithOtherEnemy { get => _isCollidingWithObstacle; private set => _isCollidingWithObstacle = value; }
-        public float NoiseRangeOfAlarmingEvent { get => _noiseRangeOfAlarmingEvent; set => _noiseRangeOfAlarmingEvent = value; }
-        public Vector3 PositionOfAlarmingEvent { get => _positionOfAlarmingEvent; set => _positionOfAlarmingEvent = value; }
+        public float NoiseRangeOfAlarmingEvent { get => _noiseRangeOfAlarmingEvent; private set => _noiseRangeOfAlarmingEvent = value; }
+        public Vector3 PositionOfAlarmingEvent { get => _positionOfAlarmingEvent; private set => _positionOfAlarmingEvent = value; }
         public Vector2 CollisionObjectPos { get => _collisionObjectPos; private set => _collisionObjectPos = value; }
+        public Vector3 LastKnownPlayerPos { get => _lastKnownPlayerPos; private set => _lastKnownPlayerPos = value; }
 
         // StateMachine-Related
         public EnemyStateMachine StateMachine { get => _stateMachine; set => _stateMachine = value; }
@@ -179,6 +181,15 @@ namespace Enemies
         internal void SetIsCollidingWithWall(bool isCollidingWithWall)
         {
             IsCollidingWithOtherEnemy = isCollidingWithWall;
+        }
+
+        /// <summary>
+        /// Sets the Value for '<see cref="LastKnownPlayerPos"/>'.
+        /// </summary>
+        /// <param name="lastKnownPlayerPosition"></param>
+        internal void CacheLastKnownPlayerPosition()
+        {
+            LastKnownPlayerPos = PlayerObject.transform.position;
         }
 
         private void SetIsPlayerDetected(bool isPlayerDetected, GameObject playerObj)

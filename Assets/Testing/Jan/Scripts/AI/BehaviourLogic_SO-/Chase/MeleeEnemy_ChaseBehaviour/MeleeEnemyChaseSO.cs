@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace ScriptableObjects
 {
-    [CreateAssetMenu(fileName = "Chase-Melee State", menuName = "Scriptable Objects/Enemy Logic/Chase Logic/Chase Melee")]
-    public class EnemyMeleeChaseSO : BaseEnemyChaseSO
+    [CreateAssetMenu(fileName = "MeleeEnemy_Chase", menuName = "Scriptable Objects/Enemy Logic/Chase Logic/MeleeEnemy Chase")]
+    public class MeleeEnemyChaseSO : BaseEnemyChaseSO
     {
         public override void Initialize(GameObject enemyObj, BaseEnemyBehaviour enemyBehav)
         {

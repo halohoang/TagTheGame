@@ -33,13 +33,6 @@ namespace ScriptableObjects
         {
             // todo: if implementing more ALert-Behaviour maybe move following logic to 'EnemyAlertStandingSO'; JM (02.11.2023)
             FaceAgentTowardsAlarmingEvent(_baseEnemyBehaviour.PositionOfAlarmingEvent, _baseEnemyBehaviour.NoiseRangeOfAlarmingEvent);
-
-            // Transition-Condition-Check
-            if (_baseEnemyBehaviour.IsPlayerDetected)
-            {
-                _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.ChaseState);
-                Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
-            }
         }
 
         public virtual void ExecutePhysicsUpdateLogic() { }

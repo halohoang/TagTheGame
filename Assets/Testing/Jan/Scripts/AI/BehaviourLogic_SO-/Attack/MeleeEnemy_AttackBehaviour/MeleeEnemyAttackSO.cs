@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ScriptableObjects
 {
     [CreateAssetMenu(fileName = "Melee-Attack State", menuName = "Scriptable Objects/Enemy Logic/Attack Logic/Melee Attack")]
-    public class EnemyMeleeAttackSO : BaseEnemyAttackSO
+    public class MeleeEnemyAttackSO : BaseEnemyAttackSO
     {
         private PlayerHealth _playerHealthScript;
 

@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace ScriptableObjects
 {
-    [CreateAssetMenu(fileName = "Enemy-Idle-Standing", menuName = "Scriptable Objects/Enemy Logic/Idle Logic/Standing (Just Standing Idle)")]
-    public class EnemyIdleStandingSO : BaseEnemyIdleSO
+    [CreateAssetMenu(fileName = "MeleeEnemy_Idle_Standing", menuName = "Scriptable Objects/Enemy Logic/Idle Logic/MeleeEnemy Standing (Just Standing Idle)")]
+    public class MeleeEnemyIdleStandingSO : BaseEnemyIdleSO
     {
         public override void Initialize(GameObject enemyObj, BaseEnemyBehaviour enemyBehav)
         {
@@ -25,6 +25,14 @@ namespace ScriptableObjects
         public override void ExecuteFrameUpdateLogic()
         {
             base.ExecuteFrameUpdateLogic();
+
+            // Transitionchecks 
+            // Switch State from Idle to ChaseState when Player is Detected
+            if (_baseEnemyBehaviour.IsPlayerDetected)
+            {
+                _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.ChaseState);
+                Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
+            }
         }
 
         public override void ExecutePhysicsUpdateLogic()

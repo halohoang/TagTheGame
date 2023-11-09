@@ -96,13 +96,15 @@ GameObject:
   - component: {fileID: 1108644999211655061}
   - component: {fileID: 1108644999211655060}
   - component: {fileID: 1108644999211655063}
+  - component: {fileID: 1465482242}
+  - component: {fileID: 1465482243}
+  - component: {fileID: 8300587106856919035}
+  - component: {fileID: 2493394620383466760}
   - component: {fileID: 1268659712}
   - component: {fileID: 1807849734675487193}
-  - component: {fileID: 1465482242}
-  - component: {fileID: 1465482241}
-  - component: {fileID: 1465482243}
+  - component: {fileID: 3021402490182317057}
   m_Layer: 9
-  m_Name: enemy_range_white
+  m_Name: enemy_range_yellow_standing_Idle
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -163,7 +165,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1371216919
-  m_SortingLayer: 5
+  m_SortingLayer: 7
   m_SortingOrder: 1
   m_Sprite: {fileID: 1276895412, guid: 152033cfaee8a7949b4b52f93e31def9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -223,42 +225,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.14, y: 0.26}
   m_EdgeRadius: 0
---- !u!114 &1268659712
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1108644999211655059}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a6b19f4a116f9441899304199b75be9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maximumHealth: 10
-  _currentHealth: 0
-  _takenDamage: 3
-  _animator: {fileID: 1108644999211655060}
-  _bloodPoolSpawn:
-  - {fileID: 3044862607823702276, guid: ef5550f6add88d942b04d90e365378c4, type: 3}
-  - {fileID: 7784901274924939644, guid: 78e9458eac6487141921a0fda951a639, type: 3}
-  - {fileID: 5169151268200698254, guid: da58d847e6380c44eb0a2b2a58ee2b1e, type: 3}
-  - {fileID: 1387189892773440931, guid: 6b10275c7991d6e4fb30a507d922ef24, type: 3}
-  _bloodDeadPrefab: {fileID: 5459322947420741018, guid: 56f040fc343074640ba7ce86ec08968c, type: 3}
---- !u!114 &1807849734675487193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1108644999211655059}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e28b497d972cb6b43bf13176102d6351, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _flashingSpeed: 0
-  _flashDuration: 0.05
 --- !u!50 &1465482242
 Rigidbody2D:
   serializedVersion: 4
@@ -280,35 +246,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &1465482241
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1108644999211655059}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e83020a8029d51343a5ac949db8b0248, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rb2d: {fileID: 0}
-  _playerTransform: {fileID: 0}
-  _navAgent: {fileID: 0}
-  _viewDirectionHelperTrans: {fileID: 1202474002}
-  _raycastingCollider: {fileID: 0}
-  _animtor: {fileID: 0}
-  _fOVAngle: 360
-  _viewDistance: 50
-  _playerDetectionMask:
-    serializedVersion: 2
-    m_Bits: 256
-  _isPlayerInFOV: 0
-  _wasPlayerDetected: 0
-  _isEnemyDead: 0
-  _movementSpeed: 1
-  _enemyType: 1
-  _rotationModifier: 0
 --- !u!195 &1465482243
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -331,3 +268,127 @@ NavMeshAgent:
   m_BaseOffset: 0.13
   m_WalkableMask: 1
   m_ObstacleAvoidanceType: 4
+--- !u!114 &8300587106856919035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108644999211655059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0ff2f52ca4a8a145a9d4acc457e3b0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _navAgent: {fileID: 0}
+  _animator: {fileID: 0}
+  _playerObject: {fileID: 0}
+  _condPlayerDetectionCheck: {fileID: 0}
+  _condMeleeAttackCheck: {fileID: 0}
+  _baseEnemyIdleStateSO: {fileID: 11400000, guid: ff910bb86ca659b42ba994054c3cbd93, type: 2}
+  _baseEnemyAlertStateSO: {fileID: 11400000, guid: 05c2ad8358f42734bbcb1c6c4c71dd95, type: 2}
+  _baseEnemyChaseStateSO: {fileID: 0}
+  _baseEnemyAttackStateSO: {fileID: 0}
+  _movementSpeed: 0
+  _chasingSpeed: 0
+  _isPlayerDetected: 0
+  _isSomethingAlarmingHappening: 0
+  _isInAttackRange: 0
+  _isCollidingWithObstacle: 0
+  _noiseRangeOfAlarmingEvent: 0
+  _positionOfAlarmingEvent: {x: 0, y: 0, z: 0}
+  _collisionObjectPos: {x: 0, y: 0}
+  _isPlayerInShootingRange: 0
+--- !u!114 &2493394620383466760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108644999211655059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a554ffcfba2869d419d8c1d29c93216e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerObj: {fileID: 0}
+  _viewDirectionHelperTrans: {fileID: 0}
+  _raycastingCollider: {fileID: 0}
+  _fOVRadius: 5.4
+  _fOVAngle: 60
+  _viewDistance: 10
+  _targetDetectionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _obstructionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _isPlayerDetected: 0
+  _isEnemyDead: 0
+--- !u!114 &1268659712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108644999211655059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6b19f4a116f9441899304199b75be9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maximumHealth: 10
+  _currentHealth: 0
+  _takenDamage: 3
+  _light2d: {fileID: 0}
+  _animator: {fileID: 1108644999211655060}
+  _bloodPoolSpawn:
+  - {fileID: 3044862607823702276, guid: ef5550f6add88d942b04d90e365378c4, type: 3}
+  - {fileID: 7784901274924939644, guid: 78e9458eac6487141921a0fda951a639, type: 3}
+  - {fileID: 5169151268200698254, guid: da58d847e6380c44eb0a2b2a58ee2b1e, type: 3}
+  - {fileID: 1387189892773440931, guid: 6b10275c7991d6e4fb30a507d922ef24, type: 3}
+  _bloodDeadPrefab: {fileID: 5459322947420741018, guid: 56f040fc343074640ba7ce86ec08968c, type: 3}
+--- !u!114 &1807849734675487193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108644999211655059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e28b497d972cb6b43bf13176102d6351, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _flashingSpeed: 0
+  _flashDuration: 0.05
+--- !u!114 &3021402490182317057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108644999211655059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_ComponentVersion: 1
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_ApplyToSortingLayers: 00000000d9eb6cc76da6e1d871ed875c19067c27ed1827b32d17e682171cbb51e7540cb041c8ec54fd35591bc7e39ca611f28f01
+  m_ShapePath:
+  - {x: -0.12999998, y: -0.07000002, z: 0}
+  - {x: -0.12999998, y: 0.06999999, z: 0}
+  - {x: 0.13, y: 0.06999999, z: 0}
+  - {x: 0.13, y: -0.07000002, z: 0}
+  m_ShapePathHash: 0
+  m_Mesh: {fileID: 0}
+  m_InstanceId: 59814
+  m_LocalBounds:
+    m_Center: {x: 0.000000014901161, y: -0.000000014901161, z: 0}
+    m_Extent: {x: 0.13, y: 0.07000001, z: 0}

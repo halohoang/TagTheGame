@@ -29,19 +29,12 @@ namespace ScriptableObjects
 
         public virtual void ExecuteFrameUpdateLogic()
         {
-            // Transitionchecks            
-            // Switch State from Idle to AlertState when Player is Detected
+            // Transitionchecks 
+            // Switch State from Idle to AlertState when something alarming is happening (e.g. door kick in, player shoots etc.) and Agent is in noise range
             if (_baseEnemyBehaviour.IsSomethingAlarmingHappening)
             {
                 _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.AlertState);
                 Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Alert</color>' should have been happend now!");
-            }
-
-            // Switch State from Idle to ChaseState when Player is Detected
-            if (_baseEnemyBehaviour.IsPlayerDetected)
-            {
-                _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.ChaseState);
-                Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
             }
         }
 

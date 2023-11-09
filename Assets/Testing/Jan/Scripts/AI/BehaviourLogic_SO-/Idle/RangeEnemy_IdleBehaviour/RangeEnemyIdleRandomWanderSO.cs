@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace ScriptableObjects
 {
-    [CreateAssetMenu(fileName = "Enemy-Idle-RadomWander", menuName = "Scriptable Objects/Enemy Logic/Idle Logic/Random Wander")]
-    public class EnemyIdleRandomWanderSO : BaseEnemyIdleSO
+    [CreateAssetMenu(fileName = "RangeEnemy_Idle_RadomWander", menuName = "Scriptable Objects/Enemy Logic/Idle Logic/RangeEnemy Random Wander")]
+    // todo: (!) if Time create a Parent Class 'BaseIdleRandomWanderSO'  that derives from 'BaseIdleSO' and is parent to the specific 'EnemyIdleRandomWanderSO' (Melee/Range) since the differ just in the Transition-Check but are equal coding wise beside that; JM (09.11.2023)
+    public class RangeEnemyIdleRandomWanderSO : BaseEnemyIdleSO
     {
         [Header("Behaviour Settings")]
         [SerializeField] private float _wanderSpeed = 1.0f;
@@ -43,6 +44,7 @@ namespace ScriptableObjects
         public bool IsMoving { get => _isMoving; private set => _isMoving = value; }
         public bool IsMovingToCloseToObstacle { get => _isMovingTOCloseToObstacle; private set => _isMovingTOCloseToObstacle = value; }
         public Vector3 WalkTargetPos { get => _walkTargedPos; private set => _walkTargedPos = value; }
+
 
         public override void Initialize(GameObject enemyObj, BaseEnemyBehaviour enemyBehav)
         {
@@ -84,16 +86,24 @@ namespace ScriptableObjects
         {
             base.ExecuteFrameUpdateLogic();
 
+            // Transitionchecks 
+            // Switch State from Idle to AttackState (Shooting) when Player is Detected
+            if (_baseEnemyBehaviour.IsPlayerDetected)
+            {
+                _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.AttackState);
+                Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Attack (Shooting)</color>' should have been happend now!");
+            }
+
             // Setup Timer
             Timer += Time.deltaTime;
-           
+
             WalkingConditionCheck();
             SetFacingDirection();
 
             // execute actual walking according to previous checks and settings
             _baseEnemyBehaviour.NavAgent.isStopped = false;
             _baseEnemyBehaviour.NavAgent.SetDestination(WalkTargetPos);
-        }        
+        }
 
         public override void ExecutePhysicsUpdateLogic()
         {
@@ -111,7 +121,7 @@ namespace ScriptableObjects
             }
             else
                 IsMovingToCloseToObstacle = false;
-        }        
+        }
 
         public override void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe)
         {
@@ -121,7 +131,7 @@ namespace ScriptableObjects
         public override void ResetValues()
         {
             base.ResetValues();
-        }       
+        }
 
         /// <summary>
         /// Checks if '<see cref="_timer"/>' is running or not and if the maximum walk range was reached while '<see cref="_timer"/>' is still running or if Agent 
@@ -137,9 +147,9 @@ namespace ScriptableObjects
                 // stop movement for this cycle
                 _baseEnemyBehaviour.NavAgent.isStopped = true;
                 _baseEnemyBehaviour.Animator.SetBool("Engage", false);
-                
+
                 Debug.Log($"'<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>': since EnemyObj collided with´an obstacle, movement was stoped currently. new movementdirection will be calculated");
-                
+
                 _baseEnemyBehaviour.SetIsCollidingWithWall(false);
             }
             else if (Timer > _rndWalktime)               // is Timmer out of Time
@@ -170,7 +180,7 @@ namespace ScriptableObjects
                 Debug.Log($"'<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>': rnd-Walking-Timer still running; rnd-Walking-Range was reached");
             }
             else if (IsMovingToCloseToObstacle)     // if Agent is walking to close towards an Obstacle, change walkin direction to the oposite
-            {                
+            {
                 WalkTargetPos = _currentObstacleAvoidanceVector;
                 Debug.Log($"'<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>': Walking Direction was Changed due to walking to close towards obstacle");
                 IsMovingToCloseToObstacle = false;
@@ -219,7 +229,7 @@ namespace ScriptableObjects
                 //_baseEnemyBehaviour.transform.rotation = quart;
                 #endregion                
             }
-        }        
+        }
 
         /// <summary>
         /// Checks all '<see cref="_directionsToCheckToAvoidObstacle"/>' for beeing clear of Obstacles inside the '<see cref="_distanceToCheckForObstacles"/>'. If so the
@@ -231,7 +241,7 @@ namespace ScriptableObjects
             {
                 RaycastHit hit;
                 Vector3 currentDirectionToCheck = _baseEnemyBehaviour.transform.TransformDirection(_directionsToCheckToAvoidObstacle[i].normalized);
-                
+
                 // if no obstacle was detected in the checked direction -> set this direction to the desired avoidance direction
                 if (!Physics.Raycast(_baseEnemyBehaviour.transform.position, currentDirectionToCheck, out hit, _distanceForAvoidCheck, _obstacleMask))
                     _currentObstacleAvoidanceVector = currentDirectionToCheck.normalized;

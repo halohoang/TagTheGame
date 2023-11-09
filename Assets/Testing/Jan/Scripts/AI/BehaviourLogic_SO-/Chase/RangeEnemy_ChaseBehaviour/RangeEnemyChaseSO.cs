@@ -2,15 +2,12 @@ using Enemies;
 using EnumLibrary;
 using UnityEngine;
 
+
 namespace ScriptableObjects
 {
-    [CreateAssetMenu(fileName = "Enemy-Alert-Stading", menuName = "Scriptable Objects/Enemy Logic/Alert Logic/Standing Alert")]
-    public class EnemyAlertStandingSO : BaseEnemyAlertSO
+    [CreateAssetMenu(fileName = "RangeEnemy_Chase", menuName = "Scriptable Objects/Enemy Logic/Chase Logic/RangeEnemy Chase")]
+    public class RangeEnemyChaseSO : BaseEnemyChaseSO
     {
-        //[SerializeField, Range(0.5f, 10.0f)] private float _stayAlertTime;
-
-        //private float _timer = 0.0f;
-
         public override void Initialize(GameObject enemyObj, BaseEnemyBehaviour enemyBehav)
         {
             base.Initialize(enemyObj, enemyBehav);
@@ -19,25 +16,25 @@ namespace ScriptableObjects
         public override void ExecuteEnterLogic()
         {
             base.ExecuteEnterLogic();
+            
+            // setup chasing relevat values (e.g. speed)
+
+            // play 'engage' animation
         }
 
         public override void ExecuteExitLogic()
         {
             base.ExecuteExitLogic();
+
+            // stop 'engage' animation
         }
 
         public override void ExecuteFrameUpdateLogic()
         {
             base.ExecuteFrameUpdateLogic();
 
-            //_timer += Time.deltaTime;            
-
-            //if (_timer > _stayAlertTime)
-            //{
-            //    _timer = 0.0f;
-            //    _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.IdleState);
-            //    Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Alert</color>' to '<color=orange>Idle</color>' should have been happend now!");
-            //}
+            // 1) transition check (if player is detected -> switch to attack state (shooting))
+            // 1.1) if agent reached last known position of player and player can't be detected anymore -> switch to idle/alert state            
         }
 
         public override void ExecutePhysicsUpdateLogic()
