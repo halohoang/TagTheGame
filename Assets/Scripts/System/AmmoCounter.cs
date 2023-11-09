@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class AmmoCounter : MonoBehaviour
 {
-	//Variables
+	// Variables
 	[SerializeField] internal int currentAmmo = 30; // Current ammo count
-	[SerializeField]private Transform[] bulletSprites; // Array to store bullet sprites
+	[SerializeField] private Transform[] bulletSprites; // Array to store bullet sprites
 	[SerializeField] private float _waitForReload;
+
+	private bool isReloading = false; // Flag to track reloading status
 
 	private void Start()
 	{
@@ -22,7 +24,7 @@ public class AmmoCounter : MonoBehaviour
 	// Link to the Shoot Function from the PlayerShoot script
 	public void DecreaseAmmo()
 	{
-		if (currentAmmo > 0)
+		if (!isReloading && currentAmmo > 0)
 		{
 			bulletSprites[currentAmmo - 1].gameObject.SetActive(false);
 			currentAmmo--;
@@ -32,7 +34,7 @@ public class AmmoCounter : MonoBehaviour
 	// Link to the Reload function from the PlayerShoot Script
 	public void Reload()
 	{
-		if (currentAmmo < 30)
+		if (currentAmmo < 30 && !isReloading)
 		{
 			StartCoroutine(EnableBulletsDuringReload());
 		}
@@ -40,11 +42,14 @@ public class AmmoCounter : MonoBehaviour
 
 	IEnumerator EnableBulletsDuringReload()
 	{
+		isReloading = true; // Set reloading flag to true
+		float timePerBullet = 1.0f / 30.0f; // Time for each bullet to enable
 		for (int i = currentAmmo; i < 30; i++)
 		{
 			bulletSprites[i].gameObject.SetActive(true);
 			currentAmmo++;
-			yield return new WaitForSeconds(_waitForReload); // Adjust the delay as needed
+			yield return new WaitForSeconds(timePerBullet);
 		}
+		isReloading = false; // Set reloading flag to false when the reload is complete
 	}
 }

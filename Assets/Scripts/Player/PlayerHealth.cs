@@ -14,6 +14,7 @@ public class PlayerHealth : MonoBehaviour
 	[SerializeField] GameObject _player;
 	[SerializeField] Transform _chargeBarTransform; // Reference to the scale of the bar
 	[SerializeField] float _chargeSpeed = 0.005f; // The rate at which bar depletes or charges
+	[SerializeField] private float _healthThresholdStopBoost;
 
 	/* Taking Damage Effect */
 	private TakingDamage _takingDamageScript;
@@ -72,7 +73,7 @@ public class PlayerHealth : MonoBehaviour
 			}
 
 			// Ensure _currentHealth does not go below 0
-			_currentHealth = Mathf.Clamp(_currentHealth, 0f, _maxHealth);
+			_currentHealth = Mathf.Clamp(_currentHealth, _healthThresholdStopBoost, _maxHealth);
 
 
 			//Testing whether the player heals. Regenerate 1 HP per frame
@@ -82,7 +83,7 @@ public class PlayerHealth : MonoBehaviour
 				RegenCharge();
 			}
 
-			_currentHealth = Mathf.Clamp(_currentHealth, 0f, _maxHealth);
+			_currentHealth = Mathf.Clamp(_currentHealth, _healthThresholdStopBoost, _maxHealth);
 
 		}
 	}

@@ -13,12 +13,16 @@ public class Movement : MonoBehaviour
 	[SerializeField] private float _minPlayerSpeed; //slowest the player move
 	[SerializeField] private float _maxPlayerSpeed; //fastest the player move
 
-	
+
 
 	[SerializeField] internal float _playerDashForce;
 	[SerializeField] private Sandevistan _sandevistan;
 	[SerializeField] internal float _dashCooldown;
 	internal float _currentDashCooldown;
+
+	internal PlayerHealth _playerHealthScript;
+
+	[SerializeField] private float _healthThresholdStopBoost;
 
 	[SerializeField] Light2D _light2D;
 
@@ -27,6 +31,7 @@ public class Movement : MonoBehaviour
 	{
 		_currentPlayerSpeed = _minPlayerSpeed;
 		_light2D = GetComponentInChildren<Light2D>();
+		_playerHealthScript = GetComponent<PlayerHealth>();
 	}
 
 	void Update()
@@ -34,7 +39,7 @@ public class Movement : MonoBehaviour
 		PlayerMovement();
 		PlayerFast();
 		//PlayerDash();
-		
+
 	}
 
 
@@ -69,28 +74,30 @@ public class Movement : MonoBehaviour
 	/* Player Sandevistan */
 	void PlayerFast()
 	{
-		//Player move faster
-		if (Input.GetKeyDown(KeyCode.Space))
+		if (_playerHealthScript._currentHealth >= _healthThresholdStopBoost) // Check if health is greater than or equal to 2
 		{
-			_currentPlayerSpeed = _maxPlayerSpeed;
-			_light2D.falloffIntensity = 0.1f;
-			_light2D.pointLightOuterRadius = 1.6f;
-			_light2D.intensity = 2;
-			_light2D.GetComponent<LightControl>().enabled = false;
-			
-			
+			// Player can move faster
+			if (Input.GetKeyDown(KeyCode.Space))
+			{
+				_currentPlayerSpeed = _maxPlayerSpeed;
+				_light2D.falloffIntensity = 0.1f;
+				_light2D.pointLightOuterRadius = 1.6f;
+				_light2D.intensity = 2;
+				_light2D.GetComponent<LightControl>().enabled = false;
+			}
 		}
-		if (!Input.GetKey(KeyCode.Space)) { _currentPlayerSpeed = _minPlayerSpeed;
+		else
+		{
+			// Player's health is below 2, so they can't use "Space" for increased speed
+			_currentPlayerSpeed = _minPlayerSpeed;
 			_light2D.falloffIntensity = 0.148f;
 			_light2D.pointLightOuterRadius = 1.12f;
 			_light2D.intensity = 1;
 			_light2D.GetComponent<LightControl>().enabled = true;
-			
-		} //Revert player back to normal speed
-		
+		}
 	}
 
-	
+
 
 	/* Player Dash */
 	void PlayerDash()
