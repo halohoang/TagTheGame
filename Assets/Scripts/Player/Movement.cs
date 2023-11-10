@@ -45,27 +45,29 @@ public class Movement : MonoBehaviour
 	/* Player Movement*/
 	void PlayerMovement()
 	{
-
-		/* Horizontal Movement */
-		if (Input.GetKey(KeyCode.A))
+		if (_playerHealthScript._currentHealth > 0)
 		{
+			/* Horizontal Movement */
+			if (Input.GetKey(KeyCode.A))
+			{
 
-			transform.Translate(Vector2.left * _currentPlayerSpeed * Time.deltaTime, Space.World);
-		}
-		if (Input.GetKey(KeyCode.D))
-		{
-			transform.Translate(Vector2.right * _currentPlayerSpeed * Time.deltaTime, Space.World);
-		}
+				transform.Translate(Vector2.left * _currentPlayerSpeed * Time.deltaTime, Space.World);
+			}
+			if (Input.GetKey(KeyCode.D))
+			{
+				transform.Translate(Vector2.right * _currentPlayerSpeed * Time.deltaTime, Space.World);
+			}
 
-		if (Input.GetKey(KeyCode.W))
-		{
+			if (Input.GetKey(KeyCode.W))
+			{
 
-			transform.Translate(Vector2.up * _currentPlayerSpeed * Time.deltaTime, Space.World);
-		}
-		if (Input.GetKey(KeyCode.S))
-		{
+				transform.Translate(Vector2.up * _currentPlayerSpeed * Time.deltaTime, Space.World);
+			}
+			if (Input.GetKey(KeyCode.S))
+			{
 
-			transform.Translate(Vector2.down * _currentPlayerSpeed * Time.deltaTime, Space.World);
+				transform.Translate(Vector2.down * _currentPlayerSpeed * Time.deltaTime, Space.World);
+			}
 		}
 	}
 
@@ -75,12 +77,12 @@ public class Movement : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Space)) // Check if health is greater than or equal to 2
 		{
 			// Player can move faster
-				_currentPlayerSpeed = _maxPlayerSpeed;
-				_light2D.falloffIntensity = 0.1f;
-				_light2D.pointLightOuterRadius = 1.6f;
-				_light2D.intensity = 2;
-				_light2D.GetComponent<LightControl>().enabled = false;
-			
+			_currentPlayerSpeed = _maxPlayerSpeed;
+			_light2D.falloffIntensity = 0.1f;
+			_light2D.pointLightOuterRadius = 1.6f;
+			_light2D.intensity = 2;
+			_light2D.GetComponent<LightControl>().enabled = false;
+
 		}
 		if (_playerHealthScript._currentHealth < 2 || Input.GetKeyUp(KeyCode.Space))
 		{
