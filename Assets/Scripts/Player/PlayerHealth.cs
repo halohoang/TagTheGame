@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -13,23 +14,30 @@ public class PlayerHealth : MonoBehaviour
 	[SerializeField] internal float _currentHealth;
 	[SerializeField] GameObject _player;
 	[SerializeField] Transform _chargeBarTransform; // Reference to the scale of the bar
-	[SerializeField] float _chargeSpeed = 0.005f; // The rate at which bar depletes or charges
-	[SerializeField] private float _healthThresholdStopBoost;
+	[SerializeField] float _chargeSpeed = 1; // The rate at which bar depletes or charges
+
+	/* Dead Effec */
+	private Animator _animator;
+	[SerializeField] private List<GameObject> _disableGameObject;
+
 
 	/* Taking Damage Effect */
 	private TakingDamage _takingDamageScript;
 
 	/* Health System */
-	[SerializeField] internal float _takenDamage = 1f;
+	[SerializeField] internal int _takenDamage;
+	[SerializeField] private float _regenCooldown = 2f; // Adjust the duration as needed
+	private bool _canRegen = true;
+	private float _regenTimer = 1f;
 
 	private Rigidbody2D _rb2D;
 
-    //Functions
-    private void Awake()
-    {
+	//Functions
+	private void Awake()
+	{
 		if (_inputReader == null)
 			_inputReader = Resources.Load("ScriptableObjects/InputReader") as InputReaderSO;
-    }
+	}
 
 	//private void OnEnable()
 	//{
@@ -46,11 +54,34 @@ public class PlayerHealth : MonoBehaviour
 		_rb2D = GetComponent<Rigidbody2D>();
 		_currentHealth = _maxHealth;
 		_takingDamageScript = GetComponent<TakingDamage>();
+		_animator = GetComponent<Animator>();
 	}
 
 	void Update()
 	{
 		ReduceHP();
+		if (_currentHealth <= 0)
+		{
+			foreach (GameObject gameobject in _disableGameObject)
+			{
+				gameobject.SetActive(false);
+			}
+			_animator.SetTrigger("Dead");
+		}
+		if (_canRegen)
+		{
+			RegenHP();
+		}
+		else
+		{
+			// Update the regen timer
+			_regenTimer += Time.deltaTime;
+			if (_regenTimer >= _regenCooldown)
+			{
+				_canRegen = true;
+				_regenTimer = 0f; // Reset the timer
+			}
+		}
 	}
 
 	internal void GetDamage()
@@ -68,25 +99,25 @@ public class PlayerHealth : MonoBehaviour
 			// If the player hold down Sandevistan his health bar will start to get depleted
 			if (Input.GetKey(KeyCode.Space))
 			{
-				_currentHealth -= 0.5f;
+				_currentHealth = Mathf.Max(_currentHealth - 0.5f, 1f);
 				ReduceCharge();
 			}
 
 			// Ensure _currentHealth does not go below 0
-			_currentHealth = Mathf.Clamp(_currentHealth, _healthThresholdStopBoost, _maxHealth);
+			_currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
 
 
-			//Testing whether the player heals. Regenerate 1 HP per frame
-			if (!Input.GetKey(KeyCode.Space) && _currentHealth != _maxHealth)
-			{
-				_currentHealth += 0.1f;
-				RegenCharge();
-			}
-
-			_currentHealth = Mathf.Clamp(_currentHealth, _healthThresholdStopBoost, _maxHealth);
 
 		}
 	}
+
+	void RegenHP()
+		{
+			if (!Input.GetKey(KeyCode.Space) && _currentHealth < _maxHealth) { _currentHealth += 1; RegenCharge(); _canRegen = false; } _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
+		}
+		
+
+	
 
 	void ReduceCharge()
 	{

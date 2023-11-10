@@ -11,6 +11,8 @@ public class AnyStateAnimation : MonoBehaviour
 
 	private bool _isArmed = false;
 
+	internal PlayerHealth _playerHealthScript;
+
 
 
 	// Functions
@@ -40,6 +42,6 @@ public class AnyStateAnimation : MonoBehaviour
 				_animator.SetBool("Armed", false);
 			}
 		}
-
+		
 	}
 }
