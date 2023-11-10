@@ -18,8 +18,8 @@ namespace StateMashine
         // ---------- Methods ----------
         private void OnTriggerStay2D(Collider2D collision)
         {
-            // Dealing Damage to Player when Player enters Trigger-Zone around Enemy        
-            if (collision.TryGetComponent(out PlayerHealth playerHealth))
+            // when Player is alive invoke MeleeAttack Event for informing, that Player is in Attack Range
+            if (collision.TryGetComponent(out PlayerHealth playerHealth) && !_isPlayerDead)
             {
                 IsInAttackRange = true;
                 OnMeleeAttack?.Invoke(IsInAttackRange, collision.gameObject);
@@ -27,7 +27,8 @@ namespace StateMashine
         }
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.TryGetComponent(out PlayerHealth playerHealth))
+            // when Player is alive invoke MeleeAttack Event for informing, that Player is not in Attack Range anymore
+            if (collision.TryGetComponent(out PlayerHealth playerHealth) && !_isPlayerDead)
             {
                 IsInAttackRange = false;
                 OnMeleeAttack?.Invoke(IsInAttackRange, collision.gameObject);

@@ -5,6 +5,7 @@ using UnityEngine.AI;
 using NaughtyAttributes;
 using Interactables;
 using ScriptableObjects;
+using System;
 
 namespace Enemies
 {
@@ -39,6 +40,7 @@ namespace Enemies
         [Space(5)]
 
         [Header("Monitoring of importang values")]
+        [SerializeField, ReadOnly] private bool _isPlayerDead;
         [SerializeField, ReadOnly] private bool _isPlayerDetected;
         [SerializeField, ReadOnly] private bool _isSomethingAlarmingHappening;
         [SerializeField, ReadOnly] private bool _isInAttackRange;                   // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
@@ -69,6 +71,7 @@ namespace Enemies
         public float ChasingSpeed { get => _chasingSpeed; private set => _chasingSpeed = value; }
         //public Vector3[] DirectionsToCheckToAvoidObstacle { get => _directionsToCheckToAvoidObstacle; private set => _directionsToCheckToAvoidObstacle = value; }
 
+        public bool IsPlayerDead { get => _isPlayerDead; private set => _isPlayerDead = value; }
         public bool IsPlayerDetected { get => _isPlayerDetected; private set => _isPlayerDetected = value; }
         public bool IsSomethingAlarmingHappening { get => _isSomethingAlarmingHappening; private set => _isSomethingAlarmingHappening = value; }
         public bool IsCollidingWithOtherEnemy { get => _isCollidingWithObstacle; private set => _isCollidingWithObstacle = value; }
@@ -116,6 +119,7 @@ namespace Enemies
         protected void OnEnable()
         {
             // subscribing to Events
+            PlayerHealth.OnPlayerDeath += SetIsPlayerDead;
             Interactable.OnDoorKickIn += SetAlarmingEventValues;
             PlayerShoot.OnPlayerShoot += SetAlarmingEventValues;
             _condPlayerDetectionCheck.OnPlayerDetection += SetIsPlayerDetected;
@@ -126,6 +130,7 @@ namespace Enemies
         protected void OnDisable()
         {
             // unsubscribing from Events
+            PlayerHealth.OnPlayerDeath -= SetIsPlayerDead;
             Interactable.OnDoorKickIn -= SetAlarmingEventValues;
             PlayerShoot.OnPlayerShoot -= SetAlarmingEventValues;
             _condPlayerDetectionCheck.OnPlayerDetection -= SetIsPlayerDetected;
@@ -152,6 +157,9 @@ namespace Enemies
 
         private void FixedUpdate()
         {
+            if (IsPlayerDead && StateMachine.CurrentState != IdleState)
+                StateMachine.Transition(IdleState);
+
             StateMachine.CurrentState.PhysicsUpdate();
         }
        
@@ -163,13 +171,16 @@ namespace Enemies
                 NavAgent.isStopped = true;
                 CollisionObjectPos = collision.transform.position;
 
-                Debug.Log($"'<color=lime>{gameObject.name}</color>': collided with a wall (wall position: {CollisionObjectPos});");
+                Debug.Log($"'<color=lime>{gameObject.name}</color>': collided with '{collision.gameObject.name}' (wall position: '{CollisionObjectPos}');");
             }
         }
 
         // Update is called once per frame
         void Update()
         {
+            if (IsPlayerDead && StateMachine.CurrentState != IdleState)
+                StateMachine.Transition(IdleState);
+
             StateMachine.CurrentState.FrameUpdate();
         }
 
@@ -196,6 +207,24 @@ namespace Enemies
         {
             IsPlayerDetected = isPlayerDetected;
             PlayerObject = playerObj;
+        }
+
+        /// <summary>
+        /// Sets the bool <see cref="IsPlayerDead"/>
+        /// </summary>
+        private void SetIsPlayerDead(bool isPlayerDead)
+        {
+            IsPlayerDead = isPlayerDead;
+        }
+
+        /// <summary>
+        /// Disables all Behaviour relevant scripts running on the 'this.gameObject'
+        /// </summary>
+        private void DisableAIBehaviour()
+        {
+            _condPlayerDetectionCheck.enabled = false;
+            _condMeleeAttackCheck.enabled = false;
+            this.enabled = false;
         }
 
         private void SetAlarmingEventValues(bool isSomethinAlarmingHappening, Vector3 positionOfAlarmingEvent, float noiseRangeOfAlarmingEvent)

@@ -40,9 +40,54 @@ public class Bullet : MonoBehaviour
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        // reworkd by Jan (09.11.2023)
-        ObstacleCollisionCheck(collision);
-        TargetCollisionDetection(collision);
+        // todo: (!) if time read more into bitshifting to really understand whats happening in the query until then stick to the tag solution of hoang; JM (10.11.23)
+        //// reworkd by Jan (09.11.2023)
+        //ObstacleCollisionCheck(collision);
+        //TargetCollisionDetection(collision);
+        
+        if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Door") || collision.gameObject.CompareTag("Bullet"))
+        {
+            gameObject.SetActive(false);
+        }
+
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            PlayerHealth playerHealth;
+            playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
+
+            /* Contact points spawning blood */
+            ContactPoint2D[] contacts = collision.contacts;
+            Vector2 collisionPoint = contacts[0].point;
+            Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+            Instantiate(_bloodPrefab, collisionPoint, bloodRotation);
+            if (playerHealth != null)
+            {
+                /* Deal Damage */
+                playerHealth.GetDamage();
+                Debug.Log(playerHealth._currentHealth);
+                gameObject.SetActive(false);
+            }
+            // Call deal damage function
+            //}
+        }
+
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            EnemyHealth enemyHealth;
+            enemyHealth = collision.gameObject.GetComponent<EnemyHealth>();
+
+            /* Contact points spawning blood */
+            ContactPoint2D[] contacts = collision.contacts;
+            Vector2 collisionPoint = contacts[0].point;
+            Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+            Instantiate(_bloodPrefab, collisionPoint, bloodRotation);
+            if (enemyHealth != null)
+            {
+                enemyHealth.GetDamage();
+                Debug.Log(enemyHealth._currentHealth);
+                gameObject.SetActive(false);
+            }
+        }
 
         #region Original Code by Hoang
         //// origianl Code by Hoang
@@ -53,7 +98,7 @@ public class Bullet : MonoBehaviour
 
         //// Original Code by Hoang
         //if (collision.gameObject.CompareTag("Player"))
-        //{            
+        //{
         //    PlayerHealth playerHealth;
         //    playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
 
@@ -70,7 +115,8 @@ public class Bullet : MonoBehaviour
         //        gameObject.SetActive(false);
         //    }
         //    // Call deal damage function
-        ////}
+        //    //}
+        //}
 
         //if (collision.gameObject.CompareTag("Enemy"))
         //{
@@ -92,12 +138,14 @@ public class Bullet : MonoBehaviour
         #endregion
     }
 
+
     /// <summary>
     /// Check if this gameobject collided with an obstacle
     /// </summary>
     /// <param name="collision"></param>
     private void ObstacleCollisionCheck(Collision2D collision)
     {
+        // todo: (!) if time read more into bitshifting to really understand whats happening in the query until then stick to the tag solution of hoang; JM (10.11.23)
         if (((1 << collision.gameObject.layer) & _obstacleCollisionMask.value) != 0)
         {
             gameObject.SetActive(false);
@@ -112,6 +160,7 @@ public class Bullet : MonoBehaviour
     /// <param name="collision"></param>
     private void TargetCollisionDetection(Collision2D collision)
     {
+        // todo: (!) if time read more into bitshifting to really understand whats happening in the query until then stick to the tag solution of hoang; JM (10.11.23)
         if (((1 << collision.gameObject.layer) & _targedMask.value) != 0)
         {
             /* Contact points spawning blood */

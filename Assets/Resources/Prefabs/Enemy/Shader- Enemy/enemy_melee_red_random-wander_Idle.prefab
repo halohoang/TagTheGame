@@ -96,11 +96,11 @@ GameObject:
   - component: {fileID: 8162599588425402330}
   - component: {fileID: 8162599588425402329}
   - component: {fileID: 8162599589911120501}
-  - component: {fileID: 329531120602993402}
-  - component: {fileID: 4429797147017748982}
   - component: {fileID: 4634727624761125239}
   - component: {fileID: 3062022871439014983}
   - component: {fileID: 5656654371403240253}
+  - component: {fileID: 329531120602993402}
+  - component: {fileID: 4429797147017748982}
   - component: {fileID: 8162599588887114161}
   - component: {fileID: 8162599589912398856}
   - component: {fileID: 8162599589912398863}
@@ -271,43 +271,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &329531120602993402
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5603002411706856772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a6b19f4a116f9441899304199b75be9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maximumHealth: 4
-  _currentHealth: 0
-  _takenDamage: 2
-  _light2d: {fileID: 1033683757630329805}
-  _animator: {fileID: 8162599589911120501}
-  _bloodPoolSpawn:
-  - {fileID: 3044862607823702276, guid: ef5550f6add88d942b04d90e365378c4, type: 3}
-  - {fileID: 7784901274924939644, guid: 78e9458eac6487141921a0fda951a639, type: 3}
-  - {fileID: 5169151268200698254, guid: da58d847e6380c44eb0a2b2a58ee2b1e, type: 3}
-  - {fileID: 1387189892773440931, guid: 6b10275c7991d6e4fb30a507d922ef24, type: 3}
-  _bloodDeadPrefab: {fileID: 5459322947420741018, guid: 56f040fc343074640ba7ce86ec08968c, type: 3}
---- !u!114 &4429797147017748982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5603002411706856772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e28b497d972cb6b43bf13176102d6351, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _flashingSpeed: 0
-  _flashDuration: 0.1
 --- !u!114 &4634727624761125239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,8 +297,11 @@ MonoBehaviour:
   _isPlayerDetected: 0
   _isSomethingAlarmingHappening: 0
   _isInAttackRange: 0
+  _isCollidingWithObstacle: 0
   _noiseRangeOfAlarmingEvent: 0
   _positionOfAlarmingEvent: {x: 0, y: 0, z: 0}
+  _collisionObjectPos: {x: 0, y: 0}
+  _lastKnownPlayerPos: {x: 0, y: 0, z: 0}
 --- !u!114 &3062022871439014983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -375,6 +341,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isInAttackRange: 0
+--- !u!114 &329531120602993402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5603002411706856772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6b19f4a116f9441899304199b75be9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maximumHealth: 4
+  _currentHealth: 0
+  _takenDamage: 2
+  _light2d: {fileID: 1033683757630329805}
+  _animator: {fileID: 8162599589911120501}
+  _bloodPoolSpawn:
+  - {fileID: 3044862607823702276, guid: ef5550f6add88d942b04d90e365378c4, type: 3}
+  - {fileID: 7784901274924939644, guid: 78e9458eac6487141921a0fda951a639, type: 3}
+  - {fileID: 5169151268200698254, guid: da58d847e6380c44eb0a2b2a58ee2b1e, type: 3}
+  - {fileID: 1387189892773440931, guid: 6b10275c7991d6e4fb30a507d922ef24, type: 3}
+  _bloodDeadPrefab: {fileID: 5459322947420741018, guid: 56f040fc343074640ba7ce86ec08968c, type: 3}
+--- !u!114 &4429797147017748982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5603002411706856772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e28b497d972cb6b43bf13176102d6351, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _flashingSpeed: 0
+  _flashDuration: 0.1
 --- !u!114 &8162599588887114161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -401,7 +404,7 @@ MonoBehaviour:
   - {x: 0.07000005, y: -0.13, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 66138
+  m_InstanceId: 34046
   m_LocalBounds:
     m_Center: {x: 0.000000059604645, y: 0, z: 0}
     m_Extent: {x: 0.06999999, y: 0.13, z: 0}
@@ -508,7 +511,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1371216919
-  m_SortingLayer: 5
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}

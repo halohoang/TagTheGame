@@ -1,4 +1,6 @@
 using NaughtyAttributes;
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -47,10 +49,9 @@ namespace StateMashine
 
         void FixedUpdate()
         {
-            #region notworking solution of YTGuy
             Collider2D targetCollider = Physics2D.OverlapCircle(transform.position, FOVRadius, _targetDetectionMask);
 
-            if (targetCollider != false)
+            if (targetCollider != false && !_isPlayerDead)
             {
                 Vector2 directionToTarget = (targetCollider.transform.position - transform.position).normalized;
 
@@ -80,8 +81,6 @@ namespace StateMashine
                 IsPlayerDetected = false;
                 FirePlayerDetectionEvent();
             }
-            #endregion
-
             #region oldCode
             //// raycasting for player detection by bypassing the this raycasting-objects own collider (via using 'Collider2D-Raycast()')
             //RaycastHit2D[] hitResults = new RaycastHit2D[1];

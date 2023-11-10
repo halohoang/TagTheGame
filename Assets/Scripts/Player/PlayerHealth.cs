@@ -1,10 +1,15 @@
+using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class PlayerHealth : MonoBehaviour
 {
+	// --- Events ---
+	public static event UnityAction<bool> OnPlayerDeath;
+
 	[Header("References")]
 	[SerializeField] private InputReaderSO _inputReader;
 	[Space(5)]
@@ -20,6 +25,8 @@ public class PlayerHealth : MonoBehaviour
 	private Animator _animator;
 	[SerializeField] private List<GameObject> _disableGameObject;
 
+	[Header("Monitoring Values")]
+	[SerializeField, ReadOnly] private bool _isPlayerDead;
 
 	/* Taking Damage Effect */
 	private TakingDamage _takingDamageScript;
@@ -60,13 +67,17 @@ public class PlayerHealth : MonoBehaviour
 	void Update()
 	{
 		ReduceHP();
-		if (_currentHealth <= 0)
+		if (_currentHealth <= 0)	// Logic for Player Death
 		{
+			_isPlayerDead = true;
+
 			foreach (GameObject gameobject in _disableGameObject)
 			{
 				gameobject.SetActive(false);
 			}
 			_animator.SetTrigger("Dead");
+
+			OnPlayerDeath?.Invoke(_isPlayerDead);
 		}
 		if (_canRegen)
 		{
