@@ -16,7 +16,13 @@ namespace ScriptableObjects
         [Header("Settings")]
         [Tooltip("The Size of the GameObjects Collizer adapted to the Shooting Sprite when entering the RangeAttack-Behaviour")]
         [SerializeField] private Vector2 _colliderSizeOfShootSprite;
+        [Tooltip("The amount of bullets a shooting salve shalt contain.")]
+        [SerializeField, Range(1, 100)] private int _maxBulletsShotAtAnInterval = 5;
+        [Tooltip("The interval in which bullet salves shall be shot (in sec.)")]
+        [SerializeField] private float _bulletSalveShootInteravl = 2.0f;
 
+        private int _amountOfBulletsShot = 0;
+        private float _timer = 0.0f;
         private bool _isAttacking = false;
         private Vector2 _colliderSizeCache;
 
@@ -50,9 +56,20 @@ namespace ScriptableObjects
                 Debug.LogWarning($"<color=yellow>Caution!</color>: There was no Reference set to 'BulletPrefab in inspector of '{this}', so it was automatically set to {_bulletPrefab.name}." +
                     $"If that is not correct, please set the according referenc manually.");
             }
-            
+
             _boxCollider2D = _baseEnemyBehaviour.gameObject.GetComponent<BoxCollider2D>();
-            _bulletSpawnPoint = _baseEnemyBehaviour.gameObject.GetComponent<Transform>();
+
+            // Get Bullet Spawn Position
+            for (int i = 0; i < _baseEnemyBehaviour.gameObject.transform.childCount; i++)
+            {
+                GameObject objChild = _baseEnemyBehaviour.gameObject.transform.GetChild(i).gameObject;
+
+                if (objChild.name == "BulletSpawnPoint")
+                {
+                    _bulletSpawnPoint = objChild.GetComponent<Transform>();
+                    return;
+                }
+            }
 
 
             // setting Setting-Values if not set manually in the inspector
@@ -109,7 +126,35 @@ namespace ScriptableObjects
             //float randomAngle = UnityEngine.Random.Range(-deviation, deviation); // Randomize the deviation angle
             //bulletRotation *= Quaternion.Euler(0f, 0f, randomAngle); // Apply rotation around the Z-axis
             #endregion
-            /*GameObject bullet =*/ Instantiate(_bulletPrefab, _bulletSpawnPoint.position, Quaternion.identity);            
+            /*GameObject bullet =*/
+            //Instantiate(_bulletPrefab, _bulletSpawnPoint.position, _bulletSpawnPoint.rotation);
+            GameObject EnemyBullet = EnemyBulletObjectPool.Instance.GetPooledObject();
+
+            if (EnemyBullet == null)
+            {
+                Debug.LogWarning($"<color=yellow>CAUTION!</color> no more inactive {EnemyBulletObjectPool.Instance.ObjectToPool.name} left in the {EnemyBulletObjectPool.Instance.gameObject.name}. You porbably should consider to increase the amount of Objects to pool in the Inspector of {EnemyBulletObjectPool.Instance.ObjectToPool.name}.");
+            }
+            else if (EnemyBullet != null && _amountOfBulletsShot <= _maxBulletsShotAtAnInterval)
+            {
+                EnemyBullet.transform.position = _bulletSpawnPoint.position;
+                EnemyBullet.transform.rotation = _bulletSpawnPoint.rotation;
+                EnemyBullet.SetActive(true);
+                _amountOfBulletsShot += 1;
+            }
+            else if (_amountOfBulletsShot > _maxBulletsShotAtAnInterval && _timer <= _bulletSalveShootInteravl)
+            {
+                // timer tick
+                _timer += Time.deltaTime;
+            }
+            else if (_timer >= _bulletSalveShootInteravl)
+            {
+                // reset timer
+                _timer = 0.0f;
+
+                // reset amount of Bullets that where shot
+                _amountOfBulletsShot = 0;
+            }
+
 
             //Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
 
