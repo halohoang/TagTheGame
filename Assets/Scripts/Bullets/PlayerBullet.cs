@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class EnemyBullet : BaseBullet
+public class PlayerBullet : BaseBullet
 {
     private new void OnCollisionEnter2D(Collision2D collision)
     {
         base.OnCollisionEnter2D(collision);
 
-        TargetCollisionCheck(collision, "Player");
+        TargetCollisionCheck(collision, "Enemy");
     }
 }

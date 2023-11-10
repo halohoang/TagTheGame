@@ -6,7 +6,7 @@ namespace Enemies
 {
     public class MeleeEnemyBehaviour : BaseEnemyBehaviour
     {
-        // todo: find a solution for a proper defining of the MeleeEnemyBehaviour-Class and seperating the specific logic form it sparent class, make proper usage of polymorphism
+        //todo: find a solution for a proper defining of the MeleeEnemyBehaviour-Class and seperating the specific logic form it sparent class, make proper usage of polymorphism
         // ---------- Fields ----------
 
         //[Header("References specific for (Melee-Enemy-Behaviour)")]
@@ -17,25 +17,25 @@ namespace Enemies
         //[SerializeField, ReadOnly] private bool _isInAttackRange;
 
 
-        //// StateMachine-Related Variables
-        //private MeleeEnemyChaseState _meleeChaseState;
-        //private MeleeAttackState _meleeAttackState;
+        ////// StateMachine-Related Variables
+        ////private MeleeEnemyChaseState _meleeChaseState;
+        ////private MeleeAttackState _meleeAttackState;
 
         //// --- Properties ---
         //public ConditionIsInMeleeAttackRangeCheck CondMeleeAttackCheck { get => _condMeleeAttackCheck; private set => _condMeleeAttackCheck = value; }
 
         //public bool IsInAttackRange { get => _isInAttackRange; private set => _isInAttackRange = value; }
 
-        //public MeleeEnemyChaseState MeleeChaseState { get => _meleeChaseState; set => _meleeChaseState = value; }
-        //public MeleeAttackState MeleeAttackState { get => _meleeAttackState; set => _meleeAttackState = value; }
+        ////public MeleeEnemyChaseState MeleeChaseState { get => _meleeChaseState; set => _meleeChaseState = value; }
+        ////public MeleeAttackState MeleeAttackState { get => _meleeAttackState; set => _meleeAttackState = value; }
 
         //// ---------- Methods ----------
         //new private void Awake()
         //{
         //    base.Awake();
 
-        //    MeleeAttackState = new MeleeAttackState(this, StateMachine);
-        //    MeleeChaseState = new MeleeEnemyChaseState(this, StateMachine);
+        //    //MeleeAttackState = new MeleeAttackState(this, StateMachine);
+        //    //MeleeChaseState = new MeleeEnemyChaseState(this, StateMachine);
 
         //    CondMeleeAttackCheck = GetComponent<ConditionIsInMeleeAttackRangeCheck>();
         //}

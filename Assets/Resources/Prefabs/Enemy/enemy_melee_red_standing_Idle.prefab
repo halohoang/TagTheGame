@@ -120,7 +120,7 @@ Transform:
   m_GameObject: {fileID: 4361380091175105727}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.54, y: 2.96, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1816798256}
@@ -286,20 +286,22 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _playerObject: {fileID: 0}
   _condPlayerDetectionCheck: {fileID: 0}
-  _condMeleeAttackCheck: {fileID: 0}
   _baseEnemyIdleStateSO: {fileID: 11400000, guid: e2f9122969f405a488f70f90701d3d7d, type: 2}
   _baseEnemyAlertStateSO: {fileID: 11400000, guid: 3846a16cac923194dad85324de682020, type: 2}
   _baseEnemyChaseStateSO: {fileID: 11400000, guid: b58cbcaeb70b8064e8441b42b8985050, type: 2}
   _baseEnemyAttackStateSO: {fileID: 11400000, guid: 6ebc51d86238c4e4ea025132c0e68de9, type: 2}
   _movementSpeed: 3.5
   _chasingSpeed: 7
+  _isPlayerDead: 0
   _isPlayerDetected: 0
   _isSomethingAlarmingHappening: 0
-  _isInAttackRange: 0
   _isCollidingWithObstacle: 0
   _noiseRangeOfAlarmingEvent: 0
   _positionOfAlarmingEvent: {x: 0, y: 0, z: 0}
   _collisionObjectPos: {x: 0, y: 0}
+  _lastKnownPlayerPos: {x: 0, y: 0, z: 0}
+  _condMeleeAttackCheck: {fileID: 0}
+  _isInAttackRange: 0
 --- !u!114 &1674458984284516015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,12 +314,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a554ffcfba2869d419d8c1d29c93216e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isPlayerDead: 0
   _playerObj: {fileID: 0}
   _viewDirectionHelperTrans: {fileID: 1816798256}
   _raycastingCollider: {fileID: 4361380091175105720}
   _fOVRadius: 6
   _fOVAngle: 60
-  _viewDistance: 50
   _targetDetectionMask:
     serializedVersion: 2
     m_Bits: 256
@@ -338,6 +340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27da4b982688fbd4db3434f7615018fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isPlayerDead: 0
   _isInAttackRange: 0
 --- !u!114 &8490934405458039553
 MonoBehaviour:

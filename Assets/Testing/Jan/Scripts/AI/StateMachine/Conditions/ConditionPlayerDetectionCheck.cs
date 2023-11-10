@@ -1,6 +1,5 @@
 using NaughtyAttributes;
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -22,7 +21,7 @@ namespace StateMashine
         [Tooltip("Angle of the field of view.")]
         [SerializeField, Range(0.0f, 20.0f)] private float _fOVRadius;
         [SerializeField, Range(0.0f, 360.0f), ReadOnly] private float _fOVAngle = 180.0f;   // todo: disable 'Readonly' on real implementation; JM (30.10.2023)
-        [SerializeField, Range(0.0f, 50.0f)] private float _viewDistance = 10.0f;
+        //[SerializeField, Range(0.0f, 50.0f)] private float _viewDistance = 10.0f;
         [SerializeField] private LayerMask _targetDetectionMask;
         [SerializeField] private LayerMask _obstructionMask;
         [SerializeField, ReadOnly] private bool _isPlayerDetected = false;     // needed for estimating if player was detected

@@ -285,12 +285,13 @@ MonoBehaviour:
   _playerObject: {fileID: 0}
   _condPlayerDetectionCheck: {fileID: 0}
   _condMeleeAttackCheck: {fileID: 0}
-  _baseEnemyIdleStateSO: {fileID: 0}
-  _baseEnemyAlertStateSO: {fileID: 11400000, guid: 3846a16cac923194dad85324de682020, type: 2}
-  _baseEnemyChaseStateSO: {fileID: 0}
-  _baseEnemyAttackStateSO: {fileID: 0}
+  _baseEnemyIdleStateSO: {fileID: 11400000, guid: e04edc38682cb82418accab793b0a20b, type: 2}
+  _baseEnemyAlertStateSO: {fileID: 11400000, guid: 05c2ad8358f42734bbcb1c6c4c71dd95, type: 2}
+  _baseEnemyChaseStateSO: {fileID: 11400000, guid: 284c40c4efd132b408914f88cbb88be6, type: 2}
+  _baseEnemyAttackStateSO: {fileID: 11400000, guid: 2602bddca1d423c4da90614d4b5c146e, type: 2}
   _movementSpeed: 0
   _chasingSpeed: 0
+  _isPlayerDead: 0
   _isPlayerDetected: 0
   _isSomethingAlarmingHappening: 0
   _isInAttackRange: 0
@@ -298,6 +299,7 @@ MonoBehaviour:
   _noiseRangeOfAlarmingEvent: 0
   _positionOfAlarmingEvent: {x: 0, y: 0, z: 0}
   _collisionObjectPos: {x: 0, y: 0}
+  _lastKnownPlayerPos: {x: 0, y: 0, z: 0}
   _isPlayerInShootingRange: 0
 --- !u!114 &-915621413644644009
 MonoBehaviour:
@@ -311,12 +313,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a554ffcfba2869d419d8c1d29c93216e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isPlayerDead: 0
   _playerObj: {fileID: 0}
   _viewDirectionHelperTrans: {fileID: 0}
   _raycastingCollider: {fileID: 0}
   _fOVRadius: 5.4
   _fOVAngle: 60
-  _viewDistance: 10
   _targetDetectionMask:
     serializedVersion: 2
     m_Bits: 0
@@ -388,7 +390,7 @@ MonoBehaviour:
   - {x: 0.13, y: -0.07000002, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -94312
+  m_InstanceId: -1532
   m_LocalBounds:
     m_Center: {x: 0.000000014901161, y: -0.000000014901161, z: 0}
     m_Extent: {x: 0.13, y: 0.07000001, z: 0}

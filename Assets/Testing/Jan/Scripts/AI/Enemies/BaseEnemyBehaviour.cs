@@ -85,11 +85,11 @@ namespace Enemies
         public IdleState IdleState { get => _idleState; set => _idleState = value; }
         public AlertState AlertState { get => _alertState; set => _alertState = value; }
         public ChaseState ChaseState { get => _chaseState; set => _chaseState = value; }
+        public AttackState AttackState { get => _attackState; set => _attackState = value; }
 
 
         // put that later inside the 'MeleeEnemyBehaviour.cs': ; JM (31.10.2023)
         public ConditionIsInMeleeAttackRangeCheck CondMeleeAttackCheck { get => _condMeleeAttackCheck; private set => _condMeleeAttackCheck = value; }
-        public AttackState AttackState { get => _attackState; set => _attackState = value; }
         public bool IsInAttackRange { get => _isInAttackRange; private set => _isInAttackRange = value; }
 
         // ---------- Methods ----------
@@ -149,7 +149,7 @@ namespace Enemies
             BaseEnemyIdleStateSOInstance.Initialize(this.gameObject, this);
             BaseEnemyAlertStateSOInstance.Initialize(this.gameObject, this);
             BaseEnemyChaseStateSOInstance.Initialize(this.gameObject, this);
-            BaseEnemyAttackStateSOInstance.Initialize(this.gameObject, this);
+            BaseEnemyAttackStateSOInstance.Initialize(this.gameObject, this);   // todo: JM; rework Architecture since the Initializiation lake that will allways put the specific EnemyBehaviour.cs into a BaseEnemyBehaviour (because of Polymorphism) regardless if MeleeEnemyBehaviour or RangeEnemyBehaviour. Accordingly simple Overloading the Initialization() to take Meless/RangeEnemyBehaviour woun't work since nonetheless the first Overload(BaseEnemyBehaviour will be used simply becaus eit'S possible) therefore outsourcing the MeleeAttack/chase Logic to MeleeEnemyBehaviour can't be called in the specific BehaviourScriptable Objects. -> find a Soluzion for this Problem(!). until then stick to the existing appraoch by handling all Attack/Chase-Logic and Queries (if 'isInAttackRange' etc) in the BaseEnemyBehaviour.cs even if it's no nice architecture and makes the MeleeEnemyBehaviour/RangeEnemyBehaviour.cs actually useless a the moment; (JM 10.11.2023)
 
             // initialize Statemachine with initial State
             StateMachine.Initialize(IdleState);
@@ -223,7 +223,7 @@ namespace Enemies
         private void DisableAIBehaviour()
         {
             _condPlayerDetectionCheck.enabled = false;
-            _condMeleeAttackCheck.enabled = false;
+            //_condMeleeAttackCheck.enabled = false;
             this.enabled = false;
         }
 

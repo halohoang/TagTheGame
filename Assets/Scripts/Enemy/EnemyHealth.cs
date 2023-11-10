@@ -75,6 +75,7 @@ public class EnemyHealth : MonoBehaviour
             }
             else
             {
+                Debug.Log($"<color=lime>No Quickfix behaviour cold be found on {this.gameObject.name} so ohter Behavióur-Scripts will be disabled</color>");
                 gameObject.GetComponent<ConditionPlayerDetectionCheck>().SetIsEnemyDead(_isDead);
                 gameObject.GetComponent<ConditionPlayerDetectionCheck>().enabled = false;
                 gameObject.GetComponent<BaseEnemyBehaviour>().enabled = false;

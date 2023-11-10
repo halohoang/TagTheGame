@@ -13,7 +13,7 @@ public class PlayerShoot : MonoBehaviour
 	[SerializeField] private Transform _bulletSpawnPoint; // Transform of the gun
 	private bool _isArmed; // Checking whether the player is armed or not
 	[SerializeField] private GameObject _bulletPrefab;
-	[SerializeField] internal Bullet _bulletScript;
+	//[SerializeField] internal PlayerBullet _bulletScript;
 
 	/* Reload system */
 	[SerializeField] internal int _maximumBulletCount;

@@ -10,6 +10,12 @@ namespace StateMashine
         public ChaseState(BaseEnemyBehaviour enemyBehav, EnemyStateMachine enemyStaMa) : base(enemyBehav, enemyStaMa)
         {
         }
+        public ChaseState(MeleeEnemyBehaviour meleeEnemyBehav, EnemyStateMachine enemySM) : base(meleeEnemyBehav, enemySM)
+        {
+        }
+        public ChaseState(RangeEnemyBehaviour rangeEnemyBehav, EnemyStateMachine enemySM) : base(rangeEnemyBehav, enemySM)
+        {
+        }
 
         public override void EnterState()
         {

@@ -11,6 +11,12 @@ namespace StateMashine
         public AttackState(BaseEnemyBehaviour enemyBehav, EnemyStateMachine enemyStaMa) : base(enemyBehav, enemyStaMa)
         {            
         }
+        public AttackState(MeleeEnemyBehaviour meleeEnemyBehav, EnemyStateMachine enemySM) : base(meleeEnemyBehav, enemySM)
+        {
+        }
+        public AttackState(RangeEnemyBehaviour rangeEnemyBehav, EnemyStateMachine enemySM) : base(rangeEnemyBehav, enemySM)
+        {
+        }
 
         public override void EnterState()
         {
