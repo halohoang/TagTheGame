@@ -94,10 +94,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4361380091175105721}
   - component: {fileID: 4361380091175105726}
-  - component: {fileID: 1508150158}
   - component: {fileID: 4361380091175105720}
   - component: {fileID: 1046136353}
   - component: {fileID: 1046136354}
+  - component: {fileID: 1508150158}
   - component: {fileID: 1532318744423531989}
   - component: {fileID: 1674458984284516015}
   - component: {fileID: 2263879138077958913}
@@ -120,7 +120,7 @@ Transform:
   m_GameObject: {fileID: 4361380091175105727}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.54, y: 2.96, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1816798256}
@@ -180,27 +180,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &1508150158
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4361380091175105727}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c43827eae041b304ebb5cc2d08f45538, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!61 &4361380091175105720
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -270,6 +249,27 @@ NavMeshAgent:
   m_BaseOffset: 0.13000003
   m_WalkableMask: 1
   m_ObstacleAvoidanceType: 4
+--- !u!95 &1508150158
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4361380091175105727}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c43827eae041b304ebb5cc2d08f45538, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &1532318744423531989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,22 +286,20 @@ MonoBehaviour:
   _animator: {fileID: 0}
   _playerObject: {fileID: 0}
   _condPlayerDetectionCheck: {fileID: 0}
+  _condMeleeAttackCheck: {fileID: 0}
   _baseEnemyIdleStateSO: {fileID: 11400000, guid: e2f9122969f405a488f70f90701d3d7d, type: 2}
   _baseEnemyAlertStateSO: {fileID: 11400000, guid: 3846a16cac923194dad85324de682020, type: 2}
   _baseEnemyChaseStateSO: {fileID: 11400000, guid: b58cbcaeb70b8064e8441b42b8985050, type: 2}
   _baseEnemyAttackStateSO: {fileID: 11400000, guid: 6ebc51d86238c4e4ea025132c0e68de9, type: 2}
   _movementSpeed: 3.5
   _chasingSpeed: 7
-  _isPlayerDead: 0
   _isPlayerDetected: 0
   _isSomethingAlarmingHappening: 0
+  _isInAttackRange: 0
   _isCollidingWithObstacle: 0
   _noiseRangeOfAlarmingEvent: 0
   _positionOfAlarmingEvent: {x: 0, y: 0, z: 0}
   _collisionObjectPos: {x: 0, y: 0}
-  _lastKnownPlayerPos: {x: 0, y: 0, z: 0}
-  _condMeleeAttackCheck: {fileID: 0}
-  _isInAttackRange: 0
 --- !u!114 &1674458984284516015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,12 +312,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a554ffcfba2869d419d8c1d29c93216e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isPlayerDead: 0
   _playerObj: {fileID: 0}
   _viewDirectionHelperTrans: {fileID: 1816798256}
   _raycastingCollider: {fileID: 4361380091175105720}
-  _fOVRadius: 6
-  _fOVAngle: 60
+  _fOVRadius: 20
+  _fOVAngle: 193
+  _viewDistance: 50
   _targetDetectionMask:
     serializedVersion: 2
     m_Bits: 256
@@ -340,7 +338,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27da4b982688fbd4db3434f7615018fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isPlayerDead: 0
   _isInAttackRange: 0
 --- !u!114 &8490934405458039553
 MonoBehaviour:
@@ -405,7 +402,7 @@ MonoBehaviour:
   - {x: 0.07000017, y: -0.12999988, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -132580
+  m_InstanceId: 47204
   m_LocalBounds:
     m_Center: {x: 0, y: 0.00000011920929, z: 0}
     m_Extent: {x: 0.07000017, y: 0.13, z: 0}
