@@ -11,6 +11,7 @@ TagManager:
   - Door
   - Ground
   - Roof
+  - Casing
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - Player
   - Enemy
   - Door
-  - Casing
+  - 
   - Roof
   - Post Processing
   - Button

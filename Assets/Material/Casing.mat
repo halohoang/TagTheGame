@@ -12,7 +12,7 @@ Material:
   m_ValidKeywords:
   - CHANGECOLOR2_ON
   - GLOWLIGHT_ON
-  - GLOW_ON
+  - INNEROUTLINE_ON
   m_InvalidKeywords:
   - _GLOWAFFECTLIGHT_ON
   m_LightmapFlags: 4
@@ -134,9 +134,9 @@ Material:
     - _GhostTransparency: 0
     - _GlitchAmount: 3
     - _GlitchSize: 1
-    - _Glow: 0.7
+    - _Glow: 0.1
     - _GlowAffectLight: 1
-    - _GlowGlobal: 1
+    - _GlowGlobal: 1.9
     - _GradBlend: 1
     - _GradBoostX: 1.2
     - _GradBoostY: 1.2
@@ -162,9 +162,9 @@ Material:
     - _HsvBright: 1
     - _HsvSaturation: 1
     - _HsvShift: 180
-    - _InnerOutlineAlpha: 0.521
-    - _InnerOutlineGlow: 250
-    - _InnerOutlineThickness: 1.75
+    - _InnerOutlineAlpha: 0.2
+    - _InnerOutlineGlow: 4
+    - _InnerOutlineThickness: 1.29
     - _LitAmount: 1
     - _MaxXUV: 1
     - _MaxYUV: 1

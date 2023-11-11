@@ -44,8 +44,13 @@ public class Bullet : MonoBehaviour
         //// reworkd by Jan (09.11.2023)
         //ObstacleCollisionCheck(collision);
         //TargetCollisionDetection(collision);
+        if (collision.gameObject.CompareTag("Casing"))
+        {
+			Physics2D.IgnoreCollision(collision.collider, GetComponent<Collider2D>());
+
+		}
         
-        if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Door") || collision.gameObject.CompareTag("Bullet"))
+        if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Door"))
         {
             gameObject.SetActive(false);
         }
