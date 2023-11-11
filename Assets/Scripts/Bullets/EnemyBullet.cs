@@ -2,6 +2,23 @@ using UnityEngine;
 
 public class EnemyBullet : BaseBullet
 {
+    private new void Start()
+    {
+        base.Start();
+
+        // enemy bullets ignoring the enemy objects
+        GameObject meleeEnemyStandIdlePrefab = Resources.Load("Prefabs/Enemy/enemy_melee_red_standing_Idle") as GameObject;
+        GameObject meleeEnemyRandomWanderIdlePrefab = Resources.Load("Prefabs/Enemy/enemy_melee_red_random-wander_Idle") as GameObject;
+        GameObject rangeEnemyStandIdkePrefab = Resources.Load("Prefabs/Enemy/enemy_range_yellow_standing_Idle") as GameObject;
+        GameObject rangeEnemyRandomWanderIdlePrefab = Resources.Load("Prefabs/Enemy/Bulenemy_range_yellow_random-wander_IdleletCasing") as GameObject;
+
+        Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), meleeEnemyStandIdlePrefab.GetComponent<Collider2D>(), true);
+        Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), meleeEnemyRandomWanderIdlePrefab.GetComponent<Collider2D>(), true);
+        Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), rangeEnemyStandIdkePrefab.GetComponent<Collider2D>(), true);
+        Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), rangeEnemyRandomWanderIdlePrefab.GetComponent<Collider2D>(), true);
+        // todo: change this to actually logic that checs first if another enemy is obstructing the line of view to the player, if so move to the left or right or something like that; JM (11.11.2023)
+    }
+
     private new void Update()
     {
         _bulletRB2D.velocity = transform.right * _bulletSpeed;
