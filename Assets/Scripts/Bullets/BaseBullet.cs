@@ -15,7 +15,7 @@ public class BaseBullet : MonoBehaviour
 
     [Header("References")]
     /* Spawning Blood */
-    [SerializeField] private GameObject _bloodPrefab;
+    [SerializeField] protected GameObject _bloodPrefab;
 
 
     /*Bounce Properties */
@@ -25,15 +25,14 @@ public class BaseBullet : MonoBehaviour
     private GameObject _bullet;
 
     // Function
-    void Start()
+    protected virtual void Start()
     {
         _bullet = GetComponent<GameObject>();
         _bulletRB2D = GetComponent<Rigidbody2D>();
-        _bulletRB2D.velocity = transform.right * _bulletSpeed;
-        _currentBulletLiveTime = _maxBulletAliveTime;
+        _currentBulletLiveTime = _maxBulletAliveTime;        
     }
 
-    void Update()
+    protected virtual void Update()
     {
         BulletDeactive();
     }
@@ -45,10 +44,11 @@ public class BaseBullet : MonoBehaviour
         //ObstacleCollisionCheck(collision);
         //TargetCollisionDetection(collision);
 
-        if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Door") || collision.gameObject.CompareTag("Bullet"))
+        if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Door")/* || collision.gameObject.CompareTag("Bullet")*/)
         {
             gameObject.SetActive(false);
-        }
+            Debug.Log($"'<color=mageta>{gameObject.name}</color>': was disabled due to collision with '{collision.gameObject.name}'");
+        }        
         #region Original Code by Hoang
         //// origianl Code by Hoang
         //if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Door") || collision.gameObject.CompareTag("Bullet"))
@@ -99,24 +99,21 @@ public class BaseBullet : MonoBehaviour
     }
 
     /// <summary>
-    /// Setup the Blood Strains on Collision to Collision Position and calls the <see cref="DealingDamage(EnemyHealth)"/> or <see cref="DealingDamage(PlayerHealth)"/> 
-    /// respective to the transmitted parameter 'tagOfTargetObj'.
+    /// Calls the <see cref="DealingDamage(EnemyHealth)"/> or <see cref="DealingDamage(PlayerHealth)"/> respective to the transmitted parameter 'tagOfTargetObj'.
     /// </summary>
     /// <param name="collision"></param>
     /// <param name="tagOfTargetObj">the Tag of the target Object to check for Damage dealing ("Player" or "Enemy")</param>
     protected void TargetCollisionCheck(Collision2D collision, string tagOfTargetObj)
     {
-        /* Contact points spawning blood */
-        ContactPoint2D[] contacts = collision.contacts;
-        Vector2 collisionPoint = contacts[0].point;
-        Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
-        Instantiate(_bloodPrefab, collisionPoint, bloodRotation);
+        // todo: maybe rather call this methon din the this.OnCollisionEnter2D() and check for simple collision.gameObject.CompareTag("Plaser"/"Enemy") and execute accordingly DealingDamage(plyerHealth/EnemyHealth); JM (11.11.2023)
 
+        // if transmitted tag is 'Player' continue with calling TakeDamage() of the PlayerHealth.cs
         if (tagOfTargetObj == "Player")
         {
             collision.gameObject.TryGetComponent(out PlayerHealth playerHealth);
             DealingDamage(playerHealth);
         }
+        // else if transmitted tag is 'Enemy' continue with calling TakeDamage() of the EnemyHealth.cs instead
         else if (tagOfTargetObj == "Enemy")
         {
             collision.gameObject.TryGetComponent(out EnemyHealth enemyHealth);
@@ -178,7 +175,7 @@ public class BaseBullet : MonoBehaviour
             Debug.Log(healthScript._currentHealth);
             gameObject.SetActive(false);
 
-            Debug.Log($"<color=cyan>Bullet was deactivated on collision with {healthScript.gameObject.name}</color>");
+            Debug.Log($"'<color=mageta>{gameObject.name}</color>: was disabled due to collision with '{healthScript.gameObject.name}'");
         }
     }
 
@@ -195,7 +192,7 @@ public class BaseBullet : MonoBehaviour
             Debug.Log(healthScript._currentHealth);
             gameObject.SetActive(false);
 
-            Debug.Log($"<color=cyan>Bullet was deactivated on collision with {healthScript.gameObject.name}</color>");
+            Debug.Log($"'<color=mageta>{gameObject.name}</color>: was disabled due to collision with '{healthScript.gameObject.name}'");
         }
     }
 
@@ -204,7 +201,17 @@ public class BaseBullet : MonoBehaviour
         if (_bulletRB2D != null)
         {
             _currentBulletLiveTime -= Time.deltaTime;
-            if (_currentBulletLiveTime <= 0) { gameObject.SetActive(false); }
+
+            if (_currentBulletLiveTime <= 0)
+            {
+                gameObject.SetActive(false);
+                Debug.Log($"'<color=mageta>{gameObject.name}</color>: was disabled due to current Bullet Live Time ('{_currentBulletLiveTime}') run out.");
+
+                // reset Bullet LiveTime
+                _currentBulletLiveTime = _maxBulletAliveTime;
+
+                Debug.Log($"'<color=mageta>{gameObject.name}</color>: current Bullet Live Time was reset to max Bullet Live Time again: Current Bullet Live TIme: ('<color=lime>{_currentBulletLiveTime}</color>')");
+            }
         }
     }
 }

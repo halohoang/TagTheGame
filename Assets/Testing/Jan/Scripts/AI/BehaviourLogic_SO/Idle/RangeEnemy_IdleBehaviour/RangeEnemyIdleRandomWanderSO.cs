@@ -100,6 +100,7 @@ namespace ScriptableObjects
             {
                 _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.AttackState);
                 Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Attack (Shooting)</color>' should have been happend now!");
+                return;
             }
 
             // Setup Timer
@@ -176,7 +177,7 @@ namespace ScriptableObjects
 
                 Debug.Log($"'<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>': rnd-Walking-Timer ended and was set to 0.0f again; New MovingDirection was calculated and set");
             }
-            else if (Timer <= _rndWalktime && _baseEnemyBehaviour.transform.position == WalkTargetPos)      // if Timer is still running but Walking-Taget-Position is reached
+            else if (Timer <= _rndWalktime && (Vector2)_baseEnemyBehaviour.transform.position == (Vector2)WalkTargetPos)      // if Timer is still running but Walking-Taget-Position is reached
             {
                 if (!_isWaitingForWalkTimerEnd)    // set random lookdirection if it is the first time entering this query
                     _lookdirectionWhileWaitingForTimerEnd = Random.insideUnitCircle;

@@ -113,11 +113,13 @@ namespace StateMashine
         private void FirePlayerDetectionEvent()
         {
             OnPlayerDetection?.Invoke(IsPlayerDetected, PlayerObj);
-            
-            if (IsPlayerDetected)
-                Debug.Log($"Player is detected by '<color=orange>{gameObject.name}</color>'");
-            else
-                Debug.Log($"Player is not anymore detected by '<color=orange>{gameObject.name}</color>'");
+
+            #region debuggers little helper
+            //if (IsPlayerDetected)
+            //    Debug.Log($"Player is detected by '<color=orange>{gameObject.name}</color>'");
+            //else
+            //    Debug.Log($"Player is not anymore detected by '<color=orange>{gameObject.name}</color>'");
+            #endregion
         }
 
         internal void SetIsEnemyDead(bool isEnemyDead)

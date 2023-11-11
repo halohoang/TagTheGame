@@ -45,6 +45,7 @@ namespace ScriptableObjects
             {
                 _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.IdleState);
                 Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>Idle</color>' should have been happend now!");
+                return;
             }
 
             // set facing direection via calling 'base.baseFrameUpdate()'
@@ -58,6 +59,7 @@ namespace ScriptableObjects
             {
                 _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.AttackState);
                 Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>MeleeAttack</color>' should have been happend now!");
+                return;
             }
         }
 

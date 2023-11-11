@@ -44,18 +44,28 @@ namespace ScriptableObjects
 
             // Set Movement-Destination for NavMeshAgent
             _baseEnemyBehaviour.NavAgent.SetDestination(_baseEnemyBehaviour.LastKnownPlayerPos);
+            #region debuggers little helper
+            Debug.Log($"<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>: Last Known Player Position is: ('<color=lime>{_baseEnemyBehaviour.LastKnownPlayerPos}</color>') " +
+                $"| Own Position is: ('<color=lime>{_baseEnemyBehaviour.gameObject.transform.position}</color>')");
+            #endregion
 
             // 1) Transition check (if player is detected -> switch to attack state (shooting))
             if (_baseEnemyBehaviour.IsPlayerDetected)
             {
                 _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.AttackState);
                 Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>Attack (Shooting)</color>' should have been happend now!");
+                return;
             }
             // 1.1) if agent reached last known position of player and player can't be detected anymore -> switch to idle/alert state            
-            else if (_baseEnemyBehaviour.gameObject.transform.position == _baseEnemyBehaviour.LastKnownPlayerPos && !_baseEnemyBehaviour.IsPlayerDead)
+            else if ((Vector2)_baseEnemyBehaviour.gameObject.transform.position == (Vector2)_baseEnemyBehaviour.LastKnownPlayerPos && !_baseEnemyBehaviour.IsPlayerDetected)
             {
                 _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.IdleState);
                 Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>Idle</color>' should have been happend now!");
+                return;
+            }
+            else if ((Vector2)_baseEnemyBehaviour.gameObject.transform.position != (Vector2)_baseEnemyBehaviour.LastKnownPlayerPos && !_baseEnemyBehaviour.IsPlayerDetected)
+            {
+                _baseEnemyBehaviour.NavAgent.SetDestination(_baseEnemyBehaviour.LastKnownPlayerPos);
             }
         }
 

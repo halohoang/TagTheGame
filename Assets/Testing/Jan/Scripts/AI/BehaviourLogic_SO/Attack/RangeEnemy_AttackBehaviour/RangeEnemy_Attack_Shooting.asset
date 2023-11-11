@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fdec5633840b4c4a855b39dfe35b5a8, type: 3}
   m_Name: RangeEnemy_Attack_Shooting
   m_EditorClassIdentifier: 
-  _bulletPrefab: {fileID: 6070599304756626328, guid: 52816834c2bd0bc4bb4ee469eaa3ad66, type: 3}
+  _bulletPrefab: {fileID: 0}
   _boxCollider2D: {fileID: 0}
   _bulletSpawnPoint: {fileID: 0}
   _colliderSizeOfShootSprite: {x: 0.258874, y: 0.139925}
+  _maxBulletsShotAtAnInterval: 3
+  _bulletSalveShootInteravl: 2
+  _bulletActivationDelay: 0.2

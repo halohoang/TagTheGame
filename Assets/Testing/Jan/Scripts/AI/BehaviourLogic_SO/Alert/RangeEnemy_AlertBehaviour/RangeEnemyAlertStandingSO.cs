@@ -39,6 +39,7 @@ namespace ScriptableObjects
             {
                 _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.AttackState);
                 Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Attack (Shooting)</color>' should have been happend now!");
+                return;
             }
         }
 
