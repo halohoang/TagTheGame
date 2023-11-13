@@ -11,10 +11,10 @@ namespace MenuManagement
         [Space(2)]
         [Tooltip("The Scriptable Object called 'InputReader' needs to be referenced here. (To be found in Assets/Resources/ScriptableObjects in Hierarchy)")]
         [SerializeField] private InputReaderSO _inputReaderSO;
-        [Tooltip("Ingame Mouse Cursor as Crosshair for better Aiming")]
-        [SerializeField] private Texture2D _ingameCrosshair;
-        [Tooltip("Menu Mouse Cursor as actual cursor for better menu maneuvering")]
-        [SerializeField] private Texture2D _menuMouseCursor;
+        //[Tooltip("Ingame Mouse Cursor as Crosshair for better Aiming")]
+        //[SerializeField] private Texture2D _ingameCrosshair;
+        //[Tooltip("Menu Mouse Cursor as actual cursor for better menu maneuvering")]
+        //[SerializeField] private Texture2D _menuMouseCursor;
         [Space(3)]
         [Header("References to GameObjects")]
         [Space(2)]
@@ -53,17 +53,17 @@ namespace MenuManagement
                 Debug.LogWarning($"<color=yellow>Caution! Reference for 'PauseMenu-Panel' was not set in Inspector in '{this}'. Trying to set automatically.</color>");
             }
 
-            if (_ingameCrosshair == null)
-            {
-                _ingameCrosshair = Resources.Load("Sprites/WeaponCrosshair/OutlineRetina/crosshair161") as Texture2D;
-                Debug.LogWarning($"<color=yellow>Caution! Reference for 'Ingame Crosshair' was not set in Inspector in '{this}'.Setting to default Crosshair Texture.</color>");
-            }
+            //if (_ingameCrosshair == null)
+            //{
+            //    _ingameCrosshair = Resources.Load("Sprites/WeaponCrosshair/OutlineRetina/crosshair161") as Texture2D;
+            //    Debug.LogWarning($"<color=yellow>Caution! Reference for 'Ingame Crosshair' was not set in Inspector in '{this}'.Setting to default Crosshair Texture.</color>");
+            //}
 
-            if (_menuMouseCursor == null)
-            {
-                _menuMouseCursor = Resources.Load("Sprites/WeaponCrosshair/OutlineRetina/crosshair161") as Texture2D;
-                Debug.LogWarning($"<color=yellow>Caution! Reference for 'Ingame Crosshair' was not set in Inspector in '{this}'.Setting to default Crosshair Texture.</color>");
-            }
+            //if (_menuMouseCursor == null)
+            //{
+            //    _menuMouseCursor = Resources.Load("Sprites/WeaponCrosshair/OutlineRetina/crosshair161") as Texture2D;
+            //    Debug.LogWarning($"<color=yellow>Caution! Reference for 'Ingame Crosshair' was not set in Inspector in '{this}'.Setting to default Crosshair Texture.</color>");
+            //}
             #endregion
         }
 
