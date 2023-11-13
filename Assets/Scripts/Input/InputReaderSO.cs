@@ -12,6 +12,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
     public event UnityAction OnAttackInput;
     public event UnityAction OnInteractionInput;
     public event UnityAction OnReloadingInput;
+    public static event UnityAction OnEscPress;
 
 
     //--------------- Fields ---------------
@@ -84,6 +85,9 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
     public void OnTogglePauseMenu(InputAction.CallbackContext context)
     {
         if (context.started)
+        {
+            OnEscPress?.Invoke();
             Debug.Log($"<color=orange> 'Esc'-Key was pressed </color>");
+        }
     }
 }

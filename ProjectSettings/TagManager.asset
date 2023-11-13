@@ -12,6 +12,7 @@ TagManager:
   - Ground
   - Roof
   - Casing
+  - MenuPanel
   layers:
   - Default
   - TransparentFX
