@@ -31,9 +31,9 @@ public class BaseBullet : MonoBehaviour
         _bulletRB2D = GetComponent<Rigidbody2D>();
         _currentBulletLiveTime = _maxBulletAliveTime;
 
-        // ignoring the bullet casings objects
-        GameObject bulletCasingPrefab = Resources.Load("Prefabs/Bullet/BulletCasing") as GameObject;
-        Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), bulletCasingPrefab.GetComponent<Collider2D>(), true);
+        //// ignoring the bullet casings objects
+        //GameObject bulletCasingPrefab = Resources.Load("Prefabs/Bullet/BulletCasing") as GameObject;
+        //Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), bulletCasingPrefab.GetComponent<Collider2D>(), true);
         // todo: check why the colliders won't be ignored. according to 'https://docs.unity3d.com/ScriptReference/Physics2D.IgnoreCollision.html' it actually should work; JM (11.11.2023)
     }
 
