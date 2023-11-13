@@ -17,9 +17,9 @@ namespace ScriptableObjects
         [Tooltip("The Size of the GameObjects Collizer adapted to the Shooting Sprite when entering the RangeAttack-Behaviour")]
         [SerializeField] private Vector2 _colliderSizeOfShootSprite;
         [Tooltip("The amount of bullets a shooting salve shalt contain.")]
-        [SerializeField, Range(1, 100)] private int _maxBulletsShotAtAnInterval = 3;
+        [SerializeField, Range(1, 100)] private int _maxBulletsShotPerBurst = 3;
         [Tooltip("The interval in which bullet salves shall be shot (in sec.)")]
-        [SerializeField] private float _bulletSalveShootInteravl = 1.0f;
+        [SerializeField] private float _TimeBetweenBursts = 2.0f;
         [SerializeField] private float _bulletActivationDelay = 0.3f;
 
         private int _amountOfBulletsShot = 0;
@@ -179,7 +179,7 @@ namespace ScriptableObjects
                 Debug.LogWarning($"<color=yellow>CAUTION!</color> no more inactive {EnemyBulletObjectPool.Instance.ObjectToPool.name} left in the {EnemyBulletObjectPool.Instance.gameObject.name}. You porbably should consider to increase the amount of Objects to pool in the Inspector of {EnemyBulletObjectPool.Instance.ObjectToPool.name}.");
             }
             // only activate a bullet prefab as long as the max bullet salve amount was not reached and the BulletActivationTimer is greater than 0 (means the Activation DelayTimer did not yet ended)
-            else if (EnemyBullet != null && _amountOfBulletsShot < _maxBulletsShotAtAnInterval && _bulletActivationTimer <= 0.0f)
+            else if (EnemyBullet != null && _amountOfBulletsShot < _maxBulletsShotPerBurst && _bulletActivationTimer <= 0.0f)
             {
                 EnemyBullet.transform.position = _bulletSpawnPoint.position;
                 EnemyBullet.transform.rotation = _bulletSpawnPoint.rotation;
@@ -195,14 +195,14 @@ namespace ScriptableObjects
                     $"'<color=cyan>{_amountOfBulletsShot}</color>'. Bullet Activation Timer: '<color=cyan>{_bulletActivationTimer}'</color>\")");
             }
             // tick the Bullet salve interval timer when more than or equal to the max Bullet Salve amount was activated and the salve bullet timer is stil running
-            else if (_amountOfBulletsShot >= _maxBulletsShotAtAnInterval && _salveIntervalTimer <= _bulletSalveShootInteravl)
+            else if (_amountOfBulletsShot >= _maxBulletsShotPerBurst && _salveIntervalTimer <= _TimeBetweenBursts)
             {
                 // timer tick
                 _salveIntervalTimer += Time.deltaTime;
                 Debug.Log($"<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>: Shooting Interval Timer: '<color=cyan>{_salveIntervalTimer}'</color>");
             }
             // if the salve interval timer reached its end reset it to 0 (for anew ticking possibility)
-            else if (_salveIntervalTimer > _bulletSalveShootInteravl)
+            else if (_salveIntervalTimer > _TimeBetweenBursts)
             {
                 // reset timer
                 _salveIntervalTimer = 0.0f;
