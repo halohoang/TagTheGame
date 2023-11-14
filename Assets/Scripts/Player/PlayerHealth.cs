@@ -39,8 +39,10 @@ public class PlayerHealth : MonoBehaviour
 
 	private Rigidbody2D _rb2D;
 
-	//Functions
-	private void Awake()
+    public bool IsPlayerDead { get => _isPlayerDead; private set => _isPlayerDead = value; }
+
+    //Functions
+    private void Awake()
 	{
 		if (_inputReader == null)
 			_inputReader = Resources.Load("ScriptableObjects/InputReader") as InputReaderSO;
@@ -69,7 +71,7 @@ public class PlayerHealth : MonoBehaviour
 		ReduceHP();
 		if (_currentHealth <= 0)	// Logic for Player Death
 		{
-			_isPlayerDead = true;
+			IsPlayerDead = true;
 
 			foreach (GameObject gameobject in _disableGameObject)
 			{
@@ -77,7 +79,7 @@ public class PlayerHealth : MonoBehaviour
 			}
 			_animator.SetTrigger("Dead");
 
-			OnPlayerDeath?.Invoke(_isPlayerDead);
+			OnPlayerDeath?.Invoke(IsPlayerDead);
 		}
 		if (_canRegen)
 		{

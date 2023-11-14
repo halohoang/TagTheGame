@@ -31,8 +31,8 @@ public class PauseMenu : MonoBehaviour
 			_pauseMenu.SetActive(true);
 			_isGamePaused = true;
 			//Cursor.SetCursor()
-			Cursor.visible = true;
-			Cursor.lockState = CursorLockMode.None;
+			//Cursor.visible = true;
+			//Cursor.lockState = CursorLockMode.None;
 
 			Debug.Log("PauseMenu was enabled, Game is paused");
 		}
@@ -40,8 +40,8 @@ public class PauseMenu : MonoBehaviour
 		{
 			_pauseMenu.SetActive(false);
 			_isGamePaused = false;
-			Cursor.visible = false;
-			Cursor.lockState = CursorLockMode.Locked;
+			//Cursor.visible = false;
+			//Cursor.lockState = CursorLockMode.Locked;			
 
 			Time.timeScale = 1;
 
@@ -57,8 +57,8 @@ public class PauseMenu : MonoBehaviour
 		{
 			_pauseMenu.SetActive(false);
 			_isGamePaused = false;
-			Cursor.visible = false;
-			Cursor.lockState = CursorLockMode.Locked;
+			//Cursor.visible = false;
+			//Cursor.lockState = CursorLockMode.Locked;
 
 			Time.timeScale = 1;
 
