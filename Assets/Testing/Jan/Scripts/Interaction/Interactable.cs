@@ -26,11 +26,13 @@ namespace Interactables
         [Header("Settings")]
         [Tooltip("Set which type of Interactable this Object is for appropriate Interaction-Logic")]
         [SerializeField] private Enum_Lib.EInteractableType _interactableType;
-        [SerializeField, Range(0.0f, 20.0f), EnableIf("_interactableType", Enum_Lib.EInteractableType.Door)] private float _doorKickInNoiseRange = 10.0f;
+        [SerializeField, Range(0.0f, 20.0f), EnableIf("_interactableType", Enum_Lib.EInteractableType.DoorKickInable)] private float _doorKickInNoiseRange = 10.0f;
+        [Tooltip("The GameObject (Console) that should be connetced to this Door to controll it (oben/close)")]
+        [SerializeField, EnableIf("_interactableType", Enum_Lib.EInteractableType.Console)] private GameObject[] _consoleControledObjects;
         [Space(5)]
 
         [Header("Monitoring values")]
-        [SerializeField, ReadOnly] private bool _wasDoorKickedIn;
+        [SerializeField, ReadOnly] private bool _wasInteractedWith;
 
         //------------------------------ Methods ------------------------------
 
@@ -58,8 +60,11 @@ namespace Interactables
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, _doorKickInNoiseRange);
+            if (_interactableType == Enum_Lib.EInteractableType.DoorKickInable)
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireSphere(transform.position, _doorKickInNoiseRange);
+            }
         }
 
         //---------- Custom Methods ----------
@@ -74,22 +79,50 @@ namespace Interactables
 
             switch (_interactableType)
             {
-                case Enum_Lib.EInteractableType.Door:
+                case Enum_Lib.EInteractableType.DoorKickInable:
 
-                    _wasDoorKickedIn = true;
+                    _wasInteractedWith = true;      // in this case, was door kicked in?
 
                     PlayAnimation("...");           // todo: if Door-KickIn-ANimation for Player is implemented fill out the Name-sting; JM (09.Oct.2023)
-                    
+
                     PlaySFX("...");                 // Play DoorKickIn Sound
 
                     gameObject.SetActive(false);    // todo: exchange this later to switching the GameObjects from intact door to broken door; JM (09.Oct.2023)
 
                     OnDoorStatusChange?.Invoke();
 
-                    OnDoorKickIn?.Invoke(_wasDoorKickedIn, transform.position, _doorKickInNoiseRange); // Event for Informing Enemies that Door was Kicked in to react to
+                    OnDoorKickIn?.Invoke(_wasInteractedWith, transform.position, _doorKickInNoiseRange); // Event for Informing Enemies that Door was Kicked in to react to
 
-                    // todo: send physics.sphereoverlap from specific door gameobject so that every enemy within a certain radius can react to the door-kick-in-event; JM (13.Oct.2023)
-                    // todo: (!)start runtime baking of nw nav mesh so the new accured walkable space (where once the door was) is walkable for the AI; JM (09.Oct.2023)
+                    break;
+
+                case Enum_Lib.EInteractableType.Console:
+
+                    _wasInteractedWith = true;      // in this case, was console used?
+
+                    // initial NullCheck
+                    if (_consoleControledObjects == null)
+                    {
+                        Debug.LogError($"<color=orange>Error!</color>: There are no references set in inspector to the field 'Console Controled Objects' in '{this}'! Therefore {this.gameObject.name} will not work!");
+                        break;
+                    }
+
+                    PlayAnimation("...");           // todo: if Door-KickIn-ANimation for Player is implemented fill out the Name-sting; JM (09.Oct.2023)
+
+                    PlaySFX("...");                 // Play DoorKickIn Sound
+
+                    // todo: exchange this Logic by playing Open/Close Animation; JM (14.11.2023)
+                    foreach (GameObject controledObj in _consoleControledObjects)
+                    {
+                        if (controledObj.activeSelf)
+                            controledObj.SetActive(false);
+                        else
+                            controledObj.SetActive(true);
+
+                        Debug.Log($"<color=lime>{gameObject.name}</color>: was used, '{controledObj.name}' should have been opend/closed. New NavMesh should have been baked.");
+                    }
+
+                    OnDoorStatusChange?.Invoke();
+
 
                     break;
 

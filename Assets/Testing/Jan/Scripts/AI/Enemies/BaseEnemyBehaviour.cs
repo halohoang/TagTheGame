@@ -168,11 +168,13 @@ namespace Enemies
             if (collision.gameObject.CompareTag("Enemy"))
             {
                 IsCollidingWithOtherEnemy = true;
-                NavAgent.isStopped = true;
-                CollisionObjectPos = collision.transform.position;
+                //NavAgent.isStopped = true;
+                //CollisionObjectPos = collision.transform.position;
 
                 Debug.Log($"'<color=lime>{gameObject.name}</color>': collided with '{collision.gameObject.name}' (wall position: '{CollisionObjectPos}');");
             }
+            else
+                IsCollidingWithOtherEnemy = false;
         }
 
         // Update is called once per frame
@@ -189,7 +191,7 @@ namespace Enemies
             IsSomethingAlarmingHappening = isSomethinAlarmingHappening;
         }
 
-        internal void SetIsCollidingWithWall(bool isCollidingWithWall)
+        internal void SetIsCollidingWithOtherEnemy(bool isCollidingWithWall)
         {
             IsCollidingWithOtherEnemy = isCollidingWithWall;
         }

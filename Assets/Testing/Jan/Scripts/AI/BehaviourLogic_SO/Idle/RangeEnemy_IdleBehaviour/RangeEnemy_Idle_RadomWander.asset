@@ -17,9 +17,17 @@ MonoBehaviour:
   _maxRandomWalkingTime: 6
   _minRandomWalkingRange: 1
   _maxRandomWalkingRange: 5
-  _distanceToCheckForObstacles: 2
+  _distanceToCheckForObstacles: 1.5
   _distanceForAvoidCheck: 5
   _obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
-  _directionsToCheckToAvoidObstacle: []
+    m_Bits: 1088
+  _directionsToCheckToAvoidObstacle:
+  - {x: 1, y: 0, z: 0}
+  - {x: 1, y: -1, z: 0}
+  - {x: 0, y: -1, z: 0}
+  - {x: -1, y: -1, z: 0}
+  - {x: -1, y: 0, z: 0}
+  - {x: -1, y: 1, z: 0}
+  - {x: 0, y: 1, z: 0}
+  - {x: 1, y: 1, z: 0}

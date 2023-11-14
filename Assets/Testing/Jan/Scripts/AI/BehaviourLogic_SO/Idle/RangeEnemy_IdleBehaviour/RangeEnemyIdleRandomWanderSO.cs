@@ -112,6 +112,8 @@ namespace ScriptableObjects
             // execute actual walking according to previous checks and settings
             _baseEnemyBehaviour.NavAgent.isStopped = false;
             _baseEnemyBehaviour.NavAgent.SetDestination(WalkTargetPos);
+
+            _baseEnemyBehaviour.SetIsCollidingWithOtherEnemy(false);      // reset bool is collidion with other enemy so at the end of an update cycly so the AI actually has a chance to wolk another direction
         }
 
         public override void ExecutePhysicsUpdateLogic()
@@ -155,11 +157,10 @@ namespace ScriptableObjects
             {
                 // stop movement for this cycle
                 _baseEnemyBehaviour.NavAgent.isStopped = true;
-                _baseEnemyBehaviour.Animator.SetBool("Engage", false);
+                _baseEnemyBehaviour.Animator.SetBool("Patrol", false);
+                _walkTargedPos = _baseEnemyBehaviour.gameObject.transform.position;
 
                 Debug.Log($"'<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>': since EnemyObj collided with´an obstacle, movement was stoped currently. new movementdirection will be calculated");
-
-                _baseEnemyBehaviour.SetIsCollidingWithWall(false);
             }
             else if (Timer > _rndWalktime)               // is Timmer out of Time
             {
@@ -173,7 +174,7 @@ namespace ScriptableObjects
                 WalkTargetPos = GetRndMoveDirection();
 
                 // Setup Walking Animation
-                _baseEnemyBehaviour.Animator.SetBool("Engage", true);
+                _baseEnemyBehaviour.Animator.SetBool("Patrol", true);
 
                 Debug.Log($"'<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>': rnd-Walking-Timer ended and was set to 0.0f again; New MovingDirection was calculated and set");
             }
@@ -184,7 +185,7 @@ namespace ScriptableObjects
 
                 _isWaitingForWalkTimerEnd = true;
                 _baseEnemyBehaviour.NavAgent.isStopped = true;
-                _baseEnemyBehaviour.Animator.SetBool("Engage", false);
+                _baseEnemyBehaviour.Animator.SetBool("Patrol", false);
 
                 Debug.Log($"'<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>': rnd-Walking-Timer still running; rnd-Walking-Range was reached");
             }
