@@ -40,6 +40,7 @@ public class Movement : MonoBehaviour
 
     private void OnEnable()
     {
+        _inputReaderSO.OnEnable();
         _inputReaderSO.OnMovementInput += ReadMovementInput;
         Debug.Log($"<color=magenta> OnEnable() was called in {this} </color>");
     }
