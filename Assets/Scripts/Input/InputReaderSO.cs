@@ -23,7 +23,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
 
     //--------------- Methods ---------------
     //---------- Unity-Executed Methods ----------
-    private void OnEnable()
+    internal void OnEnable()
     {
         if (GameInput == null)
             GameInput = new GameInput();
