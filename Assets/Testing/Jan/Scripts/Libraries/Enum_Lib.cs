@@ -31,5 +31,11 @@ namespace EnumLibrary
         {
             // todo: maybe setup some TriggerTypes for specific Animations to be triggered on specifi Events; JM (27.10.2023)
         }
+
+        public enum ESpaceKey
+        {
+            Pressed,
+            NotPressed            
+        }
     }
 }

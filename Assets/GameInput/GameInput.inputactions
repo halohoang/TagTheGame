@@ -33,7 +33,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Dashing",
+                    "name": "Sprinting",
                     "type": "PassThrough",
                     "id": "e2c9e506-0f1e-4935-a7ad-39ef0a77e482",
                     "expectedControlType": "Axis",
@@ -200,7 +200,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Mouse & Keyboard",
-                    "action": "Dashing",
+                    "action": "Sprinting",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

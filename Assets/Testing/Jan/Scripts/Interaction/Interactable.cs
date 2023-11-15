@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using EnumLibrary;
 using NaughtyAttributes;
+using System.Collections.Generic;
 
 namespace Interactables
 {
@@ -13,6 +14,7 @@ namespace Interactables
         //------------------------------ Events ------------------------------
         public static event UnityAction OnDoorStatusChange;       // for sending message to NavMeshBuilder.cs to update NavMeshSurface
         public static event UnityAction<bool, Vector3, float> OnDoorKickIn;    // for sending message to EnemyQuickFixSolution_ForTesting.cs to ifnorm about DoorKickIn and DoorPosition
+        public static event UnityAction<bool> OnInteractionLogicHasBeenExecuted;
 
         //------------------------------ Fields ------------------------------
         [Header("Needed References to GameObjects")]
@@ -28,7 +30,7 @@ namespace Interactables
         [SerializeField] private Enum_Lib.EInteractableType _interactableType;
         [SerializeField, Range(0.0f, 20.0f), EnableIf("_interactableType", Enum_Lib.EInteractableType.DoorKickInable)] private float _doorKickInNoiseRange = 10.0f;
         [Tooltip("The GameObject (Console) that should be connetced to this Door to controll it (oben/close)")]
-        [SerializeField, EnableIf("_interactableType", Enum_Lib.EInteractableType.Console)] private GameObject[] _consoleControledObjects;
+        [SerializeField, EnableIf("_interactableType", Enum_Lib.EInteractableType.Console)] private List<GameObject> _consoleControledObjects;
         [Space(5)]
 
         [Header("Monitoring values")]
@@ -37,10 +39,9 @@ namespace Interactables
         //------------------------------ Methods ------------------------------
 
         //---------- Unity-Executed Methods ----------
-        private new void Awake()
+        private void Awake()
         {
             #region AutoReferencing
-
             if (_animCtrl == null)
             {
                 _animCtrl = GetComponent<Animator>();
@@ -52,9 +53,7 @@ namespace Interactables
                 _playerAnim = GameObject.FindGameObjectWithTag("Player").GetComponent<Animator>();
                 Debug.Log($"<color=yellow>Caution! Reference for Animator 'Player Anim' was not set in Inspector of '{this}'. Trying to set automatically.</color>");
             }
-
-            base.Awake();
-
+            
             #endregion
         }
 
@@ -73,19 +72,15 @@ namespace Interactables
         /// </summary>
         protected override void ReadInteractionInput()
         {
-            // disable Interaction-Feedback-UI
-            for (int i = 0; i < _interactionFeedbackUI.Length; i++)
-                _interactionFeedbackUI[i].SetActive(false);
-
             switch (_interactableType)
             {
                 case Enum_Lib.EInteractableType.DoorKickInable:
 
                     _wasInteractedWith = true;      // in this case, was door kicked in?
 
-                    PlayAnimation("...");           // todo: if Door-KickIn-ANimation for Player is implemented fill out the Name-sting; JM (09.Oct.2023)
+                    //PlayAnimation("...");           // todo: if Door-KickIn-ANimation for Player is implemented fill out the Name-sting; JM (09.Oct.2023)
 
-                    PlaySFX("...");                 // Play DoorKickIn Sound
+                    //PlaySFX("...");                 // Play DoorKickIn Sound
 
                     gameObject.SetActive(false);    // todo: exchange this later to switching the GameObjects from intact door to broken door; JM (09.Oct.2023)
 
@@ -99,26 +94,35 @@ namespace Interactables
 
                     _wasInteractedWith = true;      // in this case, was console used?
 
-                    // initial NullCheck
-                    if (_consoleControledObjects == null)
+                    // initial Check if Array is empty
+                    if (_consoleControledObjects.Count < 1)
                     {
-                        Debug.LogError($"<color=orange>Error!</color>: There are no references set in inspector to the field 'Console Controled Objects' in '{this}'! Therefore {this.gameObject.name} will not work!");
+                        Debug.LogError($"<color=orange>Error!</color>: There are no references set to the elements of the Array 'Console Controled Objects' in the inspector of '{this}'! Therefore {this.gameObject.name} will not work!");
                         break;
                     }
 
-                    PlayAnimation("...");           // todo: if Door-KickIn-ANimation for Player is implemented fill out the Name-sting; JM (09.Oct.2023)
+                    //PlayAnimation("...");           // todo: if Door-KickIn-ANimation for Player is implemented fill out the Name-sting; JM (09.Oct.2023)
 
-                    PlaySFX("...");                 // Play DoorKickIn Sound
+                    //PlaySFX("...");                 // Play DoorKickIn Sound
 
                     // todo: exchange this Logic by playing Open/Close Animation; JM (14.11.2023)
                     foreach (GameObject controledObj in _consoleControledObjects)
                     {
-                        if (controledObj.activeSelf)
-                            controledObj.SetActive(false);
-                        else
-                            controledObj.SetActive(true);
+                        if (controledObj != null)
+                        {
+                            SetActiveStatusOfControlledObj(controledObj);
+                        }
+                        else // clear list, set new references to ListElements and try anew to set Active Status
+                        {
+                            _consoleControledObjects.Clear();
 
-                        Debug.Log($"<color=lime>{gameObject.name}</color>: was used, '{controledObj.name}' should have been opend/closed. New NavMesh should have been baked.");
+                            for (int y = 0; y < gameObject.transform.childCount; y++)
+                            {
+                                _consoleControledObjects.Add(gameObject.transform.GetChild(y).gameObject);
+                            }
+
+                            SetActiveStatusOfControlledObj(controledObj);
+                        }
                     }
 
                     OnDoorStatusChange?.Invoke();
@@ -128,6 +132,23 @@ namespace Interactables
 
                 default:
                     break;
+            }
+
+            // Fire Event for disableing Interaction-Feedback-UI (the transimmted bool leads to deactivation of FeedbackUI in 'UserFeedbackUIHandler.cs')
+            //OnInteractionLogicHasBeenExecuted?.Invoke(false);
+        }
+
+        private void SetActiveStatusOfControlledObj(GameObject controledObj)
+        {
+            if (controledObj.activeSelf)
+            {
+                controledObj.SetActive(false);
+                Debug.Log($"<color=lime>{gameObject.name}</color>: was used, '{controledObj.name}' should have been _opend_. New NavMesh should have been baked.");
+            }
+            else if (!controledObj.activeSelf)
+            {
+                controledObj.SetActive(true);
+                Debug.Log($"<color=lime>{gameObject.name}</color>: was used, '{controledObj.name}' should have been _closed_. New NavMesh should have been baked.");
             }
         }
 

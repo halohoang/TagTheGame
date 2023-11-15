@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+	public static event UnityAction<bool> OnRestartScene;
+
 	// Variables
 	[SerializeField] private GameObject _pauseMenu;
 	[SerializeField] private InputReaderSO _inputReaderSO;
@@ -69,8 +72,10 @@ public class PauseMenu : MonoBehaviour
 	}
 	public void RestartScene()
 	{
+		bool isSceneRestarted = true;
 		Time.timeScale = 1;
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+		OnRestartScene?.Invoke(isSceneRestarted);
 	}
 	public void Quit()
 	{

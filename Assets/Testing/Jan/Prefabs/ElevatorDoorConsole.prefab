@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 276476589987430967}
   - component: {fileID: 5288753673656989022}
   - component: {fileID: 632746602406210359}
-  - component: {fileID: 2189756679217531054}
   - component: {fileID: 276476589987430966}
   - component: {fileID: 276476589987430961}
   - component: {fileID: 1408213843531242475}
@@ -138,32 +137,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.50700426}
   m_EdgeRadius: 0
---- !u!61 &2189756679217531054
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 276476589987430960}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.25316787}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1.5}
-  m_EdgeRadius: 0
 --- !u!114 &276476589987430966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,6 +167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputReaderSO: {fileID: 11400000, guid: bac5360f5a3523940978876b6731d1d6, type: 2}
   _interactionFeedbackUI: []
+  _isInInteractableTriggerzone: 0
   _animCtrl: {fileID: 0}
   _playerAnim: {fileID: 0}
   _interactableType: 1
@@ -229,6 +203,7 @@ GameObject:
   - component: {fileID: 6221942588900678952}
   - component: {fileID: 22502349291987883}
   - component: {fileID: 7651611411727264636}
+  - component: {fileID: 2314640919759066985}
   m_Layer: 0
   m_Name: ElevatorDoor
   m_TagString: Untagged
@@ -350,3 +325,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2314640919759066985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5068318386704208608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c55937eb132899e41bda5bdc4f149dc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff

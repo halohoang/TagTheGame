@@ -1,46 +1,42 @@
+using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Interactables
 {
     /// <summary>
     /// Base class for interactable objects like signs but also dungeon entrances that shall be interacted by pressing the interaction button (currently 'E' on keyboard)
     /// </summary>
-    public class InteractionController : MonoBehaviour
+    public abstract class InteractionController : MonoBehaviour
     {
+        //------------------------------ Fields ------------------------------
+        public static event UnityAction<bool> OnEnterInteractableTriggerZone;
+
         //------------------------------ Fields ------------------------------
         [Header("Needed Referneces of Base Class")]
         [Tooltip("The Scriptable Object called 'InputReader' needs to be referenced here.")]
         [SerializeField] protected InputReaderSO _inputReaderSO;
         [Tooltip("Reference to the GameObject 'PlayerInteractionFeedback' (Found in Hierarchy -> Canvas-Ingame/IngameUI-Panel/)")]
         [SerializeField] protected GameObject[] _interactionFeedbackUI;
+        [Space(5)]
+
+        [Header("Monitoring Values")]
+        [SerializeField, ReadOnly] private bool _isInInteractableTriggerzone;
 
         protected Transform _playerTransform;
 
 
+
         //------------------------------ Methods ------------------------------
-
-        //---------- Unity-Executed Methods ----------
-        protected void Awake()
+        private void OnEnable()
         {
-            #region AutoReferencing            
-            
-            _interactionFeedbackUI = GameObject.FindGameObjectsWithTag("UserUIFeedback");            
-
-            if (_inputReaderSO == null)
-            {
-                _inputReaderSO = Resources.Load("ScriptableObjects/InputReader") as InputReaderSO;
-                Debug.Log($"<color=yellow>Caution! Reference for Scriptable Object 'InputReaderSO' was not set in Inspector of '{this}'. Trying to set automatically.</color>");
-            }
-
-            #endregion
+            //_inputReaderSO.OnInteractionInput += ReadInteractionInput;
+            Debug.Log($"<color=lime> OnEnable() was called in {this} </color>");
         }
-
-        protected void Start()
+        private void OnDisable()
         {
-            // disableing the Interaction-UI-Marker
-            for (int i = 0; i < _interactionFeedbackUI.Length; i++)
-                _interactionFeedbackUI[i].SetActive(false);
-            Debug.Log($"interactionFeedbackUI was disabled in {this}");
+            //_inputReaderSO.OnInteractionInput -= ReadInteractionInput;
+            Debug.Log($"<color=lime> OnDisable() was called in {this} </color>");
         }
 
         protected void OnTriggerEnter2D(Collider2D collision)
@@ -48,11 +44,10 @@ namespace Interactables
             // On Collision with Player subscribe to '_inputReaderSO.OnInteractionInput' and call Logic in 'ReadInteractionInput()' and enable Interaction-FeedBack-UI for User to know an Interaction is possible
             if (collision.CompareTag("Player"))
             {
+                _isInInteractableTriggerzone = true;
                 _inputReaderSO.OnInteractionInput += ReadInteractionInput;
+                OnEnterInteractableTriggerZone?.Invoke(_isInInteractableTriggerzone);
                 Debug.Log($"<color=lime>Player entered interactable zone -> Interaction posibillity activated</color>");
-
-                for (int i = 0; i < _interactionFeedbackUI.Length; i++)
-                    _interactionFeedbackUI[i].SetActive(true);
             }
         }
 
@@ -61,9 +56,7 @@ namespace Interactables
         {
             // On Collision with Player store the Transform of the Player into '_playerTransform' for possible later usage
             if (collision.CompareTag("Player"))
-            {
-                //Debug.Log($"<color=lime>Player stays in interactable zone -> ready for Interaction! (PRESS 'E')</color>");
-
+            {                
                 _playerTransform = collision.GetComponent<Transform>(); // needs to stay in OnTriggerStay since the PlayerPosition can also still change when the Player moves inside the Triggerzone; JM
             }
         }
@@ -73,19 +66,15 @@ namespace Interactables
         {
             if (collision.CompareTag("Player"))
             {
+                _isInInteractableTriggerzone = false;
                 _inputReaderSO.OnInteractionInput -= ReadInteractionInput;
-                Debug.Log($"<color=lime>Player exits interactable zone -> Interaction posibillity deactivated</color>");
-
-                for (int i = 0; i < _interactionFeedbackUI.Length; i++)
-                    _interactionFeedbackUI[i].SetActive(false);
+                OnEnterInteractableTriggerZone?.Invoke(_isInInteractableTriggerzone);
+                Debug.Log($"<color=lime>Player exits interactable zone -> Interaction posibillity deactivated</color>");                
             }
         }
 
         //---------- Custom Methods ----------
         // ReadInteractionInput for Actual definition in ChildClasses
-        protected virtual void ReadInteractionInput()
-        {
-            //Debug.Log($"<color=orange>Interaction-Button was pushed; Proper Logic not yet implemented tho.</color>");
-        }
+        protected abstract void ReadInteractionInput();        
     }
 }

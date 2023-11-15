@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3822669520006722222}
   - component: {fileID: 3822669520006722220}
+  - component: {fileID: 5780798890123583610}
   - component: {fileID: 3822669520006722221}
-  - component: {fileID: 956245191590839097}
   - component: {fileID: 3822669520006722211}
   - component: {fileID: 2117123643563261039}
   - component: {fileID: 3822669520006722210}
@@ -89,6 +89,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &5780798890123583610
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3822669520006722223}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!61 &3822669520006722221
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -114,32 +135,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
---- !u!61 &956245191590839097
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3822669520006722223}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.002449751}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 5.7602143}
   m_EdgeRadius: 0
 --- !u!114 &3822669520006722211
 MonoBehaviour:
@@ -172,12 +167,13 @@ MonoBehaviour:
   _inputReaderSO: {fileID: 11400000, guid: bac5360f5a3523940978876b6731d1d6, type: 2}
   _interactionFeedbackUI:
   - {fileID: 0}
+  _isInInteractableTriggerzone: 0
   _animCtrl: {fileID: 0}
   _playerAnim: {fileID: 0}
   _interactableType: 0
   _doorKickInNoiseRange: 10
   _consoleControledObjects: []
-  _wasDoorKickedIn: 0
+  _wasInteractedWith: 0
 --- !u!114 &3822669520006722210
 MonoBehaviour:
   m_ObjectHideFlags: 0

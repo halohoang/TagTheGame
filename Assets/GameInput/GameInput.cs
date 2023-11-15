@@ -55,7 +55,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Dashing"",
+                    ""name"": ""Sprinting"",
                     ""type"": ""PassThrough"",
                     ""id"": ""e2c9e506-0f1e-4935-a7ad-39ef0a77e482"",
                     ""expectedControlType"": ""Axis"",
@@ -222,7 +222,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Mouse & Keyboard"",
-                    ""action"": ""Dashing"",
+                    ""action"": ""Sprinting"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -303,7 +303,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Rotation = m_Player.FindAction("Rotation", throwIfNotFound: true);
         m_Player_Attacking = m_Player.FindAction("Attacking", throwIfNotFound: true);
-        m_Player_Dashing = m_Player.FindAction("Dashing", throwIfNotFound: true);
+        m_Player_Sprinting = m_Player.FindAction("Sprinting", throwIfNotFound: true);
         m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
         m_Player_Reloading = m_Player.FindAction("Reloading", throwIfNotFound: true);
         // UI
@@ -373,7 +373,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Rotation;
     private readonly InputAction m_Player_Attacking;
-    private readonly InputAction m_Player_Dashing;
+    private readonly InputAction m_Player_Sprinting;
     private readonly InputAction m_Player_Interaction;
     private readonly InputAction m_Player_Reloading;
     public struct PlayerActions
@@ -383,7 +383,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Rotation => m_Wrapper.m_Player_Rotation;
         public InputAction @Attacking => m_Wrapper.m_Player_Attacking;
-        public InputAction @Dashing => m_Wrapper.m_Player_Dashing;
+        public InputAction @Sprinting => m_Wrapper.m_Player_Sprinting;
         public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
         public InputAction @Reloading => m_Wrapper.m_Player_Reloading;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -404,9 +404,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @Attacking.started += instance.OnAttacking;
             @Attacking.performed += instance.OnAttacking;
             @Attacking.canceled += instance.OnAttacking;
-            @Dashing.started += instance.OnDashing;
-            @Dashing.performed += instance.OnDashing;
-            @Dashing.canceled += instance.OnDashing;
+            @Sprinting.started += instance.OnSprinting;
+            @Sprinting.performed += instance.OnSprinting;
+            @Sprinting.canceled += instance.OnSprinting;
             @Interaction.started += instance.OnInteraction;
             @Interaction.performed += instance.OnInteraction;
             @Interaction.canceled += instance.OnInteraction;
@@ -426,9 +426,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @Attacking.started -= instance.OnAttacking;
             @Attacking.performed -= instance.OnAttacking;
             @Attacking.canceled -= instance.OnAttacking;
-            @Dashing.started -= instance.OnDashing;
-            @Dashing.performed -= instance.OnDashing;
-            @Dashing.canceled -= instance.OnDashing;
+            @Sprinting.started -= instance.OnSprinting;
+            @Sprinting.performed -= instance.OnSprinting;
+            @Sprinting.canceled -= instance.OnSprinting;
             @Interaction.started -= instance.OnInteraction;
             @Interaction.performed -= instance.OnInteraction;
             @Interaction.canceled -= instance.OnInteraction;
@@ -512,7 +512,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnRotation(InputAction.CallbackContext context);
         void OnAttacking(InputAction.CallbackContext context);
-        void OnDashing(InputAction.CallbackContext context);
+        void OnSprinting(InputAction.CallbackContext context);
         void OnInteraction(InputAction.CallbackContext context);
         void OnReloading(InputAction.CallbackContext context);
     }

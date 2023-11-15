@@ -1,3 +1,5 @@
+using EnumLibrary;
+using System.Net;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -40,13 +42,16 @@ public class Movement : MonoBehaviour
 
     private void OnEnable()
     {
-        _inputReaderSO.OnEnable();
+        PauseMenu.OnRestartScene += CallOnEnableOfInputReader;        
         _inputReaderSO.OnMovementInput += ReadMovementInput;
+        _inputReaderSO.OnFastMovementInput += ReadSprintInput;
         Debug.Log($"<color=magenta> OnEnable() was called in {this} </color>");
     }
     private void OnDisable()
     {
+        PauseMenu.OnRestartScene += CallOnEnableOfInputReader;
         _inputReaderSO.OnMovementInput -= ReadMovementInput;
+        _inputReaderSO.OnFastMovementInput -= ReadSprintInput;
         Debug.Log($"<color=magenta> OnDisable() was called in {this} </color>");
     }
 
@@ -62,7 +67,7 @@ public class Movement : MonoBehaviour
     void FixedUpdate()
     {
         PlayerMovement();
-        PlayerFast();
+        //PlayerFast();
         //PlayerDash();
     }
 
@@ -70,7 +75,45 @@ public class Movement : MonoBehaviour
     {
         _movementDirection = velocity;
         Debug.Log($"<color=magenta> ReadMovementInput was called </color>");
-    }   
+    }
+    
+    /// <summary>
+    /// Takes the a Value of the Enum 'ESpace' as param and respective executes Logic for enabling fast movement 
+    /// (if SpaceKey is currently pressed) or not (is spacekey is currently not pressed).
+    /// </summary>
+    /// <param name="spacePressedStatus"></param>
+    private void ReadSprintInput(Enum_Lib.ESpaceKey spacePressedStatus)
+    {
+        switch (spacePressedStatus)
+        {
+            case Enum_Lib.ESpaceKey.Pressed:
+
+                if (_playerHealthScript._currentHealth < 2)
+                    goto case Enum_Lib.ESpaceKey.NotPressed;    // Player's health is below 2, so they can't use "Space" for increased speed
+                
+                // Player can move faster
+                _currentPlayerSpeed = _maxPlayerSpeed;
+                _light2D.falloffIntensity = 0.1f;
+                _light2D.pointLightOuterRadius = 1.6f;
+                _light2D.intensity = 2;
+                _light2D.GetComponent<LightControl>().enabled = false;                
+
+            break;
+
+            case Enum_Lib.ESpaceKey.NotPressed:
+                // reset Values to normal Movement Speed
+                _currentPlayerSpeed = _minPlayerSpeed;
+                _light2D.falloffIntensity = 0.148f;
+                _light2D.pointLightOuterRadius = 1.12f;
+                _light2D.intensity = 1;
+                _light2D.GetComponent<LightControl>().enabled = true;
+
+            break;
+
+            default:
+            break;
+        }        
+    }
 
     /* Player Movement*/
     void PlayerMovement()
@@ -79,15 +122,18 @@ public class Movement : MonoBehaviour
         if (_movementDirection != Vector2.zero && Time.timeScale != 0 && !_playerHealthScript.IsPlayerDead)  
         {
             IsPlayerMoving = true;
+
+            //PlayerFast();
+
             _rigidbody2D.MovePosition(_rigidbody2D.position + _movementDirection * _currentPlayerSpeed * Time.deltaTime);
-            Debug.Log($"<color=magenta> PlayerMovement should have been excuted </color>. MovementDirection: '{_movementDirection}' | TimeScale: '{Time.timeScale}' | " +
-                $"Is Player Dead: '{_playerHealthScript.IsPlayerDead}'");
+            //Debug.Log($"<color=magenta> PlayerMovement should have been excuted </color>. MovementDirection: '{_movementDirection}' | TimeScale: '{Time.timeScale}' | " +
+                //$"Is Player Dead: '{_playerHealthScript.IsPlayerDead}'");
         }
         else 
         { 
             IsPlayerMoving = false;
-            Debug.Log($"<color=magenta> PlayerMovement should NOT have been excuted </color>." +
-                $" MovementDirection: '{_movementDirection}' | TimeScale: '{Time.timeScale}' | Is Player Dead: '{_playerHealthScript.IsPlayerDead}'");
+            //Debug.Log($"<color=magenta> PlayerMovement should NOT have been excuted </color>." +
+                //$" MovementDirection: '{_movementDirection}' | TimeScale: '{Time.timeScale}' | Is Player Dead: '{_playerHealthScript.IsPlayerDead}'");
         }
 
         #region old Code from Hoang
@@ -189,14 +235,17 @@ public class Movement : MonoBehaviour
                 Vector2 dashForce = dashDirection * _playerDashForce * 0.5f * Time.deltaTime;
                 transform.Translate(dashForce, Space.World);
                 _currentDashCooldown = _dashCooldown;
-
             }
-
         }
         else
         {
             _currentDashCooldown -= Time.deltaTime;
         }
     } //Not currently used
+
+    private void CallOnEnableOfInputReader(bool arg0)
+    {
+        _inputReaderSO.OnEnable();
+    }
 }
 
