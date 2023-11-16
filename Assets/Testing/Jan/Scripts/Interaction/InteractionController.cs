@@ -31,12 +31,12 @@ namespace Interactables
         private void OnEnable()
         {
             //_inputReaderSO.OnInteractionInput += ReadInteractionInput;
-            Debug.Log($"<color=lime> OnEnable() was called in {this} </color>");
+            //Debug.Log($"<color=lime> OnEnable() was called in {this} </color>");            
         }
         private void OnDisable()
         {
-            //_inputReaderSO.OnInteractionInput -= ReadInteractionInput;
-            Debug.Log($"<color=lime> OnDisable() was called in {this} </color>");
+            _inputReaderSO.OnInteractionInput -= ReadInteractionInput;
+            //Debug.Log($"<color=lime> OnDisable() was called in {this} </color>");
         }
 
         protected void OnTriggerEnter2D(Collider2D collision)
