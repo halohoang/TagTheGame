@@ -39,13 +39,23 @@ namespace ScriptableObjects
 
         public override void ExecuteFrameUpdateLogic()
         {
-
             // Transition-Condition-Check (if not Player is detected anymore -> switch to IdleState again)
             if (!_baseEnemyBehaviour.IsPlayerDetected)
             {
                 _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.IdleState);
                 Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>Idle</color>' should have been happend now!");
                 return;
+            }
+            // 1.1) if agent reached last known position of player and player can't be detected anymore -> switch to idle/alert state            
+            else if ((Vector2)_baseEnemyBehaviour.gameObject.transform.position == (Vector2)_baseEnemyBehaviour.LastKnownPlayerPos && !_baseEnemyBehaviour.IsPlayerDetected)
+            {
+                _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.IdleState);
+                Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>Idle</color>' should have been happend now!");
+                return;
+            }
+            else if ((Vector2)_baseEnemyBehaviour.gameObject.transform.position != (Vector2)_baseEnemyBehaviour.LastKnownPlayerPos && !_baseEnemyBehaviour.IsPlayerDetected)
+            {
+                _baseEnemyBehaviour.NavAgent.SetDestination(_baseEnemyBehaviour.LastKnownPlayerPos);
             }
 
             // set facing direection via calling 'base.baseFrameUpdate()'
