@@ -1,4 +1,5 @@
 using EnumLibrary;
+using System;
 using System.Net;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -42,16 +43,18 @@ public class Movement : MonoBehaviour
 
     private void OnEnable()
     {
-        PauseMenu.OnRestartScene += CallOnEnableOfInputReader;        
+        PauseMenu.OnRestartScene += CallOnEnableOfInputReader;
         _inputReaderSO.OnMovementInput += ReadMovementInput;
         _inputReaderSO.OnFastMovementInput += ReadSprintInput;
+        PlayerHealth.OnPlayerDeath += DisablePlayerInput;
         Debug.Log($"<color=magenta> OnEnable() was called in {this} </color>");
     }
     private void OnDisable()
     {
-        PauseMenu.OnRestartScene += CallOnEnableOfInputReader;
+        PauseMenu.OnRestartScene -= CallOnEnableOfInputReader;
         _inputReaderSO.OnMovementInput -= ReadMovementInput;
         _inputReaderSO.OnFastMovementInput -= ReadSprintInput;
+        PlayerHealth.OnPlayerDeath -= DisablePlayerInput;
         Debug.Log($"<color=magenta> OnDisable() was called in {this} </color>");
     }
 
@@ -76,7 +79,7 @@ public class Movement : MonoBehaviour
         _movementDirection = velocity;
         Debug.Log($"<color=magenta> ReadMovementInput was called </color>");
     }
-    
+
     /// <summary>
     /// Takes the a Value of the Enum 'ESpace' as param and respective executes Logic for enabling fast movement 
     /// (if SpaceKey is currently pressed) or not (is spacekey is currently not pressed).
@@ -90,15 +93,15 @@ public class Movement : MonoBehaviour
 
                 if (_playerHealthScript._currentHealth < 2)
                     goto case Enum_Lib.ESpaceKey.NotPressed;    // Player's health is below 2, so they can't use "Space" for increased speed
-                
+
                 // Player can move faster
                 _currentPlayerSpeed = _maxPlayerSpeed;
                 _light2D.falloffIntensity = 0.1f;
                 _light2D.pointLightOuterRadius = 1.6f;
                 _light2D.intensity = 2;
-                _light2D.GetComponent<LightControl>().enabled = false;                
+                _light2D.GetComponent<LightControl>().enabled = false;
 
-            break;
+                break;
 
             case Enum_Lib.ESpaceKey.NotPressed:
                 // reset Values to normal Movement Speed
@@ -108,18 +111,18 @@ public class Movement : MonoBehaviour
                 _light2D.intensity = 1;
                 _light2D.GetComponent<LightControl>().enabled = true;
 
-            break;
+                break;
 
             default:
-            break;
-        }        
+                break;
+        }
     }
 
     /* Player Movement*/
     void PlayerMovement()
     {
         // if Movement registered (by MovementInput and TimeScale is not paused and Player alive
-        if (_movementDirection != Vector2.zero && Time.timeScale != 0 && !_playerHealthScript.IsPlayerDead)  
+        if (_movementDirection != Vector2.zero && Time.timeScale != 0 && !_playerHealthScript.IsPlayerDead)
         {
             IsPlayerMoving = true;
 
@@ -127,13 +130,13 @@ public class Movement : MonoBehaviour
 
             _rigidbody2D.MovePosition(_rigidbody2D.position + _movementDirection * _currentPlayerSpeed * Time.deltaTime);
             //Debug.Log($"<color=magenta> PlayerMovement should have been excuted </color>. MovementDirection: '{_movementDirection}' | TimeScale: '{Time.timeScale}' | " +
-                //$"Is Player Dead: '{_playerHealthScript.IsPlayerDead}'");
+            //$"Is Player Dead: '{_playerHealthScript.IsPlayerDead}'");
         }
-        else 
-        { 
+        else
+        {
             IsPlayerMoving = false;
             //Debug.Log($"<color=magenta> PlayerMovement should NOT have been excuted </color>." +
-                //$" MovementDirection: '{_movementDirection}' | TimeScale: '{Time.timeScale}' | Is Player Dead: '{_playerHealthScript.IsPlayerDead}'");
+            //$" MovementDirection: '{_movementDirection}' | TimeScale: '{Time.timeScale}' | Is Player Dead: '{_playerHealthScript.IsPlayerDead}'");
         }
 
         #region old Code from Hoang
@@ -243,9 +246,18 @@ public class Movement : MonoBehaviour
         }
     } //Not currently used
 
-    private void CallOnEnableOfInputReader(bool arg0)
+    private void CallOnEnableOfInputReader()
     {
         _inputReaderSO.OnEnable();
+    }
+
+    private void EnablePlayerInput()
+    {
+        _inputReaderSO.GameInput.Player.Enable();
+    }
+    private void DisablePlayerInput(bool arg0)
+    {
+        _inputReaderSO.GameInput.Player.Disable();
     }
 }
 

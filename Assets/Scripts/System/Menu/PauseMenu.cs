@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-	public static event UnityAction<bool> OnRestartScene;
+	public static event UnityAction OnRestartScene;
 
 	// Variables
 	[SerializeField] private GameObject _pauseMenu;
@@ -71,11 +71,10 @@ public class PauseMenu : MonoBehaviour
 		}
 	}
 	public void RestartScene()
-	{
-		bool isSceneRestarted = true;
+	{		
 		Time.timeScale = 1;
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-		OnRestartScene?.Invoke(isSceneRestarted);
+		OnRestartScene?.Invoke();
 	}
 	public void Quit()
 	{

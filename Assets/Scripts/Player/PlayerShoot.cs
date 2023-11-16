@@ -58,12 +58,28 @@ public class PlayerShoot : MonoBehaviour
 
 	[Header("Monitoring Values")]
 	[SerializeField, ReadOnly] private bool _isShooting;
+	[SerializeField, ReadOnly] private bool _isPlayerDead;
+
 
     // Functions
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
 		Gizmos.DrawWireSphere(transform.position, _shootingNoiseRange);
+    }
+
+    private void OnEnable()
+    {
+		PlayerHealth.OnPlayerDeath += SetIsPlayerDead;
+    }
+    private void OnDisable()
+    {
+		PlayerHealth.OnPlayerDeath -= SetIsPlayerDead;
+    }
+
+    private void SetIsPlayerDead(bool playerDeadStatus)
+    {
+		_isPlayerDead = playerDeadStatus;
     }
 
     private void Start()
@@ -75,7 +91,7 @@ public class PlayerShoot : MonoBehaviour
 	private void Update()
 	{
 		SwitchWeapon();
-		if (_isArmed)
+		if (_isArmed && !_isPlayerDead)
 		{
 			if (Input.GetMouseButtonUp(0))
 			{
@@ -99,7 +115,7 @@ public class PlayerShoot : MonoBehaviour
                 _animator.SetBool("Firing", _isShooting);
 			}
 		}
-		if (Input.GetKeyDown(KeyCode.R) && _isReloading == false && !Input.GetMouseButton(0))
+		if (Input.GetKeyDown(KeyCode.R) && _isReloading == false && !Input.GetMouseButton(0) && !_isPlayerDead)
 		{
 			if (_currentBulletCount < _maximumBulletCount)
 			{
