@@ -742,10 +742,10 @@ Material:
     - _GhostBlend: 1
     - _GhostColorBoost: 0.67
     - _GhostTransparency: 0
-    - _GlitchAmount: 2
-    - _GlitchSize: 0.32
-    - _Glow: 0
-    - _GlowGlobal: 7.9
+    - _GlitchAmount: 3
+    - _GlitchSize: 1
+    - _Glow: 0.2
+    - _GlowGlobal: 1
     - _GradBlend: 1
     - _GradBoostX: 1.2
     - _GradBoostY: 1.2
@@ -845,7 +845,7 @@ Material:
     - _ColorSwapGreen: {r: 1, g: 1, b: 1, a: 1}
     - _ColorSwapRed: {r: 1, g: 1, b: 1, a: 1}
     - _FadeBurnColor: {r: 1, g: 1, b: 0, a: 1}
-    - _GlowColor: {r: 0, g: 0, b: 0, a: 1}
+    - _GlowColor: {r: 1, g: 1, b: 1, a: 1}
     - _GradBotLeftCol: {r: 0, g: 0, b: 1, a: 1}
     - _GradBotRightCol: {r: 0, g: 1, b: 0, a: 1}
     - _GradTopLeftCol: {r: 1, g: 0, b: 0, a: 1}

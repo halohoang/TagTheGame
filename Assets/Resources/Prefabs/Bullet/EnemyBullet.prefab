@@ -48,7 +48,7 @@ MonoBehaviour:
   m_LightType: 1
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0
-  m_Color: {r: 0.31764707, g: 0, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
@@ -57,7 +57,7 @@ MonoBehaviour:
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 10
   m_AlphaBlendOnOverlap: 0
-  m_OverlapOperation: 0
+  m_OverlapOperation: 1
   m_NormalMapDistance: 3
   m_NormalMapQuality: 1
   m_UseNormalMap: 0
@@ -66,10 +66,10 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.00039999932, y: -0.0029171444, z: 0}
-    m_Extent: {x: 0.0522, y: 0.09858285, z: 0}
-  m_PointLightInnerAngle: 0
-  m_PointLightOuterAngle: 360
+    m_Center: {x: -0.0011, y: -0.0045999996, z: 0}
+    m_Extent: {x: 0.0511, y: 0.100899994, z: 0}
+  m_PointLightInnerAngle: 292
+  m_PointLightOuterAngle: 292
   m_PointLightInnerRadius: 0.36
   m_PointLightOuterRadius: 0.42
   m_ShapeLightParametricSides: 5
@@ -168,7 +168,7 @@ SpriteRenderer:
   m_SortingLayer: 6
   m_SortingOrder: 1
   m_Sprite: {fileID: -1120603786, guid: fcfd15f128dbc114b95013002341b3e5, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.26415092, g: 0.18118933, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -237,9 +237,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160750f319c07a54c8aba93a0fc234cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulletSpeed: 15
+  _bulletSpeed: 30
   _bloodPrefab: {fileID: 1471398999119722488, guid: 3e6cf606eb96c8c489d93206732bdb13, type: 3}
   _maxBulletAliveTime: 10
+  _enemyObjects: []
 --- !u!114 &-7281322431818092433
 MonoBehaviour:
   m_ObjectHideFlags: 0
