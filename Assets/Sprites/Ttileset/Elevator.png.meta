@@ -109,7 +109,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 128
+        y: 256
         width: 97
         height: 128
       alignment: 0
@@ -130,7 +130,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 97
-        y: 128
+        y: 256
         width: 97
         height: 128
       alignment: 0
@@ -151,7 +151,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 194
-        y: 128
+        y: 256
         width: 97
         height: 128
       alignment: 0
@@ -172,7 +172,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 128
         width: 97
         height: 128
       alignment: 0
@@ -193,7 +193,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 97
-        y: 0
+        y: 128
         width: 97
         height: 128
       alignment: 0
@@ -205,6 +205,48 @@ TextureImporter:
       bones: []
       spriteID: 314b4051e0ae3bb4e81be13889aa9416
       internalID: -964048073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Elevator_5
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 128
+        width: 97
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cff72b76057b9a943a297f60d8ceb967
+      internalID: 1342015246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Elevator_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 97
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64ccb43131a36d6448de86888359e934
+      internalID: 324504929
       vertices: []
       indices: 
       edges: []
@@ -225,6 +267,8 @@ TextureImporter:
       Elevator_2: -2126532550
       Elevator_3: -913220519
       Elevator_4: -964048073
+      Elevator_5: 1342015246
+      Elevator_6: 324504929
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
