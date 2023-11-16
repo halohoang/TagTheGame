@@ -2249,7 +2249,7 @@ RectTransform:
   m_GameObject: {fileID: 933666052}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1339515739}
@@ -2736,8 +2736,11 @@ Material:
   m_Name: AllIn1SpriteShader/AllIn1Urp2dRenderer
   m_Shader: {fileID: 4800000, guid: a36b7719ff0465b42ab1407d67672c5f, type: 3}
   m_ValidKeywords:
+  - GLITCH_ON
   - GLOW_ON
+  - HOLOGRAM_ON
   - SHADOW_ON
+  - SHAKEUV_ON
   m_InvalidKeywords:
   - GLOWLIGHT_ON
   - _GLOWAFFECTLIGHT_ON
@@ -2874,12 +2877,12 @@ Material:
     - _HandDrawnSpeed: 5
     - _HitEffectBlend: 1
     - _HitEffectGlow: 5
-    - _HologramBlend: 1
-    - _HologramMaxAlpha: 0.75
+    - _HologramBlend: 0.1
+    - _HologramMaxAlpha: 4
     - _HologramMinAlpha: 0.1
-    - _HologramStripesAmount: 0.1
-    - _HologramStripesSpeed: 4.5
-    - _HologramUnmodAmount: 0
+    - _HologramStripesAmount: 0.4
+    - _HologramStripesSpeed: -12.1
+    - _HologramUnmodAmount: 1
     - _HsvBright: 1
     - _HsvSaturation: 1
     - _HsvShift: 180
@@ -2925,9 +2928,9 @@ Material:
     - _ShadowAlpha: 0.58
     - _ShadowX: -0.04
     - _ShadowY: 0.02
-    - _ShakeUvSpeed: 2.5
-    - _ShakeUvX: 1.5
-    - _ShakeUvY: 1
+    - _ShakeUvSpeed: 1.2
+    - _ShakeUvX: 0.49
+    - _ShakeUvY: 0.29
     - _ShineGlow: 1
     - _ShineLocation: 1
     - _ShineRotate: 0
@@ -2966,7 +2969,7 @@ Material:
     - _GradTopRightCol: {r: 1, g: 1, b: 0, a: 1}
     - _GreyscaleTintColor: {r: 1, g: 1, b: 1, a: 1}
     - _HitEffectColor: {r: 1, g: 1, b: 1, a: 1}
-    - _HologramStripeColor: {r: 0, g: 1, b: 1, a: 1}
+    - _HologramStripeColor: {r: 0.9490196, g: 0.13333334, b: 1, a: 1}
     - _InnerOutlineColor: {r: 1, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
     - _OverlayColor: {r: 1, g: 1, b: 1, a: 1}
@@ -2984,6 +2987,8 @@ Material:
   m_Shader: {fileID: 4800000, guid: a36b7719ff0465b42ab1407d67672c5f, type: 3}
   m_ValidKeywords:
   - GLITCH_ON
+  - GLOW_ON
+  - HOLOGRAM_ON
   - SHADOW_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -3092,7 +3097,7 @@ Material:
     - _GhostTransparency: 0
     - _GlitchAmount: 4.1
     - _GlitchSize: 3.35
-    - _Glow: 0
+    - _Glow: 0.5
     - _GlowGlobal: 1
     - _GradBlend: 1
     - _GradBoostX: 1.2
@@ -3110,7 +3115,7 @@ Material:
     - _HandDrawnSpeed: 5
     - _HitEffectBlend: 1
     - _HitEffectGlow: 5
-    - _HologramBlend: 1
+    - _HologramBlend: 0.16
     - _HologramMaxAlpha: 0.75
     - _HologramMinAlpha: 0.1
     - _HologramStripesAmount: 0.1
@@ -3200,7 +3205,7 @@ Material:
     - _GradTopRightCol: {r: 1, g: 1, b: 0, a: 1}
     - _GreyscaleTintColor: {r: 1, g: 1, b: 1, a: 1}
     - _HitEffectColor: {r: 1, g: 1, b: 1, a: 1}
-    - _HologramStripeColor: {r: 0, g: 1, b: 1, a: 1}
+    - _HologramStripeColor: {r: 0.9490196, g: 0.13333334, b: 1, a: 1}
     - _InnerOutlineColor: {r: 1, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
     - _OverlayColor: {r: 1, g: 1, b: 1, a: 1}
@@ -3592,6 +3597,7 @@ Material:
   - BLUR_ON
   - DISTORT_ON
   - GLITCH_ON
+  - GLOW_ON
   - HOLOGRAM_ON
   - INNEROUTLINE_ON
   m_InvalidKeywords:
@@ -3702,8 +3708,8 @@ Material:
     - _GhostTransparency: 0
     - _GlitchAmount: 3
     - _GlitchSize: 0.69
-    - _Glow: 10
-    - _GlowGlobal: 1
+    - _Glow: 7
+    - _GlowGlobal: 5.3
     - _GradBlend: 1
     - _GradBoostX: 1.2
     - _GradBoostY: 1.2
@@ -4121,8 +4127,8 @@ Canvas:
   m_GameObject: {fileID: 1633896533}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 787997345}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
