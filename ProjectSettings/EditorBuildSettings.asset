@@ -17,10 +17,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Light/Light.unity
     guid: 08e0cf9e0f36bae4daf9b03db3c30bd3
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Menu.unity
     guid: cca4a4969743b824c94aaf8d3563f6a1
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Level 1.unity
     guid: 8b175f091cb7c3744b14e26a1e060fb2
+  - enabled: 1
+    path: Assets/Scenes/Level Complete Scene.unity
+    guid: cbb1ff9aa8d1b0b4daefa461c6011b51
   m_configObjects: {}
