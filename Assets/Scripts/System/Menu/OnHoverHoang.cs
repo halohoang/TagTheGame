@@ -8,12 +8,17 @@ public class OnHoverHoang : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
 	// Variables
 	[SerializeField] List<GameObject> Roles;
+	[SerializeField] List<GameObject> ObjectHide;
 	//Functions
 	public void OnPointerEnter(PointerEventData eventData)
 	{
 		foreach (GameObject obj in Roles)
 		{
 			obj.SetActive(true);
+		}
+		foreach (GameObject obj in ObjectHide)
+		{
+			obj.SetActive(false);
 		}
 	}
 	public void OnPointerExit(PointerEventData eventData)
@@ -23,5 +28,10 @@ public class OnHoverHoang : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 			obj.SetActive(false);
 
 		}
+		foreach (GameObject obj in ObjectHide)
+		{
+			obj.SetActive(true);
+		}
+
 	}
 }
