@@ -1,6 +1,7 @@
 using EnumLibrary;
 using System;
 using System.Net;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -91,32 +92,38 @@ public class Movement : MonoBehaviour
         {
             case Enum_Lib.ESpaceKey.Pressed:
 
-                if (_playerHealthScript._currentHealth < 2)
-                    goto case Enum_Lib.ESpaceKey.NotPressed;    // Player's health is below 2, so they can't use "Space" for increased speed
-
                 // Player can move faster
-                _currentPlayerSpeed = _maxPlayerSpeed;
-                _light2D.falloffIntensity = 0.1f;
-                _light2D.pointLightOuterRadius = 1.6f;
-                _light2D.intensity = 2;
-                _light2D.GetComponent<LightControl>().enabled = false;
+                SetPlayerMovementValues(_maxPlayerSpeed, 0.1f, 1.6f, 2, false);
+
+                #region original Settings Code
+                //_currentPlayerSpeed = _maxPlayerSpeed;
+                //_light2D.falloffIntensity = 0.1f;
+                //_light2D.pointLightOuterRadius = 1.6f;
+                //_light2D.intensity = 2;
+                //_light2D.GetComponent<LightControl>().enabled = false;
+                #endregion
 
                 break;
 
             case Enum_Lib.ESpaceKey.NotPressed:
+
                 // reset Values to normal Movement Speed
-                _currentPlayerSpeed = _minPlayerSpeed;
-                _light2D.falloffIntensity = 0.148f;
-                _light2D.pointLightOuterRadius = 1.12f;
-                _light2D.intensity = 1;
-                _light2D.GetComponent<LightControl>().enabled = true;
+                SetPlayerMovementValues(_minPlayerSpeed, 0.148f, 1.12f, 1, true);
+
+                #region original Settings Code
+                //_currentPlayerSpeed = _minPlayerSpeed;
+                //_light2D.falloffIntensity = 0.148f;
+                //_light2D.pointLightOuterRadius = 1.12f;
+                //_light2D.intensity = 1;
+                //_light2D.GetComponent<LightControl>().enabled = true;
+                #endregion
 
                 break;
 
             default:
                 break;
         }
-    }
+    }    
 
     /* Player Movement*/
     void PlayerMovement()
@@ -125,18 +132,23 @@ public class Movement : MonoBehaviour
         if (_movementDirection != Vector2.zero && Time.timeScale != 0 && !_playerHealthScript.IsPlayerDead)
         {
             IsPlayerMoving = true;
-
-            //PlayerFast();
+            
+            if (_playerHealthScript._currentHealth < 2)     // if Player's health is below 2, use Movement Settings as if is not sprinting
+                SetPlayerMovementValues(_minPlayerSpeed, 0.148f, 1.12f, 1, true);
 
             _rigidbody2D.MovePosition(_rigidbody2D.position + _movementDirection * _currentPlayerSpeed * Time.deltaTime);
+            #region Debuggers littel helper
             //Debug.Log($"<color=magenta> PlayerMovement should have been excuted </color>. MovementDirection: '{_movementDirection}' | TimeScale: '{Time.timeScale}' | " +
             //$"Is Player Dead: '{_playerHealthScript.IsPlayerDead}'");
+            #endregion
         }
         else
         {
             IsPlayerMoving = false;
+            #region Debuggers littel helper
             //Debug.Log($"<color=magenta> PlayerMovement should NOT have been excuted </color>." +
             //$" MovementDirection: '{_movementDirection}' | TimeScale: '{Time.timeScale}' | Is Player Dead: '{_playerHealthScript.IsPlayerDead}'");
+            #endregion
         }
 
         #region old Code from Hoang
@@ -164,6 +176,16 @@ public class Movement : MonoBehaviour
         #endregion       
     }
 
+    private void SetPlayerMovementValues(float movementSpeed, float lightFallofIntensity, float pointLightOuterRadius, float lightIntesity, bool enableDisableLightControllComponent)
+    {
+        _currentPlayerSpeed = movementSpeed;
+        _light2D.falloffIntensity = lightFallofIntensity;
+        _light2D.pointLightOuterRadius = pointLightOuterRadius;
+        _light2D.intensity = lightIntesity;
+        _light2D.GetComponent<LightControl>().enabled = enableDisableLightControllComponent;
+    }
+
+    #region currently not used
     /* Player Sandevistan */
     void PlayerFast()
     {
@@ -187,8 +209,6 @@ public class Movement : MonoBehaviour
             _light2D.GetComponent<LightControl>().enabled = true;
         }
     }
-
-
 
     /* Player Dash */
     void PlayerDash()
@@ -245,6 +265,7 @@ public class Movement : MonoBehaviour
             _currentDashCooldown -= Time.deltaTime;
         }
     } //Not currently used
+    #endregion
 
     private void CallOnEnableOfInputReader()
     {
