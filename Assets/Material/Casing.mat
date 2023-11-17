@@ -12,7 +12,6 @@ Material:
   m_ValidKeywords:
   - CHANGECOLOR2_ON
   - GLOWLIGHT_ON
-  - GLOW_ON
   - ONLYINNEROUTLINE_ON
   m_InvalidKeywords:
   - _GLOWAFFECTLIGHT_ON
