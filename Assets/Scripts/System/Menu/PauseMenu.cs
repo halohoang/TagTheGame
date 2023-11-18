@@ -93,6 +93,7 @@ public class PauseMenu : MonoBehaviour
 	public void MainMenu()
 	{
 		Time.timeScale = 1;
+		_inputReaderSO.GameInput.Player.Enable();
 		SceneManager.LoadScene(0);
 	}
 }
