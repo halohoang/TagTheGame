@@ -7,14 +7,18 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
 	public static event UnityAction OnRestartScene;
+	public static event UnityAction<bool> OnTogglePauseScene;
 
 	// Variables
 	[SerializeField] private GameObject _pauseMenu;
 	[SerializeField] private InputReaderSO _inputReaderSO;
 	private bool _isGamePaused = false;
-	// Functions
 
-	private void OnEnable()
+    public bool IsGamePaused { get => _isGamePaused; private set => _isGamePaused = value; }
+
+    // Functions
+
+    private void OnEnable()
 	{
 		InputReaderSO.OnEscPress += TogglePauseMenu;
 	}
@@ -26,23 +30,25 @@ public class PauseMenu : MonoBehaviour
 
 	private void TogglePauseMenu()
 	{
-		if (!_isGamePaused) // enable PauseMenu
+		if (!IsGamePaused) // enable PauseMenu
 		{
 			Time.timeScale = 0;
 			_inputReaderSO.GameInput.Player.Disable();
 
 			_pauseMenu.SetActive(true);
-			_isGamePaused = true;
+			IsGamePaused = true;
 			//Cursor.SetCursor()
 			//Cursor.visible = true;
 			//Cursor.lockState = CursorLockMode.None;
 
-			Debug.Log("PauseMenu was enabled, Game is paused");
+			OnTogglePauseScene?.Invoke(IsGamePaused);
+
+            Debug.Log("PauseMenu was enabled, Game is paused");
 		}
-		else if (_isGamePaused /*&& !_howToPlayMenu.activeSelf*/) // Disable PauseMenu
+		else if (IsGamePaused /*&& !_howToPlayMenu.activeSelf*/) // Disable PauseMenu
 		{
 			_pauseMenu.SetActive(false);
-			_isGamePaused = false;
+			IsGamePaused = false;
 			//Cursor.visible = false;
 			//Cursor.lockState = CursorLockMode.Locked;			
 
@@ -50,16 +56,18 @@ public class PauseMenu : MonoBehaviour
 
 			_inputReaderSO.GameInput.Player.Enable();
 
-			Debug.Log("PauseMenu was disabled, resume to Game");
+            OnTogglePauseScene?.Invoke(IsGamePaused);
+
+            Debug.Log("PauseMenu was disabled, resume to Game");
 		}
 	}
 
 	public void ResumeGame()    // Disable PauseMenu
 	{
-		if (_isGamePaused /*&& !_howToPlayMenu.activeSelf*/)
+		if (IsGamePaused /*&& !_howToPlayMenu.activeSelf*/)
 		{
 			_pauseMenu.SetActive(false);
-			_isGamePaused = false;
+			IsGamePaused = false;
 			//Cursor.visible = false;
 			//Cursor.lockState = CursorLockMode.Locked;
 
@@ -67,7 +75,9 @@ public class PauseMenu : MonoBehaviour
 
 			_inputReaderSO.GameInput.Player.Enable();
 
-			Debug.Log("PauseMenu was disabled, resume to Game.");
+            OnTogglePauseScene?.Invoke(IsGamePaused);
+
+            Debug.Log("PauseMenu was disabled, resume to Game.");
 		}
 	}
 	public void RestartScene()
