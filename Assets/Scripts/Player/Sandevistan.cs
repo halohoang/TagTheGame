@@ -8,6 +8,7 @@ public class Sandevistan : MonoBehaviour
 	//Variables
 	[Header("References")]
 	[SerializeField] private InputReaderSO _inputReader;
+	[SerializeField] private PlayerHealth _playerHealth;
 	[Space(5)]
 
 	[SerializeField] private int ClonesPerSecond = 10;
@@ -31,6 +32,9 @@ public class Sandevistan : MonoBehaviour
 	{
 		if (_inputReader == null)
 			_inputReader = Resources.Load("ScriptableObjects/InputReader") as InputReaderSO;
+
+		if (_playerHealth == null)
+			_playerHealth = GetComponent<PlayerHealth>();
 	}
 
 	//private void OnEnable()
@@ -57,9 +61,8 @@ public class Sandevistan : MonoBehaviour
 	{
 		for (; ; )
 		{
-			if (Input.GetKey(KeyCode.Space)) // Check if spacebar is held
-			{
-				
+			if (Input.GetKey(KeyCode.Space) && _playerHealth._currentHealth >= 2.0f) // Check if spacebar is held
+			{				
 				var clone = new GameObject("TrailClone");
 
 				// Calculate the new position based on the character's direction and clone distance

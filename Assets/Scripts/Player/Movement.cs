@@ -142,6 +142,11 @@ public class Movement : MonoBehaviour
             //$"Is Player Dead: '{_playerHealthScript.IsPlayerDead}'");
             #endregion
         }
+        else if (_playerHealthScript.IsPlayerDead)
+        {
+            _rigidbody2D.velocity = Vector2.zero;
+            IsPlayerMoving = false;
+        }
         else
         {
             IsPlayerMoving = false;

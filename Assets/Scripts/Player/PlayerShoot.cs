@@ -59,6 +59,7 @@ public class PlayerShoot : MonoBehaviour
 	[Header("Monitoring Values")]
 	[SerializeField, ReadOnly] private bool _isShooting;
 	[SerializeField, ReadOnly] private bool _isPlayerDead;
+	[SerializeField, ReadOnly] private bool _IsGamePaused;
 
 
     // Functions
@@ -71,15 +72,12 @@ public class PlayerShoot : MonoBehaviour
     private void OnEnable()
     {
 		PlayerHealth.OnPlayerDeath += SetIsPlayerDead;
+		PauseMenu.OnTogglePauseScene += SetIsGamePaused;
     }
     private void OnDisable()
     {
 		PlayerHealth.OnPlayerDeath -= SetIsPlayerDead;
-    }
-
-    private void SetIsPlayerDead(bool playerDeadStatus)
-    {
-		_isPlayerDead = playerDeadStatus;
+        PauseMenu.OnTogglePauseScene -= SetIsGamePaused;
     }
 
     private void Start()
@@ -136,7 +134,7 @@ public class PlayerShoot : MonoBehaviour
 
 	bool CanFire()
 	{
-		return Time.time > _nextFireTime;
+		return Time.time > _nextFireTime && !_IsGamePaused;
 	}
 
 	float CalculateDeviation()
@@ -207,4 +205,14 @@ public class PlayerShoot : MonoBehaviour
 		Quaternion casingRotation = Quaternion.Euler(0f,0f,Random.Range(0,360f));
 		Instantiate(_bulletCasingPrefab, _casingSpawnPosition.position, casingRotation);
 	}
+
+    private void SetIsGamePaused(bool isGamePaused)
+    {
+        _IsGamePaused = isGamePaused;
+    }
+
+    private void SetIsPlayerDead(bool playerDeadStatus)
+    {
+        _isPlayerDead = playerDeadStatus;
+    }
 }

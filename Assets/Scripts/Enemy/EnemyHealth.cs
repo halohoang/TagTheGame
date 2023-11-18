@@ -36,8 +36,7 @@ public class EnemyHealth : MonoBehaviour
         _animator = GetComponent<Animator>();
         _boxCollider2D = GetComponent<BoxCollider2D>();
         SpriteRenderer _spriteRenderer = GetComponent<SpriteRenderer>();
-         _shadowCaster2D = GetComponent<ShadowCaster2D>();
-      
+         _shadowCaster2D = GetComponent<ShadowCaster2D>();      
     }
 
     internal void GetDamage()
