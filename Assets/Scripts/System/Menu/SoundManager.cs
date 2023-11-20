@@ -5,32 +5,65 @@ using UnityEngine.EventSystems;
 
 public class SoundManager : MonoBehaviour
 {
+	//Variables
 	[SerializeField] AudioClip _hoverSound;
 	[SerializeField] AudioClip _clickSound;
 
-	AudioSource audioSource;
-
+	AudioSource _audioSource;
 	[SerializeField] List<Button> listOfInteractableButtons;
+
+	private static SoundManager instance;
+
+	[SerializeField] private AudioClip _backgroundSong;
+	private bool _backgroundSongPlaying = false;
+
+	//Functions
+	void Awake()
+	{
+			Debug.Log("Destroy?");
+		if (instance == null)
+		{
+			instance = this;
+			DontDestroyOnLoad(gameObject);
+		}
+		else
+		{
+			Destroy(gameObject);
+		}
+	}
 
 	void Start()
 	{
-		audioSource = GetComponent<AudioSource>();
+		_audioSource = GetComponent<AudioSource>();
+		PlayBackgroundSong();
+		SetupButtonListeners();
+	}
 
+	void PlayBackgroundSong()
+	{
+		if (!_backgroundSongPlaying && _backgroundSong != null)
+		{
+			_audioSource.clip = _backgroundSong;
+			_audioSource.loop = true;
+			_audioSource.Play();
+			_backgroundSongPlaying = true;
+		}
+	}
+
+	void SetupButtonListeners()
+	{
 		foreach (Button button in listOfInteractableButtons)
 		{
-			// Add listeners for PointerEnter and Click events
 			EventTrigger trigger = button.gameObject.GetComponent<EventTrigger>();
 			if (trigger == null)
 			{
 				trigger = button.gameObject.AddComponent<EventTrigger>();
 			}
 
-			// PointerEnter event
 			EventTrigger.Entry pointerEnter = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
 			pointerEnter.callback.AddListener((data) => { PlaySound(_hoverSound); });
 			trigger.triggers.Add(pointerEnter);
 
-			// Click event
 			EventTrigger.Entry click = new EventTrigger.Entry { eventID = EventTriggerType.PointerClick };
 			click.callback.AddListener((data) => { PlaySound(_clickSound); });
 			trigger.triggers.Add(click);
@@ -41,7 +74,18 @@ public class SoundManager : MonoBehaviour
 	{
 		if (soundClip != null)
 		{
-			audioSource.PlayOneShot(soundClip);
+			_audioSource.PlayOneShot(soundClip);
 		}
 	}
+
+	public void ResetBackgroundSongPlaying()
+	{
+		_backgroundSongPlaying = false;
+	}
+
+	public void StopPersistence()
+	{
+		Destroy(gameObject);
+	}
+	
 }

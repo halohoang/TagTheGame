@@ -14,11 +14,11 @@ public class PauseMenu : MonoBehaviour
 	[SerializeField] private InputReaderSO _inputReaderSO;
 	private bool _isGamePaused = false;
 
-    public bool IsGamePaused { get => _isGamePaused; private set => _isGamePaused = value; }
+	public bool IsGamePaused { get => _isGamePaused; private set => _isGamePaused = value; }
 
-    // Functions
+	// Functions
 
-    private void OnEnable()
+	private void OnEnable()
 	{
 		InputReaderSO.OnEscPress += TogglePauseMenu;
 	}
@@ -43,7 +43,7 @@ public class PauseMenu : MonoBehaviour
 
 			OnTogglePauseScene?.Invoke(IsGamePaused);
 
-            Debug.Log("PauseMenu was enabled, Game is paused");
+			Debug.Log("PauseMenu was enabled, Game is paused");
 		}
 		else if (IsGamePaused /*&& !_howToPlayMenu.activeSelf*/) // Disable PauseMenu
 		{
@@ -56,9 +56,9 @@ public class PauseMenu : MonoBehaviour
 
 			_inputReaderSO.GameInput.Player.Enable();
 
-            OnTogglePauseScene?.Invoke(IsGamePaused);
+			OnTogglePauseScene?.Invoke(IsGamePaused);
 
-            Debug.Log("PauseMenu was disabled, resume to Game");
+			Debug.Log("PauseMenu was disabled, resume to Game");
 		}
 	}
 
@@ -75,16 +75,21 @@ public class PauseMenu : MonoBehaviour
 
 			_inputReaderSO.GameInput.Player.Enable();
 
-            OnTogglePauseScene?.Invoke(IsGamePaused);
+			OnTogglePauseScene?.Invoke(IsGamePaused);
 
-            Debug.Log("PauseMenu was disabled, resume to Game.");
+			Debug.Log("PauseMenu was disabled, resume to Game.");
 		}
 	}
 	public void RestartScene()
-	{		
+	{
 		Time.timeScale = 1;
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 		OnRestartScene?.Invoke();
+		SoundManager soundManager = FindObjectOfType<SoundManager>();
+		if (soundManager != null)
+		{
+			soundManager.ResetBackgroundSongPlaying();
+		}
 	}
 	public void Quit()
 	{
@@ -94,6 +99,15 @@ public class PauseMenu : MonoBehaviour
 	{
 		Time.timeScale = 1;
 		_inputReaderSO.GameInput.Player.Enable();
-		SceneManager.LoadScene(0);
+		SoundManager soundManager = FindObjectOfType<SoundManager>();
+		if (soundManager != null)
+		{
+			soundManager.ResetBackgroundSongPlaying();
+			soundManager.StopPersistence(); // Stop the SoundManager from persisting
+			Destroy(gameObject);
+			SceneManager.LoadScene(0);
+		}
 	}
+
 }
+
