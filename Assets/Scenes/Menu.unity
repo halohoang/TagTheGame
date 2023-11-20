@@ -1616,7 +1616,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: AI Lead Programmer
+  m_text: Lead AI Programmer
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 48a9904d01055c6419ee8e17e0abc23e, type: 2}
   m_sharedMaterial: {fileID: 1547869652013552497, guid: 48a9904d01055c6419ee8e17e0abc23e, type: 2}
@@ -3213,7 +3213,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hover over the members name, please :3
+  m_text: Hover over the members picture, please :3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 48a9904d01055c6419ee8e17e0abc23e, type: 2}
   m_sharedMaterial: {fileID: -8129330928972788448, guid: e4d7b5533c5b2b444aacd3089dae5bc6, type: 2}
