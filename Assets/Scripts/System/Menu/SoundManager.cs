@@ -17,6 +17,11 @@ public class SoundManager : MonoBehaviour
 	[SerializeField] private AudioClip _backgroundSong;
 	private bool _backgroundSongPlaying = false;
 
+	/* Fade out */
+	[SerializeField] float _fadeDuration = 3.0f;
+	private float _startVolume;
+	 Menu _menuScript;
+
 	//Functions
 	void Awake()
 	{
@@ -35,8 +40,18 @@ public class SoundManager : MonoBehaviour
 	void Start()
 	{
 		_audioSource = GetComponent<AudioSource>();
+		_startVolume = _audioSource.volume;
 		PlayBackgroundSong();
 		SetupButtonListeners();
+		_menuScript = GetComponentInParent<Menu>();
+	}
+	private void Update()
+	{
+		if(_menuScript._startPlay == true)
+		{
+			_audioSource.volume -= _startVolume * Time.deltaTime / _fadeDuration;
+		}
+		
 	}
 
 	void PlayBackgroundSong()

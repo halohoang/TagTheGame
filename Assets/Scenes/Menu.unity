@@ -308,18 +308,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 181166449}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
 --- !u!114 &86896793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -660,6 +648,7 @@ MonoBehaviour:
   - {fileID: 86896792}
   - {fileID: 735629915}
   _backgroundSong: {fileID: 8300000, guid: 410dd7177a2c64743af01ec6934891d2, type: 3}
+  _fadeDuration: 2
 --- !u!82 &181166452
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3219,7 +3208,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &939224019
 RectTransform:
   m_ObjectHideFlags: 0
