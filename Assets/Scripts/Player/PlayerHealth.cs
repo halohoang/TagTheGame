@@ -27,6 +27,9 @@ public class PlayerHealth : MonoBehaviour
 
     [Header("Monitoring Values")]
     [SerializeField, ReadOnly] private bool _isPlayerDead;
+    [SerializeField] GameObject _deadOverlay;
+    [SerializeField] AudioClip _deadSound;
+    AudioSource _audioSource;
 
     /* Taking Damage Effect */
     private TakingDamage _takingDamageScript;
@@ -66,6 +69,7 @@ public class PlayerHealth : MonoBehaviour
         _currentHealth = _maxHealth;
         _takingDamageScript = GetComponent<TakingDamage>();
         _animator = GetComponent<Animator>();
+        _audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     void Update()
@@ -162,11 +166,12 @@ public class PlayerHealth : MonoBehaviour
                 gameobject.SetActive(false);
             }
             _animator.SetTrigger("Dead");
-
+            _deadOverlay.SetActive(true);
+            _audioSource.PlayOneShot(_deadSound);
             OnPlayerDeath?.Invoke(IsPlayerDead);
         }
 
-        Debug.LogError($"_GetDamage()_: -> CurrentPlayerHealth: {_currentHealth}");
+        //Debug.LogError($"_GetDamage()_: -> CurrentPlayerHealth: {_currentHealth}");
     }
     void ReduceHP()
     {
@@ -195,7 +200,7 @@ public class PlayerHealth : MonoBehaviour
 
         // Ensure _currentHealth does not go below 0
         _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
-        Debug.LogError($"_ReduceHP()_: -> CurrentPlayerHealth: {_currentHealth}");
+        //Debug.LogError($"_ReduceHP()_: -> CurrentPlayerHealth: {_currentHealth}");
     }
 
     void RegenHP()
@@ -203,7 +208,7 @@ public class PlayerHealth : MonoBehaviour
         if (!Input.GetKey(KeyCode.Space) && _currentHealth < _maxHealth) { _currentHealth += 1; RegenCharge(); _canRegen = false; }
         _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
 
-        Debug.LogError($"_RegenHP()_: -> CurrentPlayerHealth: {_currentHealth}");
+       // Debug.LogError($"_RegenHP()_: -> CurrentPlayerHealth: {_currentHealth}");
     }
 
     void ReduceCharge()
