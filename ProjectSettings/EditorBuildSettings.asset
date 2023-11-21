@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level Complete Scene.unity
     guid: cbb1ff9aa8d1b0b4daefa461c6011b51
+  - enabled: 1
+    path: Assets/Scenes/ToFamily.unity
+    guid: a8a61de0217340c4b8742092fcb10fc8
   m_configObjects: {}
