@@ -6,7 +6,7 @@ public class OptionsSettingsSO : ScriptableObject, IOptionsDataPersistece
     //------------------------------ Fields ------------------------------
     [Header("Default Values")]
     [SerializeField] private float _defaultSettings = -10.0f;
-    [SerializeField] private float _muteAudioValue = -80.0f;
+    [SerializeField] private float _muteAudioValue = -60.0f;
 
     [Header("Stored Mute-Toggle Value")]
     [SerializeField] private bool _isMuted = false;
