@@ -94,6 +94,9 @@ namespace UI
             _audioMixer.SetFloat(_masterVolume, _optionSettingsSO.SavedMasterVolume);
             _audioMixer.SetFloat(_musicVolume, _optionSettingsSO.SavedMusicVolume);
             _audioMixer.SetFloat(_effectsVolume, _optionSettingsSO.SavedEffectVolume);
+
+            // todo: disable Effectslider since it's currently useless -> remove this if Effectslider will be usfull; JM (21.11.23)
+            _effectsSlider.gameObject.SetActive(false);
         }
 
 

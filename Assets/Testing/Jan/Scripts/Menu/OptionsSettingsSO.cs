@@ -5,16 +5,16 @@ public class OptionsSettingsSO : ScriptableObject, IOptionsDataPersistece
 {
     //------------------------------ Fields ------------------------------
     [Header("Default Values")]
-    [SerializeField] private float _defaultSettings = -30.0f;
+    [SerializeField] private float _defaultSettings = -10.0f;
     [SerializeField] private float _muteAudioValue = -80.0f;
 
     [Header("Stored Mute-Toggle Value")]
     [SerializeField] private bool _isMuted = false;
 
     [Header("Stored Slider Values")]
-    [SerializeField] private float _savedMasterVolume = -30.0f;
-    [SerializeField] private float _savedMusicVolume = -30.0f;
-    [SerializeField] private float _savedEffectVolume = -30.0f;
+    [SerializeField] private float _savedMasterVolume = -10.0f;
+    [SerializeField] private float _savedMusicVolume = -10.0f;
+    [SerializeField] private float _savedEffectVolume = -10.0f;
 
     //---------- Properties ----------
     public float DefaultSettings { get => _defaultSettings; set => _defaultSettings = value; }

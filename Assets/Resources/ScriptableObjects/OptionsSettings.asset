@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae70c35f291c7434e9606933fd54a137, type: 3}
   m_Name: OptionsSettings
   m_EditorClassIdentifier: 
-  _defaultSettings: -30
+  _defaultSettings: -10
   _muteAudioValue: -80
   _isMuted: 0
-  _savedMasterVolume: -30
-  _savedMusicVolume: -30
-  _savedEffectVolume: -30
+  _savedMasterVolume: -10
+  _savedMusicVolume: -10
+  _savedEffectVolume: -10
