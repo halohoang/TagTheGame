@@ -102,5 +102,4 @@ public class SoundManager : MonoBehaviour
 	{
 		Destroy(gameObject);
 	}
-	
 }
