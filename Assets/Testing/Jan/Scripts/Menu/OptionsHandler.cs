@@ -96,8 +96,8 @@ namespace UI
             _audioMixer.SetFloat(_effectsVolume, _optionSettingsSO.SavedEffectVolume);
 
             // todo: disable Effectslider since it's currently useless -> remove this if Effectslider will be usfull; JM (21.11.23)
-            _effectsSlider.gameObject.SetActive(false);
-            _masterSlider.gameObject.SetActive(false);
+            //_effectsSlider.gameObject.SetActive(false);
+            //_masterSlider.gameObject.SetActive(false);
         }
 
 

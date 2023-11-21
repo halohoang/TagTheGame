@@ -1,68 +1,82 @@
-using System.Collections;
-using System.Collections.Generic;
+using JansLittleHelper;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-	public static event UnityAction OnRestartScene;
-	public static event UnityAction<bool> OnTogglePauseScene;
+    public static event UnityAction OnRestartScene;
+    public static event UnityAction<bool> OnTogglePauseScene;
 
-	// Variables
-	[SerializeField] private GameObject _pauseMenu;
-	[SerializeField] private GameObject _optionsMenu;
-	[SerializeField] private InputReaderSO _inputReaderSO;
-	private bool _isGamePaused = false;
+    // Variables
+    [SerializeField] private GameObject _pauseMenu;
+    [SerializeField] private GameObject _optionsMenu;
+    [SerializeField] private InputReaderSO _inputReaderSO;
+    private bool _isGamePaused = false;
+    [Space(5)]
 
-	public bool IsGamePaused { get => _isGamePaused; private set => _isGamePaused = value; }
+    [SerializeField, ReadOnly] private GameObject[] _menuObjects;
 
-	// Functions
+    public bool IsGamePaused { get => _isGamePaused; private set => _isGamePaused = value; }
 
-	private void OnEnable()
-	{
-		InputReaderSO.OnEscPress += TogglePauseMenu;
-	}
+    // Functions
 
-	private void OnDisable()
-	{
-		InputReaderSO.OnEscPress -= TogglePauseMenu;
-	}
+    private void Start()
+    {
+        _menuObjects = GameObject.FindGameObjectsWithTag("MenuPanel");
 
-	private void TogglePauseMenu()
-	{
-		if (!IsGamePaused) // enable PauseMenu
-		{
-			Time.timeScale = 0;
-			_inputReaderSO.GameInput.Player.Disable();
+        if (_pauseMenu == null)
+            _pauseMenu = NullChecksAndAutoReferencing.CheckAndGetGameObject(_pauseMenu, "PauseMenu", _menuObjects);
 
-			_pauseMenu.SetActive(true);
-			IsGamePaused = true;
-			//Cursor.SetCursor()
-			//Cursor.visible = true;
-			//Cursor.lockState = CursorLockMode.None;
+        if (_optionsMenu == null)
+            _optionsMenu = NullChecksAndAutoReferencing.CheckAndGetGameObject(_optionsMenu, "OptionsMenu", _menuObjects);
+    }
 
-			OnTogglePauseScene?.Invoke(IsGamePaused);
+    private void OnEnable()
+    {
+        InputReaderSO.OnEscPress += TogglePauseMenu;
+    }
 
-			Debug.Log("PauseMenu was enabled, Game is paused");
-		}
-		else if (IsGamePaused && _optionsMenu.activeSelf) // Disable PauseMenu and optionsMenu if that is open
-		{
-			_pauseMenu.SetActive(false);
-			_optionsMenu.SetActive(false);
-			IsGamePaused = false;
-			//Cursor.visible = false;
-			//Cursor.lockState = CursorLockMode.Locked;			
+    private void OnDisable()
+    {
+        InputReaderSO.OnEscPress -= TogglePauseMenu;
+    }
 
-			Time.timeScale = 1;
+    private void TogglePauseMenu()
+    {
+        if (!IsGamePaused) // enable PauseMenu
+        {
+            Time.timeScale = 0;
+            _inputReaderSO.GameInput.Player.Disable();
 
-			_inputReaderSO.GameInput.Player.Enable();
+            _pauseMenu.SetActive(true);
+            IsGamePaused = true;
+            //Cursor.SetCursor()
+            //Cursor.visible = true;
+            //Cursor.lockState = CursorLockMode.None;
 
-			OnTogglePauseScene?.Invoke(IsGamePaused);
+            OnTogglePauseScene?.Invoke(IsGamePaused);
 
-			Debug.Log("PauseMenu was disabled, resume to Game");
-		}
-		else if (IsGamePaused) // Disable PauseMenu
+            Debug.Log("PauseMenu was enabled, Game is paused");
+        }
+        else if (IsGamePaused && _optionsMenu.activeSelf) // Disable PauseMenu and optionsMenu if that is open
+        {
+            _pauseMenu.SetActive(false);
+            _optionsMenu.SetActive(false);
+            IsGamePaused = false;
+            //Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;			
+
+            Time.timeScale = 1;
+
+            _inputReaderSO.GameInput.Player.Enable();
+
+            OnTogglePauseScene?.Invoke(IsGamePaused);
+
+            Debug.Log("PauseMenu was disabled, resume to Game");
+        }
+        else if (IsGamePaused) // Disable PauseMenu
         {
             _pauseMenu.SetActive(false);
             IsGamePaused = false;
@@ -77,54 +91,54 @@ public class PauseMenu : MonoBehaviour
 
             Debug.Log("PauseMenu was disabled, resume to Game");
         }
-	}
+    }
 
-	public void ResumeGame()    // Disable PauseMenu
-	{
-		if (IsGamePaused /*&& !_howToPlayMenu.activeSelf*/)
-		{
-			_pauseMenu.SetActive(false);
-			IsGamePaused = false;
-			//Cursor.visible = false;
-			//Cursor.lockState = CursorLockMode.Locked;
+    public void ResumeGame()    // Disable PauseMenu
+    {
+        if (IsGamePaused /*&& !_howToPlayMenu.activeSelf*/)
+        {
+            _pauseMenu.SetActive(false);
+            IsGamePaused = false;
+            //Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;
 
-			Time.timeScale = 1;
+            Time.timeScale = 1;
 
-			_inputReaderSO.GameInput.Player.Enable();
+            _inputReaderSO.GameInput.Player.Enable();
 
-			OnTogglePauseScene?.Invoke(IsGamePaused);
+            OnTogglePauseScene?.Invoke(IsGamePaused);
 
-			Debug.Log("PauseMenu was disabled, resume to Game.");
-		}
-	}
-	public void RestartScene()
-	{
-		Time.timeScale = 1;
-		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-		OnRestartScene?.Invoke();
-		SoundManager soundManager = FindObjectOfType<SoundManager>();
-		if (soundManager != null)
-		{
-			soundManager.ResetBackgroundSongPlaying();
-		}
-	}
-	public void Quit()
-	{
-		Application.Quit();
-	}
-	public void MainMenu()
-	{
-		Time.timeScale = 1;
-		_inputReaderSO.GameInput.Player.Enable();
-		SoundManager soundManager = FindObjectOfType<SoundManager>();
-		if (soundManager != null)
-		{
-			soundManager.ResetBackgroundSongPlaying();
-			soundManager.StopPersistence(); // Stop the SoundManager from persisting
-			Destroy(gameObject);
-			SceneManager.LoadScene(0);
-		}
-	}
+            Debug.Log("PauseMenu was disabled, resume to Game.");
+        }
+    }
+    public void RestartScene()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        OnRestartScene?.Invoke();
+        SoundManager soundManager = FindObjectOfType<SoundManager>();
+        if (soundManager != null)
+        {
+            soundManager.ResetBackgroundSongPlaying();
+        }
+    }
+    public void Quit()
+    {
+        Application.Quit();
+    }
+    public void MainMenu()
+    {
+        Time.timeScale = 1;
+        _inputReaderSO.GameInput.Player.Enable();
+        SoundManager soundManager = FindObjectOfType<SoundManager>();
+        if (soundManager != null)
+        {
+            soundManager.ResetBackgroundSongPlaying();
+            soundManager.StopPersistence(); // Stop the SoundManager from persisting
+            Destroy(gameObject);
+            SceneManager.LoadScene(0);
+        }
+    }
 
 }
 
