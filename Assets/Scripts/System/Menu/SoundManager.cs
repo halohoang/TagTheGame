@@ -47,10 +47,10 @@ public class SoundManager : MonoBehaviour
 	}
 	private void Update()
 	{
-		if(_menuScript._startPlay == true)
-		{
-			_audioSource.volume -= _startVolume * Time.deltaTime / _fadeDuration;
-		}
+		//if(_menuScript._startPlay == true)
+		//{
+		//	_audioSource.volume -= _startVolume * Time.deltaTime / _fadeDuration;
+		//}
 		
 	}
 

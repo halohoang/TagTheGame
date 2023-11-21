@@ -16,6 +16,6 @@ MonoBehaviour:
   _boxCollider2D: {fileID: 0}
   _bulletSpawnPoint: {fileID: 0}
   _colliderSizeOfShootSprite: {x: 0.258874, y: 0.139925}
-  _maxBulletsShotPerBurst: 3
-  _TimeBetweenBursts: 2
+  _maxBulletsShotPerBurst: 4
+  _TimeBetweenBursts: 1
   _bulletActivationDelay: 0.1
