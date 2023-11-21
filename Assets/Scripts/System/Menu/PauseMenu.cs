@@ -11,6 +11,7 @@ public class PauseMenu : MonoBehaviour
 
 	// Variables
 	[SerializeField] private GameObject _pauseMenu;
+	[SerializeField] private GameObject _optionsMenu;
 	[SerializeField] private InputReaderSO _inputReaderSO;
 	private bool _isGamePaused = false;
 
@@ -45,9 +46,10 @@ public class PauseMenu : MonoBehaviour
 
 			Debug.Log("PauseMenu was enabled, Game is paused");
 		}
-		else if (IsGamePaused /*&& !_howToPlayMenu.activeSelf*/) // Disable PauseMenu
+		else if (IsGamePaused && _optionsMenu.activeSelf) // Disable PauseMenu and optionsMenu if that is open
 		{
 			_pauseMenu.SetActive(false);
+			_optionsMenu.SetActive(false);
 			IsGamePaused = false;
 			//Cursor.visible = false;
 			//Cursor.lockState = CursorLockMode.Locked;			
@@ -60,6 +62,21 @@ public class PauseMenu : MonoBehaviour
 
 			Debug.Log("PauseMenu was disabled, resume to Game");
 		}
+		else if (IsGamePaused) // Disable PauseMenu
+        {
+            _pauseMenu.SetActive(false);
+            IsGamePaused = false;
+            //Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;			
+
+            Time.timeScale = 1;
+
+            _inputReaderSO.GameInput.Player.Enable();
+
+            OnTogglePauseScene?.Invoke(IsGamePaused);
+
+            Debug.Log("PauseMenu was disabled, resume to Game");
+        }
 	}
 
 	public void ResumeGame()    // Disable PauseMenu
