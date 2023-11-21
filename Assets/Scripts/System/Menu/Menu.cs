@@ -39,10 +39,10 @@ public class Menu : MonoBehaviour
 
 	public void BackToMainMenu()
 	{
-		StartCoroutine(Delay(0, 1f)); //Load scene 2 after 1.5s delay
+		StartCoroutine(Delay(0, 0.2f)); //Load scene 2 after 1.5s delay
 	}
 	public void Letters() // A letter to a very single one
 	{
-		StartCoroutine(Delay(3, 3.1f)); //Load scene 2 after 1.5s delay
+		StartCoroutine(Delay(3, 0.2f)); //Load scene 2 after 1.5s delay
 	}
 }
