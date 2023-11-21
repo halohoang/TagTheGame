@@ -10,6 +10,8 @@ public class TakingDamage : MonoBehaviour
 	/*Flashing Effect */
 	[SerializeField] private float _flashingSpeed = 0;
 	[SerializeField] private float _flashDuration = 0.1f; // Duration of the flashing effect
+	AudioSource _audioSource;
+	[SerializeField] AudioClip _audioClip;
 
 	private bool isFlashing = false;
 
@@ -20,6 +22,7 @@ public class TakingDamage : MonoBehaviour
 	{
 		_spriteRenderer = GetComponent<SpriteRenderer>();
 		defaultColor = _spriteRenderer.color;
+		_audioSource = GetComponent<AudioSource>();
 	}
 
 	void Update()
@@ -32,6 +35,7 @@ public class TakingDamage : MonoBehaviour
 
 	internal void FlashOnce()
 	{
+		_audioSource.PlayOneShot(_audioClip);
 		// Start flashing immediately
 		StartCoroutine(FlashAndRevert());
 	}

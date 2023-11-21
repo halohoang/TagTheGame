@@ -21,6 +21,8 @@ namespace ScriptableObjects
         [Tooltip("The interval in which bullet salves shall be shot (in sec.)")]
         [SerializeField] private float _TimeBetweenBursts = 2.0f;
         [SerializeField] private float _bulletActivationDelay = 0.3f;
+       // AudioSource _audioSource;
+       //[SerializeField] AudioClip _audioClip;
 
         private int _amountOfBulletsShot = 0;
         private float _salveIntervalTimer = 0.0f;
@@ -184,6 +186,7 @@ namespace ScriptableObjects
                 EnemyBullet.transform.position = _bulletSpawnPoint.position;
                 EnemyBullet.transform.rotation = _bulletSpawnPoint.rotation;
                 EnemyBullet.SetActive(true);
+                //_audioSource.PlayOneShot(_audioClip);
 
                 // count bullets that have been activated
                 _amountOfBulletsShot += 1;
