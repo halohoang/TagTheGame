@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AmmoCounter : MonoBehaviour
@@ -8,6 +9,7 @@ public class AmmoCounter : MonoBehaviour
 	[SerializeField] internal int currentAmmo = 30; // Current ammo count
 	[SerializeField] private Transform[] bulletSprites; // Array to store bullet sprites
 	[SerializeField] private float _waitForReload;
+	[SerializeField] private GameObject _reloadHint;
 
 	private bool isReloading = false; // Flag to track reloading status
 
@@ -19,6 +21,14 @@ public class AmmoCounter : MonoBehaviour
 		{
 			bulletSprites[i] = transform.GetChild(i);
 		}
+	}
+	private void Update()
+	{
+		if(currentAmmo < 30)
+		{
+			_reloadHint.SetActive(true);
+		}
+		if (currentAmmo >= 30) { _reloadHint.SetActive(false); }
 	}
 
 	// Link to the Shoot Function from the PlayerShoot script
@@ -38,7 +48,9 @@ public class AmmoCounter : MonoBehaviour
 		{
 			StartCoroutine(EnableBulletsDuringReload());
 		}
+		
 	}
+	
 
 	IEnumerator EnableBulletsDuringReload()
 	{
