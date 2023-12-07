@@ -34,7 +34,7 @@ namespace Interactables
         [Space(5)]
 
         [Header("Monitoring values")]
-        [SerializeField, ReadOnly] private bool _wasInteractedWith;
+        [SerializeField, ReadOnly] protected bool _wasInteractedWith;
 
         //------------------------------ Methods ------------------------------
 
