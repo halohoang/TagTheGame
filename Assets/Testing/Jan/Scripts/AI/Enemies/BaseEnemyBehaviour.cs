@@ -120,7 +120,7 @@ namespace Enemies
         {
             // subscribing to Events
             PlayerHealth.OnPlayerDeath += SetIsPlayerDead;
-            Interactable.OnDoorKickIn += SetAlarmingEventValues;
+            Interactable_Door.OnDoorKickIn += SetAlarmingEventValues;
             PlayerShoot.OnPlayerShoot += SetAlarmingEventValues;
             _condPlayerDetectionCheck.OnPlayerDetection += SetIsPlayerDetected;
 
@@ -131,7 +131,7 @@ namespace Enemies
         {
             // unsubscribing from Events
             PlayerHealth.OnPlayerDeath -= SetIsPlayerDead;
-            Interactable.OnDoorKickIn -= SetAlarmingEventValues;
+            Interactable_Door.OnDoorKickIn -= SetAlarmingEventValues;
             PlayerShoot.OnPlayerShoot -= SetAlarmingEventValues;
             _condPlayerDetectionCheck.OnPlayerDetection -= SetIsPlayerDetected;
 

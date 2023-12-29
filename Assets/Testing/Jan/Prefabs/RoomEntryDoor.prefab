@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5780798890123583610}
   - component: {fileID: 3822669520006722221}
   - component: {fileID: 3822669520006722211}
-  - component: {fileID: 2117123643563261039}
+  - component: {fileID: 4930640495062182606}
   - component: {fileID: 3822669520006722210}
   m_Layer: 10
   m_Name: RoomEntryDoor
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
---- !u!114 &2117123643563261039
+--- !u!114 &4930640495062182606
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -161,19 +161,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 3822669520006722223}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7e8ae50aa1dcc44c8d2ca2845794664, type: 3}
+  m_Script: {fileID: 11500000, guid: c0860ced7bc65c0418a6a81350c626c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _inputReaderSO: {fileID: 11400000, guid: bac5360f5a3523940978876b6731d1d6, type: 2}
-  _interactionFeedbackUI:
-  - {fileID: 0}
-  _isInInteractableTriggerzone: 0
-  _animCtrl: {fileID: 0}
+  _animCtrl: {fileID: 5780798890123583610}
   _playerAnim: {fileID: 0}
-  _interactableType: 0
-  _doorKickInNoiseRange: 10
-  _consoleControledObjects: []
+  _isInInteractableTriggerzone: 0
   _wasInteractedWith: 0
+  _doorKickInNoiseRange: 10
 --- !u!114 &3822669520006722210
 MonoBehaviour:
   m_ObjectHideFlags: 0

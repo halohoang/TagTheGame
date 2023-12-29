@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5288753673656989022}
   - component: {fileID: 632746602406210359}
   - component: {fileID: 276476589987430966}
-  - component: {fileID: 276476589987430961}
+  - component: {fileID: 8445120976198128590}
   - component: {fileID: 1408213843531242475}
   m_Layer: 0
   m_Name: ElevatorDoorConsole
@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
---- !u!114 &276476589987430961
+--- !u!114 &8445120976198128590
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,19 +162,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 276476589987430960}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7e8ae50aa1dcc44c8d2ca2845794664, type: 3}
+  m_Script: {fileID: 11500000, guid: 5f62df215bd7be14995e32405d0be569, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _inputReaderSO: {fileID: 11400000, guid: bac5360f5a3523940978876b6731d1d6, type: 2}
-  _interactionFeedbackUI: []
-  _isInInteractableTriggerzone: 0
-  _animCtrl: {fileID: 0}
+  _animCtrl: {fileID: 5288753673656989022}
   _playerAnim: {fileID: 0}
-  _interactableType: 1
-  _doorKickInNoiseRange: 10
+  _isInInteractableTriggerzone: 0
+  _wasInteractedWith: 0
   _consoleControledObjects:
   - {fileID: 5068318386704208608}
-  _wasInteractedWith: 0
 --- !u!114 &1408213843531242475
 MonoBehaviour:
   m_ObjectHideFlags: 0

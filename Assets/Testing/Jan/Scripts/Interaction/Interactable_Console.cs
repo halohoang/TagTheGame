@@ -52,6 +52,8 @@ namespace Interactables
             }
 
             OnDoorStatusChange?.Invoke();
+
+            base.ReadInteractionInput();    // for fireing the Event 'OnInteractionLogicHasBeenExecuted'
         }
 
         private void SetActiveStatusOfControlledObj(GameObject controledObj)
