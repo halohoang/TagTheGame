@@ -34,12 +34,12 @@ public class UserFeedbackUIHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        InteractionController.OnEnterInteractableTriggerZone += SetFeedBackUIActive;
+        Interactable.OnEnterInteractableTriggerZone += SetFeedBackUIActive;
         Interactable.OnInteractionLogicHasBeenExecuted += SetFeedBackUIActive;
     }
     private void OnDisable()
     {
-        InteractionController.OnEnterInteractableTriggerZone -= SetFeedBackUIActive;
+        Interactable.OnEnterInteractableTriggerZone -= SetFeedBackUIActive;
         Interactable.OnInteractionLogicHasBeenExecuted -= SetFeedBackUIActive;
 
     }

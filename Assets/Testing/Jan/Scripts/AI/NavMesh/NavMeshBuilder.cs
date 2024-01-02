@@ -1,7 +1,6 @@
 using Interactables;
 using NaughtyAttributes;
 using NavMeshPlus.Components;
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(NavMeshSurface))]
@@ -18,13 +17,15 @@ public class NavMeshBuilder : MonoBehaviour
 
     private void OnEnable()
     {
-        Interactable.OnDoorStatusChange += BakeNewNavMesh;
+        Interactable_Door.OnDoorStatusChange += BakeNewNavMesh;
+        Interactable_Console.OnDoorStatusChange += BakeNewNavMesh;
         CheatInput.OnResetDoors += BakeNewNavMesh;
     }
 
     private void OnDisable()
     {
-        Interactable.OnDoorStatusChange -= BakeNewNavMesh;
+        Interactable_Door.OnDoorStatusChange -= BakeNewNavMesh;
+        Interactable_Console.OnDoorStatusChange -= BakeNewNavMesh;
         CheatInput.OnResetDoors -= BakeNewNavMesh;
     }
 

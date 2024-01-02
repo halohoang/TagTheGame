@@ -8,7 +8,6 @@ namespace Interactables
         //------------------------------ Events ------------------------------
         public static event UnityAction OnDoorStatusChange;       // for sending message to NavMeshBuilder.cs to update NavMeshSurface
         public static event UnityAction<bool, Vector3, float> OnDoorKickIn;    // for sending message to EnemyQuickFixSolution_ForTesting.cs to ifnorm about DoorKickIn and DoorPosition
-        public static event UnityAction<bool> OnInteractionLogicHasBeenExecuted;
 
         //------------------------------ Fields ------------------------------
         [Header("Settings")]
@@ -36,6 +35,8 @@ namespace Interactables
             OnDoorStatusChange?.Invoke();
 
             OnDoorKickIn?.Invoke(_wasInteractedWith, transform.position, _doorKickInNoiseRange); // Event for Informing Enemies that Door was Kicked in to react to
+
+            base.ReadInteractionInput();    // for fireing the Event 'OnInteractionLogicHasBeenExecuted'
         }
     }
 }
