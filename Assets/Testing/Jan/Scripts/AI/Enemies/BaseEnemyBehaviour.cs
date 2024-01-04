@@ -102,7 +102,7 @@ namespace Enemies
 
             CondMeleeAttackCheck = GetComponent<ConditionIsInMeleeAttackRangeCheck>(); // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
 
-            // Instantiating Copys of the Behaviour-CriptableObjects (so every Enemy has its own beahviour and not all Enemies will share the same reference of an behaviour)
+            // Instantiating Copys of the Behaviour-ScriptableObjects (so every Enemy has its own beahviour and not all Enemies will share the same reference of an behaviour)
             BaseEnemyIdleStateSOInstance = Instantiate(_baseEnemyIdleStateSO);
             BaseEnemyAlertStateSOInstance = Instantiate(_baseEnemyAlertStateSO);
             BaseEnemyChaseStateSOInstance = Instantiate(_baseEnemyChaseStateSO);
@@ -149,7 +149,7 @@ namespace Enemies
             BaseEnemyIdleStateSOInstance.Initialize(this.gameObject, this);
             BaseEnemyAlertStateSOInstance.Initialize(this.gameObject, this);
             BaseEnemyChaseStateSOInstance.Initialize(this.gameObject, this);
-            BaseEnemyAttackStateSOInstance.Initialize(this.gameObject, this);   // todo: JM; rework Architecture since the Initializiation lake that will allways put the specific EnemyBehaviour.cs into a BaseEnemyBehaviour (because of Polymorphism) regardless if MeleeEnemyBehaviour or RangeEnemyBehaviour. Accordingly simple Overloading the Initialization() to take Meless/RangeEnemyBehaviour woun't work since nonetheless the first Overload(BaseEnemyBehaviour will be used simply becaus eit'S possible) therefore outsourcing the MeleeAttack/chase Logic to MeleeEnemyBehaviour can't be called in the specific BehaviourScriptable Objects. -> find a Soluzion for this Problem(!). until then stick to the existing appraoch by handling all Attack/Chase-Logic and Queries (if 'isInAttackRange' etc) in the BaseEnemyBehaviour.cs even if it's no nice architecture and makes the MeleeEnemyBehaviour/RangeEnemyBehaviour.cs actually useless a the moment; (JM 10.11.2023)
+            BaseEnemyAttackStateSOInstance.Initialize(this.gameObject, this);   // todo: JM; rework Architecture since the Initializiation like that will allways put the specific EnemyBehaviour.cs into a BaseEnemyBehaviour (because of Polymorphism) regardless if MeleeEnemyBehaviour or RangeEnemyBehaviour. Accordingly simple Overloading the Initialization() to take Melee/RangeEnemyBehaviour woun't work since nonetheless the first Overload(BaseEnemyBehaviour will be used simply becaus it's possible) therefore outsourcing the MeleeAttack/chase Logic to MeleeEnemyBehaviour can't be called in the specific BehaviourScriptable Objects. -> find a Solution for this Problem(!). until then stick to the existing appraoch by handling all Attack/Chase-Logic and Queries (if 'isInAttackRange' etc) in the BaseEnemyBehaviour.cs even if it's no nice architecture and makes the MeleeEnemyBehaviour/RangeEnemyBehaviour.cs actually useless a the moment; (JM 10.11.2023)
 
             // initialize Statemachine with initial State
             StateMachine.Initialize(IdleState);
