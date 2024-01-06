@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,15 +12,19 @@ namespace Interactables
 
         //------------------------------ Fields ------------------------------
         [Header("Settings")]
-        [SerializeField, Range(0.0f, 20.0f)] private float _doorKickInNoiseRange = 10.0f;
+        [SerializeField, Range(0.0f, 20.0f), EnableIf("_showNoiseRangeGizmo")] private float _doorKickInNoiseRange = 10.0f;
+        [SerializeField] private bool _showNoiseRangeGizmo = true;
 
 
         //------------------------------ Methods ------------------------------
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, _doorKickInNoiseRange);
+            if (_showNoiseRangeGizmo)
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireSphere(transform.position, _doorKickInNoiseRange);
+            }
         }
 
         protected override void ReadInteractionInput()

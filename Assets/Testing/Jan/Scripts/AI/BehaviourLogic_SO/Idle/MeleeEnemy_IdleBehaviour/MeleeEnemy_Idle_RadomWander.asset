@@ -18,6 +18,7 @@ MonoBehaviour:
   _minRandomWalkingRange: 1
   _maxRandomWalkingRange: 5
   _distanceToCheckForObstacles: 1.5
+  _distanceForAvoidCheck: 1.5
   _obstacleMask:
     serializedVersion: 2
     m_Bits: 1088

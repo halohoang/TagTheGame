@@ -1,6 +1,7 @@
 using Enemies;
 using EnumLibrary;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace ScriptableObjects
 {
@@ -8,6 +9,8 @@ namespace ScriptableObjects
     // todo: (!) if Time create a Parent Class 'BaseIdleRandomWanderSO'  that derives from 'BaseIdleSO' and is parent to the specific 'EnemyIdleRandomWanderSO' (Melee/Range) since the differ just in the Transition-Check but are equal coding wise beside that; JM (09.11.2023)
     public class MeleeEnemyIdleRandomWanderSO : BaseEnemyIdleSO
     {
+        public static event UnityAction<Vector3> OnObstacleAvoidance;
+
         [Header("Behaviour Settings")]
         [SerializeField] private float _wanderSpeed = 1.0f;
         [Tooltip("The minimum time the Enemy shall wander before choosing a new wander direction, note this will be set by random between min and max value")]
@@ -191,7 +194,8 @@ namespace ScriptableObjects
             else if (IsMovingToCloseToObstacle)     // if Agent is walking to close towards an Obstacle, change walkin direction to the oposite
             {                
                 WalkTargetPos = _currentObstacleAvoidanceVector;
-                Debug.Log($"'<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>': Walking Direction was Changed due to walking to close towards obstacle");
+                Debug.Log($"'<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>': Walking Direction was Changed due to walking to close towards obstacle; new direction: {_currentObstacleAvoidanceVector}");
+                OnObstacleAvoidance?.Invoke(_currentObstacleAvoidanceVector);
                 IsMovingToCloseToObstacle = false;
             }
         }

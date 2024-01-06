@@ -229,6 +229,12 @@ namespace Enemies
             this.enabled = false;
         }
 
+        /// <summary>
+        /// rework this solution since every enemy will execute this and therefore everey enemy will set -> 
+        /// </summary>
+        /// <param name="isSomethinAlarmingHappening"></param>
+        /// <param name="positionOfAlarmingEvent"></param>
+        /// <param name="noiseRangeOfAlarmingEvent"></param>
         private void SetAlarmingEventValues(bool isSomethinAlarmingHappening, Vector3 positionOfAlarmingEvent, float noiseRangeOfAlarmingEvent)
         {
             // for every Enemy that actually is in the noise range of the AlertEvent set the appropriate values
