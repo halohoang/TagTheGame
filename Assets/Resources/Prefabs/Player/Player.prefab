@@ -72,6 +72,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1036063250}
   - component: {fileID: 1036063251}
+  - component: {fileID: 1256348239}
   m_Layer: 8
   m_Name: Goggle light
   m_TagString: Untagged
@@ -125,7 +126,7 @@ MonoBehaviour:
   m_NormalMapQuality: 1
   m_UseNormalMap: 0
   m_ShadowIntensityEnabled: 1
-  m_ShadowIntensity: 0.5
+  m_ShadowIntensity: 0.7
   m_ShadowVolumeIntensityEnabled: 1
   m_ShadowVolumeIntensity: 1
   m_LocalBounds:
@@ -144,6 +145,20 @@ MonoBehaviour:
   - {x: 0.9655361, y: -0.21299694, z: 0}
   - {x: 0.96612763, y: 0.18811147, z: 0}
   - {x: -0.032729175, y: -0.0126838535, z: 0}
+--- !u!114 &1256348239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036063249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9efdc9f856c19a3448f3daedf244c359, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lightOuterRadiusChangeValue: 0.5
+  _backLight: {fileID: 6257531966712258264}
 --- !u!1 &1578513964
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,13 +441,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93c428396c23e86419c9f75a09f766d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inputReaderSO: {fileID: 0}
+  _rigidbody2D: {fileID: 0}
   _currentPlayerSpeed: 0
   _minPlayerSpeed: 5
   _maxPlayerSpeed: 10
   _playerDashForce: 200
   _sandevistan: {fileID: 3493521951034406024}
   _dashCooldown: 1
-  _healthThresholdStopBoost: 2
   _light2D: {fileID: 6257531966712258264}
 --- !u!114 &3493521951034406027
 MonoBehaviour:
@@ -447,6 +463,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerTransform: {fileID: 3493521951034406038}
+  _isPlayerDead: 0
 --- !u!95 &3493521951034406025
 Animator:
   serializedVersion: 5
@@ -493,6 +510,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 0}
+  _playerHealth: {fileID: 0}
   ClonesPerSecond: 15
   scalePerSecond: {x: 5, y: 5, z: 5}
   colorPerSecond: {r: 1, g: 1, b: 1, a: 1}
@@ -511,8 +529,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gun: {fileID: 3493521950240620799}
   _bulletSpawnPoint: {fileID: 8411590538500528137}
-  _bulletPrefab: {fileID: 6070599304756626328, guid: 582f4e55be49c9c46856539ba8ae9868, type: 3}
-  _bulletScript: {fileID: -2388219009178345197, guid: 582f4e55be49c9c46856539ba8ae9868, type: 3}
+  _bulletPrefab: {fileID: 6070599304756626328, guid: dd94c979a65c5f14db45df26421a70b3, type: 3}
   _maximumBulletCount: 30
   _currentBulletCount: 0
   _reloadTime: 1.1
@@ -521,7 +538,7 @@ MonoBehaviour:
   _casingSpawnPosition: {fileID: 758390773}
   _firerate: 0.1
   _maxDeviationAngle: 20
-  _whenDeviationKicksIn: 5
+  _whenDeviationKicksIn: 10
   _shootingNoiseRange: 10
   _fireSound: {fileID: 8300000, guid: 92ff6bc4cca42e64db2077088246a09f, type: 3}
   _reloadSound: {fileID: 8300000, guid: 554bb6e1ed7eede439f7bbc798380490, type: 3}
@@ -531,6 +548,8 @@ MonoBehaviour:
   _muzzleFlash: {fileID: 6304203630275845578}
   _animator: {fileID: 6304203630275845577}
   _isShooting: 0
+  _isPlayerDead: 0
+  _IsGamePaused: 0
 --- !u!114 &3418635257247461372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -548,14 +567,18 @@ MonoBehaviour:
   _currentHealth: 0
   _player: {fileID: 3493521951034406032}
   _chargeBarTransform: {fileID: 6563612138351710883}
-  _chargeSpeed: 0.05
-  _healthThresholdStopBoost: 0
+  _chargeSpeed: 1
   _disableGameObject:
   - {fileID: 1208855713382640347}
   - {fileID: 2625756935860439556}
   - {fileID: 1036063249}
   - {fileID: 3333891658325693936}
+  - {fileID: 5419344618252784355}
+  _isPlayerDead: 0
+  _deadOverlay: {fileID: 0}
+  _deadSound: {fileID: 8300000, guid: ab8606f911b06b84884a725ba313a76e, type: 3}
   _takenDamage: 100
+  _regenCooldown: 0.1
 --- !u!114 &4930503924211928506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -570,6 +593,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _flashingSpeed: 0
   _flashDuration: 0.1
+  _audioClip: {fileID: 0}
 --- !u!50 &3493521951034406036
 Rigidbody2D:
   serializedVersion: 4
@@ -665,7 +689,7 @@ BoxCollider2D:
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_AutoTiling: 1
   serializedVersion: 2
   m_Size: {x: 0.14, y: 0.28519893}
   m_EdgeRadius: 0
@@ -682,7 +706,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.000000022351742, y: 0.000000007450581}
+  m_Offset: {x: -0.0008626282, y: -0.0006670207}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -693,7 +717,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.1722153, y: 0.28505635}
+  m_Size: {x: 0.26283264, y: 0.3104073}
   m_EdgeRadius: 0
 --- !u!82 &1187376039
 AudioSource:
@@ -704,7 +728,7 @@ AudioSource:
   m_GameObject: {fileID: 3493521951034406032}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5867677967352561335, guid: c229dbcc798259d40b680e3815b44748, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -817,7 +841,7 @@ MonoBehaviour:
   - {x: 0.07000017, y: -0.12999988, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 75442
+  m_InstanceId: -19852
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.07000017, y: 0.12999988, z: 0}
@@ -907,14 +931,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5419344618252784355}
-  m_LocalRotation: {x: -0, y: -0, z: -0.008921712, w: 0.99996024}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: -0.03, y: 0.0029, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3493521951034406038}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!114 &6257531966712258264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -951,8 +975,8 @@ MonoBehaviour:
   m_LocalBounds:
     m_Center: {x: 0, y: -0.00000011920929, z: 0}
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
-  m_PointLightInnerAngle: 360
-  m_PointLightOuterAngle: 360
+  m_PointLightInnerAngle: 320.33
+  m_PointLightOuterAngle: 320.33
   m_PointLightInnerRadius: 0.39
   m_PointLightOuterRadius: 0.8207537
   m_ShapeLightParametricSides: 5
