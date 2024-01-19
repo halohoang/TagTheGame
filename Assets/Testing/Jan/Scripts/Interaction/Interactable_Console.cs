@@ -4,6 +4,9 @@ using UnityEngine.Events;
 
 namespace Interactables
 {
+    /// <summary>
+    /// Child class to 'Interactable.cs'. Handles 
+    /// </summary>
     public class Interactable_Console : Interactable
     {
         //------------------------------ Events ------------------------------
@@ -32,6 +35,7 @@ namespace Interactables
             //PlaySFX("...");                 // Play DoorKickIn Sound
 
             // todo: exchange this Logic by playing Open/Close Animation; JM (14.11.2023)
+            // Activate/deactivate door-object on console interaction
             foreach (GameObject controledObj in _consoleControledObjects)
             {
                 if (controledObj != null)
@@ -56,6 +60,10 @@ namespace Interactables
             base.ReadInteractionInput();    // for fireing the Event 'OnInteractionLogicHasBeenExecuted'
         }
 
+        /// <summary>
+        /// Enables/disables the thransmitted GameObject respective to its activeSelf-property
+        /// </summary>
+        /// <param name="controledObj"></param>
         private void SetActiveStatusOfControlledObj(GameObject controledObj)
         {
             if (controledObj.activeSelf)

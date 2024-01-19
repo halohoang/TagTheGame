@@ -5,7 +5,8 @@ using NaughtyAttributes;
 namespace Interactables
 {
     /// <summary>
-    /// Chld class for interactable signs-object ingame tha shall be interacted by pressing the 'E'-Key when player is in appropriate trigger zone
+    /// Base class for interactable objects ingame, that shall be interacted with by pressing a specific key or button (for now the 'E'-Key) when player is in appropriate trigger zone.
+    /// 
     /// </summary>
     public abstract class Interactable : MonoBehaviour
     {
