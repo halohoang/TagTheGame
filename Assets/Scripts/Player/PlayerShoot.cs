@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using ScriptableObjects;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,7 +12,8 @@ public class PlayerShoot : MonoBehaviour
 
     //--- SerializedFields Variables ---
     [Header("References")]
-    [SerializeField] private InputReaderSO _inputReaderSO;
+    [SerializeField] private InputReaderSO _inputReader;
+    [SerializeField] private PlayerEquipmentSO _playerEquipment;
 
     /* Gun related References*/
     [SerializeField] GameObject _gun;
@@ -90,23 +92,28 @@ public class PlayerShoot : MonoBehaviour
 
     private void Awake()
     {
-        if (_inputReaderSO == null)
+        if (_inputReader == null)
         {
-            _inputReaderSO = Resources.Load("ScriptableObjects/InputReader") as InputReaderSO;
-            Debug.Log($"<color=yellow>Caution!</color>: Reference for InputReader in Inspector of {this} was not set. So it was Set automatically, if you want or need to set a specific " +
-                $"InputReader Asset, set it manually instead.");
+            _inputReader = Resources.Load("ScriptableObjects/InputReader") as InputReaderSO;
+            Debug.Log($"<color=yellow>Caution!</color>: Reference for ScriptableObject 'InputReader' in Inspector of {this} was not set. So it was Set automatically, if you want or need to set a specific InputReader Asset, set it manually instead.");
+        }
+
+        if (_playerEquipment == null)
+        {
+            _playerEquipment = Resources.Load("ScriptableObjects/PlayerEquipment") as PlayerEquipmentSO;
+            Debug.Log($"<color=yellow>Caution!</color>: Reference for ScriptableObject 'PlayerEquipment' in Inspector of {this} was not set. So it was Set automatically.");
         }
     }
 
     private void OnEnable()
     {
-        _inputReaderSO.OnWeaponSwitch += SwitchWeapon;
+        _inputReader.OnWeaponSwitch += SwitchWeapon;
         PlayerHealth.OnPlayerDeath += SetIsPlayerDead;
         PauseMenu.OnTogglePauseScene += SetIsGamePaused;
     }
     private void OnDisable()
     {
-        _inputReaderSO.OnWeaponSwitch -= SwitchWeapon;
+        _inputReader.OnWeaponSwitch -= SwitchWeapon;
         PlayerHealth.OnPlayerDeath -= SetIsPlayerDead;
         PauseMenu.OnTogglePauseScene -= SetIsGamePaused;
     }

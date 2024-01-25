@@ -1,16 +1,10 @@
-using UnityEngine;
-
 public class EnergyLauncher : BaseWeapon
 {
-    // Start is called before the first frame update
-    void Start()
+    EnergyLauncher(string weaponName, float weaponDamage, int magazineSize, int currentRoundsInMag)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        _weaponName = weaponName;
+        _weaponDamage = weaponDamage;
+        _magazineSize = magazineSize;
+        _currentRoundsInMag = currentRoundsInMag;
     }
 }

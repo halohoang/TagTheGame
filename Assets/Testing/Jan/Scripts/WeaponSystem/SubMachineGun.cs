@@ -1,16 +1,11 @@
-using UnityEngine;
-
 public class SubMachineGun : BaseWeapon
 {
-    // Start is called before the first frame update
-    void Start()
+    SubMachineGun(string weaponName, float weaponDamage, int magazineSize, int currentRoundsInMag)
     {
-
+        _weaponName = weaponName;
+        _weaponDamage = weaponDamage;
+        _magazineSize = magazineSize;
+        _currentRoundsInMag = currentRoundsInMag;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }
