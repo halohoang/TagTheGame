@@ -13,6 +13,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
     public event UnityAction OnAttackInput;
     public event UnityAction OnInteractionInput;
     public event UnityAction OnReloadingInput;
+    public event UnityAction OnWeaponSwitch;
     public static event UnityAction OnEscPress;
 
 
@@ -89,6 +90,11 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
             OnReloadingInput?.Invoke();
     }
 
+    public void OnWeaponSwap(InputAction.CallbackContext context)
+    {
+        if (context.started)
+            OnWeaponSwitch?.Invoke();
+    }
 
     //---------- Input-Callback Methods, UI-related ----------
     public void OnTogglePauseMenu(InputAction.CallbackContext context)
@@ -98,5 +104,5 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
             OnEscPress?.Invoke();
             Debug.Log($"<color=orange> 'Esc'-Key was pressed </color>");
         }
-    }
+    }    
 }

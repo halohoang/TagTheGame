@@ -6,62 +6,76 @@ using UnityEngine.Events;
 public class PlayerShoot : MonoBehaviour
 {
     public static event UnityAction<bool, Vector3, float> OnPlayerShoot;
-    // Variables
+    
+    // ---------- Variables ----------
 
-    /* Gun properties */
+    //--- SerializedFields Variables ---
+    [Header("References")]
+    [SerializeField] private InputReaderSO _inputReaderSO;
+
+    /* Gun related References*/
     [SerializeField] GameObject _gun;
     [SerializeField] private Transform _bulletSpawnPoint; // Transform of the gun
-    private bool _isArmed; // Checking whether the player is armed or not
     [SerializeField] private GameObject _bulletPrefab;
     //[SerializeField] internal PlayerBullet _bulletScript;
 
-    /* Reload system */
-    [SerializeField] internal int _maximumBulletCount;
-    [SerializeField] internal int _currentBulletCount;
-    //[SerializeField] internal int _minimumBulletCount; // Will use to do sound for low ammo  sound
-    private bool _isReloading = false;
-    [SerializeField] private float _reloadTime; // To sync with how long the reload animation is
+    /* Reload System References */
     [SerializeField] AmmoCounter _ammoCounterScript; // Link to the AmmoCounter script
 
-    /* Bullet Casing Spawning */
+    /* Bullet Casing Spawining References*/
     [SerializeField] private GameObject _bulletCasingPrefab; // Prefab of the bullet casing
     [SerializeField] private Transform _casingSpawnPosition;
 
-    /* Firerate */
+    /* AudioClip References*/
+    [SerializeField] private AudioClip _fireSound; //Fire sound
+    [SerializeField] private AudioClip _reloadSound; // Reload sound
+
+    /* Camera Shake References */
+    [SerializeField] private CameraRecoilShake cameraShake;
+
+    /* Muzzle Flash References */
+    [SerializeField] private GameObject _muzzleFlash;
+    [SerializeField] private Animator _animator;
+    [Space (5)]
+        
+
+    [Header("Settings")]
+    /* Reload system */
+    [SerializeField] internal int _maximumBulletCount;
+    [SerializeField] internal int _currentBulletCount;
+    //[SerializeField] internal int _minimumBulletCount; // Will use to do sound for low ammo  sound    
+    [SerializeField] private float _reloadTime; // To sync with how long the reload animation is    
+
+    /* Firerate Settings*/
     [SerializeField] private float _firerate = 0.5f;
     private float _nextFireTime;
 
-    /* Recoil */
+    /* Recoil Settings*/
     [SerializeField] private float _maxDeviationAngle = 5f; // Maximum deviation the bullet will be off from the straight line
     [SerializeField] private float _whenDeviationKicksIn;
 
-    private float _mouseButtonReleaseTime; // Time when the mouse button was last released
-
-    /* Shooting Noise Range */
+    /* Shooting Noise Range Settings*/
     [SerializeField, Range(0.0f, 25.0f), EnableIf("_showNoiseRangeGizmo")] private float _shootingNoiseRange = 10.0f;
     [Tooltip("Defines whether the green gizmo circle around the player showing the noise range when shooting, is shown in the editor or not.")]
-    [SerializeField] private bool _showNoiseRangeGizmo = true;
+    [SerializeField] private bool _showNoiseRangeGizmo = true;    
 
-    [SerializeField] private AudioClip _fireSound; //Fire sound
-    [SerializeField] private AudioClip _reloadSound; // Reload sound
-    private AudioSource _audioSource;
-
-    /* Camera Shake */
-    [SerializeField] private CameraRecoilShake cameraShake;
+    /* Camera Shake Settings*/    
     ////private float _triggerHoldStartTime = 0f;
     [SerializeField] internal float duration = 0.05f;
-    [SerializeField] internal float amount = 0.08f;
-
-
-    /* Muzzle Flash */
-    [SerializeField] private GameObject _muzzleFlash;
-    [SerializeField] private Animator _animator;
+    [SerializeField] internal float amount = 0.08f;    
+    [Space(5)]
 
 
     [Header("Monitoring Values")]
     [SerializeField, ReadOnly] private bool _isShooting;
     [SerializeField, ReadOnly] private bool _isPlayerDead;
     [SerializeField, ReadOnly] private bool _IsGamePaused;
+    [SerializeField, ReadOnly] private bool _isArmed; // Checking whether the player is armed or not
+    [SerializeField, ReadOnly] private bool _isReloading = false;
+
+    // --- private Variables ---
+    private AudioSource _audioSource;
+    private float _mouseButtonReleaseTime; // Time when the mouse button was last released
 
 
     // Functions
@@ -74,13 +88,25 @@ public class PlayerShoot : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        if (_inputReaderSO == null)
+        {
+            _inputReaderSO = Resources.Load("ScriptableObjects/InputReader") as InputReaderSO;
+            Debug.Log($"<color=yellow>Caution!</color>: Reference for InputReader in Inspector of {this} was not set. So it was Set automatically, if you want or need to set a specific " +
+                $"InputReader Asset, set it manually instead.");
+        }
+    }
+
     private void OnEnable()
     {
+        _inputReaderSO.OnWeaponSwitch += SwitchWeapon;
         PlayerHealth.OnPlayerDeath += SetIsPlayerDead;
         PauseMenu.OnTogglePauseScene += SetIsGamePaused;
     }
     private void OnDisable()
     {
+        _inputReaderSO.OnWeaponSwitch -= SwitchWeapon;
         PlayerHealth.OnPlayerDeath -= SetIsPlayerDead;
         PauseMenu.OnTogglePauseScene -= SetIsGamePaused;
     }
@@ -93,7 +119,7 @@ public class PlayerShoot : MonoBehaviour
 
     private void Update()
     {
-        SwitchWeapon();
+        DrawOrHolsterWeapon();
         if (_isArmed && !_isPlayerDead)
         {
             if (Input.GetMouseButtonUp(0))
@@ -128,13 +154,20 @@ public class PlayerShoot : MonoBehaviour
         }
     }
 
-    void SwitchWeapon()
+    void DrawOrHolsterWeapon()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             _isArmed = !_isArmed;
             _gun.SetActive(_isArmed);
         }
+    }
+
+    private void SwitchWeapon()
+    {
+        // Update UI
+
+        // Update PlayerEquipmentSO
     }
 
     bool CanFire()
