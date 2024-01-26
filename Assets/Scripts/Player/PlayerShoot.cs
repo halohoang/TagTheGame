@@ -175,6 +175,7 @@ public class PlayerShoot : MonoBehaviour
         // Update UI
 
         // Update PlayerEquipmentSO
+        _playerEquipment.SwitchWeapon();
     }
 
     bool CanFire()
