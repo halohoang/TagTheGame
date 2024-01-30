@@ -136,7 +136,7 @@ public class PlayerShoot : MonoBehaviour
             else if (Input.GetMouseButton(0) && CanFire() && _currentBulletCount > 0 && _isReloading == false)
             {
                 _isShooting = true;
-                _animator.SetBool("Firing", _isShooting);
+                //_animator.SetBool("Firing", _isShooting);
                 Shoot();
                 _currentBulletCount--;
                 SpawnBulletCasing();
@@ -148,7 +148,7 @@ public class PlayerShoot : MonoBehaviour
             else
             {
                 _isShooting = false;
-                _animator.SetBool("Firing", _isShooting);
+                //_animator.SetBool("Firing", _isShooting);
             }
         }
         if (Input.GetKeyDown(KeyCode.R) && _isReloading == false && !Input.GetMouseButton(0) && !_isPlayerDead)
@@ -206,7 +206,7 @@ public class PlayerShoot : MonoBehaviour
             GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, bulletRotation);
             Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
             _ammoCounterScript.DecreaseAmmo(); //Call the Decrease Ammo function from the AmmoCounter script;
-            _animator.SetBool("Firing", true);
+            //_animator.SetBool("Firing", true);
             _nextFireTime = Time.time + _firerate;
             if (Input.GetKey(KeyCode.Space))
             {
