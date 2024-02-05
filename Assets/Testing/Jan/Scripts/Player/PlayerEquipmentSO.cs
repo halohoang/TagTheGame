@@ -34,48 +34,73 @@ namespace ScriptableObjects
             [SerializeField, ReadOnly, AllowNesting] private string _weaponName;
             [Tooltip("The type of the weapon.")]
             [SerializeField, ReadOnly, AllowNesting] private Enum_Lib.EWeaponType _weaponType;
-            [Tooltip("The damage dealt by the weapon")]
+            [Tooltip("The damage dealt by the weapon.")]
             [SerializeField] private float _weaponDamage;
             [Tooltip("The rate of bullets spawning")]
             [SerializeField] private float _fireRate;
-            [Tooltip("The amount of rounds the weapons magazine can store")]
+            [Tooltip("The amount of rounds the weapons magazine can store.")]
             [SerializeField] private int _magazineSize;
-            [Tooltip("The current amount of rounds in the magazine")]
+            [Tooltip("The inital amount of rounds in the magazine.")]
             [SerializeField] private int _currentRoundsInMag;
-            [Tooltip("The Amount of Bullets that will be spawned simultaneously (e.g. for the Shotgun it might be '5' and for the Handgun '1')")]
+            [Tooltip("The Amount of Bullets that will be spawned simultaneously (e.g. for the Shotgun it might be '5' and for the Handgun '1').")]
             [SerializeField] private int _spawnedBullets;
 
 
             // Properties
             internal string WeaponName { get => _weaponName; set => _weaponName = value; }
             internal Enum_Lib.EWeaponType WeaponType { get => _weaponType; set => _weaponType = value; }
+            internal float WeaponDamage { get => _weaponDamage; set => _weaponDamage = value; }
+            internal float FireRate { get => _fireRate; set => _fireRate = value; }
+            internal int MagazineSize { get => _magazineSize; set => _magazineSize = value; }
+            internal int CurrentRoundsInMag { get => _currentRoundsInMag; set => _currentRoundsInMag = value; }
+            internal int SpawnedBullets { get => _spawnedBullets; set => _spawnedBullets = value; }
         }
 
         // ---------- Methods ----------
         private void OnEnable()
         {
-            // initialize the specifiv weapon objects
+            // 1. initializing single weapon objects with standard values automatically
             Handgun = new HandCannon("Handgun", Enum_Lib.EWeaponType.Handgun, 1, 1.5f, 6, 6, 1);
             SMG = new SubMachineGun("SMG", Enum_Lib.EWeaponType.SMG, 1, 0.5f, 30, 30, 1);
             Shotgun = new ShotGun("Shotgun", Enum_Lib.EWeaponType.Shotgun, 1, 1, 8, 8, 5);
-            ELauncher = new EnergyLauncher("Energy Launcher", Enum_Lib.EWeaponType.EnergyLauncher, 1, 1, 1, 1, 1);
+            ELauncher = new EnergyLauncher("Energy Launcher", Enum_Lib.EWeaponType.EnergyLauncher, 1, 1, 1, 1, 1);            
 
-            // initializing the List with the specific weapon objects
+            // 2. initializing the List with the specific weapon objects and their standard values
             _weapons = new List<BaseWeapon>() { Handgun, SMG, Shotgun, ELauncher };
 
-            // todo(!!!): find a solution for the vicious circle here regarding the initializing of the WeaponValus-Array and the WeaponList 
-            // initializing the Array for the WeaponType Values
-            _weaponValues = new WeaponTypeValues[_weapons.Count];
-            for (int i = 0; i < _weaponValues.Length; i++) // Sets the name of the specific array-fields in the Inspector for the Weapon
+            // 3. Setting the Weapons Name and Type to the weaponValues array (in the inspector accordingly to the previously instantiated List '_weaops')            
+            for (int i = 0; i < _weaponValues.Length; i++) // Sets the name and weapon type of the specific array-fields in the Inspector for the Weapon
             {
                 _weaponValues[i].WeaponName = $"{_weapons[i].WeaponName} Values";
                 _weaponValues[i].WeaponType = _weapons[i].WeaponType;
             }
 
+            // 4. Set the numerical values (damage, fire rate, mag size, rounds in mag and spawned bullets) accordingly to the manually set values in the inspector of the 'PlayerEquipment' Asset
+            for (int i = 0; i < _weaponValues.Length; i++)
+            {
+                // todo: see if that can be optimized yet, does not look soo nice; (JM, 05.02.2024)
+                if (_weaponValues[i].WeaponType == Enum_Lib.EWeaponType.Handgun)
+                {
+                    Handgun.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].SpawnedBullets);
+                }
+                else if (_weaponValues[i].WeaponType == Enum_Lib.EWeaponType.SMG)
+                {
+                    SMG.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].SpawnedBullets);
+                }
+                else if (_weaponValues[i].WeaponType == Enum_Lib.EWeaponType.Shotgun)
+                {
+                    Shotgun.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].SpawnedBullets);
+                }
+                else if (_weaponValues[i].WeaponType == Enum_Lib.EWeaponType.EnergyLauncher)
+                {
+                    ELauncher.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].SpawnedBullets);
+                }
+            }
 
             // monitoring for deugging reasons
             for (int i = 0; i < _weapons.Count; i++)
-                Debug.Log($"Contents of equipedWeapos List in '{this}': Idx:'<color=lime>{i}</color>', Content: '<color=lime>{_weapons[i].WeaponType}</color>");
+                Debug.Log($"Content´and element values of '_weapons' List in '{this}': Idx:'<color=lime>{i}</color>', \nContent: '<color=lime>{_weapons[i].WeaponType}</color>, \n" +
+                    $"weapon damage: '<color=lime>{_weaponValues[i].WeaponDamage}</color>', \nfire rate: '<color=lime>{_weaponValues[i].FireRate}</color>', \nmagazine size: '<color=lime>{_weaponValues[i].MagazineSize}</color>', \nrounds in magazine: '<color=lime>{_weaponValues[i].CurrentRoundsInMag}</color>', \nsimulaneously spawned bullets: '<color=lime>{_weaponValues[i].SpawnedBullets}</color>'");
         }
 
 

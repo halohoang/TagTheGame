@@ -12,30 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50de1450ef356584cb9e5a96c06d0bc5, type: 3}
   m_Name: PlayerEquipment
   m_EditorClassIdentifier: 
-  _weaponTypesValues:
+  _weaponValues:
   - _weaponName: Handgun Values
-    EWeaponType: 0
+    _weaponType: 0
     _weaponDamage: 1
     _fireRate: 1.5
     _magazineSize: 6
     _currentRoundsInMag: 6
     _spawnedBullets: 1
   - _weaponName: SMG Values
-    EWeaponType: 0
+    _weaponType: 1
     _weaponDamage: 1
     _fireRate: 0.5
     _magazineSize: 30
     _currentRoundsInMag: 30
     _spawnedBullets: 1
   - _weaponName: Shotgun Values
-    EWeaponType: 0
+    _weaponType: 2
     _weaponDamage: 1
     _fireRate: 1
     _magazineSize: 8
     _currentRoundsInMag: 8
     _spawnedBullets: 5
   - _weaponName: Energy Launcher Values
-    EWeaponType: 0
+    _weaponType: 3
     _weaponDamage: 1
     _fireRate: 1
     _magazineSize: 1

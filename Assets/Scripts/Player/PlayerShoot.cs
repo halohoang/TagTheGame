@@ -72,7 +72,7 @@ public class PlayerShoot : MonoBehaviour
     [SerializeField, ReadOnly] private bool _isShooting;
     [SerializeField, ReadOnly] private bool _isPlayerDead;
     [SerializeField, ReadOnly] private bool _IsGamePaused;
-    [SerializeField, ReadOnly] private bool _isArmed; // Checking whether the player is armed or not
+    [SerializeField, ReadOnly] private bool _isArmed;               // Checking whether the player is armed or not
     [SerializeField, ReadOnly] private bool _isReloading = false;
 
     // --- private Variables ---
