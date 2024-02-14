@@ -291,7 +291,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5339391018072511772
 Transform:
   m_ObjectHideFlags: 0
@@ -389,6 +389,7 @@ GameObject:
   - component: {fileID: 3493521951034406025}
   - component: {fileID: 3493521951034406026}
   - component: {fileID: 3493521951034406024}
+  - component: {fileID: 4254054510016276390}
   - component: {fileID: 4783424759540013841}
   - component: {fileID: 3418635257247461372}
   - component: {fileID: 4930503924211928506}
@@ -400,6 +401,7 @@ GameObject:
   - component: {fileID: 1187376024}
   - component: {fileID: 1187376037}
   - component: {fileID: 1187376038}
+  - component: {fileID: 7581520428874724006}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -442,7 +444,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputReaderSO: {fileID: 0}
-  _rigidbody2D: {fileID: 0}
+  _rigidbody2D: {fileID: 3493521951034406036}
   _currentPlayerSpeed: 0
   _minPlayerSpeed: 5
   _maxPlayerSpeed: 10
@@ -510,12 +512,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 0}
-  _playerHealth: {fileID: 0}
+  _playerHealth: {fileID: 3418635257247461372}
   ClonesPerSecond: 15
   scalePerSecond: {x: 5, y: 5, z: 5}
   colorPerSecond: {r: 1, g: 1, b: 1, a: 1}
   cloneSpaceDistance: 0
---- !u!114 &4783424759540013841
+--- !u!114 &4254054510016276390
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -523,6 +525,18 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3493521951034406032}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34dcc431bde827c4ebf780e3b2b1cba8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4783424759540013841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3493521951034406032}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6026d6b98ce8ca14490bd5108013a13a, type: 3}
   m_Name: 
@@ -841,7 +855,7 @@ MonoBehaviour:
   - {x: 0.07000017, y: -0.12999988, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -19852
+  m_InstanceId: -1782
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.07000017, y: 0.12999988, z: 0}
@@ -857,7 +871,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee158225ee1e59f4791627785501d950, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shaderTypes: 3
+  shaderTypes: 0
   normalStrength: 5
   normalSmoothing: 1
   computingNormal: 0
@@ -875,6 +889,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   updateEveryFrame: 0
   useMaterialInstanceIfPossible: 0
+--- !u!114 &7581520428874724006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3493521951034406032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34dcc431bde827c4ebf780e3b2b1cba8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4289307227542303294
 GameObject:
   m_ObjectHideFlags: 0
