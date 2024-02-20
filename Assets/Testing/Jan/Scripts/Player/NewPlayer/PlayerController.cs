@@ -1,19 +1,22 @@
 using EnumLibrary;
 using NaughtyAttributes;
+using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class PlayerController : MonoBehaviour
 {
+    #region Variables
     //--------------------------------------
     // - - - - -  V A R I A B L E S  - - - - 
     //--------------------------------------
     [Header("References to Resources")]
     [Space(2)]
     [SerializeField] private InputReaderSO _inputReaderSO;
+    [SerializeField] private PlayerEquipmentSO _playerEquipmentSO;
     [SerializeField] private Transform _playerTransform;        // Reference to the player's transform.	
     [SerializeField] private Rigidbody2D _rigidbody2D;
-    [SerializeField] private PlayerHealth _playerHealthScript;
+    [SerializeField] private PlayerStats _playerStats;
     [SerializeField] private Light2D _light2D;
     [SerializeField] private Sandevistan _sandevistan;
     [Space(5)]
@@ -38,12 +41,15 @@ public class PlayerController : MonoBehaviour
 
     // Properties
     public bool IsPlayerMoving { get => _isPlayerMoving; private set => _isPlayerMoving = value; }
+    #endregion
 
 
+    #region Methods
     //------------------------------------
     // - - - - -  M E T H O D S  - - - - -
     //------------------------------------
 
+    #region Unity-Provided Methods
     //--------------------------
     // - - - Unity-Methods - - -
     //--------------------------
@@ -53,11 +59,15 @@ public class PlayerController : MonoBehaviour
         if (_light2D == null)
             _light2D = GetComponentInChildren<Light2D>();
 
-        if (_playerHealthScript == null)
-            _playerHealthScript = GetComponent<PlayerHealth>();
+        if (_playerStats == null)
+            _playerStats = GetComponent<PlayerStats>();
 
         if (_rigidbody2D == null)
             _rigidbody2D = GetComponent<Rigidbody2D>();
+
+        if (_playerEquipmentSO == null)
+            _playerEquipmentSO = Resources.Load("ScriptableObjects/PlayerEquipment") as PlayerEquipmentSO;
+
 
         if (_inputReaderSO == null)
         {
@@ -98,11 +108,29 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        PlayerMovement();
+        PlayerMovement();        
         //PlayerFast();
         //PlayerDash();
     }
 
+    /// <summary>
+    /// CollisionCheck for recognizing collision with WeaponObject
+    /// </summary>
+    /// <param name="collision"></param>
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Check if collision is a of Type Baseweapon, if so trigger pickup weapon
+        if (collision.gameObject.TryGetComponent(out BaseWeapon weapon))
+        {
+            _playerEquipmentSO.WeaponPickup(weapon.WeaponType);
+
+            Destroy(weapon.gameObject);
+        }
+    }
+    #endregion
+
+
+    #region Custom Methods
     //---------------------------
     // - - - Custom Methods - - -
     //---------------------------
@@ -174,20 +202,20 @@ public class PlayerController : MonoBehaviour
     void PlayerMovement()
     {
         // if Movement registered (by MovementInput and TimeScale is not paused and Player alive
-        if (_movementDirection != Vector2.zero && Time.timeScale != 0 && !_playerHealthScript.IsPlayerDead)
+        if (_movementDirection != Vector2.zero && Time.timeScale != 0 && !_playerStats.IsPlayerDead)
         {
             IsPlayerMoving = true;
 
-            if (_playerHealthScript._currentHealth < 2)     // if Player's health is below 2, use Movement Settings as if is not sprinting
+            if (_playerStats.CurrentHealth < 2)     // if Player's health is below 2, use Movement Settings as if is not sprinting
                 SetPlayerMovementValues(_minPlayerSpeed, 0.148f, 1.12f, 1, true);
 
             _rigidbody2D.MovePosition(_rigidbody2D.position + _movementDirection * _currentPlayerSpeed * Time.deltaTime);
-            #region Debuggers littel helper
+            #region Debuggers little helper
             //Debug.Log($"<color=magenta> PlayerMovement should have been excuted </color>. MovementDirection: '{_movementDirection}' | TimeScale: '{Time.timeScale}' | " +
             //$"Is Player Dead: '{_playerHealthScript.IsPlayerDead}'");
             #endregion
         }
-        else if (_playerHealthScript.IsPlayerDead)
+        else if (_playerStats.IsPlayerDead)
         {
             _rigidbody2D.velocity = Vector2.zero;
             IsPlayerMoving = false;
@@ -195,35 +223,11 @@ public class PlayerController : MonoBehaviour
         else
         {
             IsPlayerMoving = false;
-            #region Debuggers littel helper
+            #region Debuggers little helper
             //Debug.Log($"<color=magenta> PlayerMovement should NOT have been excuted </color>." +
             //$" MovementDirection: '{_movementDirection}' | TimeScale: '{Time.timeScale}' | Is Player Dead: '{_playerHealthScript.IsPlayerDead}'");
             #endregion
         }
-
-        #region old Code from Hoang
-        //if (_playerHealthScript._currentHealth > 0)
-        //{
-        //    /* Horizontal Movement */
-        //    if (Input.GetKey(KeyCode.A))
-        //    {
-        //        transform.Translate(Vector2.left * _currentPlayerSpeed * Time.deltaTime, Space.World);
-        //    }
-        //    if (Input.GetKey(KeyCode.D))
-        //    {
-        //        transform.Translate(Vector2.right * _currentPlayerSpeed * Time.deltaTime, Space.World);
-        //    }
-
-        //    if (Input.GetKey(KeyCode.W))
-        //    {
-        //        transform.Translate(Vector2.up * _currentPlayerSpeed * Time.deltaTime, Space.World);
-        //    }
-        //    if (Input.GetKey(KeyCode.S))
-        //    {
-        //        transform.Translate(Vector2.down * _currentPlayerSpeed * Time.deltaTime, Space.World);
-        //    }
-        //}
-        #endregion       
     }
 
     private void SetPlayerMovementValues(float movementSpeed, float lightFallofIntensity, float pointLightOuterRadius, float lightIntesity, bool enableDisableLightControllComponent)
@@ -249,7 +253,7 @@ public class PlayerController : MonoBehaviour
             _light2D.GetComponent<LightControl>().enabled = false;
 
         }
-        if (_playerHealthScript._currentHealth < 2 || Input.GetKeyUp(KeyCode.Space))
+        if (_playerStats.CurrentHealth < 2 || Input.GetKeyUp(KeyCode.Space))
         {
             // Player's health is below 2, so they can't use "Space" for increased speed
             _currentPlayerSpeed = _minPlayerSpeed;
@@ -335,4 +339,7 @@ public class PlayerController : MonoBehaviour
     {
         _isPlayerDead = isPlayerDead;
     }
+    #endregion
+
+    #endregion
 }

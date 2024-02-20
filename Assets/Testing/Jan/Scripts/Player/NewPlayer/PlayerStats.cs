@@ -7,26 +7,25 @@ using UnityEngine.Events;
 
 public class PlayerStats : MonoBehaviour
 {
-    // Todo: !!! clean this mess class by finnishing mergind TakingDamage.cs and PlayerHealth.cs and stucturing the code, remove uneccessary references use Events and new Input System; JM (19.02.2024)
-
+    #region Events
     //--------------------------------
     // - - - - -  E V E N T S  - - - - 
     //--------------------------------
     public static event UnityAction<bool> OnPlayerDeath;
+    #endregion
 
-
+    #region Variables
     //--------------------------------------
     // - - - - -  V A R I A B L E S  - - - - 
     //--------------------------------------
     [Header("References")]
     [SerializeField] private InputReaderSO _inputReader;
-    //[SerializeField] private GameObject _player;
     [SerializeField] private Rigidbody2D _rb2D;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private GameObject _deadOverlay;
-    [SerializeField] private Transform _chargeBarTransform; // Reference to the scale of the bar
-    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private Transform _chargeBarTransform;     // Reference to the scale of the bar
     [SerializeField] private Animator _animator;
+    [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip _audioClip;
     [SerializeField] private AudioClip _deadSound;
     [Space(5)]
@@ -34,24 +33,20 @@ public class PlayerStats : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float _maxHealth;
     [SerializeField] private float _currentHealth;
-    [SerializeField] private float _chargeSpeed = 1; // The rate at which bar depletes or charges    
+    [SerializeField] private float _chargeSpeed = 1;            // The rate at which bar depletes or charges    
     /* Health System */
     [SerializeField] internal int _takenDamage;
-    [SerializeField] private float _regenCooldown = 2f; // Adjust the duration as needed
+    [SerializeField] private float _regenCooldown = 2f;         // Adjust the duration as needed
     /*Flashing Effect */
     [SerializeField] private float _flashingSpeed = 0;
-    [SerializeField] private float _flashDuration = 0.1f; // Duration of the flashing effect
+    [SerializeField] private float _flashDuration = 0.1f;       // Duration of the flashing effect
     [Space(5)]
 
     /* Dead Effec */
     [Header("Lists")]
     [SerializeField] private List<GameObject> _disableGameObject;
     [Space(5)]
-
-    /* Taking Damage Effect */
-    //private TakingDamage _takingDamageScript;
-
-    /* Turns color effect */
+    
     [Header("Monitoring Values")]
     [SerializeField, ReadOnly] private bool _isPlayerDead;
     [SerializeField, ReadOnly] private bool _canRegen = true;
@@ -61,16 +56,37 @@ public class PlayerStats : MonoBehaviour
 
     private Color defaultColor = Color.white;
 
+
     // - - - Properties - - -
     public bool IsPlayerDead { get => _isPlayerDead; private set => _isPlayerDead = value; }
     public bool IsSprinting { get => _isSprinting; private set => _isSprinting = value; }
     public float CurrentHealth { get => _currentHealth; private set => _currentHealth = value; }
+    #endregion
 
-    //Functions
+
+    #region Methods
+    //----------------------------------
+    // - - - - -  M E T H O D S  - - - - 
+    //----------------------------------
+
+    #region Unity-provided Methods
     private void Awake()
     {
+        // auto referencing
         if (_inputReader == null)
             _inputReader = Resources.Load("ScriptableObjects/InputReader") as InputReaderSO;
+
+        if (_spriteRenderer == null)
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (_audioSource == null)
+            _audioSource = GetComponent<AudioSource>(); 
+
+        if (_rb2D == null)
+            _rb2D = GetComponent<Rigidbody2D>();
+
+        if (_animator == null)
+            _animator = GetComponent<Animator>();
     }
 
     private void OnEnable()
@@ -85,32 +101,16 @@ public class PlayerStats : MonoBehaviour
 
     void Start()
     {
-        // TakingDamage.cs
-        _spriteRenderer = GetComponent<SpriteRenderer>();
         defaultColor = _spriteRenderer.color;
-        _audioSource = GetComponent<AudioSource>();
-
-        //PlayerThealth.cs
-        _rb2D = GetComponent<Rigidbody2D>();
         CurrentHealth = _maxHealth;
-        //_takingDamageScript = GetComponent<TakingDamage>();
-        _animator = GetComponent<Animator>();
-        _audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     void Update()
     {
-        // TakingDamage.cs
-        if (isFlashing)
-        {
-            FlashingEffect();
-        }
-
-
-        // PlayerHealth.cs
+        // Health Calculations
         ReduceHP();
 
-        #region Old Hoang Approach
+        
         if (CurrentHealth <= 0)    // Logic for Player Death
         {
             IsPlayerDead = true;
@@ -122,8 +122,7 @@ public class PlayerStats : MonoBehaviour
             _animator.SetTrigger("Dead");
 
             OnPlayerDeath?.Invoke(IsPlayerDead);
-        }
-        #endregion
+        }       
         if (_canRegen && CurrentHealth < 100) // only call this logic if Health is below 100
         {
             RegenHP();
@@ -138,39 +137,17 @@ public class PlayerStats : MonoBehaviour
                 _regenTimer = 0f; // Reset the timer
             }
         }
+
+        // Visuals on Taking Damage
+        if (isFlashing)
+        {
+            FlashingEffect();
+        }
     }
+    #endregion
 
 
-    // TakingDamage.cs
-    internal void FlashOnce()
-    {
-        _audioSource.PlayOneShot(_audioClip);
-        // Start flashing immediately
-        StartCoroutine(FlashAndRevert());
-    }
-    private IEnumerator FlashAndRevert()
-    {
-        isFlashing = true;
-
-        // Turn the enemy fully red
-        _spriteRenderer.color = Color.red;
-
-        // Wait for the flashing duration
-        yield return new WaitForSeconds(_flashDuration);
-
-        // Revert to the default color
-        isFlashing = false;
-        _spriteRenderer.color = defaultColor;
-    }
-
-    private void FlashingEffect()
-    {
-        // No need to interpolate, just set to fully red
-        _spriteRenderer.color = Color.red;
-    }
-
-
-    //Playerhealth.cs
+    #region Custom Methods
 
     /// <summary>
     /// Takes the a Value of the Enum 'ESpace' as param and respective executes Logic for enabling fast movement 
@@ -200,6 +177,8 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
+
+    #region HeathCalculating Methods
     internal void GetDamage()
     {
         CurrentHealth = CurrentHealth - _takenDamage;
@@ -237,26 +216,11 @@ public class PlayerStats : MonoBehaviour
 
         //Debug.LogError($"_GetDamage()_: -> CurrentPlayerHealth: {_currentHealth}");
     }
-    void ReduceHP()
+
+    private void ReduceHP()
     {
-        #region Old Hoang approach
-        //if (_player != null)
-        //{
-        //    // If the player hold down Sandevistan his health bar will start to get depleted
-        //    if (Input.GetKey(KeyCode.Space))
-        //    {
-        //        _currentHealth = Mathf.Max(_currentHealth - 0.5f, 1f);  // ensure that playerHealth does not decrease below '1'
-        //        ReduceCharge();
-        //    }
-
-        //    // Ensure _currentHealth does not go below 0
-        //    _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
-        //    Debug.LogError($"_ReduceHP()_: -> CurrentPlayerHealth: {_currentHealth}");
-        //}
-        #endregion
-
         // todo: here we have the problem why player can't die while space is pressed -> as long as space is pressed the HP can't decrease to '0'
-        if (_player != null && IsSprinting)
+        if (IsSprinting)
         {
             CurrentHealth = Mathf.Max(CurrentHealth - 0.5f, 1f);
             ReduceCharge();
@@ -267,7 +231,7 @@ public class PlayerStats : MonoBehaviour
         //Debug.LogError($"_ReduceHP()_: -> CurrentPlayerHealth: {_currentHealth}");
     }
 
-    void RegenHP()
+    private void RegenHP()
     {
         if (!Input.GetKey(KeyCode.Space) && CurrentHealth < _maxHealth) { CurrentHealth += 1; RegenCharge(); _canRegen = false; }
         CurrentHealth = Mathf.Clamp(CurrentHealth, 0, _maxHealth);
@@ -275,7 +239,7 @@ public class PlayerStats : MonoBehaviour
         // Debug.LogError($"_RegenHP()_: -> CurrentPlayerHealth: {_currentHealth}");
     }
 
-    void ReduceCharge()
+    private void ReduceCharge()
     {
         if (_chargeBarTransform != null)
         {
@@ -293,7 +257,7 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    void RegenCharge()
+    private void RegenCharge()
     {
         if (_chargeBarTransform != null)
         {
@@ -310,4 +274,45 @@ public class PlayerStats : MonoBehaviour
             _chargeBarTransform.localScale = new Vector3(_chargeBarTransform.localScale.x, clampedScale, _chargeBarTransform.localScale.z);
         }
     }
+    #endregion
+
+
+    #region Taking Damage Visuals
+    // -----------------------------
+    // --- Taking Damage related ---
+    // -----------------------------
+
+    internal void FlashOnce()
+    {
+        _audioSource.PlayOneShot(_audioClip);
+
+        // Start flashing immediately
+        StartCoroutine(FlashAndRevert());
+    }
+
+    private IEnumerator FlashAndRevert()
+    {
+        isFlashing = true;
+
+        // Turn the enemy fully red
+        _spriteRenderer.color = Color.red;
+
+        // Wait for the flashing duration
+        yield return new WaitForSeconds(_flashDuration);
+
+        // Revert to the default color
+        isFlashing = false;
+        _spriteRenderer.color = defaultColor;
+    }
+
+    private void FlashingEffect()
+    {
+        // No need to interpolate, just set to fully red
+        _spriteRenderer.color = Color.red;
+    }
+    #endregion
+
+    #endregion
+
+    #endregion
 }

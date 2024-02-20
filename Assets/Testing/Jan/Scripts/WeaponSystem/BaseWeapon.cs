@@ -1,18 +1,19 @@
 using EnumLibrary;
+using UnityEngine;
 
 /// <summary>
 /// BaseClass to all specific Weapontypes ike HandCannon.cs, Shotgun.cs, SubMachineGun.cs, EnergyLauncher.cs
 /// </summary>
-public class BaseWeapon
+public class BaseWeapon : MonoBehaviour
 {
     // ---------- Variables ----------  
-    protected string _weaponName;               // The name of the weapon (ideally should be equal to the WeaponType)
-    protected Enum_Lib.EWeaponType _weaponType; // The type of the weapon
-    protected float _weaponDamage;              // The damage dealt by the weapon
-    protected float _fireRate;                  // The rate of bullets spawning
-    protected int _magazineSize;                // The amount of rounds the weapons magazine can store
-    protected int _currentRoundsInMag;          // The current amount of rounds in the magazine
-    protected int _spawnedBullets;              // The Amount of Bullets that will be spawned simultaneously (e.g. for the Shotgun it might be 5 and for the Handcannon 1)
+    protected string _weaponName;                                   // The name of the weapon (ideally should be equal to the WeaponType)
+    [SerializeField] protected Enum_Lib.EWeaponType _weaponType;    // The type of the weapon
+    protected float _weaponDamage;                                  // The damage dealt by the weapon
+    protected float _fireRate;                                      // The rate of bullets spawning
+    protected int _magazineSize;                                    // The amount of rounds the weapons magazine can store
+    protected int _currentRoundsInMag;                              // The current amount of rounds in the magazine
+    protected int _spawnedBullets;                                  // The Amount of Bullets that will be spawned simultaneously (e.g. for the Shotgun it might be 5 and for the Handcannon 1)
 
     // --- Properties ---
     internal string WeaponName { get => _weaponName; set => _weaponName = value; }

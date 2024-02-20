@@ -8,7 +8,11 @@ namespace ScriptableObjects
     [CreateAssetMenu(menuName = "Scriptable Objects/Player/Equipment", fileName = "PlayerEquipment")]
     public class PlayerEquipmentSO : ScriptableObject
     {
-        // ---------- Fields ----------
+        #region Variables
+        //--------------------------------------
+        // - - - - -  V A R I A B L E S  - - - - 
+        //--------------------------------------
+
         [SerializeField] private WeaponTypeValues[] _weaponValues;
 
         private BaseWeapon _weaponInHeand;
@@ -24,12 +28,19 @@ namespace ScriptableObjects
 
         // --- Properties ---
         internal BaseWeapon WeaponInHeand { get => _weaponInHeand; private set => _weaponInHeand = value; }
+        internal BaseWeapon HolsteredWeapon { get => _holsteredWeapon; private set => _holsteredWeapon = value; }
+        #endregion
 
-        // ---------- Structs ----------
+
+        #region Structs
+        //------------------------------------
+        // - - - - -  S T R U C T S  - - - - -
+        //------------------------------------
+
         [System.Serializable]
         private struct WeaponTypeValues
         {
-            // Fields
+            // Variables
             [Tooltip("The name of the weapon (ideally should be equal to the WeaponType).")]
             [SerializeField, ReadOnly, AllowNesting] private string _weaponName;
             [Tooltip("The type of the weapon.")]
@@ -55,8 +66,15 @@ namespace ScriptableObjects
             internal int CurrentRoundsInMag { get => _currentRoundsInMag; set => _currentRoundsInMag = value; }
             internal int SpawnedBullets { get => _spawnedBullets; set => _spawnedBullets = value; }
         }
+        #endregion
 
-        // ---------- Methods ----------
+
+        #region Methods
+        //------------------------------------
+        // - - - - -  M E T H O D S  - - - - -
+        //------------------------------------
+
+        #region Unity-Provided Methods
         private void OnEnable()
         {
             // 1. initializing single weapon objects with standard values automatically
@@ -68,7 +86,7 @@ namespace ScriptableObjects
             // 2. initializing the List with the specific weapon objects and their standard values
             _weapons = new List<BaseWeapon>() { Handgun, SMG, Shotgun, ELauncher };
 
-            // 3. Setting the Weapons Name and Type to the weaponValues array (in the inspector accordingly to the previously instantiated List '_weaops')            
+            // 3. Setting the Weapons Name and Type to the '_weaponValues'-array in the inspector (accordingly to the previously instantiated List '_weaops')            
             for (int i = 0; i < _weaponValues.Length; i++) // Sets the name and weapon type of the specific array-fields in the Inspector for the Weapon
             {
                 _weaponValues[i].WeaponName = $"{_weapons[i].WeaponName} Values";
@@ -102,27 +120,53 @@ namespace ScriptableObjects
                 Debug.Log($"Content´and element values of '_weapons' List in '{this}': Idx:'<color=lime>{i}</color>', \nContent: '<color=lime>{_weapons[i].WeaponType}</color>, \n" +
                     $"weapon damage: '<color=lime>{_weaponValues[i].WeaponDamage}</color>', \nfire rate: '<color=lime>{_weaponValues[i].FireRate}</color>', \nmagazine size: '<color=lime>{_weaponValues[i].MagazineSize}</color>', \nrounds in magazine: '<color=lime>{_weaponValues[i].CurrentRoundsInMag}</color>', \nsimulaneously spawned bullets: '<color=lime>{_weaponValues[i].SpawnedBullets}</color>'");
         }
+        #endregion
 
 
+        #region Custom Methods
         /// <summary>
         /// Sets the <see cref="WeaponInHeand"/> with new values according to the picked up weapon.
         /// </summary>
-        internal void OnWeaponPickup(Enum_Lib.EWeaponType typeOfPickedupWeapon)
+        internal void WeaponPickup(Enum_Lib.EWeaponType typeOfPickedupWeapon)
         {
-            //todo: re´work this method with an more elegant queue than this mess when it's maybe less late (should work for now though); JM (29.01.2024) 
-            //debugging check
-            if (typeOfPickedupWeapon != _weapons[0].WeaponType || typeOfPickedupWeapon != _weapons[1].WeaponType ||
-                typeOfPickedupWeapon != _weapons[2].WeaponType || typeOfPickedupWeapon != _weapons[3].WeaponType)
-            {
-                Debug.LogError($"CAUTION! '<color=orange>{typeOfPickedupWeapon}</color>' does not fit any of the weapon object names in the List '<color=silver>{_weapons}</color>'!");
-                return;
-            }
+            #region Take Care about soon
+            //todo: rework this method with a more elegant queue than this mess when it's maybe less late (should work for now though); JM (29.01.2024) 
+            //debugging check (if the pickedUpWeapon is actually a usable waepon)
+            //if (typeOfPickedupWeapon != _weapons[0].WeaponType || typeOfPickedupWeapon != _weapons[1].WeaponType ||
+            //    typeOfPickedupWeapon != _weapons[2].WeaponType || typeOfPickedupWeapon != _weapons[3].WeaponType)
+            //{
+            //    Debug.LogError($"CAUTION! '<color=orange>{typeOfPickedupWeapon}</color>' does not fit any of the weapon object types in the List '<color=silver>{_weapons}</color>'!");
 
-            // if debugging check was passed without bug check List for names
+            //    for (int i = 0; i < _weapons.Count; i++)
+            //        Debug.Log($"Content´and element values of '_weapons' List in '{this}': Idx:'<color=lime>{i}</color>', \nContent: '<color=lime>{_weapons[i].WeaponType}</color>, \n" +
+            //            $"weapon damage: '<color=lime>{_weaponValues[i].WeaponDamage}</color>', \nfire rate: '<color=lime>{_weaponValues[i].FireRate}</color>', \nmagazine size: '<color=lime>{_weaponValues[i].MagazineSize}</color>', \nrounds in magazine: '<color=lime>{_weaponValues[i].CurrentRoundsInMag}</color>', \nsimulaneously spawned bullets: '<color=lime>{_weaponValues[i].SpawnedBullets}</color>'");
+
+            //    return;
+            //}
+            // todo: check commented out code, since it does not work, probably because of wrong If-Statement
+            #endregion
+
+            // if debugging check was passed without bug, check '_weapons'-List fitting Weapon Type and equip that weaponType
             for (int i = 0; i < _weapons.Count; i++)
             {
                 if (typeOfPickedupWeapon == _weapons[i].WeaponType)
                 {
+                    //---------------------- |
+                    // TO DO: F i X  T H I S |
+                    //---------------------- V
+
+                    // if no weapon was collected yet at all
+                    if (WeaponInHeand == null)
+                        WeaponInHeand = _weapons[i];
+
+                    // if Player has no 2nd Weapon yet, holster current Weapon in Hand
+                    if (HolsteredWeapon == null && WeaponInHeand != null)   // on first pickup at all HolsteredWeapon is null and also WeaponInHeand is null
+                    {
+                        HolsteredWeapon = WeaponInHeand;
+                        Debug.Log($"HERE I AM!! Oo | Currently holstered Weapon is '<color=cyan>{HolsteredWeapon.WeaponType}</color>'");
+                    }
+
+                    // equip freshly picked up weapon
                     WeaponInHeand = _weapons[i];
                     Debug.Log($"Weapon in Hand was set to '<color=cyan>{WeaponInHeand.WeaponType}</color>' 'cause '<color=lime>{_weapons[i].WeaponType}</color>' was picked up.");
                     return;
@@ -144,10 +188,23 @@ namespace ScriptableObjects
         /// </summary>
         internal void SwitchWeapon()
         {
+            // switchin weapons is only possible if player is equiped with two weapons
+            //if (WeaponInHeand == null || HolsteredWeapon == null)
+            //    return;
+
             BaseWeapon cacheWeapon = WeaponInHeand;
-            WeaponInHeand = _holsteredWeapon;
-            _holsteredWeapon = cacheWeapon;
-            //Debug.Log($"Cache Weapon should be _weapon in Hand (currently SMG) -> actual weapon cached = <color=magenta>'{cacheWeapon.WeaponName}'</color>");
+            Debug.Log($"SwitchWeapon() was called in '{this}': Weapon in Hand: <color=magenta>'{cacheWeapon.WeaponType}'</color>");
+
+            WeaponInHeand = HolsteredWeapon;
+            Debug.Log($"SwitchWeapon() was called in '{this}': Weapon in Hand: <color=cyan>'{WeaponInHeand.WeaponType}'</color>");
+
+            HolsteredWeapon = cacheWeapon;
+            Debug.Log($"SwitchWeapon() was called in '{this}': Weapon in Hand: <color=cyan>'{HolsteredWeapon.WeaponType}'</color>");
+
+            Debug.Log($"SwitchWeapon() was called in '{this}': Weapon in Hand: <color=cyan>'{WeaponInHeand.WeaponType}'</color> | Holstered Weapon: <color=lime>'{HolsteredWeapon.WeaponName}'</color> | Cached Weapon (previously holsterd): <color=magenta>'{cacheWeapon.WeaponType}'</color>.");
         }
+        #endregion
+
+        #endregion
     }
 }
