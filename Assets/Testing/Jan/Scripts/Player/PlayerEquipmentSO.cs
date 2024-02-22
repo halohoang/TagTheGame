@@ -115,6 +115,12 @@ namespace ScriptableObjects
                 }
             }
 
+            // 5. Initialize 'WeaponInHand' & 'HolsteredWeapon' and set them to Blank
+            WeaponInHeand = new BaseWeapon();
+            HolsteredWeapon = new BaseWeapon();
+            WeaponInHeand.SetWeaponNameAndType("Blank", Enum_Lib.EWeaponType.Blank);
+            HolsteredWeapon.SetWeaponNameAndType("Blank", Enum_Lib.EWeaponType.Blank);
+
             // monitoring for deugging reasons
             for (int i = 0; i < _weapons.Count; i++)
                 Debug.Log($"Content´and element values of '_weapons' List in '{this}': Idx:'<color=lime>{i}</color>', \nContent: '<color=lime>{_weapons[i].WeaponType}</color>, \n" +
@@ -151,19 +157,12 @@ namespace ScriptableObjects
             {
                 if (typeOfPickedupWeapon == _weapons[i].WeaponType)
                 {
-                    //---------------------- |
-                    // TO DO: F i X  T H I S |
-                    //---------------------- V
-
-                    // if no weapon was collected yet at all
-                    if (WeaponInHeand == null)
-                        WeaponInHeand = _weapons[i];
-
                     // if Player has no 2nd Weapon yet, holster current Weapon in Hand
-                    if (HolsteredWeapon == null && WeaponInHeand != null)   // on first pickup at all HolsteredWeapon is null and also WeaponInHeand is null
+                    if (HolsteredWeapon.WeaponType == Enum_Lib.EWeaponType.Blank && WeaponInHeand.WeaponType != Enum_Lib.EWeaponType.Blank)   // on first pickup at all HolsteredWeapon is blank and also WeaponInHeand is blank
                     {
+                        Debug.Log($"HolsteredWeapon is Blank && WeaponInHeand is not Blank. HolsteredWeapon will be set to '<color=cyan>{WeaponInHeand.WeaponType}</color>'");
                         HolsteredWeapon = WeaponInHeand;
-                        Debug.Log($"HERE I AM!! Oo | Currently holstered Weapon is '<color=cyan>{HolsteredWeapon.WeaponType}</color>'");
+                        Debug.Log($"HERE I AM!! Oo | Currently holstered Weapon is '<color=magenta>{HolsteredWeapon.WeaponType}</color>'");
                     }
 
                     // equip freshly picked up weapon
@@ -193,15 +192,14 @@ namespace ScriptableObjects
             //    return;
 
             BaseWeapon cacheWeapon = WeaponInHeand;
-            Debug.Log($"SwitchWeapon() was called in '{this}': Weapon in Hand: <color=magenta>'{cacheWeapon.WeaponType}'</color>");
-
             WeaponInHeand = HolsteredWeapon;
-            Debug.Log($"SwitchWeapon() was called in '{this}': Weapon in Hand: <color=cyan>'{WeaponInHeand.WeaponType}'</color>");
-
             HolsteredWeapon = cacheWeapon;
-            Debug.Log($"SwitchWeapon() was called in '{this}': Weapon in Hand: <color=cyan>'{HolsteredWeapon.WeaponType}'</color>");
-
-            Debug.Log($"SwitchWeapon() was called in '{this}': Weapon in Hand: <color=cyan>'{WeaponInHeand.WeaponType}'</color> | Holstered Weapon: <color=lime>'{HolsteredWeapon.WeaponName}'</color> | Cached Weapon (previously holsterd): <color=magenta>'{cacheWeapon.WeaponType}'</color>.");
+            #region Debuggers Little helper
+            //Debug.Log($"SwitchWeapon() was called in '{this}': Cached Weapon: <color=yellow>'{cacheWeapon.WeaponType}'</color>");
+            //Debug.Log($"SwitchWeapon() was called in '{this}': Weapon in Hand: <color=cyan>'{WeaponInHeand.WeaponType}'</color>");
+            //Debug.Log($"SwitchWeapon() was called in '{this}': Holstered Weapon: <color=magenta>'{HolsteredWeapon.WeaponType}'</color>");
+            #endregion
+            Debug.Log($"Equiped waepons are swapped: Weapon in Hand: <color=cyan>'{WeaponInHeand.WeaponType}'</color> | Holstered Weapon: <color=magenta>'{HolsteredWeapon.WeaponName}'</color> | Cached Weapon (previously holsterd): <color=yellow>'{cacheWeapon.WeaponType}'</color>.");
         }
         #endregion
 
