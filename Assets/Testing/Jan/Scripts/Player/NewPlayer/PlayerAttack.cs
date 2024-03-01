@@ -3,6 +3,7 @@ using ScriptableObjects;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using EnumLibrary;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class PlayerAttack : MonoBehaviour
     [Header("References")]
     [SerializeField] private InputReaderSO _inputReader;
     [SerializeField] private PlayerEquipmentSO _playerEquipment;
+    [SerializeField] private PlayerController _playerCtrl;
+    [SerializeField] private PlayerAttack _playerAttack;
 
     /* Gun related References*/
     [SerializeField] GameObject _gun;
@@ -194,9 +197,79 @@ public class PlayerAttack : MonoBehaviour
     {
         // Update UI
 
+
+        // Enable Animation
+
+
         // Update PlayerEquipmentSO
         _playerEquipment.SwitchWeapon();
+
+        switch (_playerEquipment.WeaponInHeand.WeaponType)
+        {
+            case Enum_Lib.EWeaponType.Handgun:
+                //SetAnimation();
+                    //    if (_playerCtrl.IsPlayerMoving)
+                    //    {
+                    //        // Set Animation parameter for Moving animation
+                    //    }
+                    //    else
+                    //    {
+                    //        // set animation  parameter for idle
+                    //    }
+                    break;
+
+            case Enum_Lib.EWeaponType.SMG:
+                break;
+
+            case Enum_Lib.EWeaponType.Shotgun:
+                break;
+
+            case Enum_Lib.EWeaponType.EnergyLauncher:
+                break;
+
+            case Enum_Lib.EWeaponType.Blank:
+                break;
+
+            default:
+                break;
+        }
+
+        //if (_playerEquipment.WeaponInHeand.WeaponType == Enum_Lib.EWeaponType.Handgun)
+        //{
+        //    if (_playerCtrl.IsPlayerMoving)
+        //    {
+        //        // Set Animation parameter for Moving animation
+        //    }
+        //    else
+        //    {
+        //        // set animation  parameter for idle
+        //    }
+        //}
+        //else if (_playerEquipment.WeaponInHeand.WeaponType == Enum_Lib.EWeaponType.SMG)
+        //{
+
+        //}
+        //else if (_playerEquipment.WeaponInHeand.WeaponType == Enum_Lib.EWeaponType.Shotgun)
+        //{
+
+        //}
+        //else if (_playerEquipment.WeaponInHeand.WeaponType == Enum_Lib.EWeaponType.EnergyLauncher)
+        //{
+
+        //}
     }
+
+    //private void SetAnimation(Enum_Lib.EWeaponType weaponType)
+    //{
+    //    if (_playerCtrl.IsPlayerMoving)
+    //    {
+    //        // Set Animation parameter for Moving animation with Handgun
+    //    }
+    //    else
+    //    {
+    //        // set animation parameter for idle with Handgun
+    //    }
+    //}
 
     private bool CanFire()
     {
@@ -216,17 +289,21 @@ public class PlayerAttack : MonoBehaviour
             // Calculate Deviation during the shooting
             float deviation = CalculateDeviation();
 
-            Quaternion bulletRotation = _bulletSpawnPoint.rotation; // Apply deviation to the bullet's rotation
-            float randomAngle = Random.Range(-deviation, deviation); // Randomize the deviation angle
+            Quaternion bulletRotation = _bulletSpawnPoint.rotation;     // Apply deviation to the bullet's rotation
+            float randomAngle = Random.Range(-deviation, deviation);    // Randomize the deviation angle
 
-            bulletRotation *= Quaternion.Euler(0f, 0f, randomAngle); // Apply rotation around the Z-axis
+            bulletRotation *= Quaternion.Euler(0f, 0f, randomAngle);    // Apply rotation around the Z-axis
 
             /* Play FIre Sound */
             if (_fireSound != null) { _audioSource.PlayOneShot(_fireSound); }
             GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, bulletRotation);
             Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
-            _ammoCounterScript.DecreaseAmmo(); //Call the Decrease Ammo function from the AmmoCounter script;
+            _ammoCounterScript.DecreaseAmmo();                          //Call the Decrease Ammo function from the AmmoCounter script;
+            
+            // set shooting animation
             //_animator.SetBool("Firing", true);
+
+
             _nextFireTime = Time.time + _firerate;
             if (Input.GetKey(KeyCode.Space))
             {

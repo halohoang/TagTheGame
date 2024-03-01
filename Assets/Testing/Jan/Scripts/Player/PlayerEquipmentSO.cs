@@ -17,6 +17,7 @@ namespace ScriptableObjects
 
         private BaseWeapon _weaponInHeand;
         private BaseWeapon _holsteredWeapon;
+        private BaseWeapon _blankHands;
 
         private SubMachineGun SMG;
         private ShotGun Shotgun;
