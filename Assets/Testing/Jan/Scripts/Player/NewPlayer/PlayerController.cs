@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerStats _playerStats;
     [SerializeField] private Light2D _light2D;
     [SerializeField] private Sandevistan _sandevistan;
+    [SerializeField] private Animator _animCtrl;
     [Space(5)]
 
 
@@ -67,6 +68,9 @@ public class PlayerController : MonoBehaviour
 
         if (_playerEquipmentSO == null)
             _playerEquipmentSO = Resources.Load("ScriptableObjects/PlayerEquipment") as PlayerEquipmentSO;
+
+        if (_animCtrl == null)
+            _animCtrl = GetComponent<Animator>();
 
 
         if (_inputReaderSO == null)
@@ -228,6 +232,9 @@ public class PlayerController : MonoBehaviour
             //$" MovementDirection: '{_movementDirection}' | TimeScale: '{Time.timeScale}' | Is Player Dead: '{_playerHealthScript.IsPlayerDead}'");
             #endregion
         }
+
+        // Set Animation
+        _animCtrl.SetBool("isMoving", IsPlayerMoving);
     }
 
     private void SetPlayerMovementValues(float movementSpeed, float lightFallofIntensity, float pointLightOuterRadius, float lightIntesity, bool enableDisableLightControllComponent)

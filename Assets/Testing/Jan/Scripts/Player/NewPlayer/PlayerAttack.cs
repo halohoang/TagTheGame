@@ -25,8 +25,7 @@ public class PlayerAttack : MonoBehaviour
     [Header("References")]
     [SerializeField] private InputReaderSO _inputReader;
     [SerializeField] private PlayerEquipmentSO _playerEquipment;
-    [SerializeField] private PlayerController _playerCtrl;
-    [SerializeField] private PlayerAttack _playerAttack;
+    [SerializeField] private PlayerController _playerCtrl;    
 
     /* Gun related References*/
     [SerializeField] GameObject _gun;
@@ -49,7 +48,7 @@ public class PlayerAttack : MonoBehaviour
 
     /* Muzzle Flash References */
     [SerializeField] private GameObject _muzzleFlash;
-    [SerializeField] private Animator _animator;
+    [SerializeField] private Animator _animatorCtrl;    
     [Space(5)]
 
 
@@ -122,6 +121,18 @@ public class PlayerAttack : MonoBehaviour
             Debug.Log($"<color=yellow>Caution!</color>: Reference for ScriptableObject 'PlayerEquipment' in Inspector of {this} was not set. So it was Set automatically.");
         }
 
+        if (_playerCtrl == null)
+        {
+            _playerCtrl = GetComponent<PlayerController>();
+            Debug.Log($"<color=yellow>Caution!</color>: Reference for 'PlayerController'-Component in Inspector of {this} was not set. So it was Set automatically.");
+        }
+
+        if (_animatorCtrl == null)
+        {
+            _animatorCtrl = GetComponent<Animator>();
+            Debug.Log($"<color=yellow>Caution!</color>: Reference for 'Animator'-Component in Inspector of {this} was not set. So it was Set automatically.");
+        }
+
         if (_audioSource == null)
             _audioSource = GetComponent<AudioSource>();
     }
@@ -190,6 +201,10 @@ public class PlayerAttack : MonoBehaviour
         {
             _isArmed = !_isArmed;
             _gun.SetActive(_isArmed);
+            _animatorCtrl.SetBool("Armed", _isArmed);
+
+            if (!_playerCtrl.IsPlayerMoving && !_isArmed)
+                _animatorCtrl.SetBool("Armed", false);
         }
     }
 
@@ -198,78 +213,57 @@ public class PlayerAttack : MonoBehaviour
         // Update UI
 
 
-        // Enable Animation
-
-
         // Update PlayerEquipmentSO
         _playerEquipment.SwitchWeapon();
 
+
+        // Enable proper Animation
         switch (_playerEquipment.WeaponInHeand.WeaponType)
         {
             case Enum_Lib.EWeaponType.Handgun:
-                //SetAnimation();
-                    //    if (_playerCtrl.IsPlayerMoving)
-                    //    {
-                    //        // Set Animation parameter for Moving animation
-                    //    }
-                    //    else
-                    //    {
-                    //        // set animation  parameter for idle
-                    //    }
-                    break;
+                SetAnimation("Canon");
+                #region alternative
+                //if (_playerCtrl.IsPlayerMoving)
+                //{
+                //    // Set Animation parameter for Moving animation
+                //    _animatorCtrl.SetTrigger("Canon_Walk");
+                //}
+                //else
+                //{
+                //    // set animation  parameter for idle
+                //    _animatorCtrl.SetTrigger("Canon_Idle");
+                //}
+                #endregion
+                break;
 
             case Enum_Lib.EWeaponType.SMG:
+                SetAnimation("SMG");
                 break;
 
             case Enum_Lib.EWeaponType.Shotgun:
+                SetAnimation("Shotgun");
                 break;
 
             case Enum_Lib.EWeaponType.EnergyLauncher:
+                SetAnimation("Launcher");
                 break;
 
             case Enum_Lib.EWeaponType.Blank:
+                _animatorCtrl.SetBool("Armed", false);
                 break;
 
             default:
                 break;
         }
-
-        //if (_playerEquipment.WeaponInHeand.WeaponType == Enum_Lib.EWeaponType.Handgun)
-        //{
-        //    if (_playerCtrl.IsPlayerMoving)
-        //    {
-        //        // Set Animation parameter for Moving animation
-        //    }
-        //    else
-        //    {
-        //        // set animation  parameter for idle
-        //    }
-        //}
-        //else if (_playerEquipment.WeaponInHeand.WeaponType == Enum_Lib.EWeaponType.SMG)
-        //{
-
-        //}
-        //else if (_playerEquipment.WeaponInHeand.WeaponType == Enum_Lib.EWeaponType.Shotgun)
-        //{
-
-        //}
-        //else if (_playerEquipment.WeaponInHeand.WeaponType == Enum_Lib.EWeaponType.EnergyLauncher)
-        //{
-
-        //}
     }
 
-    //private void SetAnimation(Enum_Lib.EWeaponType weaponType)
-    //{
-    //    if (_playerCtrl.IsPlayerMoving)
-    //    {
-    //        // Set Animation parameter for Moving animation with Handgun
-    //    }
-    //    else
-    //    {
-    //        // set animation parameter for idle with Handgun
-    //    }
-    //}
+    private void SetAnimation(string nameOfWeapon)
+    {
+        if (_playerCtrl.IsPlayerMoving) // Set Animation parameter for Moving animation with Handgun    
+            _animatorCtrl.SetTrigger($"{nameOfWeapon}_Walk");
+        else                            // set animation parameter for idle with Handgun
+            _animatorCtrl.SetTrigger($"{nameOfWeapon}_Idle");
+    }
 
     private bool CanFire()
     {
