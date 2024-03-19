@@ -25,7 +25,7 @@ public class PlayerAttack : MonoBehaviour
     [Header("References")]
     [SerializeField] private InputReaderSO _inputReader;
     [SerializeField] private PlayerEquipmentSO _playerEquipment;
-    [SerializeField] private PlayerController _playerCtrl;    
+    [SerializeField] private PlayerController _playerCtrl;
 
     /* Gun related References*/
     [SerializeField] GameObject _gun;
@@ -48,19 +48,16 @@ public class PlayerAttack : MonoBehaviour
 
     /* Muzzle Flash References */
     [SerializeField] private GameObject _muzzleFlash;
-    [SerializeField] private Animator _animatorCtrl;    
+    [SerializeField] private Animator _animatorCtrl;
     [Space(5)]
 
 
     [Header("Settings")]
     /* Reload system */
-    [SerializeField] internal int _maximumBulletCount;
-    [SerializeField] internal int _currentBulletCount;
     //[SerializeField] internal int _minimumBulletCount;            // Will use to do sound for low ammo  sound    
     [SerializeField] private float _reloadTime;                     // To sync with how long the reload animation is    
 
     /* Firerate Settings*/
-    [SerializeField] private float _firerate = 0.5f;
     private float _nextFireTime;
 
     /* Recoil Settings*/
@@ -79,6 +76,14 @@ public class PlayerAttack : MonoBehaviour
 
 
     [Header("Monitoring Values")]
+    /* Reload System */
+    [SerializeField, ReadOnly] internal int _maximumBulletCount;
+    [SerializeField, ReadOnly] internal int _currentBulletCount;
+
+    /* Firerate Settings*/
+    [SerializeField, ReadOnly] private float _firerate = 0.5f;
+
+    /* Different boolian Values */
     [SerializeField, ReadOnly] private bool _isShooting;
     [SerializeField, ReadOnly] private bool _isPlayerDead;
     [SerializeField, ReadOnly] private bool _IsGamePaused;
@@ -152,7 +157,20 @@ public class PlayerAttack : MonoBehaviour
 
     private void Start()
     {
-        _currentBulletCount = _maximumBulletCount;
+        // Set is Armed Status
+        //SetIsArmed(/*input 'loaded' value from ScriptableObjec*/); // -> intention is to 'load' isArmed-Data on Scene Start accordingly to the value when player left last scene
+
+        // Set MaxBullet Count to Magazine Size of currently held weapon (note, if player holds no weapon this will be '0')
+        _maximumBulletCount = _playerEquipment.WeaponInHeand.MagazineSize;
+
+        if (_playerEquipment.WeaponInHeand.CurrentRoundsInMag == _maximumBulletCount) // if amount of current bullets in weapons magazine equals maximum bullet count than set _currentBullet count to max bullet count
+        {
+            _currentBulletCount = _maximumBulletCount;
+        }
+        else // set current bulet count to the rounds currently in the mag of the weapon in hand
+        {
+            _currentBulletCount = _playerEquipment.WeaponInHeand.CurrentRoundsInMag;
+        }
     }
 
     private void Update()
@@ -190,6 +208,8 @@ public class PlayerAttack : MonoBehaviour
                 StartCoroutine(Reload());
             }
         }
+
+        //EquipWeaponAnimation(_isArmed);
     }
     #endregion
 
@@ -205,6 +225,8 @@ public class PlayerAttack : MonoBehaviour
 
             if (!_playerCtrl.IsPlayerMoving && !_isArmed)
                 _animatorCtrl.SetBool("Armed", false);
+
+            EquipWeaponAnimation(_isArmed);
         }
     }
 
@@ -217,43 +239,51 @@ public class PlayerAttack : MonoBehaviour
         _playerEquipment.SwitchWeapon();
 
 
-        // Enable proper Animation
-        switch (_playerEquipment.WeaponInHeand.WeaponType)
+        // Enable proper Animation (if Player is armed) accordingly to equipped weapon
+        EquipWeaponAnimation(_isArmed);
+    }
+
+    private void EquipWeaponAnimation(bool playAnimation)
+    {
+        if (playAnimation)
         {
-            case Enum_Lib.EWeaponType.Handgun:
-                SetAnimation("Canon");
-                #region alternative
-                //if (_playerCtrl.IsPlayerMoving)
-                //{
-                //    // Set Animation parameter for Moving animation
-                //    _animatorCtrl.SetTrigger("Canon_Walk");
-                //}
-                //else
-                //{
-                //    // set animation  parameter for idle
-                //    _animatorCtrl.SetTrigger("Canon_Idle");
-                //}
-                #endregion
-                break;
+            switch (_playerEquipment.WeaponInHeand.WeaponType)
+            {
+                case Enum_Lib.EWeaponType.Handgun:
+                    SetAnimation("Canon");
+                    #region alternative
+                    //if (_playerCtrl.IsPlayerMoving)
+                    //{
+                    //    // Set Animation parameter for Moving animation
+                    //    _animatorCtrl.SetTrigger("Canon_Walk");
+                    //}
+                    //else
+                    //{
+                    //    // set animation  parameter for idle
+                    //    _animatorCtrl.SetTrigger("Canon_Idle");
+                    //}
+                    #endregion
+                    break;
 
-            case Enum_Lib.EWeaponType.SMG:
-                SetAnimation("SMG");
-                break;
+                case Enum_Lib.EWeaponType.SMG:
+                    SetAnimation("SMG");
+                    break;
 
-            case Enum_Lib.EWeaponType.Shotgun:
-                SetAnimation("Shotgun");
-                break;
+                case Enum_Lib.EWeaponType.Shotgun:
+                    SetAnimation("Shotgun");
+                    break;
 
-            case Enum_Lib.EWeaponType.EnergyLauncher:
-                SetAnimation("Launcher");
-                break;
+                case Enum_Lib.EWeaponType.EnergyLauncher:
+                    SetAnimation("Launcher");
+                    break;
 
-            case Enum_Lib.EWeaponType.Blank:
-                _animatorCtrl.SetBool("Armed", false);
-                break;
+                case Enum_Lib.EWeaponType.Blank:
+                    _animatorCtrl.SetBool("Armed", false);
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -293,7 +323,7 @@ public class PlayerAttack : MonoBehaviour
             GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, bulletRotation);
             Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
             _ammoCounterScript.DecreaseAmmo();                          //Call the Decrease Ammo function from the AmmoCounter script;
-            
+
             // set shooting animation
             //_animator.SetBool("Firing", true);
 
@@ -352,6 +382,11 @@ public class PlayerAttack : MonoBehaviour
     private void SetIsPlayerDead(bool playerDeadStatus)
     {
         _isPlayerDead = playerDeadStatus;
+    }
+
+    private void SetIsArmed(bool isArmedStatus)
+    {
+        _isArmed = isArmedStatus;
     }
     #endregion
 

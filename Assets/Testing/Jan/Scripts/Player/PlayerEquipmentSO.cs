@@ -8,6 +8,10 @@ namespace ScriptableObjects
     [CreateAssetMenu(menuName = "Scriptable Objects/Player/Equipment", fileName = "PlayerEquipment")]
     public class PlayerEquipmentSO : ScriptableObject
     {
+        #region Events
+        // todo: put in hereEvent that fires on Weapon swapping or Weapon pick up
+        #endregion
+
         #region Variables
         //--------------------------------------
         // - - - - -  V A R I A B L E S  - - - - 
@@ -24,12 +28,16 @@ namespace ScriptableObjects
         private HandCannon Handgun;
         private EnergyLauncher ELauncher;
 
+        [Header("Monitoring Values")]
+        [SerializeField, ReadOnly] private bool _isPlayerArmed;
+
         private List<BaseWeapon> _weapons;
 
 
         // --- Properties ---
         internal BaseWeapon WeaponInHeand { get => _weaponInHeand; private set => _weaponInHeand = value; }
         internal BaseWeapon HolsteredWeapon { get => _holsteredWeapon; private set => _holsteredWeapon = value; }
+        internal bool IsPlayerArmed { get => _isPlayerArmed; private set => _isPlayerArmed = value; }
         #endregion
 
 
@@ -201,6 +209,11 @@ namespace ScriptableObjects
             //Debug.Log($"SwitchWeapon() was called in '{this}': Holstered Weapon: <color=magenta>'{HolsteredWeapon.WeaponType}'</color>");
             #endregion
             Debug.Log($"Equiped waepons are swapped: Weapon in Hand: <color=cyan>'{WeaponInHeand.WeaponType}'</color> | Holstered Weapon: <color=magenta>'{HolsteredWeapon.WeaponName}'</color> | Cached Weapon (previously holsterd): <color=yellow>'{cacheWeapon.WeaponType}'</color>.");
+        }
+
+        internal void SetIsPlayerArmed(bool isPlayerArmedStatus)
+        {
+            IsPlayerArmed = isPlayerArmedStatus;
         }
         #endregion
 
