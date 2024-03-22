@@ -19,8 +19,8 @@ namespace ScriptableObjects
 
         [SerializeField] private WeaponTypeValues[] _weaponValues;
 
-        private BaseWeapon _weaponInHeand;
-        private BaseWeapon _holsteredWeapon;
+        private BaseWeapon _firstWeapon;
+        private BaseWeapon _secondWeapon;
         private BaseWeapon _blankHands;
 
         private SubMachineGun SMG;
@@ -35,8 +35,8 @@ namespace ScriptableObjects
 
 
         // --- Properties ---
-        internal BaseWeapon WeaponInHeand { get => _weaponInHeand; private set => _weaponInHeand = value; }
-        internal BaseWeapon HolsteredWeapon { get => _holsteredWeapon; private set => _holsteredWeapon = value; }
+        internal BaseWeapon FirstWeapon { get => _firstWeapon; private set => _firstWeapon = value; }
+        internal BaseWeapon SecondWeapon { get => _secondWeapon; private set => _secondWeapon = value; }
         internal bool IsPlayerArmed { get => _isPlayerArmed; private set => _isPlayerArmed = value; }
         #endregion
 
@@ -125,10 +125,10 @@ namespace ScriptableObjects
             }
 
             // 5. Initialize 'WeaponInHand' & 'HolsteredWeapon' and set them to Blank
-            WeaponInHeand = new BaseWeapon();
-            HolsteredWeapon = new BaseWeapon();
-            WeaponInHeand.SetWeaponNameAndType("Blank", Enum_Lib.EWeaponType.Blank);
-            HolsteredWeapon.SetWeaponNameAndType("Blank", Enum_Lib.EWeaponType.Blank);
+            FirstWeapon = new BaseWeapon();
+            SecondWeapon = new BaseWeapon();
+            FirstWeapon.SetWeaponNameAndType("Blank", Enum_Lib.EWeaponType.Blank);
+            SecondWeapon.SetWeaponNameAndType("Blank", Enum_Lib.EWeaponType.Blank);
 
             // monitoring for deugging reasons
             for (int i = 0; i < _weapons.Count; i++)
@@ -140,7 +140,7 @@ namespace ScriptableObjects
 
         #region Custom Methods
         /// <summary>
-        /// Sets the <see cref="WeaponInHeand"/> with new values according to the picked up weapon.
+        /// Sets the <see cref="FirstWeapon"/> with new values according to the picked up weapon.
         /// </summary>
         internal void WeaponPickup(Enum_Lib.EWeaponType typeOfPickedupWeapon)
         {
@@ -166,17 +166,17 @@ namespace ScriptableObjects
             {
                 if (typeOfPickedupWeapon == _weapons[i].WeaponType)
                 {
-                    // if Player has no 2nd Weapon yet, holster current Weapon in Hand
-                    if (HolsteredWeapon.WeaponType == Enum_Lib.EWeaponType.Blank && WeaponInHeand.WeaponType != Enum_Lib.EWeaponType.Blank)   // on first pickup at all HolsteredWeapon is blank and also WeaponInHeand is blank
+                    // if Player has no 2nd Weapon holstered yet but a 1st weapon in hand, holster current held Weapon in Hand
+                    if (SecondWeapon.WeaponType == Enum_Lib.EWeaponType.Blank && FirstWeapon.WeaponType != Enum_Lib.EWeaponType.Blank)   // on first pickup at all HolsteredWeapon is blank and also WeaponInHeand is blank
                     {
-                        Debug.Log($"HolsteredWeapon is Blank && WeaponInHeand is not Blank. HolsteredWeapon will be set to '<color=cyan>{WeaponInHeand.WeaponType}</color>'");
-                        HolsteredWeapon = WeaponInHeand;
-                        Debug.Log($"HERE I AM!! Oo | Currently holstered Weapon is '<color=magenta>{HolsteredWeapon.WeaponType}</color>'");
+                        Debug.Log($"HolsteredWeapon is Blank && WeaponInHeand is not Blank. HolsteredWeapon will be set to '<color=cyan>{FirstWeapon.WeaponType}</color>'");
+                        SecondWeapon = FirstWeapon;
+                        Debug.Log($"HERE I AM!! Oo | Currently holstered Weapon is '<color=magenta>{SecondWeapon.WeaponType}</color>'");
                     }
 
                     // equip freshly picked up weapon
-                    WeaponInHeand = _weapons[i];
-                    Debug.Log($"Weapon in Hand was set to '<color=cyan>{WeaponInHeand.WeaponType}</color>' 'cause '<color=lime>{_weapons[i].WeaponType}</color>' was picked up.");
+                    FirstWeapon = _weapons[i];
+                    Debug.Log($"Weapon in Hand was set to '<color=cyan>{FirstWeapon.WeaponType}</color>' 'cause '<color=lime>{_weapons[i].WeaponType}</color>' was picked up.");
                     return;
                 }
             }
@@ -188,7 +188,7 @@ namespace ScriptableObjects
         /// <param name="newRoundsInMag">The actual amount of round to be in the mag</param>
         internal void UpdateRoundsInMag(int newRoundsInMag)
         {
-            WeaponInHeand.CurrentRoundsInMag = newRoundsInMag;
+            FirstWeapon.CurrentRoundsInMag = newRoundsInMag;
         }
 
         /// <summary>
@@ -200,15 +200,15 @@ namespace ScriptableObjects
             //if (WeaponInHeand == null || HolsteredWeapon == null)
             //    return;
 
-            BaseWeapon cacheWeapon = WeaponInHeand;
-            WeaponInHeand = HolsteredWeapon;
-            HolsteredWeapon = cacheWeapon;
+            BaseWeapon cacheWeapon = FirstWeapon;
+            FirstWeapon = SecondWeapon;
+            SecondWeapon = cacheWeapon;
             #region Debuggers Little helper
             //Debug.Log($"SwitchWeapon() was called in '{this}': Cached Weapon: <color=yellow>'{cacheWeapon.WeaponType}'</color>");
             //Debug.Log($"SwitchWeapon() was called in '{this}': Weapon in Hand: <color=cyan>'{WeaponInHeand.WeaponType}'</color>");
             //Debug.Log($"SwitchWeapon() was called in '{this}': Holstered Weapon: <color=magenta>'{HolsteredWeapon.WeaponType}'</color>");
             #endregion
-            Debug.Log($"Equiped waepons are swapped: Weapon in Hand: <color=cyan>'{WeaponInHeand.WeaponType}'</color> | Holstered Weapon: <color=magenta>'{HolsteredWeapon.WeaponName}'</color> | Cached Weapon (previously holsterd): <color=yellow>'{cacheWeapon.WeaponType}'</color>.");
+            Debug.Log($"Equiped waepons are swapped: Weapon in Hand: <color=cyan>'{FirstWeapon.WeaponType}'</color> | Holstered Weapon: <color=magenta>'{SecondWeapon.WeaponName}'</color> | Cached Weapon (previously holsterd): <color=yellow>'{cacheWeapon.WeaponType}'</color>.");
         }
 
         internal void SetIsPlayerArmed(bool isPlayerArmedStatus)

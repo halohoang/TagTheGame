@@ -1,4 +1,5 @@
 using EnumLibrary;
+using UnityEditor.Experimental;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -14,6 +15,9 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
     public event UnityAction OnInteractionInput;
     public event UnityAction OnReloadingInput;
     public event UnityAction OnWeaponSwitch;
+    public event UnityAction OnPrimarytWeaponEquip;
+    public event UnityAction OnSecondaryWeaponEquip;
+    public event UnityAction OnHolsteringWeapons;    
     public static event UnityAction OnEscPress;
 
 
@@ -104,5 +108,23 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
             OnEscPress?.Invoke();
             Debug.Log($"<color=orange> 'Esc'-Key was pressed </color>");
         }
-    }    
+    }
+
+    public void OnFirstWeaponEquip(InputAction.CallbackContext context)
+    {
+        if (context.started)
+            OnPrimarytWeaponEquip?.Invoke();
+    }
+
+    public void OnSecondWeaponEquip(InputAction.CallbackContext context)
+    {
+        if (context.started)
+            OnSecondaryWeaponEquip?.Invoke();
+    }
+
+    public void OnHolsterWeapons(InputAction.CallbackContext context)
+    {
+        if (context.started)
+            OnHolsteringWeapons?.Invoke();
+    }
 }

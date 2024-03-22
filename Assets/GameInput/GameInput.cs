@@ -89,6 +89,33 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FirstWeaponEquip"",
+                    ""type"": ""Button"",
+                    ""id"": ""1cc77f13-f5b6-4ead-a92a-030eba85a455"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SecondWeaponEquip"",
+                    ""type"": ""Button"",
+                    ""id"": ""ed8ed1f3-6673-4690-a4f6-ab1fefa4b4c2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HolsterWeapons"",
+                    ""type"": ""Button"",
+                    ""id"": ""a7851566-5395-48e2-a072-1a45a8e2a367"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -267,6 +294,39 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""action"": ""WeaponSwap"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""993a9b5f-d446-4c85-ad08-3238bf29553a"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Mouse & Keyboard"",
+                    ""action"": ""FirstWeaponEquip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9a96444f-fc0e-4ba4-8f78-f6d4f9da9c93"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Mouse & Keyboard"",
+                    ""action"": ""SecondWeaponEquip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5c033b34-38bb-426d-b625-03f1cd121bc7"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Mouse & Keyboard"",
+                    ""action"": ""HolsterWeapons"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -327,6 +387,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
         m_Player_Reloading = m_Player.FindAction("Reloading", throwIfNotFound: true);
         m_Player_WeaponSwap = m_Player.FindAction("WeaponSwap", throwIfNotFound: true);
+        m_Player_FirstWeaponEquip = m_Player.FindAction("FirstWeaponEquip", throwIfNotFound: true);
+        m_Player_SecondWeaponEquip = m_Player.FindAction("SecondWeaponEquip", throwIfNotFound: true);
+        m_Player_HolsterWeapons = m_Player.FindAction("HolsterWeapons", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_TogglePauseMenu = m_UI.FindAction("TogglePauseMenu", throwIfNotFound: true);
@@ -398,6 +461,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Interaction;
     private readonly InputAction m_Player_Reloading;
     private readonly InputAction m_Player_WeaponSwap;
+    private readonly InputAction m_Player_FirstWeaponEquip;
+    private readonly InputAction m_Player_SecondWeaponEquip;
+    private readonly InputAction m_Player_HolsterWeapons;
     public struct PlayerActions
     {
         private @GameInput m_Wrapper;
@@ -409,6 +475,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
         public InputAction @Reloading => m_Wrapper.m_Player_Reloading;
         public InputAction @WeaponSwap => m_Wrapper.m_Player_WeaponSwap;
+        public InputAction @FirstWeaponEquip => m_Wrapper.m_Player_FirstWeaponEquip;
+        public InputAction @SecondWeaponEquip => m_Wrapper.m_Player_SecondWeaponEquip;
+        public InputAction @HolsterWeapons => m_Wrapper.m_Player_HolsterWeapons;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -439,6 +508,15 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @WeaponSwap.started += instance.OnWeaponSwap;
             @WeaponSwap.performed += instance.OnWeaponSwap;
             @WeaponSwap.canceled += instance.OnWeaponSwap;
+            @FirstWeaponEquip.started += instance.OnFirstWeaponEquip;
+            @FirstWeaponEquip.performed += instance.OnFirstWeaponEquip;
+            @FirstWeaponEquip.canceled += instance.OnFirstWeaponEquip;
+            @SecondWeaponEquip.started += instance.OnSecondWeaponEquip;
+            @SecondWeaponEquip.performed += instance.OnSecondWeaponEquip;
+            @SecondWeaponEquip.canceled += instance.OnSecondWeaponEquip;
+            @HolsterWeapons.started += instance.OnHolsterWeapons;
+            @HolsterWeapons.performed += instance.OnHolsterWeapons;
+            @HolsterWeapons.canceled += instance.OnHolsterWeapons;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -464,6 +542,15 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @WeaponSwap.started -= instance.OnWeaponSwap;
             @WeaponSwap.performed -= instance.OnWeaponSwap;
             @WeaponSwap.canceled -= instance.OnWeaponSwap;
+            @FirstWeaponEquip.started -= instance.OnFirstWeaponEquip;
+            @FirstWeaponEquip.performed -= instance.OnFirstWeaponEquip;
+            @FirstWeaponEquip.canceled -= instance.OnFirstWeaponEquip;
+            @SecondWeaponEquip.started -= instance.OnSecondWeaponEquip;
+            @SecondWeaponEquip.performed -= instance.OnSecondWeaponEquip;
+            @SecondWeaponEquip.canceled -= instance.OnSecondWeaponEquip;
+            @HolsterWeapons.started -= instance.OnHolsterWeapons;
+            @HolsterWeapons.performed -= instance.OnHolsterWeapons;
+            @HolsterWeapons.canceled -= instance.OnHolsterWeapons;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -545,6 +632,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         void OnInteraction(InputAction.CallbackContext context);
         void OnReloading(InputAction.CallbackContext context);
         void OnWeaponSwap(InputAction.CallbackContext context);
+        void OnFirstWeaponEquip(InputAction.CallbackContext context);
+        void OnSecondWeaponEquip(InputAction.CallbackContext context);
+        void OnHolsterWeapons(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

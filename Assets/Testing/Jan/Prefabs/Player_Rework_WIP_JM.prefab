@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 1281870786429288075}
   - component: {fileID: 1281870786518600867}
   - component: {fileID: -1073356962423093796}
-  - component: {fileID: -4259475230172032254}
+  - component: {fileID: 4721480418973301468}
   - component: {fileID: -1263416233566364373}
   - component: {fileID: 2427832743909839758}
   - component: {fileID: 1281870786518600860}
@@ -241,7 +241,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2427832743909839764}
-  m_LocalRotation: {x: -0, y: -0, z: 1, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: -11.797602, y: 2.6768818, z: 0.029107463}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
@@ -517,6 +517,7 @@ MonoBehaviour:
   _playerStats: {fileID: -1263416233566364373}
   _light2D: {fileID: 5124294400161659356}
   _sandevistan: {fileID: 0}
+  _animCtrl: {fileID: 2427832743909839757}
   _currentPlayerSpeed: 0
   _minPlayerSpeed: 5
   _maxPlayerSpeed: 10
@@ -526,7 +527,7 @@ MonoBehaviour:
   _movementDirection: {x: 0, y: 0}
   _isPlayerMoving: 0
   _isPlayerDead: 0
---- !u!114 &-4259475230172032254
+--- !u!114 &4721480418973301468
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -535,11 +536,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2427832743909839764}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fa89fd5e815fd6479de36eed8ae74fc, type: 3}
+  m_Script: {fileID: 11500000, guid: 1538b5350adfb2644af19932a7bf7353, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _inputReader: {fileID: 11400000, guid: bac5360f5a3523940978876b6731d1d6, type: 2}
-  _playerEquipment: {fileID: 11400000, guid: 8298549a7bb6b2d4dad985c6a32fd015, type: 2}
+  _playerEquipmentSO: {fileID: 11400000, guid: 8298549a7bb6b2d4dad985c6a32fd015, type: 2}
+  _playerCtrl: {fileID: -1073356962423093796}
   _gun: {fileID: 2427832743120267259}
   _bulletSpawnPoint: {fileID: 7309878444236341005}
   _bulletPrefab: {fileID: 6070599304756626328, guid: dd94c979a65c5f14db45df26421a70b3, type: 3}
@@ -550,17 +552,17 @@ MonoBehaviour:
   _reloadSound: {fileID: 8300000, guid: 554bb6e1ed7eede439f7bbc798380490, type: 3}
   cameraShake: {fileID: 0}
   _muzzleFlash: {fileID: 5095569528036817614}
-  _animator: {fileID: 5095569528036817613}
-  _maximumBulletCount: 30
-  _currentBulletCount: 0
-  _reloadTime: 1.1
-  _firerate: 0.5
+  _animatorCtrl: {fileID: 2427832743909839757}
+  _reloadTime: 0
   _maxDeviationAngle: 5
-  _whenDeviationKicksIn: 10
+  _whenDeviationKicksIn: 0
   _shootingNoiseRange: 10
   _showNoiseRangeGizmo: 1
   duration: 0.05
   amount: 0.08
+  _maximumBulletCount: 0
+  _currentBulletCount: 0
+  _firerate: 0.5
   _isShooting: 0
   _isPlayerDead: 0
   _IsGamePaused: 0
@@ -638,7 +640,7 @@ MonoBehaviour:
   - {x: 0.07000017, y: -0.12999988, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 63008
+  m_InstanceId: -3210
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.07000017, y: 0.12999988, z: 0}
@@ -1265,11 +1267,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc01a567e01223e4f99502066f5cd154, type: 3}
---- !u!95 &5095569528036817613 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 6346405036840355762, guid: dc01a567e01223e4f99502066f5cd154, type: 3}
-  m_PrefabInstance: {fileID: 2208431490456288639}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5095569528036817614 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6346405036840355761, guid: dc01a567e01223e4f99502066f5cd154, type: 3}

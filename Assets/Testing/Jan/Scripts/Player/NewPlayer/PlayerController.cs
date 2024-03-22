@@ -2,10 +2,19 @@ using EnumLibrary;
 using NaughtyAttributes;
 using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
 
 public class PlayerController : MonoBehaviour
 {
+    #region Events
+    //--------------------------------
+    // - - - - -  E V E N T S  - - - - 
+    //--------------------------------
+
+    
+    #endregion
+
     #region Variables
     //--------------------------------------
     // - - - - -  V A R I A B L E S  - - - - 
@@ -115,21 +124,6 @@ public class PlayerController : MonoBehaviour
         PlayerMovement();        
         //PlayerFast();
         //PlayerDash();
-    }
-
-    /// <summary>
-    /// CollisionCheck for recognizing collision with WeaponObject
-    /// </summary>
-    /// <param name="collision"></param>
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        // Check if collision is a of Type Baseweapon, if so trigger pickup weapon
-        if (collision.gameObject.TryGetComponent(out BaseWeapon weapon))
-        {
-            _playerEquipmentSO.WeaponPickup(weapon.WeaponType);
-
-            Destroy(weapon.gameObject);
-        }
     }
     #endregion
 

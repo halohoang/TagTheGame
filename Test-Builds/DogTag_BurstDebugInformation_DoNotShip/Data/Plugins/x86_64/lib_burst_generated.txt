@@ -97,11 +97,6 @@ Library: I:\GitHub_Local_Repros\TagTheGame\Temp\StagingArea\Data\Plugins\x86_64\
 --compilation-defines=NET_STANDARD_2_1
 --compilation-defines=NETSTANDARD
 --compilation-defines=NETSTANDARD2_1
---compilation-defines=DEVELOPMENT_BUILD
---compilation-defines=ENABLE_PROFILER
---compilation-defines=DEBUG
---compilation-defines=TRACE
---compilation-defines=UNITY_ASSERTIONS
 --compilation-defines=ENABLE_CUSTOM_RENDER_TEXTURE
 --compilation-defines=ENABLE_DIRECTOR
 --compilation-defines=ENABLE_LOCALIZATION
@@ -158,7 +153,6 @@ Library: I:\GitHub_Local_Repros\TagTheGame\Temp\StagingArea\Data\Plugins\x86_64\
 --linker-options=PdbAltPath="DogTag_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=I:\GitHub_Local_Repros\TagTheGame\Temp\Burst
---debug=LineOnly
 --key-folder=I:/Unity-Editors/2021.3.30f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
 --decode-folder=I:\GitHub_Local_Repros\TagTheGame\Library\Burst
 --output=I:\GitHub_Local_Repros\TagTheGame\Temp\StagingArea\Data\Plugins\x86_64\lib_burst_generated
@@ -277,11 +271,6 @@ Library: I:\GitHub_Local_Repros\TagTheGame\Temp\StagingArea\Data\Plugins\x86_64\
 --compilation-defines=NET_STANDARD_2_1
 --compilation-defines=NETSTANDARD
 --compilation-defines=NETSTANDARD2_1
---compilation-defines=DEVELOPMENT_BUILD
---compilation-defines=ENABLE_PROFILER
---compilation-defines=DEBUG
---compilation-defines=TRACE
---compilation-defines=UNITY_ASSERTIONS
 --compilation-defines=ENABLE_CUSTOM_RENDER_TEXTURE
 --compilation-defines=ENABLE_DIRECTOR
 --compilation-defines=ENABLE_LOCALIZATION
@@ -338,7 +327,6 @@ Library: I:\GitHub_Local_Repros\TagTheGame\Temp\StagingArea\Data\Plugins\x86_64\
 --linker-options=PdbAltPath="DogTag_Data/Plugins/x86_64/lib_burst_generated.pdb"
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=I:\GitHub_Local_Repros\TagTheGame\Temp\Burst
---debug=LineOnly
 --key-folder=I:/Unity-Editors/2021.3.30f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport
 --decode-folder=I:\GitHub_Local_Repros\TagTheGame\Library\Burst
 --output=I:\GitHub_Local_Repros\TagTheGame\Temp\StagingArea\Data\Plugins\x86_64\lib_burst_generated

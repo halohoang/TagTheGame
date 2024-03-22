@@ -12,14 +12,14 @@ EditorBuildSettings:
     path: Assets/Scenes/TopDownSample.unity
     guid: f841391776a308645929d9284fc023d6
   - enabled: 0
-    path: Assets/Testing/Jan/Scenes/Jan_Test_Enemy-AI.unity
-    guid: cc62647ff8f627e469487f1e42841441
-  - enabled: 0
     path: Assets/Scenes/Light/Light.unity
     guid: 08e0cf9e0f36bae4daf9b03db3c30bd3
   - enabled: 1
     path: Assets/Scenes/Menu/Menu.unity
     guid: cca4a4969743b824c94aaf8d3563f6a1
+  - enabled: 0
+    path: Assets/Testing/Jan/Scenes/Jan_Test_EnemyStateMachine_AI_newSetup.unity
+    guid: 2fc4f3ab9551c944cbd9bac68b8e5126
   - enabled: 1
     path: Assets/Scenes/Level 1/Level 1.unity
     guid: 8b175f091cb7c3744b14e26a1e060fb2

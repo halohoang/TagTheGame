@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using EnumLibrary;
 
-public class PlayerAttack : MonoBehaviour
+public class PlayerWeaponHandling : MonoBehaviour
 {
     #region Events
     //--------------------------------
@@ -24,7 +24,7 @@ public class PlayerAttack : MonoBehaviour
     //--- SerializedFields Variables ---
     [Header("References")]
     [SerializeField] private InputReaderSO _inputReader;
-    [SerializeField] private PlayerEquipmentSO _playerEquipment;
+    [SerializeField] private PlayerEquipmentSO _playerEquipmentSO;
     [SerializeField] private PlayerController _playerCtrl;
 
     /* Gun related References*/
@@ -89,6 +89,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField, ReadOnly] private bool _IsGamePaused;
     [SerializeField, ReadOnly] private bool _isArmed;               // Checking whether the player is armed or not
     [SerializeField, ReadOnly] private bool _isReloading = false;
+    [SerializeField, ReadOnly] private bool _wasWeaponPickedUp;
 
     // --- private Variables ---
     private AudioSource _audioSource;
@@ -120,9 +121,9 @@ public class PlayerAttack : MonoBehaviour
             Debug.Log($"<color=yellow>Caution!</color>: Reference for ScriptableObject 'InputReader' in Inspector of {this} was not set. So it was Set automatically, if you want or need to set a specific InputReader Asset, set it manually instead.");
         }
 
-        if (_playerEquipment == null)
+        if (_playerEquipmentSO == null)
         {
-            _playerEquipment = Resources.Load("ScriptableObjects/PlayerEquipment") as PlayerEquipmentSO;
+            _playerEquipmentSO = Resources.Load("ScriptableObjects/PlayerEquipment") as PlayerEquipmentSO;
             Debug.Log($"<color=yellow>Caution!</color>: Reference for ScriptableObject 'PlayerEquipment' in Inspector of {this} was not set. So it was Set automatically.");
         }
 
@@ -144,13 +145,19 @@ public class PlayerAttack : MonoBehaviour
 
     private void OnEnable()
     {
-        _inputReader.OnWeaponSwitch += SwitchWeapon;
+        //_inputReader.OnWeaponSwitch += SwitchWeapon;
+        _inputReader.OnHolsteringWeapons += HolsterWeapon;
+        _inputReader.OnPrimarytWeaponEquip += firstWeaponEquip;
+        _inputReader.OnSecondaryWeaponEquip += SecondWeaponEquip;
         PlayerHealth.OnPlayerDeath += SetIsPlayerDead;
         PauseMenu.OnTogglePauseScene += SetIsGamePaused;
     }
     private void OnDisable()
     {
-        _inputReader.OnWeaponSwitch -= SwitchWeapon;
+        //_inputReader.OnWeaponSwitch -= SwitchWeapon;
+        _inputReader.OnHolsteringWeapons -= HolsterWeapon;
+        _inputReader.OnPrimarytWeaponEquip -= firstWeaponEquip;
+        _inputReader.OnSecondaryWeaponEquip -= SecondWeaponEquip;
         PlayerHealth.OnPlayerDeath -= SetIsPlayerDead;
         PauseMenu.OnTogglePauseScene -= SetIsGamePaused;
     }
@@ -161,21 +168,21 @@ public class PlayerAttack : MonoBehaviour
         //SetIsArmed(/*input 'loaded' value from ScriptableObjec*/); // -> intention is to 'load' isArmed-Data on Scene Start accordingly to the value when player left last scene
 
         // Set MaxBullet Count to Magazine Size of currently held weapon (note, if player holds no weapon this will be '0')
-        _maximumBulletCount = _playerEquipment.WeaponInHeand.MagazineSize;
+        _maximumBulletCount = _playerEquipmentSO.FirstWeapon.MagazineSize;
 
-        if (_playerEquipment.WeaponInHeand.CurrentRoundsInMag == _maximumBulletCount) // if amount of current bullets in weapons magazine equals maximum bullet count than set _currentBullet count to max bullet count
+        if (_playerEquipmentSO.FirstWeapon.CurrentRoundsInMag == _maximumBulletCount) // if amount of current bullets in weapons magazine equals maximum bullet count than set _currentBullet count to max bullet count
         {
             _currentBulletCount = _maximumBulletCount;
         }
         else // set current bulet count to the rounds currently in the mag of the weapon in hand
         {
-            _currentBulletCount = _playerEquipment.WeaponInHeand.CurrentRoundsInMag;
+            _currentBulletCount = _playerEquipmentSO.FirstWeapon.CurrentRoundsInMag;
         }
     }
 
     private void Update()
     {
-        DrawOrHolsterWeapon();
+        //DrawOrHolsterWeapon();
         if (_isArmed && !_isPlayerDead)
         {
             if (Input.GetMouseButtonUp(0))
@@ -209,47 +216,125 @@ public class PlayerAttack : MonoBehaviour
             }
         }
 
-        //EquipWeaponAnimation(_isArmed);
+        if (_wasWeaponPickedUp && !_playerCtrl.IsPlayerMoving) // ensuring that animation will truely be set correctly even in case player movement stopped right on collision
+        {
+            EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
+            _wasWeaponPickedUp = false;
+        }
+    }
+
+    /// <summary>
+    /// CollisionCheck for recognizing collision with WeaponObject
+    /// </summary>
+    /// <param name="collision"></param>
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Check if collision is a of Type Baseweapon, if so trigger pickup weapon
+        if (collision.gameObject.TryGetComponent(out BaseWeapon weapon))
+        {
+            _isArmed = true;
+            _animatorCtrl.SetBool("Armed", _isArmed);
+
+            _playerEquipmentSO.WeaponPickup(weapon.WeaponType);
+
+            // Set Animation            
+            EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
+
+            Destroy(weapon.gameObject);
+
+            _wasWeaponPickedUp = true;
+        }
     }
     #endregion
 
 
     #region Custom Methods
-    private void DrawOrHolsterWeapon()
+    private void firstWeaponEquip()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        // only equip first weapon if slot is not empty
+        if (_playerEquipmentSO.FirstWeapon.WeaponType != Enum_Lib.EWeaponType.Blank)
         {
-            _isArmed = !_isArmed;
-            _gun.SetActive(_isArmed);
+            _isArmed = true;
+
+            //_gun.SetActive(_isArmed);
             _animatorCtrl.SetBool("Armed", _isArmed);
 
-            if (!_playerCtrl.IsPlayerMoving && !_isArmed)
-                _animatorCtrl.SetBool("Armed", false);
+            //if (!_playerCtrl.IsPlayerMoving && !_isArmed)
+            //    _animatorCtrl.SetBool("Armed", false);
 
-            EquipWeaponAnimation(_isArmed);
+            EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
         }
+    }
+
+    private void SecondWeaponEquip()
+    {
+        // only equip second weapon if slot is not empty
+        if (_playerEquipmentSO.SecondWeapon.WeaponType != Enum_Lib.EWeaponType.Blank)
+        {
+            _isArmed = true;
+
+            //_gun.SetActive(_isArmed);
+            _animatorCtrl.SetBool("Armed", _isArmed);
+
+            //if (!_playerCtrl.IsPlayerMoving && !_isArmed)
+            //    _animatorCtrl.SetBool("Armed", false);
+
+            EquipWeaponAnimation(_isArmed, _playerEquipmentSO.SecondWeapon.WeaponType);
+        }
+    }
+
+    private void HolsterWeapon()
+    {
+        _isArmed = false;
+        //_gun.SetActive(_isArmed);
+        _animatorCtrl.SetBool("Armed", _isArmed);
+
+        //if (!_playerCtrl.IsPlayerMoving && !_isArmed)
+        //    _animatorCtrl.SetBool("Armed", false);
+
+        EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
+
+        #region OldHoangApproach
+        //if (Input.GetKeyDown(KeyCode.F))
+        //{
+        //    _isArmed = !_isArmed;
+        //    _gun.SetActive(_isArmed);
+        //    _animatorCtrl.SetBool("Armed", _isArmed);
+
+        //    if (!_playerCtrl.IsPlayerMoving && !_isArmed)
+        //        _animatorCtrl.SetBool("Armed", false);
+
+        //    EquipWeaponAnimation(_isArmed);
+        //}
+        #endregion
     }
 
     private void SwitchWeapon()
     {
-        // Update UI
+        // only enabling weapon swap, if _isArmed and if both weapon slots actually contain weapons
+        if (_isArmed && (_playerEquipmentSO.FirstWeapon.WeaponType != Enum_Lib.EWeaponType.Blank && _playerEquipmentSO.SecondWeapon.WeaponType != Enum_Lib.EWeaponType.Blank))
+        {
+            // Update UI
 
 
-        // Update PlayerEquipmentSO
-        _playerEquipment.SwitchWeapon();
+            // Update PlayerEquipmentSO
+            _playerEquipmentSO.SwitchWeapon();
 
 
-        // Enable proper Animation (if Player is armed) accordingly to equipped weapon
-        EquipWeaponAnimation(_isArmed);
+            // Enable proper Animation (if Player is armed) accordingly to equipped weapon
+            EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
+        }
     }
 
-    private void EquipWeaponAnimation(bool playAnimation)
+    private void EquipWeaponAnimation(bool playAnimation, Enum_Lib.EWeaponType weaponType)
     {
+        Debug.Log($"'<color=yellow>EquipWeaponANimation() was called</color>'.");
         if (playAnimation)
         {
-            switch (_playerEquipment.WeaponInHeand.WeaponType)
+            switch (weaponType)
             {
                 case Enum_Lib.EWeaponType.Handgun:
+                    Debug.Log($"'<color=yellow>Entered Case for Handgun</color>'.");
                     SetAnimation("Canon");
                     #region alternative
                     //if (_playerCtrl.IsPlayerMoving)
@@ -266,19 +351,24 @@ public class PlayerAttack : MonoBehaviour
                     break;
 
                 case Enum_Lib.EWeaponType.SMG:
+                    Debug.Log($"'<color=yellow>Entered Case for SMG</color>'.");
                     SetAnimation("SMG");
                     break;
 
                 case Enum_Lib.EWeaponType.Shotgun:
+                    Debug.Log($"'<color=yellow>Entered Case for Shotgun</color>'.");
                     SetAnimation("Shotgun");
                     break;
 
                 case Enum_Lib.EWeaponType.EnergyLauncher:
+                    Debug.Log($"'<color=yellow>Entered Case for ELauncher</color>'.");
                     SetAnimation("Launcher");
                     break;
 
                 case Enum_Lib.EWeaponType.Blank:
+                    Debug.Log($"'<color=yellow>Entered Case for Blank</color>'.");
                     _animatorCtrl.SetBool("Armed", false);
+                    _isArmed = false;
                     break;
 
                 default:
@@ -289,10 +379,17 @@ public class PlayerAttack : MonoBehaviour
 
     private void SetAnimation(string nameOfWeapon)
     {
-        if (_playerCtrl.IsPlayerMoving) // Set Animation parameter for Moving animation with Handgun    
+        if (_playerCtrl.IsPlayerMoving) // Set Animation parameter for Moving animation with weapon
+        {
             _animatorCtrl.SetTrigger($"{nameOfWeapon}_Walk");
-        else                            // set animation parameter for idle with Handgun
+            Debug.Log($"'<color=yellow>SetAnimation() was called</color>' -> '<color=yellow>walking weapon animation</color>' should have been set up.");
+        }
+        else                            // set animation parameter for idle with weapon
+        {
             _animatorCtrl.SetTrigger($"{nameOfWeapon}_Idle");
+            Debug.Log($"'<color=yellow>SetAnimation() was called</color>' -> '<color=yellow>idle weapon animation</color>' should have been set up.");
+        }
+
     }
 
     private bool CanFire()

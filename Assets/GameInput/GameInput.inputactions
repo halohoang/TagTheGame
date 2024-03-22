@@ -67,6 +67,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "FirstWeaponEquip",
+                    "type": "Button",
+                    "id": "1cc77f13-f5b6-4ead-a92a-030eba85a455",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SecondWeaponEquip",
+                    "type": "Button",
+                    "id": "ed8ed1f3-6673-4690-a4f6-ab1fefa4b4c2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "HolsterWeapons",
+                    "type": "Button",
+                    "id": "a7851566-5395-48e2-a072-1a45a8e2a367",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -243,6 +270,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "WeaponSwap",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "993a9b5f-d446-4c85-ad08-3238bf29553a",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Mouse & Keyboard",
+                    "action": "FirstWeaponEquip",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9a96444f-fc0e-4ba4-8f78-f6d4f9da9c93",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Mouse & Keyboard",
+                    "action": "SecondWeaponEquip",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5c033b34-38bb-426d-b625-03f1cd121bc7",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Mouse & Keyboard",
+                    "action": "HolsterWeapons",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
