@@ -12,7 +12,11 @@ namespace Enemies
     [RequireComponent(typeof(NavMeshAgent))]
     public class BaseEnemyBehaviour : MonoBehaviour
     {
-        // ---------- Fields ----------
+        #region Variables
+        // -------------------------
+        // --- V A R I A B L E S ---
+        // -------------------------
+
         [Header("Needed References")]
         [SerializeField, ReadOnly] private NavMeshAgent _navAgent;
         [SerializeField, ReadOnly] private Animator _animator;
@@ -57,9 +61,13 @@ namespace Enemies
         private AlertState _alertState;
         private ChaseState _chaseState;
         private AttackState _attackState;
+        #endregion
 
+        #region Properties
+        // ---------------------------
+        // --- P R O P E R T I E S ---
+        // ---------------------------
 
-        // --- Properties ---
         // References
         public NavMeshAgent NavAgent { get => _navAgent; private set => _navAgent = value; }
         public Animator Animator { get => _animator; private set => _animator = value; }
@@ -91,8 +99,16 @@ namespace Enemies
         // put that later inside the 'MeleeEnemyBehaviour.cs': ; JM (31.10.2023)
         public ConditionIsInMeleeAttackRangeCheck CondMeleeAttackCheck { get => _condMeleeAttackCheck; private set => _condMeleeAttackCheck = value; }
         public bool IsInAttackRange { get => _isInAttackRange; private set => _isInAttackRange = value; }
+        #endregion
 
-        // ---------- Methods ----------
+        #region Methods
+        // ---------------------
+        // --- M E T H O D S ---
+        // ---------------------
+
+        #region Unity Methods
+        // Unity provided Methods
+
         protected void Awake()
         {
             // Autoreferencing
@@ -157,12 +173,13 @@ namespace Enemies
 
         private void FixedUpdate()
         {
+            // reset to Idle State if Player was killed
             if (IsPlayerDead && StateMachine.CurrentState != IdleState)
                 StateMachine.Transition(IdleState);
 
             StateMachine.CurrentState.PhysicsUpdate();
         }
-       
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.gameObject.CompareTag("Enemy"))
@@ -180,11 +197,16 @@ namespace Enemies
         // Update is called once per frame
         void Update()
         {
+            // reset to Idle State if Player was killed
             if (IsPlayerDead && StateMachine.CurrentState != IdleState)
                 StateMachine.Transition(IdleState);
 
             StateMachine.CurrentState.FrameUpdate();
         }
+        #endregion
+
+        #region Custom Methods
+        // Custom Methods
 
         internal void SetIsSomethingAlarmingHappening(bool isSomethinAlarmingHappening)
         {
@@ -263,5 +285,8 @@ namespace Enemies
             // todo: maybe fill with logic for playing specific Animations on specific AnimationEvents if needed; JM (27.10.2023)
             StateMachine.CurrentState.AnimationTriggerEvent(animTriggerType);
         }
+        #endregion
+
+        #endregion
     }
 }
