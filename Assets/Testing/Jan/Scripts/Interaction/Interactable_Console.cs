@@ -14,7 +14,7 @@ namespace Interactables
 
         //------------------------------ Fields ------------------------------
         [Header("Settings")]
-        [Tooltip("The GameObject (Console) that should be connetced to this Door to controll it (oben/close)")]
+        [Tooltip("The GameObject (Console) that should be connetced to this Door to controll it (open/close; enables/disables the Object)")]
         [SerializeField] private List<GameObject> _consoleControledObjects;
 
 
