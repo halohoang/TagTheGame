@@ -146,18 +146,18 @@ public class PlayerWeaponHandling : MonoBehaviour
     private void OnEnable()
     {
         //_inputReader.OnWeaponSwitch += SwitchWeapon;
-        _inputReader.OnHolsteringWeapons += HolsterWeapon;
-        _inputReader.OnPrimarytWeaponEquip += firstWeaponEquip;
-        _inputReader.OnSecondaryWeaponEquip += SecondWeaponEquip;
+        _inputReader.OnHolsteringWeaponInput += HolsterWeapon;
+        _inputReader.OnFirstWeaponEquipInput += firstWeaponEquip;
+        _inputReader.OnSecondWeaponEquipInput += SecondWeaponEquip;
         PlayerHealth.OnPlayerDeath += SetIsPlayerDead;
         PauseMenu.OnTogglePauseScene += SetIsGamePaused;
     }
     private void OnDisable()
     {
         //_inputReader.OnWeaponSwitch -= SwitchWeapon;
-        _inputReader.OnHolsteringWeapons -= HolsterWeapon;
-        _inputReader.OnPrimarytWeaponEquip -= firstWeaponEquip;
-        _inputReader.OnSecondaryWeaponEquip -= SecondWeaponEquip;
+        _inputReader.OnHolsteringWeaponInput -= HolsterWeapon;
+        _inputReader.OnFirstWeaponEquipInput -= firstWeaponEquip;
+        _inputReader.OnSecondWeaponEquipInput -= SecondWeaponEquip;
         PlayerHealth.OnPlayerDeath -= SetIsPlayerDead;
         PauseMenu.OnTogglePauseScene -= SetIsGamePaused;
     }

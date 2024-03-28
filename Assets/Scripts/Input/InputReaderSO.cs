@@ -1,5 +1,4 @@
 using EnumLibrary;
-using UnityEditor.Experimental;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -14,10 +13,10 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
     public event UnityAction OnAttackInput;
     public event UnityAction OnInteractionInput;
     public event UnityAction OnReloadingInput;
-    public event UnityAction OnWeaponSwitch;
-    public event UnityAction OnPrimarytWeaponEquip;
-    public event UnityAction OnSecondaryWeaponEquip;
-    public event UnityAction OnHolsteringWeapons;    
+    public event UnityAction OnWeaponSwapInput;                         // currently not used; JM (28.03.2024)
+    public event UnityAction OnFirstWeaponEquipInput;
+    public event UnityAction OnSecondWeaponEquipInput;
+    public event UnityAction OnHolsteringWeaponInput;    
     public static event UnityAction OnEscPress;
 
 
@@ -97,7 +96,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
     public void OnWeaponSwap(InputAction.CallbackContext context)
     {
         if (context.started)
-            OnWeaponSwitch?.Invoke();
+            OnWeaponSwapInput?.Invoke();
     }
 
     //---------- Input-Callback Methods, UI-related ----------
@@ -113,18 +112,18 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
     public void OnFirstWeaponEquip(InputAction.CallbackContext context)
     {
         if (context.started)
-            OnPrimarytWeaponEquip?.Invoke();
+            OnFirstWeaponEquipInput?.Invoke();
     }
 
     public void OnSecondWeaponEquip(InputAction.CallbackContext context)
     {
         if (context.started)
-            OnSecondaryWeaponEquip?.Invoke();
+            OnSecondWeaponEquipInput?.Invoke();
     }
 
     public void OnHolsterWeapons(InputAction.CallbackContext context)
     {
         if (context.started)
-            OnHolsteringWeapons?.Invoke();
+            OnHolsteringWeaponInput?.Invoke();
     }
 }
