@@ -68,10 +68,11 @@ public class PlayerWeaponHandling : MonoBehaviour
     [SerializeField, Range(0.0f, 25.0f), EnableIf("_showNoiseRangeGizmo")] private float _shootingNoiseRange = 10.0f;
     [Tooltip("Defines whether the green gizmo circle around the player showing the noise range when shooting, is shown in the editor or not.")]
     [SerializeField] private bool _showNoiseRangeGizmo = true;
+    [Space(3)]
 
     /* Camera Shake Settings*/
-    [SerializeField] internal float duration = 0.05f;
-    [SerializeField] internal float amount = 0.08f;
+    [SerializeField] internal float _camShakeDuration = 0.05f;
+    [SerializeField] internal float _camShakeAmount = 0.08f;
     [Space(5)]
 
 
@@ -86,7 +87,7 @@ public class PlayerWeaponHandling : MonoBehaviour
     /* Different boolian Values */
     [SerializeField, ReadOnly] private bool _isShooting;
     [SerializeField, ReadOnly] private bool _isPlayerDead;
-    [SerializeField, ReadOnly] private bool _IsGamePaused;
+    [SerializeField, ReadOnly] private bool _isGamePaused;
     [SerializeField, ReadOnly] private bool _isArmed;               // Checking whether the player is armed or not
     [SerializeField, ReadOnly] private bool _isReloading = false;
     [SerializeField, ReadOnly] private bool _wasWeaponPickedUp;
@@ -147,7 +148,7 @@ public class PlayerWeaponHandling : MonoBehaviour
     {
         //_inputReader.OnWeaponSwitch += SwitchWeapon;
         _inputReader.OnHolsteringWeaponInput += HolsterWeapon;
-        _inputReader.OnFirstWeaponEquipInput += firstWeaponEquip;
+        _inputReader.OnFirstWeaponEquipInput += FirstWeaponEquip;
         _inputReader.OnSecondWeaponEquipInput += SecondWeaponEquip;
         PlayerHealth.OnPlayerDeath += SetIsPlayerDead;
         PauseMenu.OnTogglePauseScene += SetIsGamePaused;
@@ -156,7 +157,7 @@ public class PlayerWeaponHandling : MonoBehaviour
     {
         //_inputReader.OnWeaponSwitch -= SwitchWeapon;
         _inputReader.OnHolsteringWeaponInput -= HolsterWeapon;
-        _inputReader.OnFirstWeaponEquipInput -= firstWeaponEquip;
+        _inputReader.OnFirstWeaponEquipInput -= FirstWeaponEquip;
         _inputReader.OnSecondWeaponEquipInput -= SecondWeaponEquip;
         PlayerHealth.OnPlayerDeath -= SetIsPlayerDead;
         PauseMenu.OnTogglePauseScene -= SetIsGamePaused;
@@ -196,7 +197,7 @@ public class PlayerWeaponHandling : MonoBehaviour
                 Shoot();
                 _currentBulletCount--;
                 SpawnBulletCasing();
-                cameraShake.StartShake(duration, amount);
+                cameraShake.StartShake(_camShakeDuration, _camShakeAmount);
                 Debug.Log("Shake");
 
                 OnPlayerShoot?.Invoke(_isShooting, transform.position, _shootingNoiseRange);
@@ -249,7 +250,7 @@ public class PlayerWeaponHandling : MonoBehaviour
 
 
     #region Custom Methods
-    private void firstWeaponEquip()
+    private void FirstWeaponEquip()
     {
         // only equip first weapon if slot is not empty
         if (_playerEquipmentSO.FirstWeapon.WeaponType != Enum_Lib.EWeaponType.Blank)
@@ -333,7 +334,7 @@ public class PlayerWeaponHandling : MonoBehaviour
         {
             switch (weaponType)
             {
-                case Enum_Lib.EWeaponType.Handgun:
+                case Enum_Lib.EWeaponType.Handcannon:
                     Debug.Log($"'<color=yellow>Entered Case for Handgun</color>'.");
                     SetAnimation("Canon");
                     #region alternative
@@ -394,7 +395,7 @@ public class PlayerWeaponHandling : MonoBehaviour
 
     private bool CanFire()
     {
-        return Time.time > _nextFireTime && !_IsGamePaused;
+        return Time.time > _nextFireTime && !_isGamePaused;
     }
 
     private float CalculateDeviation()
@@ -428,13 +429,13 @@ public class PlayerWeaponHandling : MonoBehaviour
             _nextFireTime = Time.time + _firerate;
             if (Input.GetKey(KeyCode.Space))
             {
-                duration = 0;
-                amount = 0;
+                _camShakeDuration = 0;
+                _camShakeAmount = 0;
             }
             else if (!Input.GetKeyUp(KeyCode.Space))
             {
-                duration = 0.05f;
-                amount = 0.08f;
+                _camShakeDuration = 0.05f;
+                _camShakeAmount = 0.08f;
             }
 
         }
@@ -473,7 +474,7 @@ public class PlayerWeaponHandling : MonoBehaviour
 
     private void SetIsGamePaused(bool isGamePaused)
     {
-        _IsGamePaused = isGamePaused;
+        _isGamePaused = isGamePaused;
     }
 
     private void SetIsPlayerDead(bool playerDeadStatus)

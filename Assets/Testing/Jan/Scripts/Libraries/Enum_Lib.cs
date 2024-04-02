@@ -36,7 +36,7 @@ namespace EnumLibrary
         /// </summary>
         public enum EWeaponType
         {
-            Handgun,
+            Handcannon,
             SMG,
             Shotgun,
             EnergyLauncher,
