@@ -67,7 +67,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
     public void OnAttacking(InputAction.CallbackContext context)
     {
         if (context.started)
-            OnAttackInput?.Invoke();
+            OnAttackInput?.Invoke();        
     }
 
     public void OnSprinting(InputAction.CallbackContext context)
