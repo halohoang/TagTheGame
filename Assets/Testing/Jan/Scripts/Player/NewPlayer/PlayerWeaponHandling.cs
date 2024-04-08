@@ -26,6 +26,7 @@ public class PlayerWeaponHandling : MonoBehaviour
     [SerializeField] private InputReaderSO _inputReader;
     [SerializeField] private PlayerEquipmentSO _playerEquipmentSO;
     [SerializeField] private PlayerController _playerCtrl;
+    [SerializeField] private AmmoCounter _ammoCounter;
 
     /* Gun related References*/
     [SerializeField] GameObject _gun;
@@ -134,6 +135,11 @@ public class PlayerWeaponHandling : MonoBehaviour
             Debug.Log($"<color=yellow>Caution!</color>: Reference for 'PlayerController'-Component in Inspector of {this} was not set. So it was Set automatically.");
         }
 
+        if (_ammoCounter == null)
+        {
+            _ammoCounter = GameObject.FindGameObjectWithTag("UIAmmoCounter").GetComponent<AmmoCounter>();
+        }
+
         if (_animatorCtrl == null)
         {
             _animatorCtrl = GetComponent<Animator>();
@@ -168,18 +174,8 @@ public class PlayerWeaponHandling : MonoBehaviour
         // Set is Armed Status
         //SetIsArmed(/*input 'loaded' value from ScriptableObjec*/); // -> intention is to 'load' isArmed-Data on Scene Start accordingly to the value when player left last scene
 
-        // Set MaxBullet Count to Magazine Size of currently held weapon (note, if player holds no weapon this will be '0')
-        _maximumBulletCount = _playerEquipmentSO.FirstWeapon.MagazineSize;
-
-        if (_playerEquipmentSO.FirstWeapon.CurrentRoundsInMag == _maximumBulletCount) // if amount of current bullets in weapons magazine equals maximum bullet count than set _currentBullet count to max bullet count
-        {
-            _currentBulletCount = _maximumBulletCount;
-        }
-        else // set current bulet count to the rounds currently in the mag of the weapon in hand
-        {
-            _currentBulletCount = _playerEquipmentSO.FirstWeapon.CurrentRoundsInMag;
-        }
-    }
+        SetBulletCount();
+    }    
 
     private void Update()
     {
@@ -189,6 +185,7 @@ public class PlayerWeaponHandling : MonoBehaviour
             if (Input.GetMouseButtonUp(0))
             {
                 _mouseButtonReleaseTime = Time.time; // Record the time when the mouse button was released
+                Debug.Log($"Mousbutton was released.");
             }
             else if (Input.GetMouseButton(0) && CanFire() && _currentBulletCount > 0 && _isReloading == false)
             {
@@ -238,6 +235,9 @@ public class PlayerWeaponHandling : MonoBehaviour
 
             _playerEquipmentSO.WeaponPickup(weapon.WeaponType);
 
+            SetBulletCount();
+            _firerate = weapon.FireRate;
+
             // Set Animation            
             EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
 
@@ -263,6 +263,9 @@ public class PlayerWeaponHandling : MonoBehaviour
             //if (!_playerCtrl.IsPlayerMoving && !_isArmed)
             //    _animatorCtrl.SetBool("Armed", false);
 
+            SetBulletCount();
+            _firerate = _playerEquipmentSO.FirstWeapon.FireRate;
+
             EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
         }
     }
@@ -279,6 +282,9 @@ public class PlayerWeaponHandling : MonoBehaviour
 
             //if (!_playerCtrl.IsPlayerMoving && !_isArmed)
             //    _animatorCtrl.SetBool("Armed", false);
+
+            SetBulletCount();
+            _firerate = _playerEquipmentSO.SecondWeapon.FireRate;
 
             EquipWeaponAnimation(_isArmed, _playerEquipmentSO.SecondWeapon.WeaponType);
         }
@@ -393,6 +399,28 @@ public class PlayerWeaponHandling : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Sets the <see cref="_currentBulletCount"/> to <see cref="_playerEquipmentSO.FirstWeapon.MagazineSize"/> if Magazine is full or to <see cref="_playerEquipmentSO.FirstWeapon.CurrentRoundsInMag"/> if Magazine is not full and was not reloaded.
+    /// </summary>
+    private void SetBulletCount()
+    {
+        // Set MaxBullet Count to Magazine Size of currently held weapon (note, if player holds no weapon this will be '0')
+        _maximumBulletCount = _playerEquipmentSO.FirstWeapon.MagazineSize;
+
+        if (_playerEquipmentSO.FirstWeapon.CurrentRoundsInMag == _maximumBulletCount) // if amount of current bullets in weapons magazine equals maximum bullet count than set _currentBullet count to max bullet count
+        {
+            _currentBulletCount = _maximumBulletCount;            
+        }
+        else // set current bulet count to the rounds currently in the mag of the weapon in hand
+        {
+            _currentBulletCount = _playerEquipmentSO.FirstWeapon.CurrentRoundsInMag;
+        }
+
+        // Set UI-AmmoCounter to amount of current bullets
+        _ammoCounter.CurrentAmmo = _currentBulletCount;
+        _ammoCounter.SetUIAmmoToActiveWeaponAmmo();
+    }
+
     private bool CanFire()
     {
         return Time.time > _nextFireTime && !_isGamePaused;
@@ -406,7 +434,7 @@ public class PlayerWeaponHandling : MonoBehaviour
 
     private void Shoot()
     {
-        if (CanFire())
+        if (CanFire() && _isArmed)
         {
             // Calculate Deviation during the shooting
             float deviation = CalculateDeviation();
@@ -417,7 +445,11 @@ public class PlayerWeaponHandling : MonoBehaviour
             bulletRotation *= Quaternion.Euler(0f, 0f, randomAngle);    // Apply rotation around the Z-axis
 
             /* Play FIre Sound */
-            if (_fireSound != null) { _audioSource.PlayOneShot(_fireSound); }
+            if (_fireSound != null) 
+            { 
+                _audioSource.PlayOneShot(_fireSound); 
+            }
+
             GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, bulletRotation);
             Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
             _ammoCounterScript.DecreaseAmmo();                          //Call the Decrease Ammo function from the AmmoCounter script;
