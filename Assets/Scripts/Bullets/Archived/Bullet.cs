@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour
     [Header("Bullet settings")]
     /* Bullet Properties */
     [SerializeField] internal float _bulletSpeed = 40f;
+    [SerializeField] internal float _bulletDamage = 1f;
     [Tooltip("The Objects the Bullet shall detect as obstalce and be disabled on collision with")]
     [SerializeField] private LayerMask _obstacleCollisionMask;
     [Tooltip("The Objects the Bullet shall detect as Player or Enemy so that the TakeDamage() can be called on that CollisionObject and the BulletObject can be disabled on collssion")]
@@ -88,8 +89,8 @@ public class Bullet : MonoBehaviour
             Instantiate(_bloodPrefab, collisionPoint, bloodRotation);
             if (enemyHealth != null)
             {
-                enemyHealth.GetDamage();
-                Debug.Log(enemyHealth._currentHealth);
+                enemyHealth.GetDamage(_bulletDamage);
+                Debug.Log(enemyHealth.CurrentHealth);
                 gameObject.SetActive(false);
             }
         }
@@ -208,8 +209,8 @@ public class Bullet : MonoBehaviour
         if (healthScript != null)
         {
             /* Deal Damage */
-            healthScript.GetDamage();
-            Debug.Log(healthScript._currentHealth);
+            healthScript.GetDamage(_bulletDamage);
+            Debug.Log(healthScript.CurrentHealth);
             gameObject.SetActive(false);
 
             Debug.Log($"<color=cyan>Bullet was deactivated on collision with {healthScript.gameObject.name}</color>");

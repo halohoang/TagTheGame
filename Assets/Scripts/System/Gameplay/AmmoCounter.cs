@@ -2,7 +2,6 @@ using NaughtyAttributes;
 using ScriptableObjects;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class AmmoCounter : MonoBehaviour
@@ -126,6 +125,9 @@ public class AmmoCounter : MonoBehaviour
 
     //todo: rework following Method; JM (08.04.2024)
     // Link to the Shoot Function from the PlayerShoot script
+    /// <summary>
+    /// Decreases the <see cref="CurrentAmmo"/> Value and disables the BulletSprites in the Ammo-UI.
+    /// </summary>
     public void DecreaseAmmo()
     {
         if (!_isReloading && CurrentAmmo > 0)

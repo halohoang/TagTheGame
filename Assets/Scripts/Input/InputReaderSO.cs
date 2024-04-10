@@ -10,7 +10,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
     public event UnityAction<Vector2> OnMovementInput;
     public event UnityAction<Vector2> OnMouseMovement;
     public event UnityAction<Enum_Lib.ESpaceKey> OnFastMovementInput;
-    public event UnityAction OnAttackInput;
+    public event UnityAction<Enum_Lib.ELeftMouseButton> OnAttackInput;
     public event UnityAction OnInteractionInput;
     public event UnityAction OnReloadingInput;
     public event UnityAction OnWeaponSwapInput;                         // currently not used; JM (28.03.2024)
@@ -66,8 +66,16 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
 
     public void OnAttacking(InputAction.CallbackContext context)
     {
-        if (context.started)
-            OnAttackInput?.Invoke();        
+        //if (context.started)
+        //    OnAttackInput?.Invoke();
+
+        bool isLMBHeld = context.ReadValue<float>() > 0.1f;
+
+        if (isLMBHeld)
+            OnAttackInput?.Invoke(Enum_Lib.ELeftMouseButton.Pressed);
+        else
+            OnAttackInput?.Invoke(Enum_Lib.ELeftMouseButton.NotPressed);
+        //Debug.Log($"space was pressed");
     }
 
     public void OnSprinting(InputAction.CallbackContext context)

@@ -6,7 +6,7 @@ public class PlayerBullet : BaseBullet
     {
         base.Start();
 
-        _bulletRB2D.velocity = transform.right * _bulletSpeed;
+        _bulletRB2D.velocity = transform.right * BulletSpeed;
     }
 
     private new void OnCollisionEnter2D(Collision2D collision)

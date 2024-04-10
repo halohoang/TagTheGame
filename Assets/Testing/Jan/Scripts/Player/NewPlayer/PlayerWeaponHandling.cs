@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using EnumLibrary;
+using System.Collections.Generic;
 
 public class PlayerWeaponHandling : MonoBehaviour
 {
@@ -26,15 +27,14 @@ public class PlayerWeaponHandling : MonoBehaviour
     [SerializeField] private InputReaderSO _inputReader;
     [SerializeField] private PlayerEquipmentSO _playerEquipmentSO;
     [SerializeField] private PlayerController _playerCtrl;
+
+    /* Reload System References */
+    [Tooltip("Reference to the AmmoCounter-Script-Component of the 'AmmoCounter_Panel'-UI-Object in the UI-Canvas (to be Found in the Hierarchy -> UI/Ingame-UI_Canvas/WeaponUI_Panel")]
     [SerializeField] private AmmoCounter _ammoCounter;
 
     /* Gun related References*/
-    [SerializeField] GameObject _gun;
-    [SerializeField] private Transform _bulletSpawnPoint;           // Transform of the gun
-    [SerializeField] private GameObject _bulletPrefab;
-
-    /* Reload System References */
-    [SerializeField] AmmoCounter _ammoCounterScript;                // Link to the AmmoCounter script
+    [SerializeField] private Transform _projectileSpawnPos;
+    [SerializeField] private GameObject _projectilePrefab;    
 
     /* Bullet Casing Spawining References*/
     [SerializeField] private GameObject _bulletCasingPrefab;        // Prefab of the bullet casing
@@ -83,13 +83,15 @@ public class PlayerWeaponHandling : MonoBehaviour
     [SerializeField, ReadOnly] internal int _currentBulletCount;
 
     /* Firerate Settings*/
-    [SerializeField, ReadOnly] private float _firerate = 0.5f;
+    [SerializeField, ReadOnly] private float _firerate;
 
     /* Different boolian Values */
     [SerializeField, ReadOnly] private bool _isShooting;
     [SerializeField, ReadOnly] private bool _isPlayerDead;
     [SerializeField, ReadOnly] private bool _isGamePaused;
     [SerializeField, ReadOnly] private bool _isArmed;               // Checking whether the player is armed or not
+    [SerializeField, ReadOnly] private bool _isFirststWeaponSelected;
+    [SerializeField, ReadOnly] private bool _isSecondndWeaponSelected;
     [SerializeField, ReadOnly] private bool _isReloading = false;
     [SerializeField, ReadOnly] private bool _wasWeaponPickedUp;
 
@@ -174,8 +176,8 @@ public class PlayerWeaponHandling : MonoBehaviour
         // Set is Armed Status
         //SetIsArmed(/*input 'loaded' value from ScriptableObjec*/); // -> intention is to 'load' isArmed-Data on Scene Start accordingly to the value when player left last scene
 
-        SetBulletCount();
-    }    
+        SetBulletCount(_playerEquipmentSO.FirstWeapon);     // todo: maybe delete this expression later if useless (JM, 10.04.2024)
+    }
 
     private void Update()
     {
@@ -209,7 +211,7 @@ public class PlayerWeaponHandling : MonoBehaviour
         {
             if (_currentBulletCount < _maximumBulletCount)
             {
-                _ammoCounterScript.Reload();
+                _ammoCounter.Reload();
                 StartCoroutine(Reload());
             }
         }
@@ -230,13 +232,16 @@ public class PlayerWeaponHandling : MonoBehaviour
         // Check if collision is a of Type Baseweapon, if so trigger pickup weapon
         if (collision.gameObject.TryGetComponent(out BaseWeapon weapon))
         {
-            _isArmed = true;
+            // set armed boolians
+            SetWeaponEquipBools(true, true, false);
+
+            // set animation
             _animatorCtrl.SetBool("Armed", _isArmed);
 
+            // call weapon pickup
             _playerEquipmentSO.WeaponPickup(weapon.WeaponType);
 
-            SetBulletCount();
-            _firerate = weapon.FireRate;
+            SetWeaponRespectiveValues(_playerEquipmentSO.FirstWeapon);
 
             // Set Animation            
             EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
@@ -255,16 +260,11 @@ public class PlayerWeaponHandling : MonoBehaviour
         // only equip first weapon if slot is not empty
         if (_playerEquipmentSO.FirstWeapon.WeaponType != Enum_Lib.EWeaponType.Blank)
         {
-            _isArmed = true;
+            SetWeaponEquipBools(true, true, false);
 
-            //_gun.SetActive(_isArmed);
             _animatorCtrl.SetBool("Armed", _isArmed);
 
-            //if (!_playerCtrl.IsPlayerMoving && !_isArmed)
-            //    _animatorCtrl.SetBool("Armed", false);
-
-            SetBulletCount();
-            _firerate = _playerEquipmentSO.FirstWeapon.FireRate;
+            SetWeaponRespectiveValues(_playerEquipmentSO.FirstWeapon);
 
             EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
         }
@@ -275,16 +275,11 @@ public class PlayerWeaponHandling : MonoBehaviour
         // only equip second weapon if slot is not empty
         if (_playerEquipmentSO.SecondWeapon.WeaponType != Enum_Lib.EWeaponType.Blank)
         {
-            _isArmed = true;
+            SetWeaponEquipBools(true, false, true);
 
-            //_gun.SetActive(_isArmed);
             _animatorCtrl.SetBool("Armed", _isArmed);
 
-            //if (!_playerCtrl.IsPlayerMoving && !_isArmed)
-            //    _animatorCtrl.SetBool("Armed", false);
-
-            SetBulletCount();
-            _firerate = _playerEquipmentSO.SecondWeapon.FireRate;
+            SetWeaponRespectiveValues(_playerEquipmentSO.SecondWeapon);
 
             EquipWeaponAnimation(_isArmed, _playerEquipmentSO.SecondWeapon.WeaponType);
         }
@@ -384,6 +379,10 @@ public class PlayerWeaponHandling : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="nameOfWeapon"></param>
     private void SetAnimation(string nameOfWeapon)
     {
         if (_playerCtrl.IsPlayerMoving) // Set Animation parameter for Moving animation with weapon
@@ -400,20 +399,46 @@ public class PlayerWeaponHandling : MonoBehaviour
     }
 
     /// <summary>
+    /// Set the boolians <see cref="_isArmed"/>, <see cref="_isFirststWeaponSelected"/> and <see cref="_isSecondndWeaponSelected"/>.
+    /// </summary>
+    /// <param name="armedStatus">is the player armed?</param>
+    /// <param name="firstWeaponEquip">is the first weapon selected?</param>
+    /// <param name="secondWeaponEquip">is the second weapon selected?</param>
+    private void SetWeaponEquipBools(bool armedStatus, bool firstWeaponEquip, bool secondWeaponEquip)
+    {
+        _isArmed = armedStatus;
+        _isFirststWeaponSelected = firstWeaponEquip;
+        _isSecondndWeaponSelected = secondWeaponEquip;
+    }
+
+    /// <summary>
+    /// Set the values (<see cref="_maximumBulletCount"/>, <see cref="_currentBulletCount"/>, <see cref="_firerate"/>, <see cref="BaseBullet.ProjectileDamage"/>) respective to the 
+    /// Values of the Weapon currently actively selected by the Player.
+    /// </summary>
+    /// <param name="weaponSlot">The First or Second Weapon of <see cref="PlayerEquipmentSO"/></param>
+    private void SetWeaponRespectiveValues(BaseWeapon weaponSlot)
+    {
+        SetBulletCount(weaponSlot);
+        _firerate = weaponSlot.FireRate;
+        _projectilePrefab.GetComponent<BaseBullet>().ProjectileDamage = weaponSlot.WeaponDamage;    // Damage
+    }
+
+    /// <summary>
     /// Sets the <see cref="_currentBulletCount"/> to <see cref="_playerEquipmentSO.FirstWeapon.MagazineSize"/> if Magazine is full or to <see cref="_playerEquipmentSO.FirstWeapon.CurrentRoundsInMag"/> if Magazine is not full and was not reloaded.
     /// </summary>
-    private void SetBulletCount()
+    /// /// <param name="weaponSlot"> The First or Second Weapon </param>
+    private void SetBulletCount(BaseWeapon weaponSlot)
     {
         // Set MaxBullet Count to Magazine Size of currently held weapon (note, if player holds no weapon this will be '0')
-        _maximumBulletCount = _playerEquipmentSO.FirstWeapon.MagazineSize;
+        _maximumBulletCount = weaponSlot.MagazineSize;
 
-        if (_playerEquipmentSO.FirstWeapon.CurrentRoundsInMag == _maximumBulletCount) // if amount of current bullets in weapons magazine equals maximum bullet count than set _currentBullet count to max bullet count
+        if (weaponSlot.CurrentRoundsInMag == _maximumBulletCount) // if amount of current bullets in weapons magazine equals maximum bullet count than set _currentBullet count to max bullet count
         {
-            _currentBulletCount = _maximumBulletCount;            
+            _currentBulletCount = _maximumBulletCount;
         }
         else // set current bulet count to the rounds currently in the mag of the weapon in hand
         {
-            _currentBulletCount = _playerEquipmentSO.FirstWeapon.CurrentRoundsInMag;
+            _currentBulletCount = weaponSlot.CurrentRoundsInMag;
         }
 
         // Set UI-AmmoCounter to amount of current bullets
@@ -436,29 +461,26 @@ public class PlayerWeaponHandling : MonoBehaviour
     {
         if (CanFire() && _isArmed)
         {
-            // Calculate Deviation during the shooting
-            float deviation = CalculateDeviation();
+            // 1. Play Fire Sound
+            if (_fireSound != null)
+                _audioSource.PlayOneShot(_fireSound);
 
-            Quaternion bulletRotation = _bulletSpawnPoint.rotation;     // Apply deviation to the bullet's rotation
-            float randomAngle = Random.Range(-deviation, deviation);    // Randomize the deviation angle
+            // 2. Instantiate Projectile (respective to 'SpawnedBullet'-Value of the First or Second Weapon)
+            if (_isFirststWeaponSelected)
+                InstatiateProjectiles(_playerEquipmentSO.FirstWeapon);
+            else
+                InstatiateProjectiles(_playerEquipmentSO.SecondWeapon);
 
-            bulletRotation *= Quaternion.Euler(0f, 0f, randomAngle);    // Apply rotation around the Z-axis
-
-            /* Play FIre Sound */
-            if (_fireSound != null) 
-            { 
-                _audioSource.PlayOneShot(_fireSound); 
-            }
-
-            GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, bulletRotation);
-            Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
-            _ammoCounterScript.DecreaseAmmo();                          //Call the Decrease Ammo function from the AmmoCounter script;
-
-            // set shooting animation
+            // 3. set shooting animation
             //_animator.SetBool("Firing", true);
 
+            // 4. decrease The 'CurrentAmmo'-Value of the AmmoCounter and Set the Ammo-UI respectively
+            _ammoCounter.DecreaseAmmo();                          //Call the Decrease Ammo function from the AmmoCounter script;
 
+            // 5. reset the Time the 'Shoot()' can be executed the next time (to ensure the projectiles will be spawned at a specific rate ('fireRate') and not simultaneosly)
             _nextFireTime = Time.time + _firerate;
+
+            // 6. apply Camera Shake (when sprinting while shooting)
             if (Input.GetKey(KeyCode.Space))
             {
                 _camShakeDuration = 0;
@@ -469,8 +491,72 @@ public class PlayerWeaponHandling : MonoBehaviour
                 _camShakeDuration = 0.05f;
                 _camShakeAmount = 0.08f;
             }
-
         }
+    }
+
+    /// <summary>
+    /// Instatiates the amount of projectiles the transmitted 'BaseWeapon-Object' specifies in it's <see cref="BaseWeapon.SpawnedBullets"/> Variable.
+    /// </summary>
+    /// <param name="weaponSlot">The First or Second Weapon</param>
+    private void InstatiateProjectiles(BaseWeapon weaponSlot)
+    {
+        //// 1. ensure that the Projectiles won't be spawned on the same spot
+        //if (weaponSlot.SpawnedBullets > 1)
+        //{
+        //    float rndY = 0;
+        //    List<Vector3> spawnpositionCacheList = new List<Vector3>(weaponSlot.SpawnedBullets);
+
+        //    // creates a random spawn possition for the projectiles and repeats the random calculation if it equals a already cached spawn position
+        //    for (int i = 0; i < weaponSlot.SpawnedBullets; i++)
+        //    {
+        //        // generate random spawn position
+        //        rndY = (_projectilePrefab.transform.localScale.y * 0.5f) + Random.Range(-0.5f, 0.5f);
+        //        _projectileSpawnPos.position = new Vector2(_projectileSpawnPos.position.x, _projectileSpawnPos.position.y + rndY);
+        //        spawnpositionCacheList.Add(_projectileSpawnPos.position);
+
+
+        //        //while (_projectileSpawnPos.position.y == spawnpositionCacheList[i].y)
+        //        //{
+        //        //    spawnpositionCacheList.RemoveAt(i);
+
+        //        //    rndY += (_projectilePrefab.transform.localScale.y * 0.5f) + Random.Range(-0.5f, 0.5f);
+        //        //    _projectileSpawnPos.position = new Vector2(_projectileSpawnPos.position.x, _projectileSpawnPos.position.y + rndY);
+        //        //    spawnpositionCacheList.Insert(i, _projectileSpawnPos.position);
+        //        //}
+        //    }
+
+        //    for (int i = 0; i < weaponSlot.SpawnedBullets; i++)
+        //    {
+        //        // 2. instantiate (spawn) the projectiles
+        //        GameObject bullet = Instantiate(_projectilePrefab, spawnpositionCacheList[i], GetProjectileRotation());
+        //        Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
+        //    }
+        //}
+        //else
+        //{
+            // 2. instantiate (spawn) the projectiles
+            for (int i = 0; i < weaponSlot.SpawnedBullets; i++)
+            {
+                GameObject bullet = Instantiate(_projectilePrefab, _projectileSpawnPos.position, GetProjectileRotation());
+                Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
+            }
+        //}
+    }
+
+    /// <summary>
+    /// Returns the ProjectileRotation already with an applied deviation.
+    /// </summary>
+    /// <returns></returns>
+    private Quaternion GetProjectileRotation()
+    {
+        // Calculate Deviation during the shooting
+        float deviation = CalculateDeviation();
+
+        Quaternion projectileRotation = _projectileSpawnPos.rotation;     // Apply deviation to the bullet's rotation
+        float randomAngle = Random.Range(-deviation, deviation);        // Randomize the deviation angle
+
+        projectileRotation *= Quaternion.Euler(0f, 0f, randomAngle);    // Apply rotation around the Z-axis
+        return projectileRotation;
     }
 
     IEnumerator Reload()
