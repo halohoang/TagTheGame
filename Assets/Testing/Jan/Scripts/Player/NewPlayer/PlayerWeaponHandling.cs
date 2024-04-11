@@ -443,6 +443,7 @@ public class PlayerWeaponHandling : MonoBehaviour
 
         // Set UI-AmmoCounter to amount of current bullets
         _ammoCounter.CurrentAmmo = _currentBulletCount;
+        _ammoCounter.MagazineSize = _maximumBulletCount;
         _ammoCounter.SetUIAmmoToActiveWeaponAmmo();
     }
 

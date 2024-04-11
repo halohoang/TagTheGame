@@ -16,6 +16,7 @@ public class AmmoCounter : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private float _waitForReload;
+    [SerializeField] private int _magazineSize;
     [Space(5)]
 
     [Header("Monitoring Values")]
@@ -35,6 +36,7 @@ public class AmmoCounter : MonoBehaviour
     internal int CurrentAmmo { get => _currentAmmo; set => _currentAmmo = value; }
     internal float OriginRectTransHeight { get => _originRectTransHeight; private set => _originRectTransHeight = value; }
     internal float OriginRectTransWidth { get => _originRectTransWidth; private set => _originRectTransWidth = value; }
+    internal int MagazineSize { get => _magazineSize; set => _magazineSize = value; }
 
     private void Awake()
     {
@@ -100,7 +102,7 @@ public class AmmoCounter : MonoBehaviour
         }
 
         // 3. enable/disable the BulletSprites Object in the '_bulletSprites'-List respectively to the transmitted 'ammountCount'
-        // if ammoCount is greater od less than the Count of the SpriteObjects in the '_bulletSprites'-List enable or disable respectively to the difference between both counts
+        // if ammoCount is greater or less than the Count of the SpriteObjects in the '_bulletSprites'-List enable or disable respectively to the difference between both counts
         if (CurrentAmmo > _bulletSprites.Count)
         {
             for (int i = 0; i < CurrentAmmo - _bulletSprites.Count; i++)
@@ -118,8 +120,8 @@ public class AmmoCounter : MonoBehaviour
                 _bulletSprites[i].gameObject.SetActive(true);
             }
 
-            // increase the Height of the 'AmmoCount_Panel'-Object respective to its active Bullet-Sprite-ChildObjects
-            rectTrans.sizeDelta = new Vector2(rectTrans.rect.width, rectTrans.rect.height + (float)CurrentAmmo * transform.GetChild(0).GetComponent<RectTransform>().rect.width);
+            //// increase the Height of the 'AmmoCount_Panel'-Object respective to its active Bullet-Sprite-ChildObjects
+            //rectTrans.sizeDelta = new Vector2(rectTrans.rect.width, rectTrans.rect.height + (float)CurrentAmmo * transform.GetChild(0).GetComponent<RectTransform>().rect.width);
         }
     }
 
@@ -140,7 +142,7 @@ public class AmmoCounter : MonoBehaviour
     // Link to the Reload function from the PlayerShoot Script
     public void Reload()
     {
-        if (CurrentAmmo < 30 && !_isReloading)
+        if (CurrentAmmo < MagazineSize && !_isReloading)
         {
             StartCoroutine(EnableBulletsDuringReload());
         }
@@ -151,8 +153,8 @@ public class AmmoCounter : MonoBehaviour
     IEnumerator EnableBulletsDuringReload()
     {
         _isReloading = true; // Set reloading flag to true
-        float timePerBullet = 1.0f / 30.0f; // Time for each bullet to enable
-        for (int i = CurrentAmmo; i < 30; i++)
+        float timePerBullet = 1.0f / (float)MagazineSize; // Time for each bullet to enable
+        for (int i = CurrentAmmo; i < MagazineSize; i++)
         {
             _bulletSprites[i].gameObject.SetActive(true);
             CurrentAmmo++;
