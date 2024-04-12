@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 using ScriptableObjects;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -48,6 +49,19 @@ public class AmmoCounter : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        PlayerWeaponHandling.OnSetBulletCount += OnBulletCountChange;        
+        PlayerWeaponHandling.OnBulletsShot += DecreaseAmmo;
+        PlayerWeaponHandling.OnReload += Reload;
+    }    
+    private void OnDisable()
+    {
+        PlayerWeaponHandling.OnSetBulletCount -= OnBulletCountChange;
+        PlayerWeaponHandling.OnBulletsShot -= DecreaseAmmo;
+        PlayerWeaponHandling.OnReload -= Reload;
+    }    
+
     private void Start()
     {
         // save original height value of RectTransform
@@ -64,15 +78,6 @@ public class AmmoCounter : MonoBehaviour
         {
             _bulletSprites.Add(transform.GetChild(i));
         }
-
-        //// set Lists for active and inactive 
-        //for (int i = 0; i < _bulletSprites.Count; i++)
-        //{
-        //    if (_bulletSprites[i].gameObject.activeSelf)
-        //        _activeSprites.Add(_bulletSprites[i]);
-        //    else
-        //        _inactiveSprites.Add(_bulletSprites[i]);
-        //}
     }
 
     private void Update()
@@ -84,6 +89,16 @@ public class AmmoCounter : MonoBehaviour
         //if (CurrentAmmo >= 30) { _reloadHint.SetActive(false); }
     }
 
+    private void OnBulletCountChange(int ammoCount, int magazineSize)
+    {
+        // 1. First update Bullet count related values
+        CurrentAmmo = ammoCount;
+        MagazineSize = magazineSize;
+
+        // 2. Set Ammo-related Ui respectively to updated Ammo Values
+        SetUIAmmoToActiveWeaponAmmo();
+    }
+
     /// <summary>
     /// Sets the UI shown Ammo Bullets respective to the actual AmmoCount of the selected Weapon
     /// </summary>
@@ -92,7 +107,9 @@ public class AmmoCounter : MonoBehaviour
         // 1. Get Reference to the RectTransform-Component of this UI-GameObject
         RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
 
-        // 2. Set the Lists of the active and inactive BulletSprites in the '_bulletSprites'-List
+        // 2. clear _active/_inactive-Lists and sort active and inactive BulletSprites in the '_bulletSprites'-List a new
+        _activeSprites.Clear();
+        _inactiveSprites.Clear();
         for (int i = 0; i < _bulletSprites.Count; i++)
         {
             if (_bulletSprites[i].gameObject.activeSelf)
@@ -101,23 +118,35 @@ public class AmmoCounter : MonoBehaviour
                 _inactiveSprites.Add(_bulletSprites[i]);
         }
 
-        // 3. enable/disable the BulletSprites Object in the '_bulletSprites'-List respectively to the transmitted 'ammountCount'
+        // 3. enable/disable the BulletSprites Object in the '_bulletSprites'-List respectively to if they are active or not and accroding to the 'AmmountCount'
         // if ammoCount is greater or less than the Count of the SpriteObjects in the '_bulletSprites'-List enable or disable respectively to the difference between both counts
-        if (CurrentAmmo > _bulletSprites.Count)
+        if (_activeSprites.Count > CurrentAmmo)
         {
-            for (int i = 0; i < CurrentAmmo - _bulletSprites.Count; i++)
+            for (int i = 0; i < _activeSprites.Count - CurrentAmmo; i++)
             {
-                _bulletSprites[i].gameObject.SetActive(false);
+                //disable Sprite -> then insert this disabled Obj to inactiveSprite List -> then remove disabled Object from activeSprite-List
+                _activeSprites[i].gameObject.SetActive(false);                
+                _inactiveSprites.Insert(i, _activeSprites[i]);
+                _activeSprites.RemoveAt(i);
+                Debug.Log($"Deactivated BulletSprite '<color=lime>{_activeSprites[i].name}</color>' at Idx: '<color=lime>{i}</color>'");
+                Debug.Log($"inserted BulletSprite '<color=lime>{_activeSprites[i].name}</color>' at Idx: '<color=lime>{i}</color>' to _inactiveSprites-List: ('<color=lime>{_inactiveSprites[i].name}</color>', Idx: '<color=lime>{i}</color>')");
+                Debug.Log($"Removed deactivated BulletSprite from '<color=lime>{_activeSprites[i].name}</color>' at Idx: '<color=lime>{i}</color>'");
             }
 
             // decrease the Height of the 'AmmoCount_Panel'-Object respective to its active Bullet-Sprite-ChildObjects
-            rectTrans.sizeDelta = new Vector2(rectTrans.rect.width, rectTrans.rect.height - (float)CurrentAmmo * transform.GetChild(0).GetComponent<RectTransform>().rect.width);
+            //rectTrans.sizeDelta = new Vector2(rectTrans.rect.width, rectTrans.rect.height - (float)CurrentAmmo * transform.GetChild(0).GetComponent<RectTransform>().rect.width);
         }
-        else if (CurrentAmmo < _bulletSprites.Count)
+        else if (_activeSprites.Count < CurrentAmmo )
         {
-            for (int i = 0; i < _bulletSprites.Count - CurrentAmmo; i++)
+            for (int i = 0; i < CurrentAmmo - _activeSprites.Count; i++)
             {
-                _bulletSprites[i].gameObject.SetActive(true);
+                //enable Sprite -> then insert this enabled Obj to activeSprite List -> then remove this enabled Object from inactiveSprite-List
+                _inactiveSprites[i].gameObject.SetActive(true);
+                _activeSprites.Insert(i, _inactiveSprites[i]);
+                _inactiveSprites.RemoveAt(i);
+                Debug.Log($"Activated BulletSprite '<color=lime>{_inactiveSprites[i].name}</color>' at Idx: '<color=lime>{i}</color>'");
+                Debug.Log($"inserted BulletSprite '<color=lime>{_inactiveSprites[i].name}</color>' at Idx: '<color=lime>{i}</color>' to _inactiveSprites-List: ('<color=lime>{_activeSprites[i].name}</color>', Idx: '<color=lime>{i}</color>')");
+                Debug.Log($"Removed activated BulletSprite from '<color=lime>{_inactiveSprites[i].name}</color>' at Idx: '<color=lime>{i}</color>'");
             }
 
             //// increase the Height of the 'AmmoCount_Panel'-Object respective to its active Bullet-Sprite-ChildObjects
@@ -146,9 +175,7 @@ public class AmmoCounter : MonoBehaviour
         {
             StartCoroutine(EnableBulletsDuringReload());
         }
-
     }
-
 
     IEnumerator EnableBulletsDuringReload()
     {

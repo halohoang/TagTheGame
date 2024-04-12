@@ -4,7 +4,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using EnumLibrary;
-using System.Collections.Generic;
 
 public class PlayerWeaponHandling : MonoBehaviour
 {
@@ -14,6 +13,9 @@ public class PlayerWeaponHandling : MonoBehaviour
     //--------------------------------
 
     public static event UnityAction<bool, Vector3, float> OnPlayerShoot;
+    public static event UnityAction<int, int> OnSetBulletCount;
+    public static event UnityAction OnBulletsShot;
+    public static event UnityAction OnReload;
     #endregion
 
 
@@ -34,7 +36,7 @@ public class PlayerWeaponHandling : MonoBehaviour
 
     /* Gun related References*/
     [SerializeField] private Transform _projectileSpawnPos;
-    [SerializeField] private GameObject _projectilePrefab;    
+    [SerializeField] private GameObject _projectilePrefab;
 
     /* Bullet Casing Spawining References*/
     [SerializeField] private GameObject _bulletCasingPrefab;        // Prefab of the bullet casing
@@ -137,10 +139,10 @@ public class PlayerWeaponHandling : MonoBehaviour
             Debug.Log($"<color=yellow>Caution!</color>: Reference for 'PlayerController'-Component in Inspector of {this} was not set. So it was Set automatically.");
         }
 
-        if (_ammoCounter == null)
-        {
-            _ammoCounter = GameObject.FindGameObjectWithTag("UIAmmoCounter").GetComponent<AmmoCounter>();
-        }
+        //if (_ammoCounter == null)
+        //{
+        //    _ammoCounter = GameObject.FindGameObjectWithTag("UIAmmoCounter").GetComponent<AmmoCounter>();
+        //}
 
         if (_animatorCtrl == null)
         {
@@ -176,7 +178,7 @@ public class PlayerWeaponHandling : MonoBehaviour
         // Set is Armed Status
         //SetIsArmed(/*input 'loaded' value from ScriptableObjec*/); // -> intention is to 'load' isArmed-Data on Scene Start accordingly to the value when player left last scene
 
-        SetBulletCount(_playerEquipmentSO.FirstWeapon);     // todo: maybe delete this expression later if useless (JM, 10.04.2024)
+        //SetBulletCount(_playerEquipmentSO.FirstWeapon);     // todo: maybe delete this expression later if useless (JM, 10.04.2024)
     }
 
     private void Update()
@@ -211,7 +213,8 @@ public class PlayerWeaponHandling : MonoBehaviour
         {
             if (_currentBulletCount < _maximumBulletCount)
             {
-                _ammoCounter.Reload();
+                //_ammoCounter.Reload();
+                OnReload?.Invoke(); // informing AmmoCounter about Reloading
                 StartCoroutine(Reload());
             }
         }
@@ -432,19 +435,20 @@ public class PlayerWeaponHandling : MonoBehaviour
         // Set MaxBullet Count to Magazine Size of currently held weapon (note, if player holds no weapon this will be '0')
         _maximumBulletCount = weaponSlot.MagazineSize;
 
-        if (weaponSlot.CurrentRoundsInMag == _maximumBulletCount) // if amount of current bullets in weapons magazine equals maximum bullet count than set _currentBullet count to max bullet count
+        if (weaponSlot.CurrentRoundsInMag == _maximumBulletCount) // if amount of current bullets in weapons magazine equals maximum bullet count than set _currentBulletCount to _maxbulletCount
         {
             _currentBulletCount = _maximumBulletCount;
         }
-        else // set current bulet count to the rounds currently in the mag of the weapon in hand
+        else // set _currentBuletCount to the rounds currently in the mag of the weapon of the selceted weapon slot
         {
             _currentBulletCount = weaponSlot.CurrentRoundsInMag;
         }
 
         // Set UI-AmmoCounter to amount of current bullets
-        _ammoCounter.CurrentAmmo = _currentBulletCount;
-        _ammoCounter.MagazineSize = _maximumBulletCount;
-        _ammoCounter.SetUIAmmoToActiveWeaponAmmo();
+        OnSetBulletCount?.Invoke(_currentBulletCount, _maximumBulletCount); // informing ammocounter about changes of the max- and current bullet count
+        //_ammoCounter.CurrentAmmo = _currentBulletCount;
+        //_ammoCounter.MagazineSize = _maximumBulletCount;
+        //_ammoCounter.SetUIAmmoToActiveWeaponAmmo();
     }
 
     private bool CanFire()
@@ -476,7 +480,8 @@ public class PlayerWeaponHandling : MonoBehaviour
             //_animator.SetBool("Firing", true);
 
             // 4. decrease The 'CurrentAmmo'-Value of the AmmoCounter and Set the Ammo-UI respectively
-            _ammoCounter.DecreaseAmmo();                          //Call the Decrease Ammo function from the AmmoCounter script;
+            //_ammoCounter.DecreaseAmmo();                          //Call the Decrease Ammo function from the AmmoCounter script;
+            OnBulletsShot?.Invoke();                                // informing AmmoCounter about shooting
 
             // 5. reset the Time the 'Shoot()' can be executed the next time (to ensure the projectiles will be spawned at a specific rate ('fireRate') and not simultaneosly)
             _nextFireTime = Time.time + _firerate;
@@ -501,47 +506,12 @@ public class PlayerWeaponHandling : MonoBehaviour
     /// <param name="weaponSlot">The First or Second Weapon</param>
     private void InstatiateProjectiles(BaseWeapon weaponSlot)
     {
-        //// 1. ensure that the Projectiles won't be spawned on the same spot
-        //if (weaponSlot.SpawnedBullets > 1)
-        //{
-        //    float rndY = 0;
-        //    List<Vector3> spawnpositionCacheList = new List<Vector3>(weaponSlot.SpawnedBullets);
-
-        //    // creates a random spawn possition for the projectiles and repeats the random calculation if it equals a already cached spawn position
-        //    for (int i = 0; i < weaponSlot.SpawnedBullets; i++)
-        //    {
-        //        // generate random spawn position
-        //        rndY = (_projectilePrefab.transform.localScale.y * 0.5f) + Random.Range(-0.5f, 0.5f);
-        //        _projectileSpawnPos.position = new Vector2(_projectileSpawnPos.position.x, _projectileSpawnPos.position.y + rndY);
-        //        spawnpositionCacheList.Add(_projectileSpawnPos.position);
-
-
-        //        //while (_projectileSpawnPos.position.y == spawnpositionCacheList[i].y)
-        //        //{
-        //        //    spawnpositionCacheList.RemoveAt(i);
-
-        //        //    rndY += (_projectilePrefab.transform.localScale.y * 0.5f) + Random.Range(-0.5f, 0.5f);
-        //        //    _projectileSpawnPos.position = new Vector2(_projectileSpawnPos.position.x, _projectileSpawnPos.position.y + rndY);
-        //        //    spawnpositionCacheList.Insert(i, _projectileSpawnPos.position);
-        //        //}
-        //    }
-
-        //    for (int i = 0; i < weaponSlot.SpawnedBullets; i++)
-        //    {
-        //        // 2. instantiate (spawn) the projectiles
-        //        GameObject bullet = Instantiate(_projectilePrefab, spawnpositionCacheList[i], GetProjectileRotation());
-        //        Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
-        //    }
-        //}
-        //else
-        //{
-            // 2. instantiate (spawn) the projectiles
-            for (int i = 0; i < weaponSlot.SpawnedBullets; i++)
-            {
-                GameObject bullet = Instantiate(_projectilePrefab, _projectileSpawnPos.position, GetProjectileRotation());
-                Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
-            }
-        //}
+        // instantiate (spawn) the projectiles
+        for (int i = 0; i < weaponSlot.SpawnedBullets; i++)
+        {
+            GameObject bullet = Instantiate(_projectilePrefab, _projectileSpawnPos.position, GetProjectileRotation());
+            Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
+        }
     }
 
     /// <summary>
