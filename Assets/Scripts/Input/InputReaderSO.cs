@@ -56,7 +56,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
     public void OnMovement(InputAction.CallbackContext context)
     {
         OnMovementInput?.Invoke(context.ReadValue<Vector2>());
-        Debug.Log($"<color=magenta> 'OnMovement()' was called in '{this}', ergo 'OnMovementInput'-event should have been fired. </color>");
+        //Debug.Log($"<color=magenta> 'OnMovement()' was called in '{this}', ergo 'OnMovementInput'-event should have been fired. </color>");
     }
 
     public void OnRotation(InputAction.CallbackContext context)

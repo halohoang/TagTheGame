@@ -51,16 +51,16 @@ public class AmmoCounter : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerWeaponHandling.OnSetBulletCount += OnBulletCountChange;        
+        PlayerWeaponHandling.OnSetBulletCount += OnBulletCountChange;
         PlayerWeaponHandling.OnBulletsShot += DecreaseAmmo;
         PlayerWeaponHandling.OnReload += Reload;
-    }    
+    }
     private void OnDisable()
     {
         PlayerWeaponHandling.OnSetBulletCount -= OnBulletCountChange;
         PlayerWeaponHandling.OnBulletsShot -= DecreaseAmmo;
         PlayerWeaponHandling.OnReload -= Reload;
-    }    
+    }
 
     private void Start()
     {
@@ -110,43 +110,92 @@ public class AmmoCounter : MonoBehaviour
         // 2. clear _active/_inactive-Lists and sort active and inactive BulletSprites in the '_bulletSprites'-List a new
         _activeSprites.Clear();
         _inactiveSprites.Clear();
+        Debug.Log($"'SetUIAmmoToActiveWeaponAmmo()' was called");
+
         for (int i = 0; i < _bulletSprites.Count; i++)
         {
             if (_bulletSprites[i].gameObject.activeSelf)
+            {
                 _activeSprites.Add(_bulletSprites[i]);
+            }
             else
+            {
                 _inactiveSprites.Add(_bulletSprites[i]);
+            }
+            Debug.Log($"ActiveState of BulletSprites-List-Element on Idx: '<color=lime>{_bulletSprites[i]}</color>' = '<color=lime>{_bulletSprites[i].gameObject.activeSelf}</color>'");
         }
 
         // 3. enable/disable the BulletSprites Object in the '_bulletSprites'-List respectively to if they are active or not and accroding to the 'AmmountCount'
         // if ammoCount is greater or less than the Count of the SpriteObjects in the '_bulletSprites'-List enable or disable respectively to the difference between both counts
-        if (_activeSprites.Count > CurrentAmmo)
+        if (_activeSprites.Count > 0 && _activeSprites.Count > CurrentAmmo)
         {
+            Debug.Log($"_activeSprites.Count('<color=magenta>{_activeSprites.Count}</color>') is creater than Current Ammo ('<color=magenta>{CurrentAmmo}</color>')");
+            // a.) disable the difference amount between '_activeSpriter.Count' and 'CurrentAmmo' from '_activeSprites'_List and shift them to '_inactiveSprites'-List
             for (int i = 0; i < _activeSprites.Count - CurrentAmmo; i++)
             {
                 //disable Sprite -> then insert this disabled Obj to inactiveSprite List -> then remove disabled Object from activeSprite-List
-                _activeSprites[i].gameObject.SetActive(false);                
-                _inactiveSprites.Insert(i, _activeSprites[i]);
-                _activeSprites.RemoveAt(i);
-                Debug.Log($"Deactivated BulletSprite '<color=lime>{_activeSprites[i].name}</color>' at Idx: '<color=lime>{i}</color>'");
-                Debug.Log($"inserted BulletSprite '<color=lime>{_activeSprites[i].name}</color>' at Idx: '<color=lime>{i}</color>' to _inactiveSprites-List: ('<color=lime>{_inactiveSprites[i].name}</color>', Idx: '<color=lime>{i}</color>')");
-                Debug.Log($"Removed deactivated BulletSprite from '<color=lime>{_activeSprites[i].name}</color>' at Idx: '<color=lime>{i}</color>'");
+                _activeSprites[i].gameObject.SetActive(false);
+                Debug.Log($"Deactivated BulletSprite '<color=orange>{_activeSprites[i].name}</color>' at Idx: '<color=orange>{i}</color>'");
+
+                if (_inactiveSprites.Count > i)
+                {
+                    _inactiveSprites.Insert(i, _activeSprites[i]);
+                    Debug.Log($"inserted BulletSprite '<color=orange>{_activeSprites[i].name}</color>' at Idx: '<color=orange>{i}</color>' to _inactiveSprites-List: ('<color=orange>{_inactiveSprites[i].name}</color>', Idx: '<color=orange>{i}</color>')");
+                }
+                else
+                {
+                    _inactiveSprites.Add(_activeSprites[i]);
+                    Debug.Log($"_inactiveSprites-List did not contain element at Idx: '<color=orange>{_inactiveSprites[i]}</color>' thus '<color=orange>{_activeSprites[i].name}</color>' was added at the end of the list");
+                }
+                //Debug.Log($"Remove deactivated BulletSprite ('<color=orange>{_activeSprites[i].name}</color>') from _activeSprites-List at Idx: '<color=orange>{i}</color>'");
+                //_activeSprites.RemoveAt(i);
+            }
+
+            // b.) remove every disabled object from '_activeSprites'-List
+            for (int i = _activeSprites.Count; i > 0; i--)
+            {
+                if (!_activeSprites[i - 1].gameObject.activeSelf)
+                {
+                    Debug.Log($"Remove deactivated BulletSprite ('<color=orange>{_activeSprites[i - 1].name}</color>') from _activeSprites-List at Idx: '<color=orange>{i}</color>'");
+                    _activeSprites.RemoveAt(i);
+                }
             }
 
             // decrease the Height of the 'AmmoCount_Panel'-Object respective to its active Bullet-Sprite-ChildObjects
             //rectTrans.sizeDelta = new Vector2(rectTrans.rect.width, rectTrans.rect.height - (float)CurrentAmmo * transform.GetChild(0).GetComponent<RectTransform>().rect.width);
         }
-        else if (_activeSprites.Count < CurrentAmmo )
+        else if (_activeSprites.Count > 0 && _activeSprites.Count < CurrentAmmo)
         {
+            Debug.Log($"'<color=magenta>{CurrentAmmo - _activeSprites.Count}</color>'");
             for (int i = 0; i < CurrentAmmo - _activeSprites.Count; i++)
             {
                 //enable Sprite -> then insert this enabled Obj to activeSprite List -> then remove this enabled Object from inactiveSprite-List
                 _inactiveSprites[i].gameObject.SetActive(true);
-                _activeSprites.Insert(i, _inactiveSprites[i]);
-                _inactiveSprites.RemoveAt(i);
                 Debug.Log($"Activated BulletSprite '<color=lime>{_inactiveSprites[i].name}</color>' at Idx: '<color=lime>{i}</color>'");
-                Debug.Log($"inserted BulletSprite '<color=lime>{_inactiveSprites[i].name}</color>' at Idx: '<color=lime>{i}</color>' to _inactiveSprites-List: ('<color=lime>{_activeSprites[i].name}</color>', Idx: '<color=lime>{i}</color>')");
-                Debug.Log($"Removed activated BulletSprite from '<color=lime>{_inactiveSprites[i].name}</color>' at Idx: '<color=lime>{i}</color>'");
+
+                if (_inactiveSprites.Count > i)
+                {
+                    _activeSprites.Insert(i, _inactiveSprites[i]);
+                    Debug.Log($"inserted BulletSprite '<color=lime>{_inactiveSprites[i].name}</color>' at Idx: '<color=lime>{i}</color>' to _inactiveSprites-List: ('<color=lime>{_activeSprites[i].name}</color>', Idx: '<color=lime>{i}</color>')");
+                }
+                else
+                {
+                    _inactiveSprites.Add(_activeSprites[i]);
+                    Debug.Log($"_inactiveSprites-List did not contain element at Idx: '<color=orange>{_inactiveSprites[i]}</color>' thus '<color=orange>{_activeSprites[i].name}</color>' was added at the end of the list");
+                }
+
+                //_inactiveSprites.RemoveAt(i);
+                //Debug.Log($"Removed activated BulletSprite from '<color=lime>{_inactiveSprites[i].name}</color>' at Idx: '<color=lime>{i}</color>'");
+            }
+
+            // b.) remove every disabled object from '_activeSprites'-List
+            for (int i = 0; i < _inactiveSprites.Count; i++)
+            {
+                if (_inactiveSprites[i].gameObject.activeSelf)
+                {
+                    Debug.Log($"Remove deactivated BulletSprite ('<color=orange>{_inactiveSprites[i].name}</color>') from _inactiveSprites-List at Idx: '<color=orange>{i}</color>'");
+                    _inactiveSprites.RemoveAt(i);
+                }
             }
 
             //// increase the Height of the 'AmmoCount_Panel'-Object respective to its active Bullet-Sprite-ChildObjects
@@ -163,8 +212,19 @@ public class AmmoCounter : MonoBehaviour
     {
         if (!_isReloading && CurrentAmmo > 0)
         {
-            _bulletSprites[CurrentAmmo - 1].gameObject.SetActive(false);
+            _activeSprites[CurrentAmmo - 1].gameObject.SetActive(false);
             CurrentAmmo--;
+            // todo: continue her with fixed of the 'out of range' exception on fireing
+            if (_inactiveSprites.Count > CurrentAmmo - 1)
+            {
+                _inactiveSprites.Insert(CurrentAmmo - 1, _activeSprites[CurrentAmmo - 1]);
+                Debug.Log($"inserted BulletSprite '<color=orange>{_activeSprites[CurrentAmmo - 1].name}</color>' at Idx: '<color=orange>{CurrentAmmo - 1}</color>' to _inactiveSprites-List: ('<color=orange>{_inactiveSprites[CurrentAmmo - 1].name}</color>', Idx: '<color=orange>{CurrentAmmo - 1}</color>')");
+            }
+            else
+            {
+                _inactiveSprites.Add(_activeSprites[CurrentAmmo - 1]);
+                Debug.Log($"_inactiveSprites-List did not contain element at Idx: '<color=orange>{_inactiveSprites[CurrentAmmo - 1]}</color>' thus '<color=orange>{_activeSprites[CurrentAmmo - 1].name}</color>' was added at the end of the list");
+            }
         }
     }
 
