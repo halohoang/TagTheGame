@@ -162,7 +162,7 @@ public class PlayerStats : MonoBehaviour
 
                 IsSprinting = true;
 
-                Debug.LogError($"Playerhealth: {CurrentHealth}");
+                Debug.Log($"Sprinting Input detected -> Playerhealth: {CurrentHealth}");
 
                 break;
 

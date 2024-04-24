@@ -28,14 +28,15 @@ namespace EnumLibrary
         public enum ESpaceKey
         {
             Pressed,
-            NotPressed            
+            NotPressed
         }
 
         // Enum for defining if the Left Mouse Button Key is pressed or not
         public enum ELeftMouseButton
         {
             Pressed,
-            NotPressed
+            NotPressed,
+            Released
         }
 
         /// <summary>

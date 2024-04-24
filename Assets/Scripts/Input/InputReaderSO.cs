@@ -11,6 +11,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
     public event UnityAction<Vector2> OnMouseMovement;
     public event UnityAction<Enum_Lib.ESpaceKey> OnFastMovementInput;
     public event UnityAction<Enum_Lib.ELeftMouseButton> OnAttackInput;
+    public event UnityAction<Enum_Lib.ELeftMouseButton> OnAttackInputStop;
     public event UnityAction OnInteractionInput;
     public event UnityAction OnReloadingInput;
     public event UnityAction OnWeaponSwapInput;                         // currently not used; JM (28.03.2024)
@@ -70,11 +71,18 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
         //    OnAttackInput?.Invoke();
 
         bool isLMBHeld = context.ReadValue<float>() > 0.1f;
+        bool isLMBReleased = context.canceled;
+
+        //_gameInput.Player.Attacking.WasPressedThisFrame();
 
         if (isLMBHeld)
             OnAttackInput?.Invoke(Enum_Lib.ELeftMouseButton.Pressed);
         else
             OnAttackInput?.Invoke(Enum_Lib.ELeftMouseButton.NotPressed);
+
+        if (isLMBReleased)
+            OnAttackInputStop?.Invoke(Enum_Lib.ELeftMouseButton.Released);
+            
         //Debug.Log($"space was pressed");
     }
 

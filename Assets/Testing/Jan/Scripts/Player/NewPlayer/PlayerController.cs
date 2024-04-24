@@ -48,9 +48,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField, ReadOnly] private Vector2 _movementDirection;
     [SerializeField, ReadOnly] private bool _isPlayerMoving;
     [SerializeField, ReadOnly] private bool _isPlayerDead;
+    [SerializeField, ReadOnly] private bool _isPlayerSprinting;
 
     // Properties
     public bool IsPlayerMoving { get => _isPlayerMoving; private set => _isPlayerMoving = value; }
+    public bool IsPlayerSprinting { get => _isPlayerSprinting; private set => _isPlayerSprinting = value; }
     #endregion
 
 
@@ -151,6 +153,7 @@ public class PlayerController : MonoBehaviour
 
                 // Player can move faster
                 SetPlayerMovementValues(_maxPlayerSpeed, 0.1f, 1.6f, 2, false);
+                IsPlayerSprinting = true;
 
                 #region original Settings Code
                 //_currentPlayerSpeed = _maxPlayerSpeed;
@@ -166,6 +169,7 @@ public class PlayerController : MonoBehaviour
 
                 // reset Values to normal Movement Speed
                 SetPlayerMovementValues(_minPlayerSpeed, 0.148f, 1.12f, 1, true);
+                _isPlayerSprinting = false;
 
                 #region original Settings Code
                 //_currentPlayerSpeed = _minPlayerSpeed;

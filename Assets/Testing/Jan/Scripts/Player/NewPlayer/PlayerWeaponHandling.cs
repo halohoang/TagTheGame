@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using EnumLibrary;
+using UnityEngine.Networking.Types;
 
 public class PlayerWeaponHandling : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class PlayerWeaponHandling : MonoBehaviour
 
     public static event UnityAction<bool, Vector3, float> OnPlayerShoot;
     public static event UnityAction<int, int> OnSetBulletCount;
-    public static event UnityAction OnBulletsShot;
+    public static event UnityAction<int> OnBulletsnstantiated;
     public static event UnityAction OnReload;
     #endregion
 
@@ -43,7 +44,7 @@ public class PlayerWeaponHandling : MonoBehaviour
     [SerializeField] private Transform _casingSpawnPosition;
 
     /* AudioClip References*/
-    [SerializeField] private AudioClip _fireSound;                  // Fire sound
+    [SerializeField] private AudioClip _shootingSoundClip;                  // Fire sound
     [SerializeField] private AudioClip _reloadSound;                // Reload sound
 
     /* Camera Shake References */
@@ -99,7 +100,7 @@ public class PlayerWeaponHandling : MonoBehaviour
 
     // --- private Variables ---
     private AudioSource _audioSource;
-    private float _mouseButtonReleaseTime;                          // Time when the mouse button was last released
+    private float _mouseButtonReleaseTime;                          // Time when the mouse button was last released (used for calculation of deviation)
     #endregion
 
 
@@ -160,6 +161,9 @@ public class PlayerWeaponHandling : MonoBehaviour
         _inputReader.OnHolsteringWeaponInput += HolsterWeapon;
         _inputReader.OnFirstWeaponEquipInput += FirstWeaponEquip;
         _inputReader.OnSecondWeaponEquipInput += SecondWeaponEquip;
+        _inputReader.OnAttackInput += ReadAttackinput;
+        _inputReader.OnAttackInputStop += ReadAttackinput;
+        _inputReader.OnReloadingInput += Realoding;
         PlayerHealth.OnPlayerDeath += SetIsPlayerDead;
         PauseMenu.OnTogglePauseScene += SetIsGamePaused;
     }
@@ -169,6 +173,9 @@ public class PlayerWeaponHandling : MonoBehaviour
         _inputReader.OnHolsteringWeaponInput -= HolsterWeapon;
         _inputReader.OnFirstWeaponEquipInput -= FirstWeaponEquip;
         _inputReader.OnSecondWeaponEquipInput -= SecondWeaponEquip;
+        _inputReader.OnAttackInput -= ReadAttackinput;
+        _inputReader.OnAttackInputStop -= ReadAttackinput;
+        _inputReader.OnReloadingInput -= Realoding;
         PlayerHealth.OnPlayerDeath -= SetIsPlayerDead;
         PauseMenu.OnTogglePauseScene -= SetIsGamePaused;
     }
@@ -183,41 +190,43 @@ public class PlayerWeaponHandling : MonoBehaviour
 
     private void Update()
     {
-        //DrawOrHolsterWeapon();
-        if (_isArmed && !_isPlayerDead)
-        {
-            if (Input.GetMouseButtonUp(0))
-            {
-                _mouseButtonReleaseTime = Time.time; // Record the time when the mouse button was released
-                Debug.Log($"Mousbutton was released.");
-            }
-            else if (Input.GetMouseButton(0) && CanFire() && _currentBulletCount > 0 && _isReloading == false)
-            {
-                _isShooting = true;
-                //_animator.SetBool("Firing", _isShooting);
-                Shoot();
-                _currentBulletCount--;
-                SpawnBulletCasing();
-                cameraShake.StartShake(_camShakeDuration, _camShakeAmount);
-                Debug.Log("Shake");
+        #region old Hoangs prototype input solution
+        ////DrawOrHolsterWeapon();
+        //if (_isArmed && !_isPlayerDead)
+        //{
+        //    if (Input.GetMouseButtonUp(0))
+        //    {
+        //        _mouseButtonReleaseTime = Time.time; // Record the time when the mouse button was released
+        //        Debug.Log($"Mousbutton was released.");
+        //    }
+        //    else if (Input.GetMouseButton(0) && CanFire() && _currentBulletCount > 0 && _isReloading == false)
+        //    {
+        //        _isShooting = true;
+        //        //_animator.SetBool("Firing", _isShooting);
+        //        Shoot();
+        //        _currentBulletCount--;
+        //        SpawnBulletCasing();
+        //        cameraShake.StartShake(_camShakeDuration, _camShakeAmount);
+        //        Debug.Log("Shake");
 
-                OnPlayerShoot?.Invoke(_isShooting, transform.position, _shootingNoiseRange);
-            }
-            else
-            {
-                _isShooting = false;
-                //_animator.SetBool("Firing", _isShooting);
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.R) && _isReloading == false && !Input.GetMouseButton(0) && !_isPlayerDead)
-        {
-            if (_currentBulletCount < _maximumBulletCount)
-            {
-                //_ammoCounter.Reload();
-                OnReload?.Invoke(); // informing AmmoCounter about Reloading
-                StartCoroutine(Reload());
-            }
-        }
+        //        OnPlayerShoot?.Invoke(_isShooting, transform.position, _shootingNoiseRange);
+        //    }
+        //    else
+        //    {
+        //        _isShooting = false;
+        //        //_animator.SetBool("Firing", _isShooting);
+        //    }
+        //}
+        //if (Input.GetKeyDown(KeyCode.R) && _isReloading == false && !Input.GetMouseButton(0) && !_isPlayerDead)
+        //{
+        //    if (_currentBulletCount < _maximumBulletCount)
+        //    {
+        //        //_ammoCounter.Reload();
+        //        OnReload?.Invoke(); // informing AmmoCounter about Reloading
+        //        StartCoroutine(Reload());
+        //    }
+        //}
+        #endregion
 
         if (_wasWeaponPickedUp && !_playerCtrl.IsPlayerMoving) // ensuring that animation will truely be set correctly even in case player movement stopped right on collision
         {
@@ -256,8 +265,130 @@ public class PlayerWeaponHandling : MonoBehaviour
     }
     #endregion
 
-
     #region Custom Methods
+    private void ReadAttackinput(Enum_Lib.ELeftMouseButton lMBPressStatus)
+    {
+        if (_isArmed && !_isPlayerDead)
+        {
+            // read input and execute proper logic
+            switch (lMBPressStatus)
+            {
+                case Enum_Lib.ELeftMouseButton.Pressed:
+                    if (CanFire() && _isArmed && _currentBulletCount > 0 && !_isReloading)
+                    {
+                        _isShooting = true;
+                        PlayAudio(_shootingSoundClip);
+
+                        //set shooting animation
+                        //_animatorCtrl.SetBool("Firing", _isShooting);
+
+                        SpawnProjectile();
+
+                        SpawnBulletCasing();
+
+                        ExecuteCameraShake();
+
+                        OnPlayerShoot?.Invoke(_isShooting, transform.position, _shootingNoiseRange);
+
+                        // reset the Time the shooting logic can be executed the next time (e.g. to ensure the projectiles will be spawned at a specific rate ('fireRate') and not simultaneosly)
+                        _nextFireTime = Time.time + _firerate;
+                    }
+                    else
+                    {
+                        _isShooting = false;
+                        //_animatorCtrl.SetBool("Firing", _isShooting);
+                    }
+                    break;
+
+                case Enum_Lib.ELeftMouseButton.NotPressed:
+                    _isShooting = false;
+                    break;
+
+                case Enum_Lib.ELeftMouseButton.Released:
+                    _mouseButtonReleaseTime = Time.time; // Record the time when the mouse button was released
+                    Debug.Log($"Mousbutton was released.");
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Instantiates Projectiles respective to whether the first or second weapon is selected; also decreases <see cref="_currentBulletCount"/>-Value and fires respective Event to inform 
+    /// <see cref="AmmoCounter"/> to initiate an update of the Ammo-UI respective to the actual <see cref="_currentBulletCount"/>-Value.
+    /// </summary>
+    private void SpawnProjectile()
+    {
+        // Instantiate Projectiles (respective to 'SpawnedBullet'-Value of the first or second Weapon)
+        if (_isFirststWeaponSelected)
+            InstatiateProjectiles(_playerEquipmentSO.FirstWeapon);
+        else
+            InstatiateProjectiles(_playerEquipmentSO.SecondWeapon);
+
+        _currentBulletCount--;
+
+        OnBulletsnstantiated?.Invoke(_currentBulletCount);                                // informing AmmoCounter about shooting with updated ammount of Bullets          
+    }
+
+    private void ExecuteCameraShake()
+    {
+        //apply Camera Shake(when sprinting while shooting)
+
+        #region old Hoangs approach on setting CamShake Values
+        //if (Input.GetKey(KeyCode.Space))
+        //{
+        //    _camShakeDuration = 0;
+        //    _camShakeAmount = 0;
+        //}
+        //else if (!Input.GetKeyUp(KeyCode.Space))
+        //{
+        //    _camShakeDuration = 0.05f;
+        //    _camShakeAmount = 0.08f;
+        //}
+        #endregion
+
+        if (_playerCtrl.IsPlayerSprinting)
+        {
+            _camShakeDuration = 0;
+            _camShakeAmount = 0;
+        }
+        else
+        {
+            _camShakeDuration = 0.05f;
+            _camShakeAmount = 0.08f;
+        }
+
+        cameraShake.StartShake(_camShakeDuration, _camShakeAmount);
+        Debug.Log("Shake");
+    }
+
+    private bool CanFire()
+    {
+        return Time.time > _nextFireTime && !_isGamePaused;
+    }
+
+    /// <summary>
+    /// Plays transmitted Audioclip if it is not null
+    /// </summary>
+    /// <param name="clipToPlay"></param>
+    private void PlayAudio(AudioClip clipToPlay)
+    {
+        if (clipToPlay != null)
+            _audioSource.PlayOneShot(clipToPlay);
+    }
+
+    private void Realoding()
+    {
+        if (_isReloading == false && !_isShooting && !_isPlayerDead)
+        {
+            if (_currentBulletCount < _maximumBulletCount)
+            {
+                //_ammoCounter.Reload();
+                OnReload?.Invoke(); // informing AmmoCounter about Reloading
+                StartCoroutine(Reload());
+            }
+        }
+    }
+
     private void FirstWeaponEquip()
     {
         // only equip first weapon if slot is not empty
@@ -312,23 +443,6 @@ public class PlayerWeaponHandling : MonoBehaviour
         //    EquipWeaponAnimation(_isArmed);
         //}
         #endregion
-    }
-
-    private void SwitchWeapon()
-    {
-        // only enabling weapon swap, if _isArmed and if both weapon slots actually contain weapons
-        if (_isArmed && (_playerEquipmentSO.FirstWeapon.WeaponType != Enum_Lib.EWeaponType.Blank && _playerEquipmentSO.SecondWeapon.WeaponType != Enum_Lib.EWeaponType.Blank))
-        {
-            // Update UI
-
-
-            // Update PlayerEquipmentSO
-            _playerEquipmentSO.SwitchWeapon();
-
-
-            // Enable proper Animation (if Player is armed) accordingly to equipped weapon
-            EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
-        }
     }
 
     private void EquipWeaponAnimation(bool playAnimation, Enum_Lib.EWeaponType weaponType)
@@ -451,10 +565,6 @@ public class PlayerWeaponHandling : MonoBehaviour
         //_ammoCounter.SetUIAmmoToActiveWeaponAmmo();
     }
 
-    private bool CanFire()
-    {
-        return Time.time > _nextFireTime && !_isGamePaused;
-    }
 
     private float CalculateDeviation()
     {
@@ -462,43 +572,6 @@ public class PlayerWeaponHandling : MonoBehaviour
         return _maxDeviationAngle * holdTriggerDuration;
     }
 
-    private void Shoot()
-    {
-        if (CanFire() && _isArmed)
-        {
-            // 1. Play Fire Sound
-            if (_fireSound != null)
-                _audioSource.PlayOneShot(_fireSound);
-
-            // 2. Instantiate Projectile (respective to 'SpawnedBullet'-Value of the First or Second Weapon)
-            if (_isFirststWeaponSelected)
-                InstatiateProjectiles(_playerEquipmentSO.FirstWeapon);
-            else
-                InstatiateProjectiles(_playerEquipmentSO.SecondWeapon);
-
-            // 3. set shooting animation
-            //_animator.SetBool("Firing", true);
-
-            // 4. decrease The 'CurrentAmmo'-Value of the AmmoCounter and Set the Ammo-UI respectively
-            //_ammoCounter.DecreaseAmmo();                          //Call the Decrease Ammo function from the AmmoCounter script;
-            OnBulletsShot?.Invoke();                                // informing AmmoCounter about shooting
-
-            // 5. reset the Time the 'Shoot()' can be executed the next time (to ensure the projectiles will be spawned at a specific rate ('fireRate') and not simultaneosly)
-            _nextFireTime = Time.time + _firerate;
-
-            // 6. apply Camera Shake (when sprinting while shooting)
-            if (Input.GetKey(KeyCode.Space))
-            {
-                _camShakeDuration = 0;
-                _camShakeAmount = 0;
-            }
-            else if (!Input.GetKeyUp(KeyCode.Space))
-            {
-                _camShakeDuration = 0.05f;
-                _camShakeAmount = 0.08f;
-            }
-        }
-    }
 
     /// <summary>
     /// Instatiates the amount of projectiles the transmitted 'BaseWeapon-Object' specifies in it's <see cref="BaseWeapon.SpawnedBullets"/> Variable.
@@ -509,8 +582,9 @@ public class PlayerWeaponHandling : MonoBehaviour
         // instantiate (spawn) the projectiles
         for (int i = 0; i < weaponSlot.SpawnedBullets; i++)
         {
-            GameObject bullet = Instantiate(_projectilePrefab, _projectileSpawnPos.position, GetProjectileRotation());
-            Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
+            /*GameObject bullet = */
+            Instantiate(_projectilePrefab, _projectileSpawnPos.position, GetProjectileRotation());
+            //Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
         }
     }
 
@@ -574,6 +648,55 @@ public class PlayerWeaponHandling : MonoBehaviour
     private void SetIsArmed(bool isArmedStatus)
     {
         _isArmed = isArmedStatus;
+    }
+    private void Shoot()
+    {
+        if (CanFire() && _isArmed)
+        {
+            PlayAudio(_shootingSoundClip);
+
+            // 2. Instantiate Projectiles (respective to 'SpawnedBullet'-Value of the first or second Weapon)
+            if (_isFirststWeaponSelected)
+                InstatiateProjectiles(_playerEquipmentSO.FirstWeapon);
+            else
+                InstatiateProjectiles(_playerEquipmentSO.SecondWeapon);
+
+            // 3. set shooting animation
+            //_animator.SetBool("Firing", true);
+
+            // 4. decrease The 'CurrentAmmo'-Value of the AmmoCounter and Set the Ammo-UI respectively
+            //_ammoCounter.DecreaseAmmo();                          //Call the Decrease Ammo function from the AmmoCounter script;
+            //OnBulletsnstantiated?.Invoke(_currentBulletCount);                                // informing AmmoCounter about shooting            
+
+            // 5. apply Camera Shake (when sprinting while shooting)
+            if (Input.GetKey(KeyCode.Space))
+            {
+                _camShakeDuration = 0;
+                _camShakeAmount = 0;
+            }
+            else if (!Input.GetKeyUp(KeyCode.Space))
+            {
+                _camShakeDuration = 0.05f;
+                _camShakeAmount = 0.08f;
+            }
+            Debug.Log($"CurrentShakeDuration: '{_camShakeDuration}' | CurrentShakeAmount: '{_camShakeAmount}'");
+        }
+    }
+    private void SwitchWeapon()
+    {
+        // only enabling weapon swap, if _isArmed and if both weapon slots actually contain weapons
+        if (_isArmed && (_playerEquipmentSO.FirstWeapon.WeaponType != Enum_Lib.EWeaponType.Blank && _playerEquipmentSO.SecondWeapon.WeaponType != Enum_Lib.EWeaponType.Blank))
+        {
+            // Update UI
+
+
+            // Update PlayerEquipmentSO
+            _playerEquipmentSO.SwitchWeapon();
+
+
+            // Enable proper Animation (if Player is armed) accordingly to equipped weapon
+            EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
+        }
     }
     #endregion
 

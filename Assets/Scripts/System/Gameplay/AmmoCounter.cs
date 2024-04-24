@@ -52,13 +52,13 @@ public class AmmoCounter : MonoBehaviour
     private void OnEnable()
     {
         PlayerWeaponHandling.OnSetBulletCount += OnBulletCountChange;
-        PlayerWeaponHandling.OnBulletsShot += DecreaseAmmo;
+        PlayerWeaponHandling.OnBulletsnstantiated += DecreaseAmmo;
         PlayerWeaponHandling.OnReload += Reload;
     }
     private void OnDisable()
     {
         PlayerWeaponHandling.OnSetBulletCount -= OnBulletCountChange;
-        PlayerWeaponHandling.OnBulletsShot -= DecreaseAmmo;
+        PlayerWeaponHandling.OnBulletsnstantiated -= DecreaseAmmo;
         PlayerWeaponHandling.OnReload -= Reload;
     }
 
@@ -208,13 +208,15 @@ public class AmmoCounter : MonoBehaviour
     /// <summary>
     /// Decreases the <see cref="CurrentAmmo"/> Value and disables the BulletSprites in the Ammo-UI.
     /// </summary>
-    public void DecreaseAmmo()
+    public void DecreaseAmmo(int updatedBulletCount)
     {
+        CurrentAmmo = updatedBulletCount;
+
         if (!_isReloading && CurrentAmmo > 0)
         {
-            _activeSprites[CurrentAmmo - 1].gameObject.SetActive(false);
-            CurrentAmmo--;
-            // todo: continue her with fixed of the 'out of range' exception on fireing
+            _activeSprites[CurrentAmmo - 1].gameObject.SetActive(false);    
+            
+            // todo: continue here with fixed of the 'out of range' exception on fireing
             if (_inactiveSprites.Count > CurrentAmmo - 1)
             {
                 _inactiveSprites.Insert(CurrentAmmo - 1, _activeSprites[CurrentAmmo - 1]);
