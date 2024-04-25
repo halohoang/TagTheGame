@@ -205,7 +205,7 @@ public class PlayerShoot : MonoBehaviour
             if (_fireSound != null) { _audioSource.PlayOneShot(_fireSound); }
             GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, bulletRotation);
             Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
-            _ammoCounterScript.DecreaseAmmo(_currentBulletCount); //Call the Decrease Ammo function from the AmmoCounter script;
+            _ammoCounterScript.DecreaseAmmoUI(_currentBulletCount); //Call the Decrease Ammo function from the AmmoCounter script;
             //_animator.SetBool("Firing", true);
             _nextFireTime = Time.time + _firerate;
             if (Input.GetKey(KeyCode.Space))

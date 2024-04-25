@@ -67,13 +67,9 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
 
     public void OnAttacking(InputAction.CallbackContext context)
     {
-        //if (context.started)
-        //    OnAttackInput?.Invoke();
-
-        bool isLMBHeld = context.ReadValue<float>() > 0.1f;
+        //bool isLMBHeld = context.ReadValue<float>() > 0.1f;
+        bool isLMBHeld = context.performed;
         bool isLMBReleased = context.canceled;
-
-        //_gameInput.Player.Attacking.WasPressedThisFrame();
 
         if (isLMBHeld)
             OnAttackInput?.Invoke(Enum_Lib.ELeftMouseButton.Pressed);
@@ -83,7 +79,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
         if (isLMBReleased)
             OnAttackInputStop?.Invoke(Enum_Lib.ELeftMouseButton.Released);
             
-        //Debug.Log($"space was pressed");
+        Debug.Log($"is left mouse butten pressed? {isLMBHeld}");
     }
 
     public void OnSprinting(InputAction.CallbackContext context)

@@ -4,7 +4,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using EnumLibrary;
-using UnityEngine.Networking.Types;
 
 public class PlayerWeaponHandling : MonoBehaviour
 {
@@ -97,10 +96,11 @@ public class PlayerWeaponHandling : MonoBehaviour
     [SerializeField, ReadOnly] private bool _isSecondndWeaponSelected;
     [SerializeField, ReadOnly] private bool _isReloading = false;
     [SerializeField, ReadOnly] private bool _wasWeaponPickedUp;
+    [SerializeField, ReadOnly] private Enum_Lib.ELeftMouseButton _leftMouseButtonStatus;
+    [SerializeField, ReadOnly] private float _mouseButtonReleaseTime;                          // Time when the mouse button was last released (used for calculation of deviation)
 
     // --- private Variables ---
     private AudioSource _audioSource;
-    private float _mouseButtonReleaseTime;                          // Time when the mouse button was last released (used for calculation of deviation)
     #endregion
 
 
@@ -190,6 +190,9 @@ public class PlayerWeaponHandling : MonoBehaviour
 
     private void Update()
     {
+        if (_isArmed && !_isPlayerDead)
+            PlayerAttackOnInput();
+
         #region old Hoangs prototype input solution
         ////DrawOrHolsterWeapon();
         //if (_isArmed && !_isPlayerDead)
@@ -235,6 +238,8 @@ public class PlayerWeaponHandling : MonoBehaviour
         }
     }
 
+    
+
     /// <summary>
     /// CollisionCheck for recognizing collision with WeaponObject
     /// </summary>
@@ -268,47 +273,98 @@ public class PlayerWeaponHandling : MonoBehaviour
     #region Custom Methods
     private void ReadAttackinput(Enum_Lib.ELeftMouseButton lMBPressStatus)
     {
-        if (_isArmed && !_isPlayerDead)
+        _leftMouseButtonStatus = lMBPressStatus;
+
+        if (lMBPressStatus == Enum_Lib.ELeftMouseButton.Released)
         {
-            // read input and execute proper logic
-            switch (lMBPressStatus)
-            {
-                case Enum_Lib.ELeftMouseButton.Pressed:
-                    if (CanFire() && _isArmed && _currentBulletCount > 0 && !_isReloading)
-                    {
-                        _isShooting = true;
-                        PlayAudio(_shootingSoundClip);
+            _mouseButtonReleaseTime = Time.time; // Record the time when the mouse button was released
+            Debug.Log($"Mousbutton was released.");
+        }
 
-                        //set shooting animation
-                        //_animatorCtrl.SetBool("Firing", _isShooting);
+        #region obsolete for now
+        //if (_isArmed && !_isPlayerDead)
+        //{
+        //    // read input and execute proper logic
+        //    switch (lMBPressStatus)
+        //    {
+        //        case Enum_Lib.ELeftMouseButton.Pressed:
+        //            if (CanFire() && _isArmed && _currentBulletCount > 0 && !_isReloading)
+        //            {
+        //                _isShooting = true;
+        //                PlayAudio(_shootingSoundClip);
 
-                        SpawnProjectile();
+        //                //set shooting animation
+        //                //_animatorCtrl.SetBool("Firing", _isShooting);
 
-                        SpawnBulletCasing();
+        //                SpawnProjectile();
 
-                        ExecuteCameraShake();
+        //                SpawnBulletCasing();
 
-                        OnPlayerShoot?.Invoke(_isShooting, transform.position, _shootingNoiseRange);
+        //                ExecuteCameraShake();
 
-                        // reset the Time the shooting logic can be executed the next time (e.g. to ensure the projectiles will be spawned at a specific rate ('fireRate') and not simultaneosly)
-                        _nextFireTime = Time.time + _firerate;
-                    }
-                    else
-                    {
-                        _isShooting = false;
-                        //_animatorCtrl.SetBool("Firing", _isShooting);
-                    }
-                    break;
+        //                OnPlayerShoot?.Invoke(_isShooting, transform.position, _shootingNoiseRange);
 
-                case Enum_Lib.ELeftMouseButton.NotPressed:
+        //                // reset the Time the shooting logic can be executed the next time (e.g. to ensure the projectiles will be spawned at a specific rate ('fireRate') and not simultaneosly)
+        //                _nextFireTime = Time.time + _firerate;
+        //            }
+        //            else
+        //            {
+        //                _isShooting = false;
+        //                //_animatorCtrl.SetBool("Firing", _isShooting);
+        //            }
+        //            break;
+
+        //        case Enum_Lib.ELeftMouseButton.NotPressed:
+        //            _isShooting = false;
+        //            break;
+
+        //        case Enum_Lib.ELeftMouseButton.Released:
+        //            _mouseButtonReleaseTime = Time.time; // Record the time when the mouse button was released
+        //            Debug.Log($"Mousbutton was released.");
+        //            break;
+        //    }
+        //}
+        #endregion
+    }
+
+    /// <summary>
+    /// Executes Attack/Shooting related Logic (e.g. shooting sound, Projectile spawning, camera shake etc.) respective to Mouse-Input.
+    /// </summary>
+    private void PlayerAttackOnInput()
+    {
+        // read input and execute proper logic
+        switch (_leftMouseButtonStatus)
+        {
+            case Enum_Lib.ELeftMouseButton.Pressed:
+                if (CanFire() && _isArmed && _currentBulletCount > 0 && !_isReloading)
+                {
+                    _isShooting = true;
+                    PlayAudio(_shootingSoundClip);
+
+                    //set shooting animation
+                    //_animatorCtrl.SetBool("Firing", _isShooting);
+
+                    SpawnProjectile();
+
+                    SpawnBulletCasing();
+
+                    ExecuteCameraShake();
+
+                    OnPlayerShoot?.Invoke(_isShooting, transform.position, _shootingNoiseRange);
+
+                    // reset the Time the shooting logic can be executed the next time (e.g. to ensure the projectiles will be spawned at a specific rate ('fireRate') and not simultaneosly)
+                    _nextFireTime = Time.time + _firerate;
+                }
+                else
+                {
                     _isShooting = false;
-                    break;
+                    //_animatorCtrl.SetBool("Firing", _isShooting);
+                }
+                break;
 
-                case Enum_Lib.ELeftMouseButton.Released:
-                    _mouseButtonReleaseTime = Time.time; // Record the time when the mouse button was released
-                    Debug.Log($"Mousbutton was released.");
-                    break;
-            }
+            case Enum_Lib.ELeftMouseButton.NotPressed:
+                _isShooting = false;
+                break;
         }
     }
 
@@ -445,9 +501,15 @@ public class PlayerWeaponHandling : MonoBehaviour
         #endregion
     }
 
+    /// <summary>
+    /// Executes the Animation for the specific weapon types via calling the <see cref="SetAnimation()"/> respective to the transmitted parameter-values 
+    /// (which determine which weapon-animation shall be played and if a animation shall be layed at all).
+    /// </summary>
+    /// <param name="playAnimation">shall the animation be played or not?</param>
+    /// <param name="weaponType">The Weapontype spcified by Enum_Lib.EWeapnType</param>
     private void EquipWeaponAnimation(bool playAnimation, Enum_Lib.EWeaponType weaponType)
     {
-        Debug.Log($"'<color=yellow>EquipWeaponANimation() was called</color>'.");
+        Debug.Log($"'<color=yellow>EquipWeaponAnimation() was called</color>'.");
         if (playAnimation)
         {
             switch (weaponType)
@@ -530,7 +592,7 @@ public class PlayerWeaponHandling : MonoBehaviour
 
     /// <summary>
     /// Set the values (<see cref="_maximumBulletCount"/>, <see cref="_currentBulletCount"/>, <see cref="_firerate"/>, <see cref="BaseBullet.ProjectileDamage"/>) respective to the 
-    /// Values of the Weapon currently actively selected by the Player.
+    /// Values of the Weapon currently actively selected by the Player. Also Fires an event to inform the <see cref="AmmoCounter"/> to update the Ammo-UI.
     /// </summary>
     /// <param name="weaponSlot">The First or Second Weapon of <see cref="PlayerEquipmentSO"/></param>
     private void SetWeaponRespectiveValues(BaseWeapon weaponSlot)
