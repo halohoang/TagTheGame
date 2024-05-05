@@ -72,7 +72,6 @@ SpriteAtlas:
   - {fileID: 1377813808, guid: 84137d1649fe2724daf22d6c8b36d997, type: 3}
   - {fileID: 2035904973, guid: 84137d1649fe2724daf22d6c8b36d997, type: 3}
   - {fileID: -1615017852, guid: f5c7472606ba4584a89a72846a269974, type: 3}
-  - {fileID: -822606213, guid: f5c7472606ba4584a89a72846a269974, type: 3}
   - {fileID: 149072588, guid: f5c7472606ba4584a89a72846a269974, type: 3}
   - {fileID: -1160950663, guid: f5c7472606ba4584a89a72846a269974, type: 3}
   - {fileID: 222180409, guid: f5c7472606ba4584a89a72846a269974, type: 3}
@@ -81,7 +80,12 @@ SpriteAtlas:
   - {fileID: -2071531607, guid: f5c7472606ba4584a89a72846a269974, type: 3}
   - {fileID: 1291991329, guid: f5c7472606ba4584a89a72846a269974, type: 3}
   - {fileID: -1262367347, guid: f5c7472606ba4584a89a72846a269974, type: 3}
+  - {fileID: -822606213, guid: f5c7472606ba4584a89a72846a269974, type: 3}
   - {fileID: 1794418351, guid: f5c7472606ba4584a89a72846a269974, type: 3}
+  - {fileID: -1168857580, guid: f5c7472606ba4584a89a72846a269974, type: 3}
+  - {fileID: 1748970235, guid: f5c7472606ba4584a89a72846a269974, type: 3}
+  - {fileID: -679422857, guid: f5c7472606ba4584a89a72846a269974, type: 3}
+  - {fileID: -343253925, guid: f5c7472606ba4584a89a72846a269974, type: 3}
   - {fileID: 1463252473, guid: ce071eb97836b25448a75eddd157d18c, type: 3}
   - {fileID: -1726814055, guid: ce071eb97836b25448a75eddd157d18c, type: 3}
   - {fileID: 1986494391, guid: 3ee4f08b4dd7b5a4586212095f4e4d27, type: 3}
@@ -110,7 +114,6 @@ SpriteAtlas:
   - Floor 2_11
   - Floor 2_10
   - CornerwALL_1
-  - CornerwALL_0
   - CornerwALL_3
   - CornerwALL_2
   - CornerwALL_5
@@ -119,7 +122,12 @@ SpriteAtlas:
   - CornerwALL_6
   - CornerwALL_9
   - CornerwALL_8
+  - CornerwALL
   - CornerwALL_10
+  - CornerwALL_11
+  - CornerwALL_12
+  - CornerwALL_13
+  - CornerwALL_14
   - Prop 2_1
   - Prop 2_0
   - Button_0
