@@ -12,10 +12,10 @@ public class PlayerWeaponHandling : MonoBehaviour
     // - - - - -  E V E N T S  - - - - 
     //--------------------------------
 
-    public static event UnityAction<bool, Vector3, float> OnPlayerShoot;
-    public static event UnityAction<int, int> OnSetBulletCount;
-    public static event UnityAction<int> OnBulletsnstantiated;
-    public static event UnityAction OnReload;
+    public static event UnityAction<bool, Vector3, float> OnPlayerShoot;    // invoked in 'PlayerAttackOnInput()' (when projectile is instantiated); JM (08.05.24)
+    public static event UnityAction<int, int> OnSetBulletCount;             // invoked in 'SetBulletCount()' (when new bullet counts are (re)setted, e.g. on weapon switch/pickup); JM (08.05.24)
+    public static event UnityAction<int> OnBulletsInstantiated;             // invoked in 'SpawnProjectile()' (respective during execution of 'PlayerAttackOnInput()'); JM (08.05.24)
+    public static event UnityAction OnReload;                               // invoked in 'Realoding()' (respective when Reload-Input was detected); JM (08.05.24)
     #endregion
 
 
@@ -26,78 +26,148 @@ public class PlayerWeaponHandling : MonoBehaviour
 
     //--- SerializedFields Variables ---
     [Header("References")]
+    #region Tooltip
+    [Tooltip("Reference to the Scriptable Object Asset 'InputReader' (to be found in Project Folder -> Resources/ScriptableObjects; will be referenced automatically if not set manually here)")]
+    #endregion
     [SerializeField] private InputReaderSO _inputReader;
+    #region Tooltip
+    [Tooltip("Reference to the Scriptable Object Asset 'PlayerEquipment' (to be found in Project Folder -> Resources/ScriptableObjects; will be referenced automatically if not set manually here)")]
+    #endregion
     [SerializeField] private PlayerEquipmentSO _playerEquipmentSO;
+    #region Tooltip
+    [Tooltip("Reference to the Player Controller Component of the Player Object (will be referenced automatically if not set manually here")]
+    #endregion
     [SerializeField] private PlayerController _playerCtrl;
 
     /* Reload System References */
-    [Tooltip("Reference to the AmmoCounter-Script-Component of the 'AmmoCounter_Panel'-UI-Object in the UI-Canvas (to be Found in the Hierarchy -> UI/Ingame-UI_Canvas/WeaponUI_Panel")]
+    #region Tooltip
+    [Tooltip("Reference to the AmmoCounter-Script-Component of the 'AmmoCounter_Panel'-UI-Object in the UI-Canvas (to be found in the hierarchy -> UI/Ingame-UI_Canvas/WeaponUI_Panel")]
+    #endregion
     [SerializeField] private AmmoCounter _ammoCounter;
 
     /* Gun related References*/
+    #region Tooltip
+    [Tooltip("The transform positon the projectile object shall spawn on instatiation.")]
+    #endregion
     [SerializeField] private Transform _projectileSpawnPos;
+    #region Tooltip
+    [Tooltip("The prefab of the projectile object that shall be spawned.")]
+    #endregion
     [SerializeField] private GameObject _projectilePrefab;
 
     /* Bullet Casing Spawining References*/
-    [SerializeField] private GameObject _bulletCasingPrefab;        // Prefab of the bullet casing
+    #region Tooltip
+    [Tooltip("The transform positon the bullet casing object shall spawn on instatiation.")]
+    #endregion
     [SerializeField] private Transform _casingSpawnPosition;
+    #region Tooltip
+    [Tooltip("The prefab of the bullet casing object that shall be spawned.")]
+    #endregion
+    [SerializeField] private GameObject _bulletCasingPrefab;
 
     /* AudioClip References*/
-    [SerializeField] private AudioClip _shootingSoundClip;                  // Fire sound
+    #region Tooltip
+    [Tooltip("The audio clip that shall be playey on shooting a weapon. (aka the shooting sound.)")]
+    #endregion
+    [SerializeField] private AudioClip _shootingSoundClip;
+    #region Tooltip
+    [Tooltip("The audio clip that shall be playey on reloading a weapon. (aka the reload sound.)")]
+    #endregion
     [SerializeField] private AudioClip _reloadSound;                // Reload sound
 
     /* Camera Shake References */
-    [SerializeField] private CameraRecoilShake cameraShake;
+    #region Tooltip
+    [Tooltip("The 'CameraRecoilShake'-Component, currently a component of the main camera object.")]
+    #endregion
+    [SerializeField] private CameraRecoilShake _cameraShake;
 
     /* Muzzle Flash References */
+    #region Tooltip
+    [Tooltip("The 'MuzzleFlashPlayer'-Object (currently a child object of the player object)")]
+    #endregion
     [SerializeField] private GameObject _muzzleFlash;
+    #region Tooltip
+    [Tooltip("The 'Animator'-Component of the Player (will be referneced automatically if not set manually here.))")]
+    #endregion
     [SerializeField] private Animator _animatorCtrl;
     [Space(5)]
 
 
     [Header("Settings")]
     /* Reload system */
-    //[SerializeField] internal int _minimumBulletCount;            // Will use to do sound for low ammo  sound    
+    //[SerializeField] internal int _minimumBulletCount;            // Will use to do sound for low ammo  sound
+    #region Tooltip
+    [Tooltip("The duration of reload time.")]
+    #endregion
     [SerializeField] private float _reloadTime;                     // To sync with how long the reload animation is    
 
     /* Firerate Settings*/
     private float _nextFireTime;
 
     /* Recoil Settings*/
+    #region Tooltip
+    [Tooltip("Maximum Angle for deviation of the direction the projecctiles will move towards when shooting.")]
+    #endregion
     [SerializeField] private float _maxDeviationAngle = 5f;         // Maximum deviation the bullet will be off from the straight line
+    #region Tooltip
+    [Tooltip("The Time the deviation to the movement direction fot he projectile is applied (in seconds)")]
+    #endregion
     [SerializeField] private float _whenDeviationKicksIn;
 
     /* Shooting Noise Range Settings*/
+    #region Tooltip
+    [Tooltip("The range (in Unity Units) the shooting shall be recognizable by enemies.")]
+    #endregion
     [SerializeField, Range(0.0f, 25.0f), EnableIf("_showNoiseRangeGizmo")] private float _shootingNoiseRange = 10.0f;
+    #region Tooltip
     [Tooltip("Defines whether the green gizmo circle around the player showing the noise range when shooting, is shown in the editor or not.")]
+    #endregion
     [SerializeField] private bool _showNoiseRangeGizmo = true;
     [Space(3)]
 
     /* Camera Shake Settings*/
+    #region Tooltip
+    [Tooltip("Duration of appliance of the camera shake effect when shooting a gun")]
+    #endregion
     [SerializeField] internal float _camShakeDuration = 0.05f;
+    #region Tooltip
+    [Tooltip("The amount the camera shall shake (when shooting gun)")]
+    #endregion
     [SerializeField] internal float _camShakeAmount = 0.08f;
     [Space(5)]
 
 
     [Header("Monitoring Values")]
     /* Reload System */
+    #region Tooltip
+    [Tooltip("The maximum bullet count accordingly to the magazine size of the currently selected weapon.")]
+    #endregion
     [SerializeField, ReadOnly] internal int _maximumBulletCount;
+    #region Tooltip
+    [Tooltip("The current amount of bullets of the currently selected weapon.")]
+    #endregion
     [SerializeField, ReadOnly] internal int _currentBulletCount;
 
     /* Firerate Settings*/
-    [SerializeField, ReadOnly] private float _firerate;
+    #region Tooltip
+    [Tooltip("Determines the frequence of bullets that can be instantiated after one another. (The less the value the shorter the time frequenze of projectile spawning.)")]
+    #endregion
+    [SerializeField, ReadOnly] private float _fireRate;
 
     /* Different boolian Values */
     [SerializeField, ReadOnly] private bool _isShooting;
     [SerializeField, ReadOnly] private bool _isPlayerDead;
     [SerializeField, ReadOnly] private bool _isGamePaused;
-    [SerializeField, ReadOnly] private bool _isArmed;               // Checking whether the player is armed or not
+    [SerializeField, ReadOnly] private bool _isArmed;                                           // Checking whether the player is armed or not
     [SerializeField, ReadOnly] private bool _isFirststWeaponSelected;
     [SerializeField, ReadOnly] private bool _isSecondndWeaponSelected;
     [SerializeField, ReadOnly] private bool _isReloading = false;
     [SerializeField, ReadOnly] private bool _wasWeaponPickedUp;
     [SerializeField, ReadOnly] private Enum_Lib.ELeftMouseButton _leftMouseButtonStatus;
-    [SerializeField, ReadOnly] private float _mouseButtonReleaseTime;                          // Time when the mouse button was last released (used for calculation of deviation)
+    #region Tooltip
+    [Tooltip("The time when the mouse button was released (in seconds)")]
+    #endregion
+    [SerializeField, ReadOnly] private float _mouseButtonReleaseTime;                          // used for calculation of deviation
 
     // --- private Variables ---
     private AudioSource _audioSource;
@@ -353,7 +423,7 @@ public class PlayerWeaponHandling : MonoBehaviour
                     OnPlayerShoot?.Invoke(_isShooting, transform.position, _shootingNoiseRange);
 
                     // reset the Time the shooting logic can be executed the next time (e.g. to ensure the projectiles will be spawned at a specific rate ('fireRate') and not simultaneosly)
-                    _nextFireTime = Time.time + _firerate;
+                    _nextFireTime = Time.time + _fireRate;
                 }
                 else
                 {
@@ -382,7 +452,7 @@ public class PlayerWeaponHandling : MonoBehaviour
 
         _currentBulletCount--;
 
-        OnBulletsnstantiated?.Invoke(_currentBulletCount);                                // informing AmmoCounter about shooting with updated ammount of Bullets          
+        OnBulletsInstantiated?.Invoke(_currentBulletCount);                                // informing AmmoCounter about shooting with updated ammount of Bullets          
     }
 
     private void ExecuteCameraShake()
@@ -413,7 +483,7 @@ public class PlayerWeaponHandling : MonoBehaviour
             _camShakeAmount = 0.08f;
         }
 
-        cameraShake.StartShake(_camShakeDuration, _camShakeAmount);
+        _cameraShake.StartShake(_camShakeDuration, _camShakeAmount);
         Debug.Log("Shake");
     }
 
@@ -591,14 +661,14 @@ public class PlayerWeaponHandling : MonoBehaviour
     }
 
     /// <summary>
-    /// Set the values (<see cref="_maximumBulletCount"/>, <see cref="_currentBulletCount"/>, <see cref="_firerate"/>, <see cref="BaseBullet.ProjectileDamage"/>) respective to the 
+    /// Set the values (<see cref="_maximumBulletCount"/>, <see cref="_currentBulletCount"/>, <see cref="_fireRate"/>, <see cref="BaseBullet.ProjectileDamage"/>) respective to the 
     /// Values of the Weapon currently actively selected by the Player. Also Fires an event to inform the <see cref="AmmoCounter"/> to update the Ammo-UI.
     /// </summary>
     /// <param name="weaponSlot">The First or Second Weapon of <see cref="PlayerEquipmentSO"/></param>
     private void SetWeaponRespectiveValues(BaseWeapon weaponSlot)
     {
         SetBulletCount(weaponSlot);
-        _firerate = weaponSlot.FireRate;
+        _fireRate = weaponSlot.FireRate;
         _projectilePrefab.GetComponent<BaseBullet>().ProjectileDamage = weaponSlot.WeaponDamage;    // Damage
     }
 

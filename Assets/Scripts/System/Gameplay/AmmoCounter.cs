@@ -52,13 +52,13 @@ public class AmmoCounter : MonoBehaviour
     private void OnEnable()
     {
         PlayerWeaponHandling.OnSetBulletCount += OnBulletCountChange;
-        PlayerWeaponHandling.OnBulletsnstantiated += DecreaseAmmoUI;
+        PlayerWeaponHandling.OnBulletsInstantiated += DecreaseAmmoUI;
         PlayerWeaponHandling.OnReload += Reload;
     }
     private void OnDisable()
     {
         PlayerWeaponHandling.OnSetBulletCount -= OnBulletCountChange;
-        PlayerWeaponHandling.OnBulletsnstantiated -= DecreaseAmmoUI;
+        PlayerWeaponHandling.OnBulletsInstantiated -= DecreaseAmmoUI;
         PlayerWeaponHandling.OnReload -= Reload;
     }
 
