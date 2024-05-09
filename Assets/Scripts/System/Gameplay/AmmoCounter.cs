@@ -240,7 +240,7 @@ public class AmmoCounter : MonoBehaviour
     }
 
     // Link to the Reload function from the PlayerShoot Script
-    public void Reload()
+    private void Reload(int currentAmmo)
     {
         if (CurrentAmmo < MagazineSize && !_isReloading)
         {

@@ -1137,6 +1137,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 729844113}
+  - component: {fileID: 866194516}
   m_Layer: 5
   m_Name: UIManager
   m_TagString: Untagged
@@ -1164,6 +1165,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &866194516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 729844112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6454d29c1cfe44c489c2a0f0adc659f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ammoDisplayTxt: {fileID: 0}
+  _reloadHintTxt: {fileID: 0}
+  _uIWeaponImg: {fileID: 0}
+  _reloadHintThreshhold: 5
+  _currentAmmo: 0
+  _maxAmmo: 0
+  _isReloading: 0
 --- !u!1 &846579768
 GameObject:
   m_ObjectHideFlags: 0
@@ -4947,7 +4967,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 830.9454, y: 188}
+  m_SizeDelta: {x: 427.2847, y: 188}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &2582154426052968142
 CanvasRenderer:
@@ -8205,7 +8225,7 @@ GameObject:
   - component: {fileID: 5593955763061594132}
   m_Layer: 5
   m_Name: ReloadHint_Text (TMP)
-  m_TagString: Untagged
+  m_TagString: UI_variableText
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8445,7 +8465,7 @@ GameObject:
   - component: {fileID: 926948677059549553}
   m_Layer: 5
   m_Name: WeaponDepiction_Img
-  m_TagString: Untagged
+  m_TagString: UI_variableImage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8521,7 +8541,7 @@ GameObject:
   - component: {fileID: 4685923780403836381}
   m_Layer: 5
   m_Name: AmmoDisplay_Text (TMP)
-  m_TagString: Untagged
+  m_TagString: UI_variableText
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

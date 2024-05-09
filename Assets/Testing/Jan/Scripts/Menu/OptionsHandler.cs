@@ -55,7 +55,7 @@ namespace UI
                     _effectsSlider = sliderObj.GetComponent<Slider>();
             }
 
-            _optionsMenu = NullChecksAndAutoReferencing.CheckAndGetGameObject(_optionsMenu, "Options", _menuPanels);
+            _optionsMenu = NullChecksAndAutoReferencing.CheckAndGetGameObject(_optionsMenu, "OptionsMenu", _menuPanels);
 
             // Autoreferencing to other Objects
             if (_optionSettingsSO == null)
@@ -72,7 +72,7 @@ namespace UI
 
             if (_optionsMenu == null)
             {
-                _optionsMenu = GameObject.FindGameObjectWithTag("OptionsMenu");
+                _optionsMenu = GameObject.FindGameObjectWithTag("MenuPanel");
                 Debug.Log($"<color=yellow>Caution! Reference for 'OptionsMenu-Panel' was not set in Inspector in '{this}'. Trying to set automatically.</color>");
             }
             #endregion

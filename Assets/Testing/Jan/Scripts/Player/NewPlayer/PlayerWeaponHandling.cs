@@ -15,7 +15,7 @@ public class PlayerWeaponHandling : MonoBehaviour
     public static event UnityAction<bool, Vector3, float> OnPlayerShoot;    // invoked in 'PlayerAttackOnInput()' (when projectile is instantiated); JM (08.05.24)
     public static event UnityAction<int, int> OnSetBulletCount;             // invoked in 'SetBulletCount()' (when new bullet counts are (re)setted, e.g. on weapon switch/pickup); JM (08.05.24)
     public static event UnityAction<int> OnBulletsInstantiated;             // invoked in 'SpawnProjectile()' (respective during execution of 'PlayerAttackOnInput()'); JM (08.05.24)
-    public static event UnityAction OnReload;                               // invoked in 'Realoding()' (respective when Reload-Input was detected); JM (08.05.24)
+    public static event UnityAction<int> OnReload;                               // invoked in 'Realoding()' (respective when Reload-Input was detected); JM (08.05.24)
     #endregion
 
 
@@ -308,8 +308,6 @@ public class PlayerWeaponHandling : MonoBehaviour
         }
     }
 
-    
-
     /// <summary>
     /// CollisionCheck for recognizing collision with WeaponObject
     /// </summary>
@@ -425,14 +423,13 @@ public class PlayerWeaponHandling : MonoBehaviour
                     // reset the Time the shooting logic can be executed the next time (e.g. to ensure the projectiles will be spawned at a specific rate ('fireRate') and not simultaneosly)
                     _nextFireTime = Time.time + _fireRate;
                 }
-                else
-                {
-                    _isShooting = false;
-                    //_animatorCtrl.SetBool("Firing", _isShooting);
-                }
                 break;
 
             case Enum_Lib.ELeftMouseButton.NotPressed:
+                _isShooting = false;
+                break;
+
+            case Enum_Lib.ELeftMouseButton.Released:
                 _isShooting = false;
                 break;
         }
@@ -508,8 +505,7 @@ public class PlayerWeaponHandling : MonoBehaviour
         {
             if (_currentBulletCount < _maximumBulletCount)
             {
-                //_ammoCounter.Reload();
-                OnReload?.Invoke(); // informing AmmoCounter about Reloading
+                _audioSource.PlayOneShot(_reloadSound);
                 StartCoroutine(Reload());
             }
         }
@@ -697,13 +693,11 @@ public class PlayerWeaponHandling : MonoBehaviour
         //_ammoCounter.SetUIAmmoToActiveWeaponAmmo();
     }
 
-
     private float CalculateDeviation()
     {
         float holdTriggerDuration = Mathf.Clamp01((Time.time - _mouseButtonReleaseTime) / _whenDeviationKicksIn); // Normalize the duration between 0 and 1, with a maximum of 5 seconds
         return _maxDeviationAngle * holdTriggerDuration;
     }
-
 
     /// <summary>
     /// Instatiates the amount of projectiles the transmitted 'BaseWeapon-Object' specifies in it's <see cref="BaseWeapon.SpawnedBullets"/> Variable.
@@ -739,25 +733,37 @@ public class PlayerWeaponHandling : MonoBehaviour
     IEnumerator Reload()
     {
         _isReloading = true;
+        float timePerBullet = 1.0f / (float)_maximumBulletCount;           // Time for each bullet to enable
+
         // Play reload animation
 
-        int bulletsLeftToFullMag = _maximumBulletCount - _currentBulletCount;
-        if (bulletsLeftToFullMag > 0)
+        for (int i = _currentBulletCount; i < _maximumBulletCount; i++)
         {
-            _audioSource.PlayOneShot(_reloadSound);
-
-            if (bulletsLeftToFullMag <= _currentBulletCount)
-            {
-                _currentBulletCount += bulletsLeftToFullMag;
-            }
-            else
-            {
-                _currentBulletCount = _maximumBulletCount;
-            }
-
+            _currentBulletCount++;
+            yield return new WaitForSeconds(timePerBullet);
+            OnReload?.Invoke(_currentBulletCount);         // informing UIManager about Reloading
         }
-        yield return new WaitForSeconds(_reloadTime);
-        _isReloading = false;
+        _isReloading = false;                                   // Set reloading flag to false when the reload is complete
+
+        #region old Hoang Approach
+        //int bulletsLeftToFullMag = _maximumBulletCount - _currentBulletCount;
+        //if (bulletsLeftToFullMag > 0)
+        //{
+        //    _audioSource.PlayOneShot(_reloadSound);
+
+        //    if (bulletsLeftToFullMag <= _currentBulletCount)
+        //    {
+        //        _currentBulletCount += bulletsLeftToFullMag;
+        //    }
+        //    else
+        //    {
+        //        _currentBulletCount = _maximumBulletCount;
+        //    }
+
+        //}
+        //yield return new WaitForSeconds(_reloadTime);
+        //_isReloading = false;
+        #endregion
     }
 
     private void SpawnBulletCasing()

@@ -17,6 +17,7 @@ TagManager:
   - UIAmmoCounter
   - UI_variableText
   - UI_variableImage
+  - UI_activatableObject
   layers:
   - Default
   - TransparentFX

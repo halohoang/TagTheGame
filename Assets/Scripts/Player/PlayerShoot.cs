@@ -155,7 +155,7 @@ public class PlayerShoot : MonoBehaviour
         {
             if (_currentBulletCount < _maximumBulletCount)
             {
-                _ammoCounterScript.Reload();
+                //_ammoCounterScript.Reload();
                 StartCoroutine(Reload());
             }
         }

@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace JansLittleHelper
@@ -20,6 +21,32 @@ namespace JansLittleHelper
                     objToCheck = arrayToCheckIn[i];
             }
             return objToCheck;
+        }
+
+        /// <summary>
+        /// Checks the transmitted GameObject-Array for element with the name that matches the transmitted 'nameToCheckFor' and returns it's TextMeshProUGUI-Component of the found Object.
+        /// returns null if no Element in the Array matches the transmitted name.
+        /// </summary>
+        /// <param name="listToCheck">The GameObject-Array that shall be checked for the searched Object</param>
+        /// <param name="nameToCheckFor">The name of the Object searched for</param>
+        /// <returns></returns>
+        public static TextMeshProUGUI GetTMPFromTagList(GameObject[] listToCheck, string nameToCheckFor)
+        {
+            TextMeshProUGUI tmpObj;
+
+            for (int i = 0; i < listToCheck.Length; i++)
+            {
+                if (listToCheck[i].name == nameToCheckFor)
+                {
+                    tmpObj = listToCheck[i].GetComponent<TextMeshProUGUI>();
+
+                    return tmpObj;
+                }
+            }
+
+            Debug.LogError($"<color=red>Caution!</color> No fitting TextMeshProUGUI-Object was found during search in List ('{listToCheck}') -> check if 'nameToCheckFor'-string was written" +
+                $" correctly or for other problem.");
+            return null;
         }
     }
 }
