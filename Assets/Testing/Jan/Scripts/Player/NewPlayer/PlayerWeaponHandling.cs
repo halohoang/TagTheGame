@@ -15,7 +15,8 @@ public class PlayerWeaponHandling : MonoBehaviour
     public static event UnityAction<bool, Vector3, float> OnPlayerShoot;    // invoked in 'PlayerAttackOnInput()' (when projectile is instantiated); JM (08.05.24)
     public static event UnityAction<int, int> OnSetBulletCount;             // invoked in 'SetBulletCount()' (when new bullet counts are (re)setted, e.g. on weapon switch/pickup); JM (08.05.24)
     public static event UnityAction<int> OnBulletsInstantiated;             // invoked in 'SpawnProjectile()' (respective during execution of 'PlayerAttackOnInput()'); JM (08.05.24)
-    public static event UnityAction<int> OnReload;                               // invoked in 'Realoding()' (respective when Reload-Input was detected); JM (08.05.24)
+    public static event UnityAction<int> OnReload;                          // invoked in 'Realoding()' (respective when Reload-Input was detected); JM (08.05.24)
+    public static event UnityAction<BaseWeapon> OnWeaponEquip;              // invoked in 'FirstWeaponEquip()', 'SecondWEaponEquip()', 'HolsterWeapon()' and 'OnCollisionEnter2D()'; JM (10.05.24)
     #endregion
 
 
@@ -252,6 +253,9 @@ public class PlayerWeaponHandling : MonoBehaviour
 
     private void Start()
     {
+        // reset LeftMousebutton Status to Not pressed (otherwise it might be considered as pressed initially if no Input by Player was recognized on Gamestart yet)
+        _leftMouseButtonStatus = Enum_Lib.ELeftMouseButton.NotPressed;
+
         // Set is Armed Status
         //SetIsArmed(/*input 'loaded' value from ScriptableObjec*/); // -> intention is to 'load' isArmed-Data on Scene Start accordingly to the value when player left last scene
 
@@ -332,6 +336,8 @@ public class PlayerWeaponHandling : MonoBehaviour
             EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
 
             Destroy(weapon.gameObject);
+
+            OnWeaponEquip?.Invoke(_playerEquipmentSO.FirstWeapon); // fire event e.g. to inform UIManager for updating UI respectively to pickedup weapon
 
             _wasWeaponPickedUp = true;
         }
@@ -449,6 +455,10 @@ public class PlayerWeaponHandling : MonoBehaviour
 
         _currentBulletCount--;
 
+        // storing the current amount of rounds in mag in ScriptableObject respective to wether First or Second Weapon is Selected
+        _playerEquipmentSO.UpdateRoundsInMag(
+            _isFirststWeaponSelected ? Enum_Lib.ESelectedWeapon.FirstWeapon : Enum_Lib.ESelectedWeapon.SecondWeapon, _currentBulletCount);                         
+
         OnBulletsInstantiated?.Invoke(_currentBulletCount);                                // informing AmmoCounter about shooting with updated ammount of Bullets          
     }
 
@@ -514,7 +524,7 @@ public class PlayerWeaponHandling : MonoBehaviour
     private void FirstWeaponEquip()
     {
         // only equip first weapon if slot is not empty
-        if (_playerEquipmentSO.FirstWeapon.WeaponType != Enum_Lib.EWeaponType.Blank)
+        if (_playerEquipmentSO.FirstWeapon.WeaponType != Enum_Lib.EWeaponType.Blank && !_isReloading)
         {
             SetWeaponEquipBools(true, true, false);
 
@@ -523,13 +533,15 @@ public class PlayerWeaponHandling : MonoBehaviour
             SetWeaponRespectiveValues(_playerEquipmentSO.FirstWeapon);
 
             EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
+
+            OnWeaponEquip?.Invoke(_playerEquipmentSO.FirstWeapon);
         }
     }
 
     private void SecondWeaponEquip()
     {
-        // only equip second weapon if slot is not empty
-        if (_playerEquipmentSO.SecondWeapon.WeaponType != Enum_Lib.EWeaponType.Blank)
+        // only equip second weapon if slot is not empty and is not reloading
+        if (_playerEquipmentSO.SecondWeapon.WeaponType != Enum_Lib.EWeaponType.Blank && !_isReloading)
         {
             SetWeaponEquipBools(true, false, true);
 
@@ -538,6 +550,8 @@ public class PlayerWeaponHandling : MonoBehaviour
             SetWeaponRespectiveValues(_playerEquipmentSO.SecondWeapon);
 
             EquipWeaponAnimation(_isArmed, _playerEquipmentSO.SecondWeapon.WeaponType);
+
+            OnWeaponEquip?.Invoke(_playerEquipmentSO.SecondWeapon);
         }
     }
 
@@ -550,7 +564,11 @@ public class PlayerWeaponHandling : MonoBehaviour
         //if (!_playerCtrl.IsPlayerMoving && !_isArmed)
         //    _animatorCtrl.SetBool("Armed", false);
 
-        EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
+        //EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
+
+        SetWeaponRespectiveValues(_playerEquipmentSO.BlankHands);
+
+        OnWeaponEquip?.Invoke(_playerEquipmentSO.BlankHands);
 
         #region OldHoangApproach
         //if (Input.GetKeyDown(KeyCode.F))
@@ -742,6 +760,10 @@ public class PlayerWeaponHandling : MonoBehaviour
             _currentBulletCount++;
             yield return new WaitForSeconds(timePerBullet);
             OnReload?.Invoke(_currentBulletCount);         // informing UIManager about Reloading
+
+            // storing the current amount of rounds in mag in ScriptableObject respective to wether First or Second Weapon is Selected
+            _playerEquipmentSO.UpdateRoundsInMag(
+                _isFirststWeaponSelected ? Enum_Lib.ESelectedWeapon.FirstWeapon : Enum_Lib.ESelectedWeapon.SecondWeapon, _currentBulletCount);                        
         }
         _isReloading = false;                                   // Set reloading flag to false when the reload is complete
 

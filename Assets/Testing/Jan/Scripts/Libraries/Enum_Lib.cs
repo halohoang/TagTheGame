@@ -51,5 +51,11 @@ namespace EnumLibrary
 
             Blank               // (!)ATTENTION(!) -> 'Blank' allways needs to be the last entry of this Enum!; (JM, 22.02.2024)
         }
+
+        public enum ESelectedWeapon
+        {
+            FirstWeapon,
+            SecondWeapon
+        }
     }
 }

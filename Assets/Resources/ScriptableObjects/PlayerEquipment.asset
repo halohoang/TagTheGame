@@ -21,6 +21,7 @@ MonoBehaviour:
     _magazineSize: 6
     _currentRoundsInMag: 6
     _spawnedBullets: 1
+    _reloadHintThreshhold: 3
   - _inspectorTitle: SMG Values
     _weaponName: SMG
     _weaponType: 1
@@ -29,6 +30,7 @@ MonoBehaviour:
     _magazineSize: 30
     _currentRoundsInMag: 30
     _spawnedBullets: 1
+    _reloadHintThreshhold: 15
   - _inspectorTitle: Shotgun Values
     _weaponName: Shotgun
     _weaponType: 2
@@ -37,6 +39,7 @@ MonoBehaviour:
     _magazineSize: 8
     _currentRoundsInMag: 8
     _spawnedBullets: 5
+    _reloadHintThreshhold: 4
   - _inspectorTitle: EnergyLauncher Values
     _weaponName: Energy Launcher
     _weaponType: 3
@@ -45,4 +48,5 @@ MonoBehaviour:
     _magazineSize: 1
     _currentRoundsInMag: 1
     _spawnedBullets: 1
+    _reloadHintThreshhold: 0
   _isPlayerArmed: 0

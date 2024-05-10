@@ -2,7 +2,7 @@ using EnumLibrary;
 
 public class HandCannon : BaseWeapon
 {
-    public HandCannon(string weaponName, Enum_Lib.EWeaponType weaponType, float weaponDamage, float fireRate, int magazineSize, int currentRoundsInMag, int spawnedBullets)
+    public HandCannon(string weaponName, Enum_Lib.EWeaponType weaponType, float weaponDamage, float fireRate, int magazineSize, int currentRoundsInMag, int spawnedBullets, int reloadHintThreshold)
     {
         _weaponName = weaponName;
         _weaponType = weaponType;
@@ -11,5 +11,6 @@ public class HandCannon : BaseWeapon
         _magazineSize = magazineSize;
         _currentRoundsInMag = currentRoundsInMag;
         _spawnedBullets = spawnedBullets;
+        _reloadHintThreshhold = reloadHintThreshold;
     }
 }
