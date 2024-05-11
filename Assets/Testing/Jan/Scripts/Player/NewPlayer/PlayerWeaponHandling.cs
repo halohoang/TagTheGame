@@ -319,7 +319,7 @@ public class PlayerWeaponHandling : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // Check if collision is a of Type Baseweapon, if so trigger pickup weapon
-        if (collision.gameObject.TryGetComponent(out BaseWeapon weapon))
+        if (collision.gameObject.TryGetComponent(out WeaponTypeObject weapon))
         {
             // set armed boolians
             SetWeaponEquipBools(true, true, false);
