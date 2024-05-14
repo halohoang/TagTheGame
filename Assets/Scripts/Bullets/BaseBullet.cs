@@ -19,20 +19,22 @@ public class BaseBullet : MonoBehaviour
     [SerializeField] protected GameObject _bloodPrefab;
 
 
-    /*Bounce Properties */
-    internal Rigidbody2D _bulletRB2D;
+    /* Bounce Properties */
+    private Rigidbody2D _bulletRB2D;
     [SerializeField] internal float _maxBulletAliveTime = 1.0f; // Maximum of time until the bullet is destroyed
-    internal float _currentBulletLiveTime; // Current time until the bullet is destroyed
+    private float _currentBulletLiveTime; // Current time until the bullet is destroyed
     private GameObject _bullet;
 
     internal float BulletSpeed { get => _bulletSpeed; set => _bulletSpeed = value; }
     internal float ProjectileDamage { get => _projectileDamage; set => _projectileDamage = value; }
+    internal Rigidbody2D BulletRB2D { get => _bulletRB2D; set => _bulletRB2D = value; }
 
     // Function
     protected virtual void Start()
     {
+        // referencing anf value initialization
         _bullet = GetComponent<GameObject>();
-        _bulletRB2D = GetComponent<Rigidbody2D>();
+        BulletRB2D = GetComponent<Rigidbody2D>();
         _currentBulletLiveTime = _maxBulletAliveTime;
 
         //// ignoring the bullet casings objects
@@ -49,7 +51,7 @@ public class BaseBullet : MonoBehaviour
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         // todo: (!) if time read more into bitshifting to really understand whats happening in the query until then stick to the tag solution of hoang; JM (10.11.23)
-        //// reworkd by Jan (09.11.2023)
+        //// reworked by Jan (09.11.2023)
         //ObstacleCollisionCheck(collision);
         //TargetCollisionDetection(collision);
         
@@ -129,6 +131,12 @@ public class BaseBullet : MonoBehaviour
             collision.gameObject.TryGetComponent(out EnemyHealth enemyHealth);
             DealingDamage(enemyHealth);
         }
+
+        /* Contact points spawning blood */
+        ContactPoint2D[] contacts = collision.contacts;
+        Vector2 collisionPoint = contacts[0].point;
+        Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+        Instantiate(_bloodPrefab, collisionPoint, bloodRotation);                       // todo: rework to use object pool instead of newly instantiate blood prefab, JM (14.05.24)
     }
 
     #region Used in LayerMaskCheck
@@ -208,7 +216,7 @@ public class BaseBullet : MonoBehaviour
 
     private void BulletDeactive()
     {
-        if (_bulletRB2D != null)
+        if (BulletRB2D != null)
         {
             _currentBulletLiveTime -= Time.deltaTime;
 

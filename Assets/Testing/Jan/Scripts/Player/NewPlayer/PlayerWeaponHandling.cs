@@ -52,9 +52,9 @@ public class PlayerWeaponHandling : MonoBehaviour
     #endregion
     [SerializeField] private Transform _projectileSpawnPos;
     #region Tooltip
-    [Tooltip("The prefab of the projectile object that shall be spawned.")]
+    [Tooltip("The prefabs of the projectile object that shall be spawned.")]
     #endregion
-    [SerializeField] private GameObject _projectilePrefab;
+    [SerializeField] private GameObject[] _projectilePrefabs;
 
     /* Bullet Casing Spawining References*/
     #region Tooltip
@@ -253,6 +253,9 @@ public class PlayerWeaponHandling : MonoBehaviour
 
     private void Start()
     {
+        // Array/List Instantiation
+        _projectilePrefabs = new GameObject[2] { Resources.Load<GameObject>("Prefabs/Projectile/PlayerProjectile"), Resources.Load<GameObject>("Prefabs/Projectile/BouncingProjectile") };
+
         // reset LeftMousebutton Status to Not pressed (otherwise it might be considered as pressed initially if no Input by Player was recognized on Gamestart yet)
         _leftMouseButtonStatus = Enum_Lib.ELeftMouseButton.NotPressed;
 
@@ -457,7 +460,7 @@ public class PlayerWeaponHandling : MonoBehaviour
 
         // storing the current amount of rounds in mag in ScriptableObject respective to wether First or Second Weapon is Selected
         _playerEquipmentSO.UpdateRoundsInMag(
-            _isFirststWeaponSelected ? Enum_Lib.ESelectedWeapon.FirstWeapon : Enum_Lib.ESelectedWeapon.SecondWeapon, _currentBulletCount);                         
+            _isFirststWeaponSelected ? Enum_Lib.ESelectedWeapon.FirstWeapon : Enum_Lib.ESelectedWeapon.SecondWeapon, _currentBulletCount);
 
         OnBulletsInstantiated?.Invoke(_currentBulletCount);                                // informing AmmoCounter about shooting with updated ammount of Bullets          
     }
@@ -683,7 +686,11 @@ public class PlayerWeaponHandling : MonoBehaviour
     {
         SetBulletCount(weaponSlot);
         _fireRate = weaponSlot.FireRate;
-        _projectilePrefab.GetComponent<BaseBullet>().ProjectileDamage = weaponSlot.WeaponDamage;    // Damage
+
+        if (weaponSlot.WeaponType == Enum_Lib.EWeaponType.EnergyLauncher)
+            _projectilePrefabs[1].GetComponent<BaseBullet>().ProjectileDamage = weaponSlot.WeaponDamage;    // Damage of BouncingProjectile
+        else
+            _projectilePrefabs[0].GetComponent<BaseBullet>().ProjectileDamage = weaponSlot.WeaponDamage;    // Damage of normal PlayerProjectile
     }
 
     /// <summary>
@@ -726,9 +733,11 @@ public class PlayerWeaponHandling : MonoBehaviour
         // instantiate (spawn) the projectiles
         for (int i = 0; i < weaponSlot.SpawnedBullets; i++)
         {
-            /*GameObject bullet = */
-            Instantiate(_projectilePrefab, _projectileSpawnPos.position, GetProjectileRotation());
-            //Rigidbody2D bulletRigidBody2D = bullet.GetComponent<Rigidbody2D>();
+            // projectile instantiation
+            if (weaponSlot.WeaponType == Enum_Lib.EWeaponType.EnergyLauncher)
+                Instantiate(_projectilePrefabs[1], _projectileSpawnPos.position, GetProjectileRotation());  // instantiates BouncingProjectile
+            else
+                Instantiate(_projectilePrefabs[0], _projectileSpawnPos.position, GetProjectileRotation());  // instantiates normal PlayerProjectiles
         }
     }
 
@@ -763,7 +772,7 @@ public class PlayerWeaponHandling : MonoBehaviour
 
             // storing the current amount of rounds in mag in ScriptableObject respective to wether First or Second Weapon is Selected
             _playerEquipmentSO.UpdateRoundsInMag(
-                _isFirststWeaponSelected ? Enum_Lib.ESelectedWeapon.FirstWeapon : Enum_Lib.ESelectedWeapon.SecondWeapon, _currentBulletCount);                        
+                _isFirststWeaponSelected ? Enum_Lib.ESelectedWeapon.FirstWeapon : Enum_Lib.ESelectedWeapon.SecondWeapon, _currentBulletCount);
         }
         _isReloading = false;                                   // Set reloading flag to false when the reload is complete
 

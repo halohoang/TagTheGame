@@ -1,6 +1,9 @@
 using UnityEngine;
 using NaughtyAttributes;
 
+/// <summary>
+/// Class for defining the behaviour for the bullet projectile shot by enemy-characters
+/// </summary>
 public class EnemyBullet : BaseBullet
 {
     [SerializeField, ReadOnly] private GameObject[] _enemyObjects;
@@ -32,7 +35,7 @@ public class EnemyBullet : BaseBullet
 
     private new void Update()
     {
-        _bulletRB2D.velocity = transform.right * BulletSpeed;
+        BulletRB2D.velocity = transform.right * BulletSpeed;
 
         base.Update();
     }
@@ -43,13 +46,13 @@ public class EnemyBullet : BaseBullet
 
         TargetCollisionCheck(collision, "Player");
 
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            /* Contact points spawning blood */
-            ContactPoint2D[] contacts = collision.contacts;
-            Vector2 collisionPoint = contacts[0].point;
-            Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
-            Instantiate(_bloodPrefab, collisionPoint, bloodRotation);
-        }
+        //if (collision.gameObject.CompareTag("Player"))
+        //{
+        //    /* Contact points spawning blood */
+        //    ContactPoint2D[] contacts = collision.contacts;
+        //    Vector2 collisionPoint = contacts[0].point;
+        //    Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+        //    Instantiate(_bloodPrefab, collisionPoint, bloodRotation);
+        //}
     }
 }
