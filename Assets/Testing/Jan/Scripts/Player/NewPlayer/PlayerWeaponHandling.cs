@@ -160,8 +160,8 @@ public class PlayerWeaponHandling : MonoBehaviour
     [SerializeField, ReadOnly] private bool _isPlayerDead;
     [SerializeField, ReadOnly] private bool _isGamePaused;
     [SerializeField, ReadOnly] private bool _isArmed;                                           // Checking whether the player is armed or not
-    [SerializeField, ReadOnly] private bool _isFirststWeaponSelected;
-    [SerializeField, ReadOnly] private bool _isSecondndWeaponSelected;
+    [SerializeField, ReadOnly] private bool _isFirstWeaponSelected;
+    [SerializeField, ReadOnly] private bool _isSecondWeaponSelected;
     [SerializeField, ReadOnly] private bool _isReloading = false;
     [SerializeField, ReadOnly] private bool _wasWeaponPickedUp;
     [SerializeField, ReadOnly] private Enum_Lib.ELeftMouseButton _leftMouseButtonStatus;
@@ -451,7 +451,7 @@ public class PlayerWeaponHandling : MonoBehaviour
     private void SpawnProjectile()
     {
         // Enable Projectiles (from Object pool and respective to 'SpawnedBullet'-Value of the first or second Weapon)
-        if (_isFirststWeaponSelected)
+        if (_isFirstWeaponSelected)
             ActivateProjectiles(_playerEquipmentSO.FirstWeapon);
         else
             ActivateProjectiles(_playerEquipmentSO.SecondWeapon);
@@ -460,7 +460,7 @@ public class PlayerWeaponHandling : MonoBehaviour
 
         // storing the current amount of rounds in mag in ScriptableObject respective to wether First or Second Weapon is Selected
         _playerEquipmentSO.UpdateRoundsInMag(
-            _isFirststWeaponSelected ? Enum_Lib.ESelectedWeapon.FirstWeapon : Enum_Lib.ESelectedWeapon.SecondWeapon, _currentBulletCount);
+            _isFirstWeaponSelected ? Enum_Lib.ESelectedWeapon.FirstWeapon : Enum_Lib.ESelectedWeapon.SecondWeapon, _currentBulletCount);
 
         OnBulletsInstantiated?.Invoke(_currentBulletCount);                                // informing AmmoCounter about shooting with updated ammount of Bullets          
     }
@@ -500,17 +500,7 @@ public class PlayerWeaponHandling : MonoBehaviour
     private bool CanFire()
     {
         return Time.time > _nextFireTime && !_isGamePaused;
-    }
-
-    /// <summary>
-    /// Plays transmitted Audioclip if it is not null
-    /// </summary>
-    /// <param name="clipToPlay"></param>
-    private void PlayAudio(AudioClip clipToPlay)
-    {
-        if (clipToPlay != null)
-            _audioSource.PlayOneShot(clipToPlay);
-    }
+    }    
 
     private void Realoding()
     {
@@ -522,6 +512,45 @@ public class PlayerWeaponHandling : MonoBehaviour
                 StartCoroutine(Reload());
             }
         }
+    }
+    IEnumerator Reload()
+    {
+        _isReloading = true;
+        float timePerBullet = 1.0f / (float)_maximumBulletCount;           // Time for each bullet to enable
+
+        // Play reload animation
+
+        for (int i = _currentBulletCount; i < _maximumBulletCount; i++)
+        {
+            _currentBulletCount++;
+            yield return new WaitForSeconds(timePerBullet);
+            OnReload?.Invoke(_currentBulletCount);         // informing UIManager about Reloading
+
+            // storing the current amount of rounds in mag in ScriptableObject respective to wether First or Second Weapon is Selected
+            _playerEquipmentSO.UpdateRoundsInMag(
+                _isFirstWeaponSelected ? Enum_Lib.ESelectedWeapon.FirstWeapon : Enum_Lib.ESelectedWeapon.SecondWeapon, _currentBulletCount);
+        }
+        _isReloading = false;                                   // Set reloading flag to false when the reload is complete
+
+        #region old Hoang Approach
+        //int bulletsLeftToFullMag = _maximumBulletCount - _currentBulletCount;
+        //if (bulletsLeftToFullMag > 0)
+        //{
+        //    _audioSource.PlayOneShot(_reloadSound);
+
+        //    if (bulletsLeftToFullMag <= _currentBulletCount)
+        //    {
+        //        _currentBulletCount += bulletsLeftToFullMag;
+        //    }
+        //    else
+        //    {
+        //        _currentBulletCount = _maximumBulletCount;
+        //    }
+
+        //}
+        //yield return new WaitForSeconds(_reloadTime);
+        //_isReloading = false;
+        #endregion
     }
 
     private void FirstWeaponEquip()
@@ -665,7 +694,7 @@ public class PlayerWeaponHandling : MonoBehaviour
     }
 
     /// <summary>
-    /// Set the boolians <see cref="_isArmed"/>, <see cref="_isFirststWeaponSelected"/> and <see cref="_isSecondndWeaponSelected"/>.
+    /// Set the boolians <see cref="_isArmed"/>, <see cref="_isFirstWeaponSelected"/> and <see cref="_isSecondWeaponSelected"/>.
     /// </summary>
     /// <param name="armedStatus">is the player armed?</param>
     /// <param name="firstWeaponEquip">is the first weapon selected?</param>
@@ -673,8 +702,8 @@ public class PlayerWeaponHandling : MonoBehaviour
     private void SetWeaponEquipBools(bool armedStatus, bool firstWeaponEquip, bool secondWeaponEquip)
     {
         _isArmed = armedStatus;
-        _isFirststWeaponSelected = firstWeaponEquip;
-        _isSecondndWeaponSelected = secondWeaponEquip;
+        _isFirstWeaponSelected = firstWeaponEquip;
+        _isSecondWeaponSelected = secondWeaponEquip;
     }
 
     /// <summary>
@@ -786,53 +815,23 @@ public class PlayerWeaponHandling : MonoBehaviour
 
         projectileRotation *= Quaternion.Euler(0f, 0f, randomAngle);    // Apply rotation around the Z-axis
         return projectileRotation;
-    }
-
-    IEnumerator Reload()
-    {
-        _isReloading = true;
-        float timePerBullet = 1.0f / (float)_maximumBulletCount;           // Time for each bullet to enable
-
-        // Play reload animation
-
-        for (int i = _currentBulletCount; i < _maximumBulletCount; i++)
-        {
-            _currentBulletCount++;
-            yield return new WaitForSeconds(timePerBullet);
-            OnReload?.Invoke(_currentBulletCount);         // informing UIManager about Reloading
-
-            // storing the current amount of rounds in mag in ScriptableObject respective to wether First or Second Weapon is Selected
-            _playerEquipmentSO.UpdateRoundsInMag(
-                _isFirststWeaponSelected ? Enum_Lib.ESelectedWeapon.FirstWeapon : Enum_Lib.ESelectedWeapon.SecondWeapon, _currentBulletCount);
-        }
-        _isReloading = false;                                   // Set reloading flag to false when the reload is complete
-
-        #region old Hoang Approach
-        //int bulletsLeftToFullMag = _maximumBulletCount - _currentBulletCount;
-        //if (bulletsLeftToFullMag > 0)
-        //{
-        //    _audioSource.PlayOneShot(_reloadSound);
-
-        //    if (bulletsLeftToFullMag <= _currentBulletCount)
-        //    {
-        //        _currentBulletCount += bulletsLeftToFullMag;
-        //    }
-        //    else
-        //    {
-        //        _currentBulletCount = _maximumBulletCount;
-        //    }
-
-        //}
-        //yield return new WaitForSeconds(_reloadTime);
-        //_isReloading = false;
-        #endregion
-    }
+    }    
 
     private void SpawnBulletCasing()
     {
         // Instantiate a bullet casing at the specified spawn point
         Quaternion casingRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
         Instantiate(_bulletCasingPrefab, _casingSpawnPosition.position, casingRotation);
+    }
+
+    /// <summary>
+    /// Plays transmitted Audioclip if it is not null
+    /// </summary>
+    /// <param name="clipToPlay"></param>
+    private void PlayAudio(AudioClip clipToPlay)
+    {
+        if (clipToPlay != null)
+            _audioSource.PlayOneShot(clipToPlay);
     }
 
     private void SetIsGamePaused(bool isGamePaused)
@@ -856,7 +855,7 @@ public class PlayerWeaponHandling : MonoBehaviour
             PlayAudio(_shootingSoundClip);
 
             // 2. Instantiate Projectiles (respective to 'SpawnedBullet'-Value of the first or second Weapon)
-            if (_isFirststWeaponSelected)
+            if (_isFirstWeaponSelected)
                 ActivateProjectiles(_playerEquipmentSO.FirstWeapon);
             else
                 ActivateProjectiles(_playerEquipmentSO.SecondWeapon);

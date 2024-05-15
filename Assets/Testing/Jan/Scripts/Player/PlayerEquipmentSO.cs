@@ -37,7 +37,7 @@ namespace ScriptableObjects
         // --- Properties ---
         internal BaseWeapon FirstWeapon { get => _firstWeapon; private set => _firstWeapon = value; }
         internal BaseWeapon SecondWeapon { get => _secondWeapon; private set => _secondWeapon = value; }
-        internal BaseWeapon BlankHands { get => _blankHands; set => _blankHands = value; }
+        internal BaseWeapon BlankHands { get => _blankHands; private set => _blankHands = value; }
         internal bool IsPlayerArmed { get => _isPlayerArmed; private set => _isPlayerArmed = value; }
         #endregion
 
