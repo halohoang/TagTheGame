@@ -23,17 +23,15 @@ public class BaseBullet : MonoBehaviour
     private Rigidbody2D _bulletRB2D;
     [SerializeField] internal float _maxBulletAliveTime = 1.0f; // Maximum of time until the bullet is destroyed
     private float _currentBulletLiveTime; // Current time until the bullet is destroyed
-    private GameObject _bullet;
 
     internal float BulletSpeed { get => _bulletSpeed; set => _bulletSpeed = value; }
     internal float ProjectileDamage { get => _projectileDamage; set => _projectileDamage = value; }
     internal Rigidbody2D BulletRB2D { get => _bulletRB2D; set => _bulletRB2D = value; }
-
+    
     // Function
     protected virtual void Start()
     {
         // referencing anf value initialization
-        _bullet = GetComponent<GameObject>();
         BulletRB2D = GetComponent<Rigidbody2D>();
         _currentBulletLiveTime = _maxBulletAliveTime;
 
@@ -54,13 +52,13 @@ public class BaseBullet : MonoBehaviour
         //// reworked by Jan (09.11.2023)
         //ObstacleCollisionCheck(collision);
         //TargetCollisionDetection(collision);
-        
+
         // checking for collision with obstacle objects
         if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Door")/* || collision.gameObject.CompareTag("Bullet")*/)
         {
             gameObject.SetActive(false);
             Debug.Log($"'<color=mageta>{gameObject.name}</color>': was disabled due to collision with '{collision.gameObject.name}'");
-        }        
+        }
         #region Original Code by Hoang
         //// origianl Code by Hoang
         //if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Door") || collision.gameObject.CompareTag("Bullet"))
@@ -115,28 +113,24 @@ public class BaseBullet : MonoBehaviour
     /// </summary>
     /// <param name="collision"></param>
     /// <param name="tagOfTargetObj">the Tag of the target Object to check for Damage dealing ("Player" or "Enemy")</param>
-    protected void TargetCollisionCheck(Collision2D collision, string tagOfTargetObj)
+    protected void TargetCollisionCheck(Collision2D collision)
     {
         // todo: maybe rather call this methon din the this.OnCollisionEnter2D() and check for simple collision.gameObject.CompareTag("Plaser"/"Enemy") and execute accordingly DealingDamage(plyerHealth/EnemyHealth); JM (11.11.2023)
 
-        // if transmitted tag is 'Player' continue with calling TakeDamage() of the PlayerHealth.cs
-        if (tagOfTargetObj == "Player")
-        {
-            collision.gameObject.TryGetComponent(out PlayerStats playerHealth);
-            DealingDamage(playerHealth);
+        // if is 'Player' continue with calling TakeDamage() of the PlayerStats.cs
+        if (collision.gameObject.TryGetComponent(out PlayerStats playerStats))
+        {            
+            DealingDamage(playerStats);
+            SpawnBloodSplatter(collision);
+            Debug.Log($" 'TargetCollisionCheck()' for player was called");
         }
-        // else if transmitted tag is 'Enemy' continue with calling TakeDamage() of the EnemyHealth.cs instead
-        else if (tagOfTargetObj == "Enemy")
-        {
-            collision.gameObject.TryGetComponent(out EnemyHealth enemyHealth);
+        // else if is 'Enemy' continue with calling TakeDamage() of the EnemyHealth.cs instead
+        else if (collision.gameObject.TryGetComponent(out EnemyHealth enemyHealth))
+        {            
             DealingDamage(enemyHealth);
+            SpawnBloodSplatter(collision);
+            Debug.Log($" 'TargetCollisionCheck()' for enemy was called");
         }
-
-        /* Contact points spawning blood */
-        ContactPoint2D[] contacts = collision.contacts;
-        Vector2 collisionPoint = contacts[0].point;
-        Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
-        Instantiate(_bloodPrefab, collisionPoint, bloodRotation);                       // todo: rework to use object pool instead of newly instantiate blood prefab, JM (14.05.24)
     }
 
     #region Used in LayerMaskCheck
@@ -195,6 +189,19 @@ public class BaseBullet : MonoBehaviour
 
             Debug.Log($"'<color=mageta>{gameObject.name}</color>: was disabled due to collision with '{healthScript.gameObject.name}'");
         }
+    }
+
+    /// <summary>
+    /// Instantiates prefab for bloot splatter (<see cref="_bloodPrefab"/>) at the point of collision.
+    /// </summary>
+    /// <param name="collision"></param>
+    private void SpawnBloodSplatter(Collision2D collision)
+    {
+        /* Contact points spawning blood */
+        ContactPoint2D[] contacts = collision.contacts;
+        Vector2 collisionPoint = contacts[0].point;
+        Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+        Instantiate(_bloodPrefab, collisionPoint, bloodRotation);                       // todo: rework to use object pool instead of newly instantiate blood prefab, JM (14.05.24)
     }
 
     /// <summary>

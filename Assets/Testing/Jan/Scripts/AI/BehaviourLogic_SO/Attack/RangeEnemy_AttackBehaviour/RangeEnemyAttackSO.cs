@@ -178,7 +178,7 @@ namespace ScriptableObjects
 
             if (EnemyBullet == null)    // shoot a warning if no bullet can be activated
             {
-                Debug.LogWarning($"<color=yellow>CAUTION!</color> no more inactive {EnemyBulletObjectPool.Instance.ObjectToPool.name} left in the {EnemyBulletObjectPool.Instance.gameObject.name}. You porbably should consider to increase the amount of Objects to pool in the Inspector of {EnemyBulletObjectPool.Instance.ObjectToPool.name}.");
+                Debug.LogError($"<color=red>CAUTION!</color> no more inactive {EnemyBulletObjectPool.Instance.ObjectToPool.name} left in the {EnemyBulletObjectPool.Instance.gameObject.name}. You porbably should consider to increase the amount of Objects to pool in the Inspector of {EnemyBulletObjectPool.Instance.ObjectToPool.name}.");
             }
             // only activate a bullet prefab as long as the max bullet salve amount was not reached and the BulletActivationTimer is greater than 0 (means the Activation DelayTimer did not yet ended)
             else if (EnemyBullet != null && _amountOfBulletsShot < _maxBulletsShotPerBurst && _bulletActivationTimer <= 0.0f)

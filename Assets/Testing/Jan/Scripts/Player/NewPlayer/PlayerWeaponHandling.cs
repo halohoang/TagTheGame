@@ -450,11 +450,11 @@ public class PlayerWeaponHandling : MonoBehaviour
     /// </summary>
     private void SpawnProjectile()
     {
-        // Instantiate Projectiles (respective to 'SpawnedBullet'-Value of the first or second Weapon)
+        // Enable Projectiles (from Object pool and respective to 'SpawnedBullet'-Value of the first or second Weapon)
         if (_isFirststWeaponSelected)
-            InstatiateProjectiles(_playerEquipmentSO.FirstWeapon);
+            ActivateProjectiles(_playerEquipmentSO.FirstWeapon);
         else
-            InstatiateProjectiles(_playerEquipmentSO.SecondWeapon);
+            ActivateProjectiles(_playerEquipmentSO.SecondWeapon);
 
         _currentBulletCount--;
 
@@ -728,16 +728,47 @@ public class PlayerWeaponHandling : MonoBehaviour
     /// Instatiates the amount of projectiles the transmitted 'BaseWeapon-Object' specifies in it's <see cref="BaseWeapon.SpawnedBullets"/> Variable.
     /// </summary>
     /// <param name="weaponSlot">The First or Second Weapon</param>
-    private void InstatiateProjectiles(BaseWeapon weaponSlot)
+    private void ActivateProjectiles(BaseWeapon weaponSlot)
     {
-        // instantiate (spawn) the projectiles
+        // activate (spawn) the projectiles
         for (int i = 0; i < weaponSlot.SpawnedBullets; i++)
         {
-            // projectile instantiation
+            // projectile activation
             if (weaponSlot.WeaponType == Enum_Lib.EWeaponType.EnergyLauncher)
-                Instantiate(_projectilePrefabs[1], _projectileSpawnPos.position, GetProjectileRotation());  // instantiates BouncingProjectile
+            {
+                // enables normal PlayerProjectiles from Object Pool
+                ActivateFromObjectPool(EnLaunBulletObjectPool.Instance.GetInactivePooledObject(), _projectileSpawnPos.position, GetProjectileRotation());
+                Debug.Log($"PlayerBullet should have been enabled from pool");
+                //Instantiate(_projectilePrefabs[1], _projectileSpawnPos.position, GetProjectileRotation());  // instantiates BouncingProjectile
+            }
             else
-                Instantiate(_projectilePrefabs[0], _projectileSpawnPos.position, GetProjectileRotation());  // instantiates normal PlayerProjectiles
+            {
+                // enables normal PlayerProjectiles from Object Pool
+                ActivateFromObjectPool(PlayerBulletObjectPool.Instance.GetInactivePooledObject(), _projectileSpawnPos.position, GetProjectileRotation());
+                Debug.Log($"PlayerBullet should have been enabled from pool");
+                //Instantiate(_projectilePrefabs[0], _projectileSpawnPos.position, GetProjectileRotation());  // instantiates normal PlayerProjectiles
+            }
+        }
+    }
+
+    /// <summary>
+    /// Enables a transmitted object from an objectpool (of course it needs to be an inactive) and set its position and rotation respective to the transmitted values.
+    /// </summary>
+    /// <param name="objToActivate"></param>
+    /// <param name="spawnPosition"></param>
+    /// <param name="rotation"></param>
+    private void ActivateFromObjectPool(GameObject objToActivate, Vector3 spawnPosition, Quaternion rotation)
+    {
+        // if no inactive object -> error msg
+        if (objToActivate == null)
+        {
+            Debug.LogError($"<color=red>CAUTION!</color> no more inactive {PlayerBulletObjectPool.Instance.ObjectToPool.name} left in the {PlayerBulletObjectPool.Instance.gameObject.name}. You porbably should consider to increase the amount of Objects to pool in the Inspector of {PlayerBulletObjectPool.Instance.ObjectToPool.name}.");
+        }
+        else
+        {
+            objToActivate.transform.position = spawnPosition;
+            objToActivate.transform.rotation = rotation;
+            objToActivate.SetActive(true);
         }
     }
 
@@ -826,9 +857,9 @@ public class PlayerWeaponHandling : MonoBehaviour
 
             // 2. Instantiate Projectiles (respective to 'SpawnedBullet'-Value of the first or second Weapon)
             if (_isFirststWeaponSelected)
-                InstatiateProjectiles(_playerEquipmentSO.FirstWeapon);
+                ActivateProjectiles(_playerEquipmentSO.FirstWeapon);
             else
-                InstatiateProjectiles(_playerEquipmentSO.SecondWeapon);
+                ActivateProjectiles(_playerEquipmentSO.SecondWeapon);
 
             // 3. set shooting animation
             //_animator.SetBool("Firing", true);
