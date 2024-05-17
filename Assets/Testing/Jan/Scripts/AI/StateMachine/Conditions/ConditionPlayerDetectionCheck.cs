@@ -21,7 +21,9 @@ namespace StateMashine
         [SerializeField, Range(0.0f, 20.0f)] private float _fOVRadius;
         [SerializeField, Range(0.0f, 360.0f), ReadOnly] private float _fOVAngle = 180.0f;   // todo: disable 'Readonly' on real implementation; JM (30.10.2023)
         //[SerializeField, Range(0.0f, 50.0f)] private float _viewDistance = 10.0f;
+        [Tooltip("The LayerMask of the object that shall be recognized as target by this enemy.")]
         [SerializeField] private LayerMask _targetDetectionMask;
+        [Tooltip("The LayerMask of the object that shall be recognized as obstacle for the vision (like walls, or doors) by this enemy. Like Objects this enemy can't look through.")]
         [SerializeField] private LayerMask _obstructionMask;
         [SerializeField, ReadOnly] private bool _isPlayerDetected = false;     // needed for estimating if player was detected
         [SerializeField, ReadOnly] private bool _isEnemyDead;
@@ -55,7 +57,7 @@ namespace StateMashine
 
                 if (Vector2.Angle(transform.right, directionToTarget) < FOVAngle * 0.5)
                 {
-                    float distanceToTarget = Vector2.Distance(transform.position, targetCollider.transform.position);   // todo: maybe cahnge 'V2.Distance()' to (a-b).sqrMagnitude for performance reasons?; JM (03.11.2023)
+                    float distanceToTarget = (transform.position - targetCollider.transform.position).sqrMagnitude; // distance calculation (changed that from 'V2.Distance()' because of performace reasons); JM (17.05.2024)
 
                     if (!Physics2D.Raycast(transform.position, directionToTarget, distanceToTarget, _obstructionMask))
                     {

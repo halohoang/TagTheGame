@@ -1177,13 +1177,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6454d29c1cfe44c489c2a0f0adc659f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ammoDisplayTxt: {fileID: 0}
-  _reloadHintTxt: {fileID: 0}
-  _uIWeaponImg: {fileID: 0}
-  _reloadHintThreshhold: 5
+  _ammoDisplayTxt: {fileID: 4685923780403836381}
+  _reloadHintTxt: {fileID: 5593955763061594132}
+  _uIWeaponImg: {fileID: 926948677059549553}
   _currentAmmo: 0
   _maxAmmo: 0
   _isReloading: 0
+  _selectedWeaponReloadThreshold: 0
+  _weaponSprites: []
 --- !u!1 &846579768
 GameObject:
   m_ObjectHideFlags: 0
@@ -8518,7 +8519,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 29cb0656daf24594ca8a3144b19a809f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d6d49bd8fe8512644a4da57ea3fbdcce, type: 2}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

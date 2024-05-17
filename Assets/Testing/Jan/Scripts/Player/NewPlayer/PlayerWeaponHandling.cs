@@ -41,20 +41,16 @@ public class PlayerWeaponHandling : MonoBehaviour
     [SerializeField] private PlayerController _playerCtrl;
 
     /* Reload System References */
-    #region Tooltip
-    [Tooltip("Reference to the AmmoCounter-Script-Component of the 'AmmoCounter_Panel'-UI-Object in the UI-Canvas (to be found in the hierarchy -> UI/Ingame-UI_Canvas/WeaponUI_Panel")]
-    #endregion
-    [SerializeField] private AmmoCounter _ammoCounter;
+    //#region Tooltip
+    //[Tooltip("Reference to the AmmoCounter-Script-Component of the 'AmmoCounter_Panel'-UI-Object in the UI-Canvas (to be found in the hierarchy -> UI/Ingame-UI_Canvas/WeaponUI_Panel")]
+    //#endregion
+    //[SerializeField] private AmmoCounter _ammoCounter;
 
     /* Gun related References*/
     #region Tooltip
     [Tooltip("The transform positon the projectile object shall spawn on instatiation.")]
     #endregion
-    [SerializeField] private Transform _projectileSpawnPos;
-    #region Tooltip
-    [Tooltip("The prefabs of the projectile object that shall be spawned.")]
-    #endregion
-    [SerializeField] private GameObject[] _projectilePrefabs;
+    [SerializeField] private Transform _projectileSpawnPos;    
 
     /* Bullet Casing Spawining References*/
     #region Tooltip
@@ -253,9 +249,6 @@ public class PlayerWeaponHandling : MonoBehaviour
 
     private void Start()
     {
-        // Array/List Instantiation
-        _projectilePrefabs = new GameObject[2] { Resources.Load<GameObject>("Prefabs/Projectile/PlayerProjectile"), Resources.Load<GameObject>("Prefabs/Projectile/BouncingProjectile") };
-
         // reset LeftMousebutton Status to Not pressed (otherwise it might be considered as pressed initially if no Input by Player was recognized on Gamestart yet)
         _leftMouseButtonStatus = Enum_Lib.ELeftMouseButton.NotPressed;
 
@@ -500,7 +493,7 @@ public class PlayerWeaponHandling : MonoBehaviour
     private bool CanFire()
     {
         return Time.time > _nextFireTime && !_isGamePaused;
-    }    
+    }
 
     private void Realoding()
     {
@@ -708,18 +701,32 @@ public class PlayerWeaponHandling : MonoBehaviour
 
     /// <summary>
     /// Set the values (<see cref="_maximumBulletCount"/>, <see cref="_currentBulletCount"/>, <see cref="_fireRate"/>, <see cref="BaseBullet.ProjectileDamage"/>) respective to the 
-    /// Values of the Weapon currently actively selected by the Player. Also Fires an event to inform the <see cref="AmmoCounter"/> to update the Ammo-UI.
+    /// Values of the Weapon currently actively selected by the Player. Also Fires an event to inform the <see cref="UIManager"/> to update the Ammo-UI.
     /// </summary>
     /// <param name="weaponSlot">The First or Second Weapon of <see cref="PlayerEquipmentSO"/></param>
     private void SetWeaponRespectiveValues(BaseWeapon weaponSlot)
     {
+        // Set bullet count and fire rate
         SetBulletCount(weaponSlot);
         _fireRate = weaponSlot.FireRate;
 
+        // set projectile Damage
+        GameObject[] projectiles;
+
         if (weaponSlot.WeaponType == Enum_Lib.EWeaponType.EnergyLauncher)
-            _projectilePrefabs[1].GetComponent<BaseBullet>().ProjectileDamage = weaponSlot.WeaponDamage;    // Damage of BouncingProjectile
+        {
+            projectiles = EnLaunBulletObjectPool.Instance.GetAllPooledObjects();
+
+            for (int i = 0; i < projectiles.Length; i++)
+                projectiles[i].GetComponent<BouncingBullet>().ProjectileDamage = weaponSlot.WeaponDamage;     // Set Damage of BouncingProjectiles            
+        }
         else
-            _projectilePrefabs[0].GetComponent<BaseBullet>().ProjectileDamage = weaponSlot.WeaponDamage;    // Damage of normal PlayerProjectile
+        {
+            projectiles = PlayerBulletObjectPool.Instance.GetAllPooledObjects();
+
+            for (int i = 0; i < projectiles.Length; i++)
+                projectiles[i].GetComponent<PlayerBullet>().ProjectileDamage = weaponSlot.WeaponDamage;     // Set Damage of normal PlayerProjectiles            
+        }
     }
 
     /// <summary>
@@ -815,7 +822,7 @@ public class PlayerWeaponHandling : MonoBehaviour
 
         projectileRotation *= Quaternion.Euler(0f, 0f, randomAngle);    // Apply rotation around the Z-axis
         return projectileRotation;
-    }    
+    }
 
     private void SpawnBulletCasing()
     {

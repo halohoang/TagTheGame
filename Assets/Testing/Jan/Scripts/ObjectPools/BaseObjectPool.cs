@@ -22,20 +22,14 @@ public class BaseObjectPool : MonoBehaviour
     private List<GameObject> _inactivePooledObjects;
     private List<GameObject> _activePooledObjects;
 
-    public GameObject ObjectToPool { get => _objectToPool; private set => _objectToPool = value; }
+    internal GameObject ObjectToPool { get => _objectToPool; private set => _objectToPool = value; }
+    internal int AmountToPool { get => _amountToPool; private set => _amountToPool = value; }
 
     //------------------------------ Methods ------------------------------
 
     //---------- Unity-Executed Methods ----------
     protected virtual void Awake()
     {
-        //#region Singleton
-        //if (Instance != null && Instance != this)
-        //    Destroy(this);
-        //else
-        //    Instance = this;
-        //#endregion
-
         #region Null Checks
         if (_parentObject == null)
         {
@@ -50,7 +44,7 @@ public class BaseObjectPool : MonoBehaviour
         // create a new Obj-List the length of _amountToPool, instantiate Objects for each Idx of this list and add the inatantiated object to this list
         _pooledObjects = new List<GameObject>();
         GameObject tempObject;
-        for (int i = 0; i < _amountToPool; i++)
+        for (int i = 0; i < AmountToPool; i++)
         {
             tempObject = Instantiate(ObjectToPool, _parentObject.transform);
             tempObject.SetActive(false);
@@ -70,12 +64,10 @@ public class BaseObjectPool : MonoBehaviour
     /// <returns></returns>
     public GameObject GetInactivePooledObject()
     {
-        for (int i = 0; i < _amountToPool; i++)
+        for (int i = 0; i < AmountToPool; i++)
         {
             if (!_pooledObjects[i].activeInHierarchy)
-            {
                 return _pooledObjects[i];
-            }
         }
         return null;
     }
@@ -86,33 +78,31 @@ public class BaseObjectPool : MonoBehaviour
     /// <returns></returns>
     public GameObject GetActivePooledObject()
     {
-        for (int i = 0; i < _amountToPool; i++)
+        for (int i = 0; i < AmountToPool; i++)
         {
             if (_pooledObjects[i].activeInHierarchy)
-            {
                 return _pooledObjects[i];
-            }
         }
         return null;
     }
 
     /// <summary>
-    /// Returns the enabled Objects stored to the Object-Pool-List
+    /// Returns the disabled Objects stored to the Object-Pool-List
     /// </summary>
     /// <returns></returns>
     public GameObject[] GetAllInactivePooledObjects()
     {
-        for (int i = 0; i < _amountToPool; i++)
+        // clear List
+        _inactivePooledObjects.Clear();
+
+        // add any inactive Obj. to List
+        for (int i = 0; i < AmountToPool; i++)
         {
             if (!_pooledObjects[i].activeInHierarchy)
-            {
-                _inactivePooledObjects.Clear();
                 _inactivePooledObjects.Add(_pooledObjects[i]);
-
-                return _inactivePooledObjects.ToArray();
-            }
         }
-        return null;
+        // return List
+        return _inactivePooledObjects.ToArray();
     }
 
     /// <summary>
@@ -121,16 +111,25 @@ public class BaseObjectPool : MonoBehaviour
     /// <returns></returns>
     public GameObject[] GetAllActivePooledObjects()
     {
-        for (int i = 0; i < _amountToPool; i++)
-        {
-            if (_pooledObjects[i].activeInHierarchy)
-            {
-                _activePooledObjects.Clear();
-                _activePooledObjects.Add(_pooledObjects[i]);
+        // clear List
+        _activePooledObjects.Clear();
 
-                return _activePooledObjects.ToArray();
-            }
+        // add any active Obj. to List
+        for (int i = 0; i < AmountToPool; i++)
+        {
+            if (_pooledObjects[i].activeInHierarchy)            
+                _activePooledObjects.Add(_pooledObjects[i]);
         }
-        return null;
+        // return List
+        return _activePooledObjects.ToArray();
+    }
+
+    /// <summary>
+    /// Retursn all pooled Objects no matter if en- or disabled
+    /// </summary>
+    /// <returns></returns>
+    public GameObject[] GetAllPooledObjects()
+    {        
+        return _pooledObjects.ToArray();
     }
 }
