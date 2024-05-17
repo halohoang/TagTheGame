@@ -6,7 +6,8 @@ public class BaseBullet : MonoBehaviour
 
     [Header("Bullet settings")]
     /* Bullet Properties */
-    [SerializeField] internal float _bulletSpeed = 40.0f;
+    [SerializeField] private float _bulletSpeed = 40.0f;
+    [SerializeField] private float _projectileDamage;
     //[Tooltip("The Objects the Bullet shall detect as obstalce and be disabled on collision with")]
     //[SerializeField] private LayerMask _obstacleCollisionMask;
     //[Tooltip("The Objects the Bullet shall detect as Player or Enemy so that the TakeDamage() can be called on that CollisionObject and the BulletObject can be disabled on collssion")]
@@ -23,6 +24,9 @@ public class BaseBullet : MonoBehaviour
     [SerializeField] internal float _maxBulletAliveTime = 1.0f; // Maximum of time until the bullet is destroyed
     internal float _currentBulletLiveTime; // Current time until the bullet is destroyed
     private GameObject _bullet;
+
+    internal float BulletSpeed { get => _bulletSpeed; set => _bulletSpeed = value; }
+    internal float ProjectileDamage { get => _projectileDamage; set => _projectileDamage = value; }
 
     // Function
     protected virtual void Start()
@@ -116,7 +120,7 @@ public class BaseBullet : MonoBehaviour
         // if transmitted tag is 'Player' continue with calling TakeDamage() of the PlayerHealth.cs
         if (tagOfTargetObj == "Player")
         {
-            collision.gameObject.TryGetComponent(out PlayerHealth playerHealth);
+            collision.gameObject.TryGetComponent(out PlayerStats playerHealth);
             DealingDamage(playerHealth);
         }
         // else if transmitted tag is 'Enemy' continue with calling TakeDamage() of the EnemyHealth.cs instead
@@ -169,16 +173,16 @@ public class BaseBullet : MonoBehaviour
     #endregion
 
     /// <summary>
-    /// Executing <see cref="PlayerHealth.GetDamage()"/> if transmitted Type is not null and deactivates this gameobject
+    /// Executing <see cref="PlayerStats.GetDamage()"/> if transmitted Type is not null and deactivates this gameobject
     /// </summary>
     /// <param name="healthScript"></param>
-    private void DealingDamage(PlayerHealth healthScript)
+    private void DealingDamage(PlayerStats healthScript)
     {
         if (healthScript != null)
         {
             /* Deal Damage */
             healthScript.GetDamage();
-            Debug.Log(healthScript._currentHealth);
+            Debug.Log(healthScript.CurrentHealth);
             gameObject.SetActive(false);
 
             Debug.Log($"'<color=mageta>{gameObject.name}</color>: was disabled due to collision with '{healthScript.gameObject.name}'");
@@ -194,8 +198,8 @@ public class BaseBullet : MonoBehaviour
         if (healthScript != null)
         {
             /* Deal Damage */
-            healthScript.GetDamage();
-            Debug.Log(healthScript._currentHealth);
+            healthScript.GetDamage(ProjectileDamage);
+            Debug.Log(healthScript.CurrentHealth);
             gameObject.SetActive(false);
 
             Debug.Log($"'<color=mageta>{gameObject.name}</color>: was disabled due to collision with '{healthScript.gameObject.name}'");

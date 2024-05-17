@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour
     private void ReadMovementInput(Vector2 velocity)
     {
         _movementDirection = velocity;
-        Debug.Log($"<color=magenta> ReadMovementInput was called </color>");
+        //Debug.Log($"<color=magenta> ReadMovementInput was called </color>");
     }
 
     /// <summary>

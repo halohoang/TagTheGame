@@ -6,7 +6,7 @@ using UnityEngine.Events;
 namespace ScriptableObjects
 {
     [CreateAssetMenu(fileName = "MeleeEnemy_Idle_RadomWander", menuName = "Scriptable Objects/Enemy Logic/Idle Logic/MeleeEnemy Random Wander")]
-    // todo: (!) if Time create a Parent Class 'BaseIdleRandomWanderSO'  that derives from 'BaseIdleSO' and is parent to the specific 'EnemyIdleRandomWanderSO' (Melee/Range) since the differ just in the Transition-Check but are equal coding wise beside that; JM (09.11.2023)
+    // todo: (!) if Time create a Parent Class 'BaseIdleRandomWanderSO'  that derives from 'BaseIdleSO' and is parent to the specific 'EnemyIdleRandomWanderSO' (Melee/Range) since they differ just in the Transition-Check but are equal coding wise beside that; JM (09.11.2023)
     public class MeleeEnemyIdleRandomWanderSO : BaseEnemyIdleSO
     {
         public static event UnityAction<Vector3> OnObstacleAvoidance;

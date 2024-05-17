@@ -23,10 +23,10 @@ namespace ScriptableObjects
         private BaseWeapon _secondWeapon;
         private BaseWeapon _blankHands;
 
-        private SubMachineGun SMG;
-        private ShotGun Shotgun;
-        private HandCannon Handgun;
-        private EnergyLauncher ELauncher;
+        private SubMachineGun _sMG;
+        private ShotGun _shotgun;
+        private HandCannon _handCannon;
+        private EnergyLauncher _eLauncher;
 
         [Header("Monitoring Values")]
         [SerializeField, ReadOnly] private bool _isPlayerArmed;
@@ -49,7 +49,8 @@ namespace ScriptableObjects
         [System.Serializable]
         private struct WeaponTypeValues
         {
-            // Variables
+            // Variables            
+            [SerializeField, HideInInspector] private string _inspectorTitle;
             [Tooltip("The name of the weapon (ideally should be equal to the WeaponType).")]
             [SerializeField, ReadOnly, AllowNesting] private string _weaponName;
             [Tooltip("The type of the weapon.")]
@@ -66,7 +67,9 @@ namespace ScriptableObjects
             [SerializeField] private int _spawnedBullets;
 
 
+
             // Properties
+            internal string InspectorTitle { get => _inspectorTitle; set => _inspectorTitle = value; }
             internal string WeaponName { get => _weaponName; set => _weaponName = value; }
             internal Enum_Lib.EWeaponType WeaponType { get => _weaponType; set => _weaponType = value; }
             internal float WeaponDamage { get => _weaponDamage; set => _weaponDamage = value; }
@@ -87,18 +90,19 @@ namespace ScriptableObjects
         private void OnEnable()
         {
             // 1. initializing single weapon objects with standard values automatically
-            Handgun = new HandCannon("Handgun", Enum_Lib.EWeaponType.Handgun, 1, 1.5f, 6, 6, 1);
-            SMG = new SubMachineGun("SMG", Enum_Lib.EWeaponType.SMG, 1, 0.5f, 30, 30, 1);
-            Shotgun = new ShotGun("Shotgun", Enum_Lib.EWeaponType.Shotgun, 1, 1, 8, 8, 5);
-            ELauncher = new EnergyLauncher("Energy Launcher", Enum_Lib.EWeaponType.EnergyLauncher, 1, 1, 1, 1, 1);            
+            _handCannon = new HandCannon("Handcannon", Enum_Lib.EWeaponType.Handcannon, 1, 1.5f, 6, 6, 1);
+            _sMG = new SubMachineGun("SMG", Enum_Lib.EWeaponType.SMG, 1, 0.5f, 30, 30, 1);
+            _shotgun = new ShotGun("Shotgun", Enum_Lib.EWeaponType.Shotgun, 1, 1, 8, 8, 5);
+            _eLauncher = new EnergyLauncher("Energy Launcher", Enum_Lib.EWeaponType.EnergyLauncher, 1, 1, 1, 1, 1);            
 
             // 2. initializing the List with the specific weapon objects and their standard values
-            _weapons = new List<BaseWeapon>() { Handgun, SMG, Shotgun, ELauncher };
+            _weapons = new List<BaseWeapon>() { _handCannon, _sMG, _shotgun, _eLauncher };
 
             // 3. Setting the Weapons Name and Type to the '_weaponValues'-array in the inspector (accordingly to the previously instantiated List '_weaops')            
             for (int i = 0; i < _weaponValues.Length; i++) // Sets the name and weapon type of the specific array-fields in the Inspector for the Weapon
             {
-                _weaponValues[i].WeaponName = $"{_weapons[i].WeaponName} Values";
+                _weaponValues[i].InspectorTitle = $"{_weapons[i].WeaponType} Values";   // needs to reference the WeaponType since the weaponName can differ from the type
+                _weaponValues[i].WeaponName = _weapons[i].WeaponName;
                 _weaponValues[i].WeaponType = _weapons[i].WeaponType;
             }
 
@@ -106,21 +110,21 @@ namespace ScriptableObjects
             for (int i = 0; i < _weaponValues.Length; i++)
             {
                 // todo: see if that can be optimized yet, does not look soo nice; (JM, 05.02.2024)
-                if (_weaponValues[i].WeaponType == Enum_Lib.EWeaponType.Handgun)
+                if (_weaponValues[i].WeaponType == Enum_Lib.EWeaponType.Handcannon)
                 {
-                    Handgun.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].SpawnedBullets);
+                    _handCannon.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].SpawnedBullets);
                 }
                 else if (_weaponValues[i].WeaponType == Enum_Lib.EWeaponType.SMG)
                 {
-                    SMG.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].SpawnedBullets);
+                    _sMG.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].SpawnedBullets);
                 }
                 else if (_weaponValues[i].WeaponType == Enum_Lib.EWeaponType.Shotgun)
                 {
-                    Shotgun.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].SpawnedBullets);
+                    _shotgun.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].SpawnedBullets);
                 }
                 else if (_weaponValues[i].WeaponType == Enum_Lib.EWeaponType.EnergyLauncher)
                 {
-                    ELauncher.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].SpawnedBullets);
+                    _eLauncher.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].SpawnedBullets);
                 }
             }
 

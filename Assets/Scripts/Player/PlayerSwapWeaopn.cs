@@ -19,11 +19,11 @@ public class PlayerSwapWeaopn : MonoBehaviour
 
     private void OnEnable()
     {
-        _inputReaderSO.OnWeaponSwitch += SwitchWeapon;
+        _inputReaderSO.OnWeaponSwapInput += SwitchWeapon;
     }
     private void OnDisable()
     {
-        _inputReaderSO.OnWeaponSwitch -= SwitchWeapon;
+        _inputReaderSO.OnWeaponSwapInput -= SwitchWeapon;
     }
 
     private void SwitchWeapon()

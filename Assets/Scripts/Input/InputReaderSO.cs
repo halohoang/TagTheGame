@@ -1,5 +1,4 @@
 using EnumLibrary;
-using UnityEditor.Experimental;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -11,13 +10,13 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
     public event UnityAction<Vector2> OnMovementInput;
     public event UnityAction<Vector2> OnMouseMovement;
     public event UnityAction<Enum_Lib.ESpaceKey> OnFastMovementInput;
-    public event UnityAction OnAttackInput;
+    public event UnityAction<Enum_Lib.ELeftMouseButton> OnAttackInput;
     public event UnityAction OnInteractionInput;
     public event UnityAction OnReloadingInput;
-    public event UnityAction OnWeaponSwitch;
-    public event UnityAction OnPrimarytWeaponEquip;
-    public event UnityAction OnSecondaryWeaponEquip;
-    public event UnityAction OnHolsteringWeapons;    
+    public event UnityAction OnWeaponSwapInput;                         // currently not used; JM (28.03.2024)
+    public event UnityAction OnFirstWeaponEquipInput;
+    public event UnityAction OnSecondWeaponEquipInput;
+    public event UnityAction OnHolsteringWeaponInput;    
     public static event UnityAction OnEscPress;
 
 
@@ -57,7 +56,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
     public void OnMovement(InputAction.CallbackContext context)
     {
         OnMovementInput?.Invoke(context.ReadValue<Vector2>());
-        Debug.Log($"<color=magenta> 'OnMovement()' was called in '{this}', ergo 'OnMovementInput'-event should have been fired. </color>");
+        //Debug.Log($"<color=magenta> 'OnMovement()' was called in '{this}', ergo 'OnMovementInput'-event should have been fired. </color>");
     }
 
     public void OnRotation(InputAction.CallbackContext context)
@@ -67,8 +66,16 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
 
     public void OnAttacking(InputAction.CallbackContext context)
     {
-        if (context.started)
-            OnAttackInput?.Invoke();
+        //if (context.started)
+        //    OnAttackInput?.Invoke();
+
+        bool isLMBHeld = context.ReadValue<float>() > 0.1f;
+
+        if (isLMBHeld)
+            OnAttackInput?.Invoke(Enum_Lib.ELeftMouseButton.Pressed);
+        else
+            OnAttackInput?.Invoke(Enum_Lib.ELeftMouseButton.NotPressed);
+        //Debug.Log($"space was pressed");
     }
 
     public void OnSprinting(InputAction.CallbackContext context)
@@ -97,7 +104,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
     public void OnWeaponSwap(InputAction.CallbackContext context)
     {
         if (context.started)
-            OnWeaponSwitch?.Invoke();
+            OnWeaponSwapInput?.Invoke();
     }
 
     //---------- Input-Callback Methods, UI-related ----------
@@ -113,18 +120,18 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
     public void OnFirstWeaponEquip(InputAction.CallbackContext context)
     {
         if (context.started)
-            OnPrimarytWeaponEquip?.Invoke();
+            OnFirstWeaponEquipInput?.Invoke();
     }
 
     public void OnSecondWeaponEquip(InputAction.CallbackContext context)
     {
         if (context.started)
-            OnSecondaryWeaponEquip?.Invoke();
+            OnSecondWeaponEquipInput?.Invoke();
     }
 
     public void OnHolsterWeapons(InputAction.CallbackContext context)
     {
         if (context.started)
-            OnHolsteringWeapons?.Invoke();
+            OnHolsteringWeaponInput?.Invoke();
     }
 }

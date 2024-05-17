@@ -32,7 +32,7 @@ public class EnemyBullet : BaseBullet
 
     private new void Update()
     {
-        _bulletRB2D.velocity = transform.right * _bulletSpeed;
+        _bulletRB2D.velocity = transform.right * BulletSpeed;
 
         base.Update();
     }

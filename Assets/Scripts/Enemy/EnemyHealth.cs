@@ -10,8 +10,8 @@ public class EnemyHealth : MonoBehaviour
 {
     // Variables
     [SerializeField] private float _maximumHealth;
-    [SerializeField] internal float _currentHealth;
-    [SerializeField] private float _takenDamage;
+    [SerializeField] private float _currentHealth;
+    //[SerializeField] private float _dealtDamage;
     private TakingDamage _takingDamageScript;
 
     // Light & Shadow //
@@ -28,10 +28,14 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] List<GameObject> _bloodPoolSpawn; //Spawning blood pool when hit
     [SerializeField] GameObject _bloodDeadPrefab; //Spawning blood pool at where enemy die
 
+    internal float CurrentHealth { get => _currentHealth; private set => _currentHealth = value; }
+
+    //internal float DealtDamage { get => _dealtDamage; set => _dealtDamage = value; }
+
     // Functions
     void Start()
     {
-        _currentHealth = _maximumHealth;
+        CurrentHealth = _maximumHealth;
         _takingDamageScript = GetComponent<TakingDamage>();
         _animator = GetComponent<Animator>();
         _boxCollider2D = GetComponent<BoxCollider2D>();
@@ -39,11 +43,11 @@ public class EnemyHealth : MonoBehaviour
          _shadowCaster2D = GetComponent<ShadowCaster2D>();      
     }
 
-    internal void GetDamage()
+    internal void GetDamage(float damage)
     {
-        if (_currentHealth > 0)
+        if (CurrentHealth > 0)
         {
-            _currentHealth -= _takenDamage;
+            CurrentHealth -= damage;
             if (_takingDamageScript != null)
             {
                 _takingDamageScript.FlashOnce();
@@ -54,7 +58,7 @@ public class EnemyHealth : MonoBehaviour
                 Instantiate(_bloodPoolSpawn[randomIndex], transform.position, bloodRotation);
             }
         }
-        if (_currentHealth <= 0 && _isDead == false)
+        if (CurrentHealth <= 0 && _isDead == false)
         {
             // Randomize dead rotation
             this.transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));

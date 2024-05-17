@@ -107,13 +107,13 @@ public class PlayerShoot : MonoBehaviour
 
     private void OnEnable()
     {
-        _inputReader.OnWeaponSwitch += SwitchWeapon;
+        _inputReader.OnWeaponSwapInput += SwitchWeapon;
         PlayerHealth.OnPlayerDeath += SetIsPlayerDead;
         PauseMenu.OnTogglePauseScene += SetIsGamePaused;
     }
     private void OnDisable()
     {
-        _inputReader.OnWeaponSwitch -= SwitchWeapon;
+        _inputReader.OnWeaponSwapInput -= SwitchWeapon;
         PlayerHealth.OnPlayerDeath -= SetIsPlayerDead;
         PauseMenu.OnTogglePauseScene -= SetIsGamePaused;
     }

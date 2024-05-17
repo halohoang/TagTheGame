@@ -31,12 +31,19 @@ namespace EnumLibrary
             NotPressed            
         }
 
+        // Enum for defining if the Left Mouse Button Key is pressed or not
+        public enum ELeftMouseButton
+        {
+            Pressed,
+            NotPressed
+        }
+
         /// <summary>
         /// Enum for Specification of the weapon type
         /// </summary>
         public enum EWeaponType
         {
-            Handgun,
+            Handcannon,
             SMG,
             Shotgun,
             EnergyLauncher,
