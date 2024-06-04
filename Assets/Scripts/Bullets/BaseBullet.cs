@@ -1,33 +1,32 @@
+using NaughtyAttributes;
 using UnityEngine;
 
 public class BaseBullet : MonoBehaviour
 {
     // Variables
 
-    [Header("Bullet settings")]
-    /* Bullet Properties */
-    [SerializeField] private float _bulletSpeed = 40.0f;
-    [SerializeField] private float _projectileDamage;
-    //[Tooltip("The Objects the Bullet shall detect as obstalce and be disabled on collision with")]
-    //[SerializeField] private LayerMask _obstacleCollisionMask;
-    //[Tooltip("The Objects the Bullet shall detect as Player or Enemy so that the TakeDamage() can be called on that CollisionObject and the BulletObject can be disabled on collssion")]
-    //[SerializeField] private LayerMask _targedMask;
-    [Space(5)]
-
     [Header("References")]
     /* Spawning Blood */
     [SerializeField] protected GameObject _bloodPrefab;
-
-
-    /* Bounce Properties */
     private Rigidbody2D _bulletRB2D;
+    [Space(5)]
+
+    [Header("Bullet settings")]
+    [SerializeField] private float _bulletSpeed = 40.0f;
     [SerializeField] internal float _maxBulletAliveTime = 1.0f; // Maximum of time until the bullet is destroyed
+    //[Tooltip("The Objects the Bullet shall detect as obstalce and be disabled on collision with")]
+    //[SerializeField] private LayerMask _obstacleCollisionMask;
+    //[Tooltip("The Objects the Bullet shall detect as Player or Enemy so that the TakeDamage() can be called on that CollisionObject and the BulletObject can be disabled on collssion")]
+    //[SerializeField] private LayerMask _targedMask;    
+   
     private float _currentBulletLiveTime; // Current time until the bullet is destroyed
+    private float _projectileDamage;
+
 
     internal float BulletSpeed { get => _bulletSpeed; set => _bulletSpeed = value; }
     internal float ProjectileDamage { get => _projectileDamage; set => _projectileDamage = value; }
     internal Rigidbody2D BulletRB2D { get => _bulletRB2D; set => _bulletRB2D = value; }
-    
+
     // Function
     protected virtual void Start()
     {
@@ -119,14 +118,14 @@ public class BaseBullet : MonoBehaviour
 
         // if is 'Player' continue with calling TakeDamage() of the PlayerStats.cs
         if (collision.gameObject.TryGetComponent(out PlayerStats playerStats))
-        {            
+        {
             DealingDamage(playerStats);
             SpawnBloodSplatter(collision);
             Debug.Log($" 'TargetCollisionCheck()' for player was called");
         }
         // else if is 'Enemy' continue with calling TakeDamage() of the EnemyHealth.cs instead
         else if (collision.gameObject.TryGetComponent(out EnemyHealth enemyHealth))
-        {            
+        {
             DealingDamage(enemyHealth);
             SpawnBloodSplatter(collision);
             Debug.Log($" 'TargetCollisionCheck()' for enemy was called");

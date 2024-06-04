@@ -31,11 +31,14 @@ public class PlayerStats : MonoBehaviour
     [Space(5)]
 
     [Header("Settings")]
-    [SerializeField] private float _maxHealth;
-    [SerializeField] private float _currentHealth;
-    [SerializeField] private float _chargeSpeed = 1;            // The rate at which bar depletes or charges    
     /* Health System */
-    [SerializeField] internal int _takenDamage;
+    [SerializeField] private bool _isPlayerInvincible = false;
+    [SerializeField, Range(0.1f, 100.0f)] private float _maxHealth;
+    #region Tooltip
+    [Tooltip("The damage the PlayerCharacter will take on any attack impact, no matter if bullet or melee attack.")]
+    #endregion
+    [SerializeField, Range(0.1f, 100.0f)] internal int _takenDamage;                 // todo: for more variability on taken damage this might need to be changed yet
+    [SerializeField] private float _chargeSpeed = 1;            // The rate at which bar depletes or charges    
     [SerializeField] private float _regenCooldown = 2f;         // Adjust the duration as needed
     /*Flashing Effect */
     [SerializeField] private float _flashingSpeed = 0;
@@ -46,12 +49,13 @@ public class PlayerStats : MonoBehaviour
     [Header("Lists")]
     [SerializeField] private List<GameObject> _disableGameObject;
     [Space(5)]
-    
+
     [Header("Monitoring Values")]
+    [SerializeField, ReadOnly] private float _currentHealth;
+    [SerializeField, ReadOnly] private float _regenTimer = 1f;
     [SerializeField, ReadOnly] private bool _isPlayerDead;
     [SerializeField, ReadOnly] private bool _canRegen = true;
     [SerializeField, ReadOnly] private bool _isSprinting;
-    [SerializeField, ReadOnly] private float _regenTimer = 1f;
     [SerializeField, ReadOnly] private bool isFlashing = false;
 
     private Color defaultColor = Color.white;
@@ -61,6 +65,7 @@ public class PlayerStats : MonoBehaviour
     public bool IsPlayerDead { get => _isPlayerDead; private set => _isPlayerDead = value; }
     public bool IsSprinting { get => _isSprinting; private set => _isSprinting = value; }
     public float CurrentHealth { get => _currentHealth; private set => _currentHealth = value; }
+    public bool IsPlayerInvincible { get => _isPlayerInvincible; private set => _isPlayerInvincible = value; }
     #endregion
 
 
@@ -80,7 +85,7 @@ public class PlayerStats : MonoBehaviour
             _spriteRenderer = GetComponent<SpriteRenderer>();
 
         if (_audioSource == null)
-            _audioSource = GetComponent<AudioSource>(); 
+            _audioSource = GetComponent<AudioSource>();
 
         if (_rb2D == null)
             _rb2D = GetComponent<Rigidbody2D>();
@@ -110,7 +115,7 @@ public class PlayerStats : MonoBehaviour
         // Health Calculations
         ReduceHP();
 
-        
+
         if (CurrentHealth <= 0)    // Logic for Player Death
         {
             IsPlayerDead = true;
@@ -122,7 +127,7 @@ public class PlayerStats : MonoBehaviour
             _animator.SetTrigger("Dead");
 
             OnPlayerDeath?.Invoke(IsPlayerDead);
-        }       
+        }
         if (_canRegen && CurrentHealth < 100) // only call this logic if Health is below 100
         {
             RegenHP();
@@ -181,7 +186,8 @@ public class PlayerStats : MonoBehaviour
     #region HeathCalculating Methods
     internal void GetDamage()
     {
-        CurrentHealth = CurrentHealth - _takenDamage;
+        if (!IsPlayerInvincible)
+            CurrentHealth = CurrentHealth - _takenDamage;
 
         FlashOnce();
 
@@ -276,6 +282,10 @@ public class PlayerStats : MonoBehaviour
     }
     #endregion
 
+    internal void SetPlayerInvincibleStatus(bool isInvincible)
+    {
+        IsPlayerInvincible = isInvincible;
+    }
 
     #region Taking Damage Visuals
     // -----------------------------

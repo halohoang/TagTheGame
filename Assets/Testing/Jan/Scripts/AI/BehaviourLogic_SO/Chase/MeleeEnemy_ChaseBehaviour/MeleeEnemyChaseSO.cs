@@ -39,7 +39,7 @@ namespace ScriptableObjects
 
         public override void ExecuteFrameUpdateLogic()
         {
-            // Transition-Condition-Check (if not Player is detected anymore -> switch to IdleState again)
+            // Transition-Condition-Check (if no Player is detected anymore -> switch to IdleState again)
             if (!_baseEnemyBehaviour.IsPlayerDetected)
             {
                 _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.IdleState);

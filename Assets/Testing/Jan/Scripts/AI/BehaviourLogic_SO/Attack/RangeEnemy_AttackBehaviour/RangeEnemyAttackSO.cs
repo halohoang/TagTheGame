@@ -9,7 +9,6 @@ namespace ScriptableObjects
     public class RangeEnemyAttackSO : BaseEnemyAttackSO
     {
         [Header("References")]
-        [SerializeField] private GameObject _bulletPrefab;
         [SerializeField, ReadOnly] private BoxCollider2D _boxCollider2D;
         [SerializeField, ReadOnly] private Transform _bulletSpawnPoint;
 
@@ -126,14 +125,6 @@ namespace ScriptableObjects
         /// </summary>
         private void SettingReferences()
         {
-            // setting References if not manually set inthe inspector
-            if (_bulletPrefab == null)
-            {
-                _bulletPrefab = Resources.Load("Prefabs/Bullet/EnemyBullet") as GameObject;
-                Debug.LogWarning($"<color=yellow>Caution!</color>: There was no Reference set to 'BulletPrefab in inspector of '{this}', so it was automatically set to {_bulletPrefab.name}." +
-                    $"If that is not correct, please set the according referenc manually.");
-            }
-
             _boxCollider2D = _baseEnemyBehaviour.gameObject.GetComponent<BoxCollider2D>();
 
             // Get Bullet Spawn Position

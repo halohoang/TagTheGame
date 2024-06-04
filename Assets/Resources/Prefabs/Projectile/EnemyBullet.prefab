@@ -237,8 +237,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160750f319c07a54c8aba93a0fc234cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulletSpeed: 22
   _bloodPrefab: {fileID: 1471398999119722488, guid: 3e6cf606eb96c8c489d93206732bdb13, type: 3}
+  _projectileDamage: 100
+  _bulletSpeed: 22
   _maxBulletAliveTime: 10
   _enemyObjects: []
 --- !u!114 &-7281322431818092433

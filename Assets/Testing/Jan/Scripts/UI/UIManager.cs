@@ -32,6 +32,10 @@ public class UIManager : MonoBehaviour
     [Tooltip("The Image-Component of the WeaponDepiction-UI (Found in Hierarchy -> /UI/Ingame-UI_Canvas/WeaponUI_Panel/WeaponDepiction_Panel_Panel/WeaponDepiction_Img)")]
     #endregion
     [SerializeField] private Image _uIWeaponImg;
+    #region Tooltip
+    [Tooltip("GodMode TMP (Found in Hierarchy -> /UI/Ingame-UI_Canvas/Testing_&_Debug_Panel/ActiveCheats_Panel/GodMode_Text (TMP))")]
+    #endregion
+    [SerializeField] private TextMeshProUGUI _godeModeTxt;
     [Space(5)]
 
     [Header("Monitoring Values")]
@@ -91,6 +95,9 @@ public class UIManager : MonoBehaviour
         PlayerWeaponHandling.OnBulletsInstantiated += UpdateAmmoDisplay;
         PlayerWeaponHandling.OnReload += UpdateAmmoDisplay;
         PlayerWeaponHandling.OnWeaponEquip += UpdateWeaponDisplay;
+
+        // Cheat Panel related
+        CheatInput.OnSetGodMode += SetGodModeHint;
     }
     private void OnDisable()
     {
@@ -98,6 +105,9 @@ public class UIManager : MonoBehaviour
         PlayerWeaponHandling.OnBulletsInstantiated -= UpdateAmmoDisplay;
         PlayerWeaponHandling.OnReload -= UpdateAmmoDisplay;
         PlayerWeaponHandling.OnWeaponEquip -= UpdateWeaponDisplay;
+
+        // Cheat Panel related
+        CheatInput.OnSetGodMode -= SetGodModeHint;
     }
 
     void Start()
@@ -166,6 +176,15 @@ public class UIManager : MonoBehaviour
             _reloadHintTxt.enabled = true;
         else
             _reloadHintTxt.enabled = false;
+    }
+
+    /// <summary>
+    /// En-/Disables the Text-Hint depicting whether God Mode is active or not
+    /// </summary>
+    /// <param name="godModeStatus"></param>
+    private void SetGodModeHint(bool godModeStatus)
+    {        
+        _godeModeTxt.enabled = godModeStatus;
     }
 
     #endregion
