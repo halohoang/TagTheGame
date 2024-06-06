@@ -24,15 +24,18 @@ public class PlayerHealth : MonoBehaviour
     /* Dead Effec */
     private Animator _animator;
     [SerializeField] private List<GameObject> _disableGameObject;
+    [SerializeField] private float _flashingSpeed; // Speed of the flashing effect
+    [SerializeField] private float _flashDuration; // Duration of the flashing effect
 
     [Header("Monitoring Values")]
     [SerializeField, ReadOnly] private bool _isPlayerDead;
     [SerializeField] GameObject _deadOverlay;
     [SerializeField] AudioClip _deadSound;
+    [SerializeField] AudioClip _hitSound;
     AudioSource _audioSource;
 
     /* Taking Damage Effect */
-    private TakingDamage _takingDamageScript;
+    private TakingDamageVFX _takingDamageScript;
 
     /* Health System */
     [SerializeField] internal int _takenDamage;
@@ -42,6 +45,8 @@ public class PlayerHealth : MonoBehaviour
     private float _regenTimer = 1f;
 
     private Rigidbody2D _rb2D;
+
+    private TakingDamageVFX _damageVFX;
 
     public bool IsPlayerDead { get => _isPlayerDead; private set => _isPlayerDead = value; }
     public bool IsSprinting { get => _isSprinting; private set => _isSprinting = value; }
@@ -67,9 +72,12 @@ public class PlayerHealth : MonoBehaviour
     {
         _rb2D = GetComponent<Rigidbody2D>();
         _currentHealth = _maxHealth;
-        _takingDamageScript = GetComponent<TakingDamage>();
+        //_takingDamageScript = GetComponent<TakingDamageVFX>();
         _animator = GetComponent<Animator>();
         _audioSource = gameObject.AddComponent<AudioSource>();
+
+        // initializations
+        _damageVFX = new TakingDamageVFX(GetComponent<SpriteRenderer>(), _flashingSpeed, _flashDuration);
     }
 
     void Update()
@@ -137,10 +145,12 @@ public class PlayerHealth : MonoBehaviour
     internal void GetDamage()
     {
         _currentHealth = _currentHealth - _takenDamage;
-        if (_takingDamageScript != null)
+        if (_damageVFX != null)
         {
-            _takingDamageScript.FlashOnce();
+            _audioSource.PlayOneShot(_hitSound);
+            StartCoroutine(_damageVFX?.FlashAndRevert());
         }
+
 
         // Logic for Player Death
         if (IsSprinting && _currentHealth <= 1.5f)

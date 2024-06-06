@@ -4,58 +4,109 @@ using UnityEngine.AI;
 using StateMashine;
 using Enemies;
 using UnityEngine.Rendering.Universal;
+using NaughtyAttributes;
 
 public class EnemyHealth : MonoBehaviour
 {
-    // Variables
-    [SerializeField] private float _maximumHealth;
-    [SerializeField] private float _currentHealth;
-    //[SerializeField] private float _dealtDamage;
-    private TakingDamage _takingDamageScript;
+    //--------------------------------------
+    // - - - - -  V A R I A B L E S  - - - - 
+    //--------------------------------------
 
-    // Light & Shadow //
-    [SerializeField] GameObject _light2d;
-    ShadowCaster2D _shadowCaster2D;
+    [Header("References")]
+    [SerializeField] private GameObject _light2d;               // for Lightning and Shadow
+    [SerializeField] private Animator _animator;                // for animation
+    #region Tooltip
+    [Tooltip("Prefabs for randomly spawning on enemy hit (taking damage) event.")]
+    #endregion
+    [SerializeField] private List<GameObject> _bloodPrefabPool;  // Spawning pool of blood when hit (randomly out of list)
+    #region Tooltip
+    [Tooltip("Prefab for spawning on enemy death event.")]
+    #endregion
+    [SerializeField] private GameObject _onDeathBloodPrefab;       // Spawning pool of blood at where enemy die
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _audioClip;
+    [Space(5)]
 
-	/* Animation */
-	[SerializeField] Animator _animator;
+    [Header("Settings")]
+    [SerializeField, Range(0.1f, 100.0f)] private float _maximumHealth;
+    [SerializeField, Range(0.1f, 100.0f)] private float _currentHealth;
+    [SerializeField] private float _flashingSpeed = 0;    // Speed of the flashing effect on taking damage  
+    [SerializeField] private float _flashDuration = 0.1f; // Duration of the flashing effect on taking damage
+    [Space(5)]
+
+    [Header("Monitoring Values")]
+    [SerializeField, ReadOnly] private bool _isDead = false;
+
+    // private Variables
+    private SpriteRenderer _spriteRenderer;
     private BoxCollider2D _boxCollider2D;
-    private bool _isDead = false;
-    SpriteRenderer _spriteRenderer;
+    private ShadowCaster2D _shadowCaster2D;
+    private TakingDamageVFX _damageVFX;
 
-    /* Spawning Blood Variables */
-    [SerializeField] List<GameObject> _bloodPoolSpawn; //Spawning blood pool when hit
-    [SerializeField] GameObject _bloodDeadPrefab; //Spawning blood pool at where enemy die
 
+    // properties
     internal float CurrentHealth { get => _currentHealth; private set => _currentHealth = value; }
 
-    //internal float DealtDamage { get => _dealtDamage; set => _dealtDamage = value; }
+    //----------------------------------
+    // - - - - -  M E T H O D S  - - - - 
+    //----------------------------------
 
-    // Functions
+    // Unity provided Methods
     void Start()
     {
+        #region autoreferencing
+        // auto referencing
+        if (_animator == null)
+            _animator = GetComponent<Animator>();
+
+        if (_audioSource == null)
+            _audioSource = GetComponent<AudioSource>();
+
+        if (_boxCollider2D == null)
+            _boxCollider2D = GetComponent<BoxCollider2D>();
+
+        if (_shadowCaster2D == null)
+            _shadowCaster2D = GetComponent<ShadowCaster2D>();
+        #endregion
+
+        // initializations
+        _damageVFX = new TakingDamageVFX(GetComponent<SpriteRenderer>(), _flashingSpeed, _flashDuration);
+
+        // value initializations
         CurrentHealth = _maximumHealth;
-        _takingDamageScript = GetComponent<TakingDamage>();
-        _animator = GetComponent<Animator>();
-        _boxCollider2D = GetComponent<BoxCollider2D>();
-        SpriteRenderer _spriteRenderer = GetComponent<SpriteRenderer>();
-         _shadowCaster2D = GetComponent<ShadowCaster2D>();      
     }
 
+    private void Update()
+    {
+        // Visual effects on taking damage
+        if (_damageVFX.IsFlashing)
+            _damageVFX.FlashingEffect();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        /* Spawn blood where enemy died */
+        Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+        Instantiate(_onDeathBloodPrefab, transform.position, bloodRotation);
+    }
+
+    // Custom Methods
     internal void GetDamage(float damage)
     {
         if (CurrentHealth > 0)
         {
             CurrentHealth -= damage;
-            if (_takingDamageScript != null)
-            {
-                _takingDamageScript.FlashOnce();
 
-                /* Spawn blood and stay on the ground while enemy moving*/
-                int randomIndex = Random.Range(0, _bloodPoolSpawn.Count);
-                Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
-                Instantiate(_bloodPoolSpawn[randomIndex], transform.position, bloodRotation);
-            }
+            // sound effects on taking damage
+            _audioSource.PlayOneShot(_audioClip);
+
+            // Visual effects on taking damage
+            StartCoroutine(_damageVFX?.FlashAndRevert());
+
+            /* Spawn blood and stay on the ground while enemy moving*/
+            int randomIndex = Random.Range(0, _bloodPrefabPool.Count);
+            Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+            Instantiate(_bloodPrefabPool[randomIndex], transform.position, bloodRotation);
         }
         if (CurrentHealth <= 0 && _isDead == false)
         {
@@ -77,7 +128,7 @@ public class EnemyHealth : MonoBehaviour
             }
             else
             {
-                Debug.Log($"<color=lime>No Quickfix behaviour cold be found on {this.gameObject.name} so ohter Behavióur-Scripts will be disabled</color>");
+                Debug.Log($"<color=lime>No Quickfix behaviour cold be found on {this.gameObject.name} so other Behavióur-Scripts will be disabled</color>");
                 gameObject.GetComponent<ConditionPlayerDetectionCheck>().SetIsEnemyDead(_isDead);
                 gameObject.GetComponent<ConditionPlayerDetectionCheck>().enabled = false;
                 gameObject.GetComponent<BaseEnemyBehaviour>().enabled = false;
@@ -86,11 +137,5 @@ public class EnemyHealth : MonoBehaviour
             gameObject.GetComponent<NavMeshAgent>().isStopped = true;
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
         }
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        /* Spawn blood where enemy die */
-        Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
-        Instantiate(_bloodDeadPrefab, transform.position, bloodRotation);
     }
 }

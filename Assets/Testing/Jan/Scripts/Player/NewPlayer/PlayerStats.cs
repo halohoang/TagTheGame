@@ -26,7 +26,6 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private Transform _chargeBarTransform;     // Reference to the scale of the bar
     [SerializeField] private Animator _animator;
     [SerializeField] private AudioSource _audioSource;
-    [SerializeField] private AudioClip _audioClip;
     [SerializeField] private AudioClip _deadSound;
     [Space(5)]
 
@@ -56,10 +55,10 @@ public class PlayerStats : MonoBehaviour
     [SerializeField, ReadOnly] private bool _isPlayerDead;
     [SerializeField, ReadOnly] private bool _canRegen = true;
     [SerializeField, ReadOnly] private bool _isSprinting;
-    [SerializeField, ReadOnly] private bool isFlashing = false;
+    //[SerializeField, ReadOnly] private bool isFlashing = false;
 
     private Color defaultColor = Color.white;
-
+    private TakingDamageVFX _damageVFX;
 
     // - - - Properties - - -
     public bool IsPlayerDead { get => _isPlayerDead; private set => _isPlayerDead = value; }
@@ -106,6 +105,9 @@ public class PlayerStats : MonoBehaviour
 
     void Start()
     {
+        // initializadions
+        _damageVFX = new TakingDamageVFX(_spriteRenderer, _flashingSpeed, _flashDuration);
+
         defaultColor = _spriteRenderer.color;
         CurrentHealth = _maxHealth;
     }
@@ -143,11 +145,9 @@ public class PlayerStats : MonoBehaviour
             }
         }
 
-        // Visuals on Taking Damage
-        if (isFlashing)
-        {
-            FlashingEffect();
-        }
+        // Visual effects on Taking Damage
+        if (_damageVFX.IsFlashing)
+            _damageVFX?.FlashingEffect();
     }
     #endregion
 
@@ -189,7 +189,8 @@ public class PlayerStats : MonoBehaviour
         if (!IsPlayerInvincible)
             CurrentHealth = CurrentHealth - _takenDamage;
 
-        FlashOnce();
+        // Visual effects on taking damage        
+        StartCoroutine(_damageVFX?.FlashAndRevert());
 
         // Logic for Player Death
         if (IsSprinting && CurrentHealth <= 1.5f)
@@ -292,34 +293,34 @@ public class PlayerStats : MonoBehaviour
     // --- Taking Damage related ---
     // -----------------------------
 
-    internal void FlashOnce()
-    {
-        _audioSource.PlayOneShot(_audioClip);
+    //internal void FlashOnce()
+    //{
+    //    _audioSource.PlayOneShot(_audioClip);
 
-        // Start flashing immediately
-        StartCoroutine(FlashAndRevert());
-    }
+    //    // Start flashing immediately
+    //    StartCoroutine(FlashAndRevert());
+    //}
 
-    private IEnumerator FlashAndRevert()
-    {
-        isFlashing = true;
+    //private IEnumerator FlashAndRevert()
+    //{
+    //    isFlashing = true;
 
-        // Turn the enemy fully red
-        _spriteRenderer.color = Color.red;
+    //    // Turn the enemy fully red
+    //    _spriteRenderer.color = Color.red;
 
-        // Wait for the flashing duration
-        yield return new WaitForSeconds(_flashDuration);
+    //    // Wait for the flashing duration
+    //    yield return new WaitForSeconds(_flashDuration);
 
-        // Revert to the default color
-        isFlashing = false;
-        _spriteRenderer.color = defaultColor;
-    }
+    //    // Revert to the default color
+    //    isFlashing = false;
+    //    _spriteRenderer.color = defaultColor;
+    //}
 
-    private void FlashingEffect()
-    {
-        // No need to interpolate, just set to fully red
-        _spriteRenderer.color = Color.red;
-    }
+    //private void FlashingEffect()
+    //{
+    //    // No need to interpolate, just set to fully red
+    //    _spriteRenderer.color = Color.red;
+    //}
     #endregion
 
     #endregion

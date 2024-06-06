@@ -299,7 +299,6 @@ GameObject:
   - component: {fileID: 4204878161562480582}
   - component: {fileID: -915621413644644009}
   - component: {fileID: 1268659712}
-  - component: {fileID: 1807849734675487193}
   - component: {fileID: -7614648117892860930}
   - component: {fileID: 939063735}
   m_Layer: 9
@@ -541,31 +540,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a6b19f4a116f9441899304199b75be9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maximumHealth: 10
-  _currentHealth: 0
-  _takenDamage: 3
   _light2d: {fileID: 1982545485}
   _animator: {fileID: 1108644999211655060}
-  _bloodPoolSpawn:
+  _bloodPrefabPool:
   - {fileID: 3044862607823702276, guid: ef5550f6add88d942b04d90e365378c4, type: 3}
   - {fileID: 7784901274924939644, guid: 78e9458eac6487141921a0fda951a639, type: 3}
   - {fileID: 5169151268200698254, guid: da58d847e6380c44eb0a2b2a58ee2b1e, type: 3}
   - {fileID: 1387189892773440931, guid: 6b10275c7991d6e4fb30a507d922ef24, type: 3}
-  _bloodDeadPrefab: {fileID: 5459322947420741018, guid: 56f040fc343074640ba7ce86ec08968c, type: 3}
---- !u!114 &1807849734675487193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1108644999211655059}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e28b497d972cb6b43bf13176102d6351, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _onDeathBloodPrefab: {fileID: 5459322947420741018, guid: 56f040fc343074640ba7ce86ec08968c, type: 3}
+  _audioSource: {fileID: 0}
+  _audioClip: {fileID: 8300000, guid: ab8606f911b06b84884a725ba313a76e, type: 3}
+  _maximumHealth: 10
+  _currentHealth: 0
   _flashingSpeed: 0
-  _flashDuration: 0.05
+  _flashDuration: 0.1
+  _isDead: 0
 --- !u!114 &-7614648117892860930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -592,7 +581,7 @@ MonoBehaviour:
   - {x: 0.13, y: -0.07000002, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 70936
+  m_InstanceId: 62520
   m_LocalBounds:
     m_Center: {x: 0.000000014901161, y: -0.000000014901161, z: 0}
     m_Extent: {x: 0.13, y: 0.07000001, z: 0}
