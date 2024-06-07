@@ -229,12 +229,12 @@ public class BaseBullet : MonoBehaviour
             if (_currentBulletLiveTime <= 0)
             {
                 gameObject.SetActive(false);
-                Debug.Log($"'<color=mageta>{gameObject.name}</color>: was disabled due to current Bullet Live Time ('{_currentBulletLiveTime}') run out.");
+                //Debug.Log($"'<color=mageta>{gameObject.name}</color>: was disabled due to current Bullet Live Time ('{_currentBulletLiveTime}') run out.");
 
                 // reset Bullet LiveTime
                 _currentBulletLiveTime = _maxBulletAliveTime;
 
-                Debug.Log($"'<color=mageta>{gameObject.name}</color>: current Bullet Live Time was reset to max Bullet Live Time again: Current Bullet Live TIme: ('<color=lime>{_currentBulletLiveTime}</color>')");
+                //Debug.Log($"'<color=mageta>{gameObject.name}</color>: current Bullet Live Time was reset to max Bullet Live Time again: Current Bullet Live TIme: ('<color=lime>{_currentBulletLiveTime}</color>')");
             }
         }
     }

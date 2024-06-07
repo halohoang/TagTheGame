@@ -3,7 +3,7 @@ using NaughtyAttributes;
 using UnityEngine;
 
 [RequireComponent(typeof(BaseEnemyBehaviour))]
-public class CollisionCheck : MonoBehaviour
+public class TactilePerception : MonoBehaviour
 {
     [SerializeField, ReadOnly] private BaseEnemyBehaviour _enemyBehav;
 

@@ -826,9 +826,18 @@ public class PlayerWeaponHandling : MonoBehaviour
 
     private void SpawnBulletCasing()
     {
-        // Instantiate a bullet casing at the specified spawn point
-        Quaternion casingRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
-        Instantiate(_bulletCasingPrefab, _casingSpawnPosition.position, casingRotation);
+        Debug.Log($"'SpawnBulletCasing()' was called in '{this}'");
+
+        // Instantiate a bullet casing at the specified spawn point with random rotation
+        GameObject casing = BulletCasingObjectPool.Instance.GetInactivePooledObject();
+        casing.transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+        casing.transform.position = _casingSpawnPosition.position;
+        casing.SetActive(true);
+
+        #region old prefab instatnitation
+        //Quaternion casingRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+        //Instantiate(_bulletCasingPrefab, _casingSpawnPosition.position, casingRotation);
+        #endregion
     }
 
     /// <summary>

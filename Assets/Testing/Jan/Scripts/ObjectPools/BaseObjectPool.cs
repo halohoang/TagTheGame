@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class BaseObjectPool : MonoBehaviour
 {
+    //--------------------------------------
+    // - - - - -  V A R I A B L E S  - - - - 
+    //--------------------------------------
+
     [Header("Needed References")]
     [Tooltip("Reference to the GameObject in the Hierarchy that shall parent the pooled Objects.")]
     [SerializeField] private GameObject _parentObject;
@@ -25,7 +29,9 @@ public class BaseObjectPool : MonoBehaviour
     internal GameObject ObjectToPool { get => _objectToPool; private set => _objectToPool = value; }
     internal int AmountToPool { get => _amountToPool; private set => _amountToPool = value; }
 
-    //------------------------------ Methods ------------------------------
+    //----------------------------------
+    // - - - - -  M E T H O D S  - - - - 
+    //----------------------------------
 
     //---------- Unity-Executed Methods ----------
     protected virtual void Awake()

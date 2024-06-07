@@ -22,8 +22,8 @@ public class TakingDamageVFX
     //----------------------------------
     // - - - - -  M E T H O D S  - - - - 
     //----------------------------------
-        
-    // Constructors
+
+    //---------- Constructors ----------
     public TakingDamageVFX(SpriteRenderer spriteRenderer, float flashSpeed, float flashDuration)
 	{
 		_spriteRenderer = spriteRenderer;
@@ -31,14 +31,14 @@ public class TakingDamageVFX
         _flashDuration = flashDuration;
 	}
 
-    // Custom Methods
+    //---------- Custom Methods ----------
     internal void FlashingEffect()
     {
         // No need to interpolate, just set to fully red
         _spriteRenderer.color = Color.red;
     }
 
-    // Coroutines
+    //---------- Coroutines ----------
     internal IEnumerator FlashAndRevert()
 	{
 		isFlashing = true;

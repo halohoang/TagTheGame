@@ -122,8 +122,8 @@ GameObject:
   - component: {fileID: 4110486833003962724}
   - component: {fileID: -5423439436550806727}
   - component: {fileID: -4546890457570054001}
-  - component: {fileID: 157907538518814236}
   - component: {fileID: -2134144922999699345}
+  - component: {fileID: 157907538518814236}
   m_Layer: 15
   m_Name: BulletCasing
   m_TagString: Casing
@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00c8f7eb05ad5eb40baa9fc126742d38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ejectionForce: 10
+  _ejectionForce: 5
   _despawnTime: 10
 --- !u!50 &-4546890457570054001
 Rigidbody2D:
@@ -234,22 +234,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &157907538518814236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4110486833003962727}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee158225ee1e59f4791627785501d950, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shaderTypes: 3
-  normalStrength: 5
-  normalSmoothing: 1
-  computingNormal: 0
 --- !u!61 &-2134144922999699345
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -257,7 +241,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4110486833003962727}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -276,3 +260,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.06, y: 0.15}
   m_EdgeRadius: 0
+--- !u!114 &157907538518814236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4110486833003962727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee158225ee1e59f4791627785501d950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shaderTypes: 3
+  normalStrength: 5
+  normalSmoothing: 1
+  computingNormal: 0
