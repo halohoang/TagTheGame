@@ -97,8 +97,8 @@ public class PlayerController : MonoBehaviour
         PauseMenu.OnRestartScene += CallOnEnableOfInputReader;
         _inputReaderSO.OnMovementInput += ReadMovementInput;
         _inputReaderSO.OnFastMovementInput += ReadSprintInput;
-        PlayerHealth.OnPlayerDeath += SetIsPlayerDead;
-        PlayerHealth.OnPlayerDeath += DisablePlayerInput;
+        PlayerStats.OnPlayerDeath += SetIsPlayerDead;
+        PlayerStats.OnPlayerDeath += DisablePlayerInput;
         Debug.Log($"<color=magenta> OnEnable() was called in {this} </color>");
     }
     private void OnDisable()
@@ -106,8 +106,8 @@ public class PlayerController : MonoBehaviour
         PauseMenu.OnRestartScene -= CallOnEnableOfInputReader;
         _inputReaderSO.OnMovementInput -= ReadMovementInput;
         _inputReaderSO.OnFastMovementInput -= ReadSprintInput;
-        PlayerHealth.OnPlayerDeath -= SetIsPlayerDead;
-        PlayerHealth.OnPlayerDeath -= DisablePlayerInput;
+        PlayerStats.OnPlayerDeath -= SetIsPlayerDead;
+        PlayerStats.OnPlayerDeath -= DisablePlayerInput;
         Debug.Log($"<color=magenta> OnDisable() was called in {this} </color>");
     }
 
@@ -167,7 +167,7 @@ public class PlayerController : MonoBehaviour
 
             case Enum_Lib.ESpaceKey.NotPressed:
 
-                // reset Values to normal Movement Speed
+                // reset Values to normal movement speed
                 SetPlayerMovementValues(_minPlayerSpeed, 0.148f, 1.12f, 1, true);
                 _isPlayerSprinting = false;
 
@@ -200,24 +200,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    /* Player Movement*/
+    /// <summary>
+    /// Executes movement related logic respective to input (e.g. <see cref="_movementDirection"/>).
+    /// </summary>
     void PlayerMovement()
     {
         // if Movement registered (by MovementInput and TimeScale is not paused and Player alive
-        if (_movementDirection != Vector2.zero && Time.timeScale != 0 && !_playerStats.IsPlayerDead)
+        if (_movementDirection != Vector2.zero && Time.timeScale != 0 && !_isPlayerDead)
         {
             IsPlayerMoving = true;
 
-            if (_playerStats.CurrentHealth < 2)     // if Player's health is below 2, use Movement Settings as if is not sprinting
+            // set movement values
+            if (_playerStats.CurrentHealth < 2) // if Player's health is below 2, use Movement Settings as if is not sprinting (currently Health and stamina are the same thing in this game)
                 SetPlayerMovementValues(_minPlayerSpeed, 0.148f, 1.12f, 1, true);
 
+            // movement of player character
             _rigidbody2D.MovePosition(_rigidbody2D.position + _movementDirection * _currentPlayerSpeed * Time.deltaTime);
             #region Debuggers little helper
             //Debug.Log($"<color=magenta> PlayerMovement should have been excuted </color>. MovementDirection: '{_movementDirection}' | TimeScale: '{Time.timeScale}' | " +
             //$"Is Player Dead: '{_playerHealthScript.IsPlayerDead}'");
             #endregion
         }
-        else if (_playerStats.IsPlayerDead)
+        else if (_isPlayerDead)
         {
             _rigidbody2D.velocity = Vector2.zero;
             IsPlayerMoving = false;
@@ -235,6 +239,14 @@ public class PlayerController : MonoBehaviour
         _animCtrl.SetBool("isMoving", IsPlayerMoving);
     }
 
+    /// <summary>
+    /// Sets movement related values like movement speed
+    /// </summary>
+    /// <param name="movementSpeed"></param>
+    /// <param name="lightFallofIntensity"></param>
+    /// <param name="pointLightOuterRadius"></param>
+    /// <param name="lightIntesity"></param>
+    /// <param name="enableDisableLightControllComponent"></param>
     private void SetPlayerMovementValues(float movementSpeed, float lightFallofIntensity, float pointLightOuterRadius, float lightIntesity, bool enableDisableLightControllComponent)
     {
         _currentPlayerSpeed = movementSpeed;

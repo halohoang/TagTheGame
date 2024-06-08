@@ -1,6 +1,5 @@
 using EnumLibrary;
 using NaughtyAttributes;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -50,7 +49,7 @@ public class PlayerStats : MonoBehaviour
     [Space(5)]
 
     [Header("Monitoring Values")]
-    [SerializeField, ReadOnly] private float _currentHealth;
+    [SerializeField, ReadOnly] private float _currentHealth;    // todo: implement a stamina and seperate this from the health value; JM
     [SerializeField, ReadOnly] private float _regenTimer = 1f;
     [SerializeField, ReadOnly] private bool _isPlayerDead;
     [SerializeField, ReadOnly] private bool _canRegen = true;
