@@ -1,36 +1,39 @@
 using UnityEngine;
 using NaughtyAttributes;
 
-/// <summary>
-/// Class for defining the behaviour for the bullet projectile shot by enemy-characters
-/// </summary>
-public class EnemyBullet : BaseBullet
+namespace Projectile
 {
-    [SerializeField, ReadOnly] private GameObject[] _enemyObjects;
-
-    private void Awake()
+    /// <summary>
+    /// Class for defining the behaviour for the bullet projectile shot by enemy-characters
+    /// </summary>
+    public class EnemyBullet : BaseBullet
     {
-        _enemyObjects = GameObject.FindGameObjectsWithTag("Enemy");
-    }
+        [SerializeField, ReadOnly] private GameObject[] _enemyObjects;
 
-    private void OnEnable()
-    {
-        // enemy bullets ignoring the enemy objects
-        foreach (GameObject enemyObj in _enemyObjects)
+        private void Awake()
         {
-            Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), enemyObj.GetComponent<Collider2D>());
+            _enemyObjects = GameObject.FindGameObjectsWithTag("Enemy");
         }
-    }
 
-    private void FixedUpdate()
-    {
-        BulletRB2D.velocity = transform.right * BulletSpeed;
-    }
+        private void OnEnable()
+        {
+            // enemy bullets ignoring the enemy objects
+            foreach (GameObject enemyObj in _enemyObjects)
+            {
+                Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), enemyObj.GetComponent<Collider2D>());
+            }
+        }
 
-    private new void OnCollisionEnter2D(Collision2D collision)
-    {
-        base.OnCollisionEnter2D(collision);
+        private void FixedUpdate()
+        {
+            BulletRB2D.velocity = transform.right * BulletSpeed;
+        }
 
-        TargetCollisionCheck(collision);
+        private new void OnCollisionEnter2D(Collision2D collision)
+        {
+            base.OnCollisionEnter2D(collision);
+
+            TargetCollisionCheck(collision);
+        }
     }
 }
