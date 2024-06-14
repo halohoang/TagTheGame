@@ -58,6 +58,10 @@ namespace UI
         [Tooltip("The threshold of the currently selected weapon for when to show the reload hint to inform the palyer that reloading is reccomended.")]
         #endregion
         [SerializeField, ReadOnly] private int _selectedWeaponReloadThreshold;
+        #region Tooltip
+        [Tooltip("Is the god mode currently enabled and player invincible?")]
+        #endregion
+        [SerializeField, ReadOnly] private bool _isGodModeEnabled;
 
         private GameObject[] _uITextObjects;                                        // stores the UI-Text-Objects for quicker referencing and access
         [SerializeField, ReadOnly] private Sprite[] _weaponSprites;                 // stores the Weapon Sprites for quicker referencing and access
@@ -101,6 +105,7 @@ namespace UI
 
             // Cheat Panel related
             CheatInput.OnSetGodMode += SetGodModeHint;
+            PlayerStats.OnGodModeChange += SetGodModeHint;
         }
         private void OnDisable()
         {
@@ -115,6 +120,9 @@ namespace UI
 
         void Start()
         {
+            // Set god mode hint
+            _godeModeTxt.enabled = _isGodModeEnabled;
+
             // disable Reaload Hint Object
             _reloadHintTxt.enabled = false;
         }
@@ -188,6 +196,7 @@ namespace UI
         private void SetGodModeHint(bool godModeStatus)
         {
             _godeModeTxt.enabled = godModeStatus;
+            _isGodModeEnabled = godModeStatus;
         }
 
         #endregion

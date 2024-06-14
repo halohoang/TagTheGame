@@ -14,6 +14,7 @@ namespace Player
         // - - - - -  E V E N T S  - - - - 
         //--------------------------------
         public static event UnityAction<bool> OnPlayerDeath;
+        public static event UnityAction<bool> OnGodModeChange;
         #endregion
 
         #region Variables
@@ -25,7 +26,7 @@ namespace Player
         [SerializeField] private Rigidbody2D _rb2D;
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private GameObject _deadOverlay;
-        [SerializeField] private Transform _chargeBarTransform;     // Reference to the scale of the bar
+        [SerializeField] private Transform _chargeBarTransform;                     // Reference to the scale of the bar
         [SerializeField] private Animator _animator;
         [SerializeField] private AudioSource _audioSource;
         [SerializeField] private AudioClip _deadSound;
@@ -38,12 +39,12 @@ namespace Player
         #region Tooltip
         [Tooltip("The damage the PlayerCharacter will take on any attack impact, no matter if bullet or melee attack.")]
         #endregion
-        [SerializeField, Range(0.1f, 100.0f)] internal int _takenDamage;                 // todo: for more variability on taken damage this might need to be changed yet
-        [SerializeField] private float _chargeSpeed = 1;            // The rate at which bar depletes or charges    
-        [SerializeField] private float _regenCooldown = 2f;         // Adjust the duration as needed
+        [SerializeField, Range(0.1f, 100.0f)] internal int _takenDamage;            // todo: for more variability on taken damage this might need to be changed yet
+        [SerializeField] private float _chargeSpeed = 1;                            // The rate at which bar depletes or charges    
+        [SerializeField] private float _regenCooldown = 2f;                         // Adjust the duration as needed
         /*Flashing Effect */
         [SerializeField] private float _flashingSpeed = 0;
-        [SerializeField] private float _flashDuration = 0.1f;       // Duration of the flashing effect
+        [SerializeField] private float _flashDuration = 0.1f;                       // Duration of the flashing effect
         [Space(5)]
 
         /* Dead Effec */
@@ -52,7 +53,7 @@ namespace Player
         [Space(5)]
 
         [Header("Monitoring Values")]
-        [SerializeField, ReadOnly] private float _currentHealth;    // todo: implement a stamina and seperate this from the health value; JM
+        [SerializeField, ReadOnly] private float _currentHealth;                    // todo: implement a stamina and seperate this from the health value; JM
         [SerializeField, ReadOnly] private float _regenTimer = 1f;
         [SerializeField, ReadOnly] private bool _isPlayerDead;
         [SerializeField, ReadOnly] private bool _canRegen = true;
@@ -76,6 +77,11 @@ namespace Player
         //----------------------------------
 
         #region Unity-provided Methods
+        private void OnValidate()
+        {
+            OnGodModeChange?.Invoke(IsPlayerInvincible);
+        }
+
         private void Awake()
         {
             // auto referencing
@@ -118,7 +124,6 @@ namespace Player
         {
             // Health Calculations
             ReduceHP();
-
 
             if (CurrentHealth <= 0)    // Logic for Player Death
             {
