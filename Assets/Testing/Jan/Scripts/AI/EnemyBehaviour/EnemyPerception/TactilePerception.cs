@@ -1,15 +1,18 @@
-using Enemies;
 using NaughtyAttributes;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(BaseEnemyBehaviour))]
 public class TactilePerception : MonoBehaviour
 {
-    [SerializeField, ReadOnly] private BaseEnemyBehaviour _enemyBehav;
-
-    private void Awake()
+    private void Start()
     {
-        _enemyBehav = GetComponent<BaseEnemyBehaviour>();
+        
+    }
+
+    private void Update()
+    {
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

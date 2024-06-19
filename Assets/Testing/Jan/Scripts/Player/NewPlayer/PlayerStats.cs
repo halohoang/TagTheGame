@@ -14,7 +14,6 @@ namespace Player
         // - - - - -  E V E N T S  - - - - 
         //--------------------------------
         public static event UnityAction<bool> OnPlayerDeath;
-        public static event UnityAction<bool> OnGodModeChange;
         #endregion
 
         #region Variables
@@ -34,7 +33,6 @@ namespace Player
 
         [Header("Settings")]
         /* Health System */
-        [SerializeField] private bool _isPlayerInvincible = false;
         [SerializeField, Range(0.1f, 100.0f)] private float _maxHealth;
         #region Tooltip
         [Tooltip("The damage the PlayerCharacter will take on any attack impact, no matter if bullet or melee attack.")]
@@ -53,6 +51,7 @@ namespace Player
         [Space(5)]
 
         [Header("Monitoring Values")]
+        [SerializeField, ReadOnly] private bool _isPlayerInvincible = false;
         [SerializeField, ReadOnly] private float _currentHealth;                    // todo: implement a stamina and seperate this from the health value; JM
         [SerializeField, ReadOnly] private float _regenTimer = 1f;
         [SerializeField, ReadOnly] private bool _isPlayerDead;
@@ -77,11 +76,6 @@ namespace Player
         //----------------------------------
 
         #region Unity-provided Methods
-        private void OnValidate()
-        {
-            OnGodModeChange?.Invoke(IsPlayerInvincible);
-        }
-
         private void Awake()
         {
             // auto referencing

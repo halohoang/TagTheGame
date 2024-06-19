@@ -105,7 +105,6 @@ namespace UI
 
             // Cheat Panel related
             CheatInput.OnSetGodMode += SetGodModeHint;
-            PlayerStats.OnGodModeChange += SetGodModeHint;
         }
         private void OnDisable()
         {
