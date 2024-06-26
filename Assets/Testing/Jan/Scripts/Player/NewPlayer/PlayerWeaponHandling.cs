@@ -10,18 +10,18 @@ namespace Player
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(PlayerController))]
-    public class PlayerWeaponHandling : MonoBehaviour
+    public class PlayerWeaponHandling : MonoBehaviour, INoiseEmitting
     {
         #region Events
         //--------------------------------
         // - - - - -  E V E N T S  - - - - 
         //--------------------------------
 
-        public static event UnityAction<bool, Vector3, float> OnPlayerShoot;    // invoked in 'PlayerAttackOnInput()' (when projectile is instantiated); JM (08.05.24)
-        public static event UnityAction<int, int> OnSetBulletCount;             // invoked in 'SetBulletCount()' (when new bullet counts are (re)setted, e.g. on weapon switch/pickup); JM (08.05.24)
-        public static event UnityAction<int> OnBulletsInstantiated;             // invoked in 'SpawnProjectile()' (respective during execution of 'PlayerAttackOnInput()'); JM (08.05.24)
-        public static event UnityAction<int> OnReload;                          // invoked in 'Realoding()' (respective when Reload-Input was detected); JM (08.05.24)
-        public static event UnityAction<BaseWeapon> OnWeaponEquip;              // invoked in 'FirstWeaponEquip()', 'SecondWEaponEquip()', 'HolsterWeapon()' and 'OnCollisionEnter2D()'; JM (10.05.24)
+        public static event UnityAction<bool, Vector3, Collider2D[]> OnPlayerShoot;     // invoked in 'PlayerAttackOnInput()' (when projectile is instantiated); JM (08.05.24)
+        public static event UnityAction<int, int> OnSetBulletCount;                     // invoked in 'SetBulletCount()' (when new bullet counts are (re)setted, e.g. on weapon switch/pickup); JM (08.05.24)
+        public static event UnityAction<int> OnBulletsInstantiated;                     // invoked in 'SpawnProjectile()' (respective during execution of 'PlayerAttackOnInput()'); JM (08.05.24)
+        public static event UnityAction<int> OnReload;                                  // invoked in 'Realoding()' (respective when Reload-Input was detected); JM (08.05.24)
+        public static event UnityAction<BaseWeapon> OnWeaponEquip;                      // invoked in 'FirstWeaponEquip()', 'SecondWEaponEquip()', 'HolsterWeapon()' and 'OnCollisionEnter2D()'; JM (10.05.24)
         #endregion
 
 
@@ -115,6 +115,7 @@ namespace Player
         [Tooltip("The Time the deviation to the movement direction fot he projectile is applied (in seconds)")]
         #endregion
         [SerializeField] private float _whenDeviationKicksIn;
+        [Space(3)]
 
         /* Shooting Noise Range Settings*/
         #region Tooltip
@@ -125,6 +126,10 @@ namespace Player
         [Tooltip("Defines whether the green gizmo circle around the player showing the noise range when shooting, is shown in the editor or not.")]
         #endregion
         [SerializeField] private bool _showNoiseRangeGizmo = true;
+        #region Tooltip
+        [Tooltip("The game Objects of this layer mask that shall be affected, when this Interactable is interacted with. E.g. Enemies that are within the noise range of this object.")]
+        #endregion
+        [SerializeField] private LayerMask _affectedObjectsOnInteraction;
         [Space(3)]
 
         /* Camera Shake Settings*/
@@ -346,6 +351,24 @@ namespace Player
         #endregion
 
         #region Custom Methods
+        /// <summary>
+        /// Gets all enemy object wihtin the noise range of this interactable and fires an event to inform every enemy object in the scene that this interactable was interacted with and
+        /// transmits the array of enemy objects that are within the noise range of this interaction object
+        /// </summary>
+        /// <param name="isSomethinHappening"></param>
+        /// <param name="positionOfEvent"></param>
+        /// <param name="noiseRange"></param>
+        public void InformObjectsInNoiseRange(bool isSomethinHappening, Vector3 positionOfEvent, float noiseRange)
+        {
+            // for every Enemy that actually is in the noise range of the AlertEvent set the appropriate values
+            Collider2D[] CollidersWithinRange = Physics2D.OverlapCircleAll(positionOfEvent, noiseRange, _affectedObjectsOnInteraction);
+            for (int i = 0; i < CollidersWithinRange.Length; i++)
+            {
+                // todo: remove this event after completing AI-Rework; JM (26.06.24)
+                OnPlayerShoot?.Invoke(isSomethinHappening, positionOfEvent, CollidersWithinRange); // Event for Informing Enemies that Door was Kicked in to react to
+            }
+        }
+
         private void ReadAttackinput(Enum_Lib.ELeftMouseButton lMBPressStatus)
         {
             _leftMouseButtonStatus = lMBPressStatus;
@@ -425,7 +448,8 @@ namespace Player
 
                         ExecuteCameraShake();
 
-                        OnPlayerShoot?.Invoke(_isShooting, transform.position, _shootingNoiseRange);
+                        //OnPlayerShoot?.Invoke(_isShooting, transform.position, _shootingNoiseRange);
+                        InformObjectsInNoiseRange(_isShooting, transform.position, _shootingNoiseRange);
 
                         // reset the Time the shooting logic can be executed the next time (e.g. to ensure the projectiles will be spawned at a specific rate ('fireRate') and not simultaneosly)
                         _nextFireTime = Time.time + _fireRate;
@@ -463,6 +487,22 @@ namespace Player
             OnBulletsInstantiated?.Invoke(_currentBulletCount);                                // informing AmmoCounter about shooting with updated ammount of Bullets          
         }
 
+        private void SpawnBulletCasing()
+        {
+            Debug.Log($"'SpawnBulletCasing()' was called in '{this}'");
+
+            // Instantiate a bullet casing at the specified spawn point with random rotation
+            GameObject casing = BulletCasingObjectPool.Instance.GetInactivePooledObject();
+            casing.transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+            casing.transform.position = _casingSpawnPosition.position;
+            casing.SetActive(true);
+
+            #region old prefab instatnitation
+            //Quaternion casingRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+            //Instantiate(_bulletCasingPrefab, _casingSpawnPosition.position, casingRotation);
+            #endregion
+        }
+
         private void ExecuteCameraShake()
         {
             //apply Camera Shake(when sprinting while shooting)
@@ -494,6 +534,7 @@ namespace Player
             _cameraShake.StartShake(_camShakeDuration, _camShakeAmount);
             Debug.Log("Shake");
         }
+
 
         private bool CanFire()
         {
@@ -735,7 +776,8 @@ namespace Player
         }
 
         /// <summary>
-        /// Sets the <see cref="_currentBulletCount"/> to <see cref="_playerEquipmentSO.FirstWeapon.MagazineSize"/> if Magazine is full or to <see cref="_playerEquipmentSO.FirstWeapon.CurrentRoundsInMag"/> if Magazine is not full and was not reloaded.
+        /// Sets the <see cref="_currentBulletCount"/> to <see cref="_playerEquipmentSO.FirstWeapon.MagazineSize"/> if Magazine is full or to
+        /// <see cref="_playerEquipmentSO.FirstWeapon.CurrentRoundsInMag"/> if Magazine is not full and was not reloaded.
         /// </summary>
         /// /// <param name="weaponSlot"> The First or Second Weapon </param>
         private void SetBulletCount(BaseWeapon weaponSlot)
@@ -829,21 +871,6 @@ namespace Player
             return projectileRotation;
         }
 
-        private void SpawnBulletCasing()
-        {
-            Debug.Log($"'SpawnBulletCasing()' was called in '{this}'");
-
-            // Instantiate a bullet casing at the specified spawn point with random rotation
-            GameObject casing = BulletCasingObjectPool.Instance.GetInactivePooledObject();
-            casing.transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
-            casing.transform.position = _casingSpawnPosition.position;
-            casing.SetActive(true);
-
-            #region old prefab instatnitation
-            //Quaternion casingRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
-            //Instantiate(_bulletCasingPrefab, _casingSpawnPosition.position, casingRotation);
-            #endregion
-        }
 
         /// <summary>
         /// Plays transmitted Audioclip if it is not null
@@ -917,7 +944,7 @@ namespace Player
                 // Enable proper Animation (if Player is armed) accordingly to equipped weapon
                 EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
             }
-        }
+        }        
         #endregion
 
         #endregion

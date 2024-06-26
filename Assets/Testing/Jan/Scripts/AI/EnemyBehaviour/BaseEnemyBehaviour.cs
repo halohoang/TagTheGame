@@ -1,21 +1,23 @@
-using UnityEngine;
+using EnemyPerception;
 using EnumLibrary;
-using StateMashine;
-using UnityEngine.AI;
-using NaughtyAttributes;
 using Interactables;
+using NaughtyAttributes;
+using Player;
 using ScriptableObjects;
-using System;
+using StateMashine;
+using UnityEngine;
+using UnityEngine.AI;
 
 namespace Enemies
 {
     [RequireComponent(typeof(NavMeshAgent))]
+    [DisallowMultipleComponent]
     public class BaseEnemyBehaviour : MonoBehaviour
     {
         #region Variables
-        // -------------------------
-        // --- V A R I A B L E S ---
-        // -------------------------
+        //--------------------------------------
+        // - - - - -  V A R I A B L E S  - - - - 
+        //--------------------------------------
 
         [Header("Needed References")]
         [SerializeField, ReadOnly] private NavMeshAgent _navAgent;
@@ -62,11 +64,9 @@ namespace Enemies
         private ChaseState _chaseState;
         private AttackState _attackState;
         #endregion
-
-        #region Properties
-        // ---------------------------
-        // --- P R O P E R T I E S ---
-        // ---------------------------
+        
+        
+        // - - - Properties - - -         
 
         // References
         public NavMeshAgent NavAgent { get => _navAgent; private set => _navAgent = value; }
@@ -82,7 +82,7 @@ namespace Enemies
         public bool IsPlayerDead { get => _isPlayerDead; private set => _isPlayerDead = value; }
         public bool IsPlayerDetected { get => _isPlayerDetected; private set => _isPlayerDetected = value; }
         public bool IsSomethingAlarmingHappening { get => _isSomethingAlarmingHappening; private set => _isSomethingAlarmingHappening = value; }
-        public bool IsCollidingWithOtherEnemy { get => _isCollidingWithObstacle; private set => _isCollidingWithObstacle = value; }
+        public bool IsCollidingWithObject { get => _isCollidingWithObstacle; private set => _isCollidingWithObstacle = value; }
         public float NoiseRangeOfAlarmingEvent { get => _noiseRangeOfAlarmingEvent; private set => _noiseRangeOfAlarmingEvent = value; }
         public Vector3 PositionOfAlarmingEvent { get => _positionOfAlarmingEvent; private set => _positionOfAlarmingEvent = value; }
         public Vector2 CollisionObjectPos { get => _collisionObjectPos; private set => _collisionObjectPos = value; }
@@ -99,12 +99,12 @@ namespace Enemies
         // put that later inside the 'MeleeEnemyBehaviour.cs': ; JM (31.10.2023)
         public ConditionIsInMeleeAttackRangeCheck CondMeleeAttackCheck { get => _condMeleeAttackCheck; private set => _condMeleeAttackCheck = value; }
         public bool IsInAttackRange { get => _isInAttackRange; private set => _isInAttackRange = value; }
-        #endregion
+
 
         #region Methods
-        // ---------------------
-        // --- M E T H O D S ---
-        // ---------------------
+        //----------------------------------
+        // - - - - -  M E T H O D S  - - - - 
+        //----------------------------------
 
         #region Unity Methods
         // Unity provided Methods
@@ -135,10 +135,21 @@ namespace Enemies
         protected void OnEnable()
         {
             // subscribing to Events
+            #region old System
             PlayerHealth.OnPlayerDeath += SetIsPlayerDead;
-            Interactable_Door.OnDoorKickIn += SetAlarmingEventValues;
+            //Interactable_Door.OnDoorKickIn += SetAlarmingEventValues;
             PlayerShoot.OnPlayerShoot += SetAlarmingEventValues;
             _condPlayerDetectionCheck.OnPlayerDetection += SetIsPlayerDetected;
+            #endregion
+
+            #region new System (26.06.)
+            // new System (26.06.24)
+            PlayerStats.OnPlayerDeath += SetIsPlayerDead;
+
+            VisualPerception.OnPlayerDetection += SetIsPlayerDetected;
+            AuditivePerception.OnSomethingAlarmingIsHappening += SetAlarmingEventValues;
+            TactilePerception.OnCollidingWithOtherEnemy += SetIsCollidingWithOtherEnemy;
+            #endregion
 
             _condMeleeAttackCheck.OnMeleeAttack += SetIsInAttackRangePlayer;        // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
         }
@@ -146,10 +157,21 @@ namespace Enemies
         protected void OnDisable()
         {
             // unsubscribing from Events
+            #region old system
             PlayerHealth.OnPlayerDeath -= SetIsPlayerDead;
-            Interactable_Door.OnDoorKickIn -= SetAlarmingEventValues;
+            //Interactable_Door.OnDoorKickIn -= SetAlarmingEventValues;
             PlayerShoot.OnPlayerShoot -= SetAlarmingEventValues;
             _condPlayerDetectionCheck.OnPlayerDetection -= SetIsPlayerDetected;
+            #endregion
+
+            #region new system (26.06.)
+            // new System (26.06.24)
+            PlayerStats.OnPlayerDeath -= SetIsPlayerDead;
+
+            VisualPerception.OnPlayerDetection -= SetIsPlayerDetected;
+            AuditivePerception.OnSomethingAlarmingIsHappening -= SetAlarmingEventValues;
+            TactilePerception.OnCollidingWithOtherEnemy -= SetIsCollidingWithOtherEnemy;
+            #endregion
 
             _condMeleeAttackCheck.OnMeleeAttack -= SetIsInAttackRangePlayer;        // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
         }
@@ -180,18 +202,19 @@ namespace Enemies
             StateMachine.CurrentState.PhysicsUpdate();
         }
 
+        // todo: move this logic to TactilePerception.cs; JM (26.06.24)
         private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.gameObject.CompareTag("Enemy"))
             {
-                IsCollidingWithOtherEnemy = true;
+                IsCollidingWithObject = true;
                 //NavAgent.isStopped = true;
                 //CollisionObjectPos = collision.transform.position;
 
                 Debug.Log($"'<color=lime>{gameObject.name}</color>': collided with '{collision.gameObject.name}' (wall position: '{CollisionObjectPos}');");
             }
             else
-                IsCollidingWithOtherEnemy = false;
+                IsCollidingWithObject = false;
         }
 
         // Update is called once per frame
@@ -206,16 +229,17 @@ namespace Enemies
         #endregion
 
         #region Custom Methods
-        // Custom Methods
+        // Custom Methods        
 
-        internal void SetIsSomethingAlarmingHappening(bool isSomethinAlarmingHappening)
+        internal void SetIsCollidingWithOtherEnemy(bool isCollidingWithWall, GameObject otherObj)
         {
-            IsSomethingAlarmingHappening = isSomethinAlarmingHappening;
+            IsCollidingWithObject = isCollidingWithWall;
+            CollisionObjectPos = otherObj.transform.position;
         }
 
-        internal void SetIsCollidingWithOtherEnemy(bool isCollidingWithWall)
+        internal void SetIsCollidingWithObject(bool isCollidingWithObject)
         {
-            IsCollidingWithOtherEnemy = isCollidingWithWall;
+            IsCollidingWithObject = isCollidingWithObject;
         }
 
         /// <summary>
@@ -225,6 +249,43 @@ namespace Enemies
         internal void CacheLastKnownPlayerPosition()
         {
             LastKnownPlayerPos = PlayerObject.transform.position;
+        }
+
+        internal void SetIsSomethingAlarmingHappening(bool isSomethinAlarmingHappening)
+        {
+            IsSomethingAlarmingHappening = isSomethinAlarmingHappening;
+        }
+
+        /// <summary>
+        /// Sets the values defining the alarming status of this enemy. (<see cref="IsSomethingAlarmingHappening"/>, <see cref="PositionOfAlarmingEvent"/>)
+        /// </summary>
+        /// <param name="isSomethinAlarmingHappening"></param>
+        /// <param name="positionOfAlarmingEvent"></param>
+        internal void SetAlarmingEventValues(bool isSomethinAlarmingHappening, Vector3 positionOfAlarmingEvent)
+        {
+            IsSomethingAlarmingHappening = isSomethinAlarmingHappening;
+            PositionOfAlarmingEvent = positionOfAlarmingEvent;
+        }
+
+        /// <summary>
+        /// rework this solution since every enemy will execute this and therefore everey enemy will set -> 
+        /// </summary>
+        /// <param name="isSomethinAlarmingHappening"></param>
+        /// <param name="positionOfAlarmingEvent"></param>
+        /// <param name="noiseRangeOfAlarmingEvent"></param>
+        private void SetAlarmingEventValues(bool isSomethinAlarmingHappening, Vector3 positionOfAlarmingEvent, float noiseRangeOfAlarmingEvent)
+        {
+            BaseEnemyBehaviour enemBehav = new BaseEnemyBehaviour();
+
+            // for every Enemy that actually is in the noise range of the AlertEvent set the appropriate values
+            Collider2D[] enemieColliders = Physics2D.OverlapCircleAll(positionOfAlarmingEvent, noiseRangeOfAlarmingEvent, LayerMask.GetMask("Enemy"));
+            for (int i = 0; i < enemieColliders.Length; i++)
+            {
+                enemBehav = enemieColliders[i].GetComponent<BaseEnemyBehaviour>();
+                enemBehav.IsSomethingAlarmingHappening = isSomethinAlarmingHappening;
+                enemBehav.PositionOfAlarmingEvent = positionOfAlarmingEvent;
+                enemBehav.NoiseRangeOfAlarmingEvent = noiseRangeOfAlarmingEvent;
+            }
         }
 
         private void SetIsPlayerDetected(bool isPlayerDetected, GameObject playerObj)
@@ -249,24 +310,6 @@ namespace Enemies
             _condPlayerDetectionCheck.enabled = false;
             //_condMeleeAttackCheck.enabled = false;
             this.enabled = false;
-        }
-
-        /// <summary>
-        /// rework this solution since every enemy will execute this and therefore everey enemy will set -> 
-        /// </summary>
-        /// <param name="isSomethinAlarmingHappening"></param>
-        /// <param name="positionOfAlarmingEvent"></param>
-        /// <param name="noiseRangeOfAlarmingEvent"></param>
-        private void SetAlarmingEventValues(bool isSomethinAlarmingHappening, Vector3 positionOfAlarmingEvent, float noiseRangeOfAlarmingEvent)
-        {
-            // for every Enemy that actually is in the noise range of the AlertEvent set the appropriate values
-            Collider2D[] enemieColliders = Physics2D.OverlapCircleAll(positionOfAlarmingEvent, noiseRangeOfAlarmingEvent, LayerMask.GetMask("Enemy"));
-            for (int i = 0; i < enemieColliders.Length; i++)
-            {
-                enemieColliders[i].GetComponent<BaseEnemyBehaviour>().IsSomethingAlarmingHappening = isSomethinAlarmingHappening;
-                enemieColliders[i].GetComponent<BaseEnemyBehaviour>().PositionOfAlarmingEvent = positionOfAlarmingEvent;
-                enemieColliders[i].GetComponent<BaseEnemyBehaviour>().NoiseRangeOfAlarmingEvent = noiseRangeOfAlarmingEvent;
-            }
         }
 
         /// <summary>

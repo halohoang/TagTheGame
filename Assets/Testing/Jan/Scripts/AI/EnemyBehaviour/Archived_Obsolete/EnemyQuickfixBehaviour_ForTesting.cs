@@ -59,13 +59,13 @@ public class EnemyQuickfixBehaviour_ForTesting : MonoBehaviour
     private void OnEnable()
     {
         // subscribing to Events
-        Interactable_Door.OnDoorKickIn += FaceAgentTowardsDoor;
+        //Interactable_Door.OnDoorKickIn += FaceAgentTowardsDoor;
     }
 
     private void OnDisable()
     {
         // unsubscribing from Events
-        Interactable_Door.OnDoorKickIn -= FaceAgentTowardsDoor;
+        //Interactable_Door.OnDoorKickIn -= FaceAgentTowardsDoor;
     }
 
     private void Start()

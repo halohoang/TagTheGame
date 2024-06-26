@@ -113,7 +113,7 @@ namespace ScriptableObjects
             _baseEnemyBehaviour.NavAgent.isStopped = false;
             _baseEnemyBehaviour.NavAgent.SetDestination(WalkTargetPos);
 
-            _baseEnemyBehaviour.SetIsCollidingWithOtherEnemy(false);      // reset bool is collidion with other enemy so at the end of an update cycly so the AI actually has a chance to wolk another direction
+            _baseEnemyBehaviour.SetIsCollidingWithObject(false);      // reset bool is collision with other enemy so at the end of an update cycle so the AI actually has a chance to wolk another direction
         }
 
         public override void ExecutePhysicsUpdateLogic()
@@ -153,7 +153,7 @@ namespace ScriptableObjects
         {
 
             // controll structures regarding walking behaviour
-            if (_baseEnemyBehaviour.IsCollidingWithOtherEnemy)
+            if (_baseEnemyBehaviour.IsCollidingWithObject)
             {
                 // stop movement for this cycle
                 _baseEnemyBehaviour.NavAgent.isStopped = true;
