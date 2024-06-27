@@ -6,7 +6,7 @@ namespace StateMashine
 {
     public class AttackState : BaseState
     {
-        private PlayerStats _playerHealthScript;
+        private PlayerHealth _playerHealthScript;
 
         public AttackState(NPCBehaviourController enemyBehav, EnemyStateMachine enemyStaMa) : base(enemyBehav, enemyStaMa)
         {            

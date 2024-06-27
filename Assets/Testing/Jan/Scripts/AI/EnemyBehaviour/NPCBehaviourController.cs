@@ -6,6 +6,7 @@ using ScriptableObjects;
 using StateMashine;
 using UnityEngine;
 using UnityEngine.AI;
+using Perception;
 
 namespace Enemies
 {

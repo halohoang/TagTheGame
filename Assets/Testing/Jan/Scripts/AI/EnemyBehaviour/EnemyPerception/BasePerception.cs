@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using Player;
 using UnityEngine;
 
 namespace NPCPerception
@@ -39,8 +40,8 @@ namespace NPCPerception
         [SerializeField, ReadOnly] private bool _isTargetDead;
 
         // - - - Properties - - -
-        protected GameObject TargetObject { get => _targetObject; set => _targetObject = value; }
-        protected bool IsTargetDetected { get => _isTargetDetected; set => _isTargetDetected = value; }
+        public bool IsTargetDetected { get => _isTargetDetected; protected set => _isTargetDetected = value; }
+        public GameObject TargetObject { get => _targetObject; protected set => _targetObject = value; }
         protected bool IsDead { get => _isDead; private set => _isDead = value; }
         protected bool IsTargetDead { get => _isTargetDead; private set => _isTargetDead = value; }
         protected LayerMask TargetDetectionMask { get => _targetDetectionMask; set => _targetDetectionMask = value; }
