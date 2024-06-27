@@ -8,7 +8,7 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "MeleeEnemy_Chase", menuName = "Scriptable Objects/Enemy Logic/Chase Logic/MeleeEnemy Chase")]
     public class MeleeEnemyChaseSO : BaseEnemyChaseSO
     {
-        public override void Initialize(GameObject enemyObj, BaseEnemyBehaviour enemyBehav)
+        public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
             base.Initialize(enemyObj, enemyBehav);
         }

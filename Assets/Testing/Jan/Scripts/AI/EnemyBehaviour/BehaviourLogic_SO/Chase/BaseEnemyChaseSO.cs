@@ -6,7 +6,7 @@ namespace ScriptableObjects
 {
     public class BaseEnemyChaseSO : ScriptableObject
     {
-        protected BaseEnemyBehaviour _baseEnemyBehaviour;
+        protected NPCBehaviourController _baseEnemyBehaviour;
         //protected MeleeEnemyBehaviour _meleeEnemyBehaviour;
         //protected RangeEnemyBehaviour _rangeEnemyBehaviour;
         protected Transform _transform;
@@ -15,7 +15,7 @@ namespace ScriptableObjects
         protected Transform _playerTransform;
         private Rigidbody2D _thisEnemyRB2D;
 
-        public virtual void Initialize(GameObject enemyObj, BaseEnemyBehaviour enemyBehav)
+        public virtual void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
             this._gameObject = enemyObj;
             this._transform = enemyObj.transform;

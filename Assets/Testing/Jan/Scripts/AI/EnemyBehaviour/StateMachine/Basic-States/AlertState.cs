@@ -6,7 +6,7 @@ namespace StateMashine
 {
     public class AlertState : BaseState
     {
-        public AlertState(BaseEnemyBehaviour enemyBehav, EnemyStateMachine enemySM) : base(enemyBehav, enemySM)
+        public AlertState(NPCBehaviourController enemyBehav, EnemyStateMachine enemySM) : base(enemyBehav, enemySM)
         {
         }
         public AlertState(MeleeEnemyBehaviour meleeEnemyBehav, EnemyStateMachine enemySM) : base(meleeEnemyBehav, enemySM)

@@ -1,13 +1,22 @@
+using Enemies;
+using NaughtyAttributes;
+using StateMashine;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using StateMashine;
-using Enemies;
+using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
-using NaughtyAttributes;
 
-public class EnemyHealth : MonoBehaviour
+public class EnemyStats : MonoBehaviour
 {
+    #region Events
+    //--------------------------------
+    // - - - - -  E V E N T S  - - - - 
+    //--------------------------------
+    public static event UnityAction<bool, GameObject> OnEnemyDeathEvent;
+    #endregion
+
+    #region Variables
     //--------------------------------------
     // - - - - -  V A R I A B L E S  - - - - 
     //--------------------------------------
@@ -18,11 +27,7 @@ public class EnemyHealth : MonoBehaviour
     #region Tooltip
     [Tooltip("Prefabs for randomly spawning on enemy hit (taking damage) event.")]
     #endregion
-    [SerializeField] private List<GameObject> _bloodPrefabPool;  // Spawning pool of blood when hit (randomly out of list)
-    #region Tooltip
-    [Tooltip("Prefab for spawning on enemy death event.")]
-    #endregion
-    [SerializeField] private GameObject _onDeathBloodPrefab;       // Spawning pool of blood at where enemy die
+    [SerializeField] private List<GameObject> _bloodPrefabPool;  // Spawning pool of blood when hit (randomly out of list)    
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private AudioClip _audioClip;
     [Space(5)]
@@ -44,14 +49,16 @@ public class EnemyHealth : MonoBehaviour
     private TakingDamageVFX _damageVFX;
 
 
-    // properties
+    // - - - properties - - -
     internal float CurrentHealth { get => _currentHealth; private set => _currentHealth = value; }
+    #endregion
 
+    #region Methods
     //----------------------------------
     // - - - - -  M E T H O D S  - - - - 
     //----------------------------------
 
-    // Unity provided Methods
+    // - - - Unity provided Methods - - -
     void Start()
     {
         #region autoreferencing
@@ -83,14 +90,7 @@ public class EnemyHealth : MonoBehaviour
             _damageVFX.FlashingEffect();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        /* Spawn blood where enemy died */
-        Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
-        Instantiate(_onDeathBloodPrefab, transform.position, bloodRotation);
-    }
-
-    // Custom Methods
+    // - - - Custom Methods - - -
     internal void GetDamage(float damage)
     {
         if (CurrentHealth > 0)
@@ -103,39 +103,41 @@ public class EnemyHealth : MonoBehaviour
             // Visual effects on taking damage
             StartCoroutine(_damageVFX?.FlashAndRevert());
 
-            /* Spawn blood and stay on the ground while enemy moving*/
-            int randomIndex = Random.Range(0, _bloodPrefabPool.Count);
-            Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
-            Instantiate(_bloodPrefabPool[randomIndex], transform.position, bloodRotation);
+            SpawnBloodOnGround();
         }
-        if (CurrentHealth <= 0 && _isDead == false)
+        else if (CurrentHealth <= 0 && _isDead == false)
         {
-            // Randomize dead rotation
+            // 1. set important values
+            CurrentHealth = 0;
+            _isDead = true;
+            _boxCollider2D.isTrigger = true;    // set collider to trigger to ensure no collision is possible any more
+
+            // 2. Randomize dead rotation and enable dead animation sprite
             this.transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
             _animator.SetTrigger("Dead");
-            _isDead = true;
-            _boxCollider2D.isTrigger = true;
+                        
+            // 3. disableing light emission
             _light2d.SetActive(false);
             _shadowCaster2D.enabled = false;
 
-            // Setup Enemy-Behaviour to EnemyDead
-            // todo: if AI-Logic/StateMachine is fully implemented, adjust following Logic accordingly; JM (30.10.23)
-            if (gameObject.TryGetComponent(out EnemyQuickfixBehaviour_ForTesting enemyQuickFixBehav))
-            {
-                // todo: delete this Query if StateMachine and according new AI-Logic is fully set up and functioning; JM (30.10.23)
-                enemyQuickFixBehav.IsEnemyDead = _isDead;
-                enemyQuickFixBehav.enabled = false;
-            }
-            else
-            {
-                Debug.Log($"<color=lime>No Quickfix behaviour cold be found on {this.gameObject.name} so other Behavióur-Scripts will be disabled</color>");
-                gameObject.GetComponent<ConditionPlayerDetectionCheck>().SetIsEnemyDead(_isDead);
-                gameObject.GetComponent<ConditionPlayerDetectionCheck>().enabled = false;
-                gameObject.GetComponent<NPCBehaviourController>().enabled = false;
-            }
+            SpawnBloodOnGround();
+
+            // 4. Setup Enemy-Behaviour to EnemyDead
+            OnEnemyDeathEvent?.Invoke(_isDead, this.gameObject);
+            //gameObject.GetComponent<ConditionPlayerDetectionCheck>().SetIsEnemyDead(_isDead);
+            //gameObject.GetComponent<ConditionPlayerDetectionCheck>().enabled = false;
+            //gameObject.GetComponent<NPCBehaviourController>().enabled = false;
 
             gameObject.GetComponent<NavMeshAgent>().isStopped = true;
-            gameObject.GetComponent<BoxCollider2D>().enabled = false;
         }
     }
+
+    private void SpawnBloodOnGround()
+    {
+        /* Spawn blood and stay on the ground while enemy moving*/
+        int randomIndex = Random.Range(0, _bloodPrefabPool.Count);
+        Quaternion bloodRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+        Instantiate(_bloodPrefabPool[randomIndex], transform.position, bloodRotation);  // todo: exchange this with using object pool; JM (27.06.2024)
+    }
+    #endregion
 }

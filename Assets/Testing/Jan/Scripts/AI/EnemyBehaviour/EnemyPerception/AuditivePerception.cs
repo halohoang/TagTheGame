@@ -3,10 +3,10 @@ using Player;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace EnemyPerception
+namespace NPCPerception
 {
     [DisallowMultipleComponent]
-    public class AuditivePerception : MonoBehaviour
+    public class AuditivePerception : BasePerception
     {
         //--------------------------------
         // - - - - -  E V E N T S  - - - - 

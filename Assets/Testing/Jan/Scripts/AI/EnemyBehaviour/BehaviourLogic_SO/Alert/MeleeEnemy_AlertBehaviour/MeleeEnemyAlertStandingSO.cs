@@ -11,7 +11,7 @@ namespace ScriptableObjects
 
         //private float _timer = 0.0f;
 
-        public override void Initialize(GameObject enemyObj, BaseEnemyBehaviour enemyBehav)
+        public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
             base.Initialize(enemyObj, enemyBehav);
         }

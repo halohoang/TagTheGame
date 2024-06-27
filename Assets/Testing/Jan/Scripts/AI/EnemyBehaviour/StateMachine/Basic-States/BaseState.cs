@@ -7,11 +7,11 @@ namespace StateMashine
     public class BaseState
     {
         protected EnemyStateMachine _enemyStateMachine;
-        protected BaseEnemyBehaviour _enemyBehaviour;
+        protected NPCBehaviourController _enemyBehaviour;
         //protected MeleeEnemyBehaviour _meleeEnemyBehav;
         //protected RangeEnemyBehaviour _rangeEnemyBehav;
 
-        public BaseState(BaseEnemyBehaviour enemyBehav, EnemyStateMachine enemyStaMa)
+        public BaseState(NPCBehaviourController enemyBehav, EnemyStateMachine enemyStaMa)
         {
             // setup Variables (using 'this'-Keyword just for visible clarification and simpler understanding)
             this._enemyBehaviour = enemyBehav;

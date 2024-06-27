@@ -42,14 +42,14 @@ public class CheatInput : MonoBehaviour
         }
 
         // Enabling GodMode
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            if (_playerStatsScript.IsPlayerInvincible)
-                _playerStatsScript.SetPlayerInvincibleStatus(false);
-            else
-                _playerStatsScript.SetPlayerInvincibleStatus(true);
+        //if (Input.GetKeyDown(KeyCode.Keypad1))
+        //{
+        //    if (_playerStatsScript.IsPlayerInvincible)
+        //        _playerStatsScript.SetPlayerInvincibleStatus(false);
+        //    else
+        //        _playerStatsScript.SetPlayerInvincibleStatus(true);
 
-            OnSetGodMode?.Invoke(_playerStatsScript.IsPlayerInvincible);
-        }
+        //    OnSetGodMode?.Invoke(_playerStatsScript.IsPlayerInvincible);
+        //}
     }
 }

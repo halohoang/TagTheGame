@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 642933330743008563}
   - component: {fileID: 2895116781174709516}
   m_Layer: 0
-  m_Name: BloodDeath_5
+  m_Name: BloodPoolOnDeath_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

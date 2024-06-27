@@ -7,7 +7,7 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "MeleeEnemy_Idle_Standing", menuName = "Scriptable Objects/Enemy Logic/Idle Logic/MeleeEnemy Standing (Just Standing Idle)")]
     public class MeleeEnemyIdleStandingSO : BaseEnemyIdleSO
     {
-        public override void Initialize(GameObject enemyObj, BaseEnemyBehaviour enemyBehav)
+        public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
             base.Initialize(enemyObj, enemyBehav);
         }        

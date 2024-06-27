@@ -32,7 +32,7 @@ namespace ScriptableObjects
         public bool IsAttacking { get => _isAttacking; private set => _isAttacking = value; }
 
         // todo: look into the initialization again and check if really all three overloads are necessary here; JM (10.11.2023)
-        public override void Initialize(GameObject enemyObj, BaseEnemyBehaviour enemyBehav)
+        public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
             base.Initialize(enemyObj, enemyBehav);
         }

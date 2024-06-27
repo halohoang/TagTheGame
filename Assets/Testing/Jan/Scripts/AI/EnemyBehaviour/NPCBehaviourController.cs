@@ -1,6 +1,5 @@
-using EnemyPerception;
+using NPCPerception;
 using EnumLibrary;
-using Interactables;
 using NaughtyAttributes;
 using Player;
 using ScriptableObjects;
@@ -12,7 +11,7 @@ namespace Enemies
 {
     [RequireComponent(typeof(NavMeshAgent))]
     [DisallowMultipleComponent]
-    public class BaseEnemyBehaviour : MonoBehaviour
+    public class NPCBehaviourController : MonoBehaviour
     {
         #region Variables
         //--------------------------------------
@@ -33,6 +32,7 @@ namespace Enemies
         [SerializeField] private BaseEnemyChaseSO _baseEnemyChaseStateSO;
         [SerializeField] private BaseEnemyAttackSO _baseEnemyAttackStateSO;
 
+        // properties for Base behaviour scriptable objects to store copies of the respective above referenced ones
         public BaseEnemyIdleSO BaseEnemyIdleStateSOInstance { get; set; }
         public BaseEnemyAlertSO BaseEnemyAlertStateSOInstance { get; set; }
         public BaseEnemyChaseSO BaseEnemyChaseStateSOInstance { get; set; }
@@ -50,7 +50,7 @@ namespace Enemies
         [SerializeField, ReadOnly] private bool _isPlayerDetected;
         [SerializeField, ReadOnly] private bool _isSomethingAlarmingHappening;
         [SerializeField, ReadOnly] private bool _isInAttackRange;                   // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
-        [SerializeField, ReadOnly] private bool _isCollidingWithObstacle;
+        [SerializeField, ReadOnly] private bool _isCollidingWithObject;
         [SerializeField, ReadOnly] private float _noiseRangeOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector3 _positionOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector2 _collisionObjectPos;
@@ -82,7 +82,7 @@ namespace Enemies
         public bool IsPlayerDead { get => _isPlayerDead; private set => _isPlayerDead = value; }
         public bool IsPlayerDetected { get => _isPlayerDetected; private set => _isPlayerDetected = value; }
         public bool IsSomethingAlarmingHappening { get => _isSomethingAlarmingHappening; private set => _isSomethingAlarmingHappening = value; }
-        public bool IsCollidingWithObject { get => _isCollidingWithObstacle; private set => _isCollidingWithObstacle = value; }
+        public bool IsCollidingWithObject { get => _isCollidingWithObject; private set => _isCollidingWithObject = value; }
         public float NoiseRangeOfAlarmingEvent { get => _noiseRangeOfAlarmingEvent; private set => _noiseRangeOfAlarmingEvent = value; }
         public Vector3 PositionOfAlarmingEvent { get => _positionOfAlarmingEvent; private set => _positionOfAlarmingEvent = value; }
         public Vector2 CollisionObjectPos { get => _collisionObjectPos; private set => _collisionObjectPos = value; }
@@ -136,10 +136,11 @@ namespace Enemies
         {
             // subscribing to Events
             #region old System
-            PlayerHealth.OnPlayerDeath += SetIsPlayerDead;
-            //Interactable_Door.OnDoorKickIn += SetAlarmingEventValues;
-            PlayerShoot.OnPlayerShoot += SetAlarmingEventValues;
-            _condPlayerDetectionCheck.OnPlayerDetection += SetIsPlayerDetected;
+            //PlayerHealth.OnPlayerDeath += SetIsPlayerDead;
+            ////Interactable_Door.OnDoorKickIn += SetAlarmingEventValues;
+            //PlayerShoot.OnPlayerShoot += SetAlarmingEventValues;
+            //_condPlayerDetectionCheck.OnPlayerDetection += SetIsPlayerDetected;
+            //_condMeleeAttackCheck.OnMeleeAttack += SetIsInAttackRangePlayer;        // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
             #endregion
 
             #region new System (26.06.)
@@ -149,19 +150,20 @@ namespace Enemies
             VisualPerception.OnPlayerDetection += SetIsPlayerDetected;
             AuditivePerception.OnSomethingAlarmingIsHappening += SetAlarmingEventValues;
             TactilePerception.OnCollidingWithOtherEnemy += SetIsCollidingWithOtherEnemy;
+            TactilePerception.OnMeleeAttack += SetIsInAttackRangePlayer;
             #endregion
 
-            _condMeleeAttackCheck.OnMeleeAttack += SetIsInAttackRangePlayer;        // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
         }
 
         protected void OnDisable()
         {
             // unsubscribing from Events
             #region old system
-            PlayerHealth.OnPlayerDeath -= SetIsPlayerDead;
-            //Interactable_Door.OnDoorKickIn -= SetAlarmingEventValues;
-            PlayerShoot.OnPlayerShoot -= SetAlarmingEventValues;
-            _condPlayerDetectionCheck.OnPlayerDetection -= SetIsPlayerDetected;
+            //PlayerHealth.OnPlayerDeath -= SetIsPlayerDead;
+            ////Interactable_Door.OnDoorKickIn -= SetAlarmingEventValues;
+            //PlayerShoot.OnPlayerShoot -= SetAlarmingEventValues;
+            //_condPlayerDetectionCheck.OnPlayerDetection -= SetIsPlayerDetected;
+            //_condMeleeAttackCheck.OnMeleeAttack -= SetIsInAttackRangePlayer;        // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
             #endregion
 
             #region new system (26.06.)
@@ -171,9 +173,9 @@ namespace Enemies
             VisualPerception.OnPlayerDetection -= SetIsPlayerDetected;
             AuditivePerception.OnSomethingAlarmingIsHappening -= SetAlarmingEventValues;
             TactilePerception.OnCollidingWithOtherEnemy -= SetIsCollidingWithOtherEnemy;
+            TactilePerception.OnMeleeAttack += SetIsInAttackRangePlayer;
             #endregion
 
-            _condMeleeAttackCheck.OnMeleeAttack -= SetIsInAttackRangePlayer;        // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
         }
 
         // Start is called before the first frame update
@@ -196,7 +198,7 @@ namespace Enemies
         private void FixedUpdate()
         {
             // reset to Idle State if Player was killed
-            if (IsPlayerDead && StateMachine.CurrentState != IdleState)
+            if (_isPlayerDead && StateMachine.CurrentState != IdleState)
                 StateMachine.Transition(IdleState);
 
             StateMachine.CurrentState.PhysicsUpdate();
@@ -207,21 +209,21 @@ namespace Enemies
         {
             if (collision.gameObject.CompareTag("Enemy"))
             {
-                IsCollidingWithObject = true;
+                _isCollidingWithObject = true;
                 //NavAgent.isStopped = true;
                 //CollisionObjectPos = collision.transform.position;
 
-                Debug.Log($"'<color=lime>{gameObject.name}</color>': collided with '{collision.gameObject.name}' (wall position: '{CollisionObjectPos}');");
+                Debug.Log($"'<color=lime>{gameObject.name}</color>': collided with '{collision.gameObject.name}' (wall position: '{_collisionObjectPos}');");
             }
             else
-                IsCollidingWithObject = false;
+                _isCollidingWithObject = false;
         }
 
         // Update is called once per frame
         void Update()
         {
             // reset to Idle State if Player was killed
-            if (IsPlayerDead && StateMachine.CurrentState != IdleState)
+            if (_isPlayerDead && StateMachine.CurrentState != IdleState)
                 StateMachine.Transition(IdleState);
 
             StateMachine.CurrentState.FrameUpdate();
@@ -233,13 +235,13 @@ namespace Enemies
 
         internal void SetIsCollidingWithOtherEnemy(bool isCollidingWithWall, GameObject otherObj)
         {
-            IsCollidingWithObject = isCollidingWithWall;
-            CollisionObjectPos = otherObj.transform.position;
+            _isCollidingWithObject = isCollidingWithWall;
+            _collisionObjectPos = otherObj.transform.position;
         }
 
         internal void SetIsCollidingWithObject(bool isCollidingWithObject)
         {
-            IsCollidingWithObject = isCollidingWithObject;
+            _isCollidingWithObject = isCollidingWithObject;
         }
 
         /// <summary>
@@ -248,12 +250,12 @@ namespace Enemies
         /// <param name="lastKnownPlayerPosition"></param>
         internal void CacheLastKnownPlayerPosition()
         {
-            LastKnownPlayerPos = PlayerObject.transform.position;
+            _lastKnownPlayerPos = PlayerObject.transform.position;
         }
 
         internal void SetIsSomethingAlarmingHappening(bool isSomethinAlarmingHappening)
         {
-            IsSomethingAlarmingHappening = isSomethinAlarmingHappening;
+            _isSomethingAlarmingHappening = isSomethinAlarmingHappening;
         }
 
         /// <summary>
@@ -263,8 +265,8 @@ namespace Enemies
         /// <param name="positionOfAlarmingEvent"></param>
         internal void SetAlarmingEventValues(bool isSomethinAlarmingHappening, Vector3 positionOfAlarmingEvent)
         {
-            IsSomethingAlarmingHappening = isSomethinAlarmingHappening;
-            PositionOfAlarmingEvent = positionOfAlarmingEvent;
+            _isSomethingAlarmingHappening = isSomethinAlarmingHappening;
+            _positionOfAlarmingEvent = positionOfAlarmingEvent;
         }
 
         /// <summary>
@@ -275,13 +277,13 @@ namespace Enemies
         /// <param name="noiseRangeOfAlarmingEvent"></param>
         private void SetAlarmingEventValues(bool isSomethinAlarmingHappening, Vector3 positionOfAlarmingEvent, float noiseRangeOfAlarmingEvent)
         {
-            BaseEnemyBehaviour enemBehav = new BaseEnemyBehaviour();
+            NPCBehaviourController enemBehav = new NPCBehaviourController();
 
             // for every Enemy that actually is in the noise range of the AlertEvent set the appropriate values
             Collider2D[] enemieColliders = Physics2D.OverlapCircleAll(positionOfAlarmingEvent, noiseRangeOfAlarmingEvent, LayerMask.GetMask("Enemy"));
             for (int i = 0; i < enemieColliders.Length; i++)
             {
-                enemBehav = enemieColliders[i].GetComponent<BaseEnemyBehaviour>();
+                enemBehav = enemieColliders[i].GetComponent<NPCBehaviourController>();
                 enemBehav.IsSomethingAlarmingHappening = isSomethinAlarmingHappening;
                 enemBehav.PositionOfAlarmingEvent = positionOfAlarmingEvent;
                 enemBehav.NoiseRangeOfAlarmingEvent = noiseRangeOfAlarmingEvent;
@@ -290,8 +292,8 @@ namespace Enemies
 
         private void SetIsPlayerDetected(bool isPlayerDetected, GameObject playerObj)
         {
-            IsPlayerDetected = isPlayerDetected;
-            PlayerObject = playerObj;
+            _isPlayerDetected = isPlayerDetected;
+            _playerObject = playerObj;
         }
 
         /// <summary>
@@ -299,7 +301,7 @@ namespace Enemies
         /// </summary>
         private void SetIsPlayerDead(bool isPlayerDead)
         {
-            IsPlayerDead = isPlayerDead;
+            _isPlayerDead = isPlayerDead;
         }
 
         /// <summary>
@@ -319,8 +321,8 @@ namespace Enemies
         /// <param name="playerObj"></param>
         private void SetIsInAttackRangePlayer(bool isAttackingPlayer, GameObject playerObj)
         {
-            IsInAttackRange = isAttackingPlayer;
-            PlayerObject = playerObj;
+            _isInAttackRange = isAttackingPlayer;
+            _playerObject = playerObj;
         }
 
         private void AnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerType)

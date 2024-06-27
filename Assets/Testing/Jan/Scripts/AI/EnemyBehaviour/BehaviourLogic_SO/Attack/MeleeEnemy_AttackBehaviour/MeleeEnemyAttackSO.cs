@@ -7,9 +7,9 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "Melee-Attack State", menuName = "Scriptable Objects/Enemy Logic/Attack Logic/Melee Attack")]
     public class MeleeEnemyAttackSO : BaseEnemyAttackSO
     {
-        private PlayerHealth _playerHealthScript;
+        private PlayerStats _playerHealthScript;
 
-        public override void Initialize(GameObject enemyObj, BaseEnemyBehaviour enemyBehav)
+        public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
             base.Initialize(enemyObj, enemyBehav);
         }
@@ -33,7 +33,7 @@ namespace ScriptableObjects
             _baseEnemyBehaviour.Animator.SetBool("Attack", true);
 
             // set PlayerGameObject reference
-            _playerHealthScript = _baseEnemyBehaviour.PlayerObject.GetComponent<PlayerHealth>();
+            _playerHealthScript = _baseEnemyBehaviour.PlayerObject.GetComponent<PlayerStats>();
         }
 
         public override void ExecuteExitLogic()

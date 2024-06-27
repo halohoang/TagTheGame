@@ -7,7 +7,7 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "RangeEnemy_Alert_Stading", menuName = "Scriptable Objects/Enemy Logic/Alert Logic/RangeEnemy Alert Standing")]
     public class RangeEnemyAlertStandingSO : BaseEnemyAlertSO
     {
-        public override void Initialize(GameObject enemyObj, BaseEnemyBehaviour enemyBehav)
+        public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
             base.Initialize(enemyObj, enemyBehav);
         }

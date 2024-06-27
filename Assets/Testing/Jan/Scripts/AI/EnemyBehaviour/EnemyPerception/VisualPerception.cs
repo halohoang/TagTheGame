@@ -1,12 +1,11 @@
 using NaughtyAttributes;
-using Player;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace EnemyPerception
+namespace NPCPerception
 {
-
-    public class VisualPerception : MonoBehaviour
+    public class VisualPerception : BasePerception
     {
         #region Events
         //--------------------------------
@@ -22,7 +21,6 @@ namespace EnemyPerception
         //--------------------------------------
 
         [Header("References")]
-        [Space(2)]
         #region Tooltip
         [Tooltip("The collider the the physics ray shall be casted from for object detection. Usually it should be the collider attached to this object.")]
         #endregion
@@ -30,7 +28,6 @@ namespace EnemyPerception
         [Space(5)]
 
         [Header("Perception Settings")]
-        [Space(2)]
         #region Tooltip
         [Tooltip("The overall radius of the field of view. Equals the dinstance of the field of view.")]
         #endregion
@@ -39,43 +36,42 @@ namespace EnemyPerception
         [Tooltip("Angle of the field of view.")]
         #endregion
         [SerializeField, Range(0.0f, 360.0f)] private float _fOVAngle = 180.0f;
-        #region Tooltip
-        [Tooltip("The LayerMask of the object that shall be recognized as target by this enemy.")]
-        #endregion
-        [SerializeField] private LayerMask _targetDetectionMask;
-        #region Tooltip
-        [Tooltip("The LayerMask of objects that shall be recognized as obstacle for the vision (like walls, or doors) by this enemy. Like Objects this enemy can't look through.")]
-        #endregion
-        [SerializeField] private LayerMask _obstructionMask;
-        [Space(5)]
+        //#region Tooltip
+        //[Tooltip("The LayerMask of the object that shall be recognized as target by this enemy.")]
+        //#endregion
+        //[SerializeField] private LayerMask _targetDetectionMask;
+        //#region Tooltip
+        //[Tooltip("The LayerMask of objects that shall be recognized as obstacle for the vision (like walls, or doors) by this enemy. Like Objects this enemy can't look through.")]
+        //#endregion
+        //[SerializeField] private LayerMask _obstructionMask;
+        //[Space(5)]
 
-        [Header("Monitoring Values")]
-        [Space(2)]
-        #region Tooltip
-        [Tooltip("The object whis is targeted by this enemy, repsective to the 'Target Detection Mask'.")]
-        #endregion
-        [SerializeField, ReadOnly] private GameObject _targetObject;
-        #region Tooltip
-        [Tooltip("Depicts if the player character is currently detected by this enemy.")]
-        #endregion
-        [SerializeField, ReadOnly] private bool _isPlayerDetected = false;
-        #region Tooltip
-        [Tooltip("Depicts if this enemy is currently dead or not.")]
-        #endregion
-        [SerializeField, ReadOnly] private bool _isEnemyDead;
-        #region Tooltip
-        [Tooltip("Depicts if the player character is currently dead or not.")]
-        #endregion
-        [SerializeField, ReadOnly] private bool _isPlayerDead;
+        //[Header("Monitoring Values")]
+        //#region Tooltip
+        //[Tooltip("The object whis is targeted by this enemy, repsective to the 'Target Detection Mask'.")]
+        //#endregion
+        //[SerializeField, ReadOnly] private GameObject _targetObject;
+        //#region Tooltip
+        //[Tooltip("Depicts if the player character is currently detected by this enemy.")]
+        //#endregion
+        //[SerializeField, ReadOnly] private bool _isTargetDetected = false;
+        //#region Tooltip
+        //[Tooltip("Depicts if this enemy is currently dead or not.")]
+        //#endregion
+        //[SerializeField, ReadOnly] private bool _isDead;
+        //#region Tooltip
+        //[Tooltip("Depicts if the player character is currently dead or not.")]
+        //#endregion
+        //[SerializeField, ReadOnly] private bool _isTargetDead;
 
 
         // - - - Properties - - -
-        public GameObject TargetObject { get => _targetObject; private set => _targetObject = value; }
+        //public GameObject TargetObject { get => _targetObject; private set => _targetObject = value; }
         public float FOVAngle { get => _fOVAngle; private set => _fOVAngle = value; }
         public float FOVRadius { get => _fOVRadius; private set => _fOVRadius = value; }
-        public bool IsTargetDetected { get => _isPlayerDetected; private set => _isPlayerDetected = value; }
-        public bool IsEnemyDead { get => _isEnemyDead; private set => _isEnemyDead = value; }
-        public bool IsPlayerDead { get => _isPlayerDead; set => _isPlayerDead = value; }
+        //public bool IsTargetDetected { get => _isTargetDetected; private set => _isTargetDetected = value; }
+        //public bool IsDead { get => _isDead; private set => _isDead = value; }
+        //public bool IsTargetDead { get => _isTargetDead; set => _isTargetDead = value; }
         #endregion
 
 
@@ -92,26 +88,39 @@ namespace EnemyPerception
                 _raycastingCollider = GetComponent<Collider2D>();
         }
 
-        private void OnEnable()
-        {
-            PlayerStats.OnPlayerDeath += SetIsPlayerDead;
-        }
-        private void OnDisable()
-        {
-            PlayerStats.OnPlayerDeath -= SetIsPlayerDead;
-        }
+        //private void OnEnable()
+        //{
+        //    PlayerStats.OnPlayerDeath += SetIsTargetDead;
+        //    EnemyStats.OnEnemyDeathEvent += SetIsDead;
+        //}
+        //private void OnDisable()
+        //{
+        //    PlayerStats.OnPlayerDeath -= SetIsTargetDead;
+        //    EnemyStats.OnEnemyDeathEvent -= SetIsDead;
+        //}
+
 
         void FixedUpdate()
         {
-            // storing the collider of the target object (e.g. the collider of the player object)
-            Collider2D targetCollider = Physics2D.OverlapCircle(transform.position, FOVRadius, _targetDetectionMask);
-            //targetCollider.gameObject.TryGetComponent(out PlayerStats playerStats);
+            if (IsDead || IsTargetDead)
+                return;
+            else
+                TargetDetectionCheck();
+        }
 
-            #region cleaned If-Statements (not Tested yet)
-            if (targetCollider != false && !IsPlayerDead)   // if there is a target detected and the player is not dead
+        /// <summary>
+        /// Checks if the target object is inside the Field ov view (<see cref="FOVRadius"/>, <see cref="FOVAngle"/>) and therefore detected by this npc object. Respectiv to the check result
+        /// an event will be fired which carrys/transmitts result-respective values for informing about the outcome of the detection check.
+        /// </summary>
+        private void TargetDetectionCheck()
+        {
+            // storing the collider of the target object (e.g. the collider of the player object)
+            Collider2D targetCollider = Physics2D.OverlapCircle(transform.position, FOVRadius, TargetDetectionMask);
+
+            if (targetCollider != false)   // if there is a target detected
             {
                 // 1.: set the _targetObject to the object the target collider is attached to
-                _targetObject = targetCollider.gameObject;
+                TargetObject = targetCollider.gameObject;
 
                 // 2.: get the direction and distance to the target object
                 Vector2 directionToTarget = (targetCollider.transform.position - transform.position).normalized;
@@ -128,7 +137,7 @@ namespace EnemyPerception
 
                 // 4: Check if there is no obstacle object detected between the target object and this enemy object
                 // if there is an obstacle Object detected between the target object and this, fire event with according values and return from this method
-                if (Physics2D.Raycast(transform.position, directionToTarget, distanceToTarget, _obstructionMask))
+                if (Physics2D.Raycast(transform.position, directionToTarget, distanceToTarget, ObstructionMask))
                 {
                     IsTargetDetected = false;
                     InformAboutPlayerDetectionStatus();
@@ -140,51 +149,11 @@ namespace EnemyPerception
                 InformAboutPlayerDetectionStatus();
 
             }
-            else if (_isPlayerDetected)
+            else if (IsTargetDetected) // set '_isTargetDetected' to false if it is not already set to false and there is no target detected
             {
                 IsTargetDetected = false;
                 InformAboutPlayerDetectionStatus();
             }
-            #endregion
-
-            #region old nested If-Statements
-            //if (targetCollider != false && !IsPlayerDead)   // if there is a target detected and the player is not dead
-            //{
-            //    // set the _targetObject to the object the target collider is attached to
-            //    _targetObject = targetCollider.gameObject;
-
-            //    // get the direction to the target object
-            //    Vector2 directionToTarget = (targetCollider.transform.position - transform.position).normalized;
-
-            //    if (Vector2.Angle(transform.right, directionToTarget) < FOVAngle * 0.5) // if target object is inside the field of view
-            //    {
-            //        // store the distance to the target object
-            //        float distanceToTarget = (transform.position - targetCollider.transform.position).sqrMagnitude; // distance calculation (changed that from 'V2.Distance()' because of performace reasons); JM (17.05.2024)
-
-            //        // if there is no obstacle object detecte between the target object and this enemy object
-            //        if (!Physics2D.Raycast(transform.position, directionToTarget, distanceToTarget, _obstructionMask))
-            //        {                    
-            //            IsTargetDetected = true;
-            //            FireTargetDetectedEvent();
-            //        }
-            //        else // if there is an obstacle object detacted between the target object and this enemy object
-            //        {
-            //            IsTargetDetected = false;
-            //            FireTargetDetectedEvent();
-            //        }
-            //    }
-            //    else // if target object is not inside the field of view of this object
-            //    {
-            //        IsTargetDetected = false;
-            //        FireTargetDetectedEvent();
-            //    }
-            //}
-            //else if (_isPlayerDetected)
-            //{
-            //    IsTargetDetected = false;
-            //    FireTargetDetectedEvent();
-            //}
-            #endregion
         }
 
         // - - - Custom Methods - - -
@@ -204,15 +173,22 @@ namespace EnemyPerception
             #endregion
         }
 
-        internal void SetIsEnemyDead(bool enemyDeadSatus)
-        {
-            IsEnemyDead = enemyDeadSatus;
-        }
+        //private void SetIsTargetDead(bool targetDeadStatus)
+        //{
+        //    _isTargetDead = targetDeadStatus;
+        //}
 
-        private void SetIsPlayerDead(bool playerDeadStatus)
-        {
-            IsPlayerDead = playerDeadStatus;
-        }
+        ///// <summary>
+        ///// Sets the bool <see cref="_isDead"/> respective to transmitted parameter 'isDeadStatus' if this gameobject is equal to the transmitted gameObject.
+        ///// </summary>
+        ///// <param name="isDeadStatus"></param>
+        ///// <param name="affectedNPCObject"></param>
+        //private void SetIsDead(bool isDeadStatus, GameObject affectedNPCObject)
+        //{
+        //    if (this.gameObject == affectedNPCObject)
+        //        _isDead = isDeadStatus;
+        //}
+
         #endregion
     }
 }

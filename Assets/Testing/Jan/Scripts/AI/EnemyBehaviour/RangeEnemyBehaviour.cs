@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Enemies
 {    
-    public class RangeEnemyBehaviour : BaseEnemyBehaviour
+    public class RangeEnemyBehaviour : NPCBehaviourController
     {
         [Header("Monitoring for Debugging (specific for Range-Enemy-Behaviour)")]
         [SerializeField, ReadOnly] private bool _isPlayerInShootingRange;

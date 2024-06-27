@@ -46,7 +46,7 @@ namespace ScriptableObjects
         public Vector3 WalkTargetPos { get => _walkTargedPos; private set => _walkTargedPos = value; }
 
 
-        public override void Initialize(GameObject enemyObj, BaseEnemyBehaviour enemyBehav)
+        public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
             base.Initialize(enemyObj, enemyBehav);
         }

@@ -9,7 +9,7 @@ namespace StateMashine
     /// </summary>
     public class IdleState : BaseState
     {
-        public IdleState(BaseEnemyBehaviour enemyBehav, EnemyStateMachine enemySM) : base(enemyBehav, enemySM)
+        public IdleState(NPCBehaviourController enemyBehav, EnemyStateMachine enemySM) : base(enemyBehav, enemySM)
         {
         }
         public IdleState(MeleeEnemyBehaviour meleeEnemyBehav, EnemyStateMachine enemySM) : base (meleeEnemyBehav, enemySM) 

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -8061259776148960897}
   - component: {fileID: 7034249848856298260}
   m_Layer: 0
-  m_Name: BloodHit
+  m_Name: BloodSprayOnHit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -112,11 +112,11 @@ GameObject:
   - component: {fileID: 5927879779157621966}
   - component: {fileID: 5927879779157621965}
   - component: {fileID: 5927879777554231649}
+  - component: {fileID: 8584657945339164868}
   - component: {fileID: 5118319569479040826}
   - component: {fileID: 6495155309656917150}
   - component: {fileID: 9217962957026928474}
   - component: {fileID: 3982366321536414803}
-  - component: {fileID: 2851293799639673326}
   - component: {fileID: 378967618739238392}
   - component: {fileID: 8329460373295778464}
   - component: {fileID: 4905708932010437200}
@@ -285,6 +285,33 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8584657945339164868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7981138669945753168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 467dd186c8a19664285183459634343c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _light2d: {fileID: 0}
+  _animator: {fileID: 0}
+  _bloodPrefabPool:
+  - {fileID: 5459322947420741018, guid: 56f040fc343074640ba7ce86ec08968c, type: 3}
+  - {fileID: 3044862607823702276, guid: ef5550f6add88d942b04d90e365378c4, type: 3}
+  - {fileID: 7784901274924939644, guid: 78e9458eac6487141921a0fda951a639, type: 3}
+  - {fileID: 5169151268200698254, guid: da58d847e6380c44eb0a2b2a58ee2b1e, type: 3}
+  - {fileID: 1387189892773440931, guid: 6b10275c7991d6e4fb30a507d922ef24, type: 3}
+  _audioSource: {fileID: 0}
+  _audioClip: {fileID: 0}
+  _maximumHealth: 0
+  _currentHealth: 0
+  _flashingSpeed: 0
+  _flashDuration: 0.1
+  _isDead: 0
 --- !u!114 &5118319569479040826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,7 +339,7 @@ MonoBehaviour:
   _isPlayerDetected: 0
   _isSomethingAlarmingHappening: 0
   _isInAttackRange: 0
-  _isCollidingWithObstacle: 0
+  _isCollidingWithObject: 0
   _noiseRangeOfAlarmingEvent: 0
   _positionOfAlarmingEvent: {x: 0, y: 0, z: 0}
   _collisionObjectPos: {x: 0, y: 0}
@@ -366,33 +393,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e846988463247043b0fe4226a85ae32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2851293799639673326
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7981138669945753168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a6b19f4a116f9441899304199b75be9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _light2d: {fileID: 3268223215718377689}
-  _animator: {fileID: 5927879777554231649}
-  _bloodPrefabPool:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  _onDeathBloodPrefab: {fileID: 0}
-  _audioSource: {fileID: 0}
-  _audioClip: {fileID: 8300000, guid: ab8606f911b06b84884a725ba313a76e, type: 3}
-  _maximumHealth: 2
-  _currentHealth: 0
-  _flashingSpeed: 0
-  _flashDuration: 0.1
-  _isDead: 0
+  _isInAttackRange: 0
+  _isPlayerDead: 0
+  _isCollidingWithOtherEnemy: 0
 --- !u!114 &378967618739238392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,7 +422,7 @@ MonoBehaviour:
   - {x: 0.07000017, y: -0.12999988, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 50324
+  m_InstanceId: 59350
   m_LocalBounds:
     m_Center: {x: 0, y: 0.00000011920929, z: 0}
     m_Extent: {x: 0.07000017, y: 0.13, z: 0}
