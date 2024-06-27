@@ -127,9 +127,9 @@ namespace Projectile
                 Debug.Log($" 'TargetCollisionCheck()' for player was called");
             }
             // else if is 'Enemy' continue with calling TakeDamage() of the EnemyHealth.cs instead
-            else if (collision.gameObject.TryGetComponent(out EnemyHealth enemyHealth))
+            else if (collision.gameObject.TryGetComponent(out EnemyStats enemyStats))
             {
-                DealingDamage(enemyHealth);
+                DealingDamage(enemyStats);
                 SpawnBloodSplatter(collision);
                 Debug.Log($" 'TargetCollisionCheck()' for enemy was called");
             }
@@ -210,7 +210,7 @@ namespace Projectile
         /// Executing <see cref="EnemyHealth.GetDamage()"/> if transmitted Type is not null and deactivates this gameobject
         /// </summary>
         /// <param name="healthScript"></param>
-        private void DealingDamage(EnemyHealth healthScript)
+        private void DealingDamage(EnemyStats healthScript)
         {
             if (healthScript != null)
             {

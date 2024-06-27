@@ -1,5 +1,6 @@
 using Enemies;
 using EnumLibrary;
+using Player;
 using UnityEngine;
 
 namespace ScriptableObjects
@@ -7,7 +8,7 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "Melee-Attack State", menuName = "Scriptable Objects/Enemy Logic/Attack Logic/Melee Attack")]
     public class MeleeEnemyAttackSO : BaseEnemyAttackSO
     {
-        private PlayerHealth _playerHealthScript;
+        private PlayerStats _playerStatsScript;
 
         public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
@@ -33,7 +34,7 @@ namespace ScriptableObjects
             _baseEnemyBehaviour.Animator.SetBool("Attack", true);
 
             // set PlayerGameObject reference
-            _playerHealthScript = _baseEnemyBehaviour.PlayerObject.GetComponent<PlayerHealth>();
+            _playerStatsScript = _baseEnemyBehaviour.PlayerObject.GetComponent<PlayerStats>();
         }
 
         public override void ExecuteExitLogic()
@@ -54,7 +55,7 @@ namespace ScriptableObjects
             if (_baseEnemyBehaviour.IsInAttackRange)
             {
                 // dealing Damage
-                _playerHealthScript.GetDamage();
+                _playerStatsScript.GetDamage();
             }
             else
             {

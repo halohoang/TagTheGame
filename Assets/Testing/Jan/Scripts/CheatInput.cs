@@ -41,15 +41,15 @@ public class CheatInput : MonoBehaviour
              * Navmesh-Bugs, since the Doors will be reactivated again; JM (09.Oct.2023) */
         }
 
-        // Enabling GodMode
-        //if (Input.GetKeyDown(KeyCode.Keypad1))
-        //{
-        //    if (_playerStatsScript.IsPlayerInvincible)
-        //        _playerStatsScript.SetPlayerInvincibleStatus(false);
-        //    else
-        //        _playerStatsScript.SetPlayerInvincibleStatus(true);
+        //Enabling GodMode
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            if (_playerStatsScript.IsPlayerInvincible)
+                _playerStatsScript.SetPlayerInvincibleStatus(false);
+            else
+                _playerStatsScript.SetPlayerInvincibleStatus(true);
 
-        //    OnSetGodMode?.Invoke(_playerStatsScript.IsPlayerInvincible);
-        //}
+            OnSetGodMode?.Invoke(_playerStatsScript.IsPlayerInvincible);
+        }
     }
 }

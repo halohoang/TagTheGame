@@ -1,8 +1,9 @@
 using NaughtyAttributes;
+using StateMashine;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace StateMashine
+namespace ArchivedSinceDeprecated
 {
     public class ConditionIsInMeleeAttackRangeCheck : BaseConditionCheck
     {

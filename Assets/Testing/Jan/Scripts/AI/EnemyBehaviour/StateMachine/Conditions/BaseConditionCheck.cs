@@ -1,7 +1,7 @@
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace StateMashine
+namespace ArchivedSinceDeprecated
 {
     public class BaseConditionCheck : MonoBehaviour
     {

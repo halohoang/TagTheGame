@@ -1,12 +1,13 @@
-using NPCPerception;
+using ArchivedSinceDeprecated;
 using EnumLibrary;
 using NaughtyAttributes;
+using NPCPerception;
 using Player;
+using Perception;
 using ScriptableObjects;
 using StateMashine;
 using UnityEngine;
 using UnityEngine.AI;
-using Perception;
 
 namespace Enemies
 {

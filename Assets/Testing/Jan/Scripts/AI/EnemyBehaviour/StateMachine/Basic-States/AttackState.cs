@@ -1,12 +1,13 @@
 using Enemies;
 using EnumLibrary;
+using Player;
 using UnityEngine;
 
 namespace StateMashine
 {
     public class AttackState : BaseState
     {
-        private PlayerHealth _playerHealthScript;
+        private PlayerStats _playerStatsScript;
 
         public AttackState(NPCBehaviourController enemyBehav, EnemyStateMachine enemyStaMa) : base(enemyBehav, enemyStaMa)
         {            
