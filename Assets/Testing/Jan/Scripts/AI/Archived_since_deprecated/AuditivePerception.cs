@@ -3,7 +3,7 @@ using Player;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace NPCPerception
+namespace ArchivedSinceDeprecated
 {
     [DisallowMultipleComponent]
     public class AuditivePerception : BasePerception

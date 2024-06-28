@@ -1,7 +1,6 @@
 using ArchivedSinceDeprecated;
 using EnumLibrary;
 using NaughtyAttributes;
-using NPCPerception;
 using Player;
 using Perception;
 using ScriptableObjects;
@@ -149,10 +148,10 @@ namespace Enemies
             // new System (26.06.24)
             PlayerStats.OnPlayerDeath += SetIsPlayerDead;
 
-            VisualPerception.OnPlayerDetection += SetIsPlayerDetected;
-            AuditivePerception.OnSomethingAlarmingIsHappening += SetAlarmingEventValues;
-            TactilePerception.OnCollidingWithOtherEnemy += SetIsCollidingWithOtherEnemy;
-            TactilePerception.OnMeleeAttack += SetIsInAttackRangePlayer;
+            NPCPerception.OnTargetDetection += SetIsPlayerDetected;
+            NPCPerception.OnSomethingAlarmingIsHappening += SetAlarmingEventValues;
+            NPCPerception.OnCollidingWithOtherObject += SetIsCollidingWithOtherEnemy;
+            NPCPerception.OnInMeleeAttackRange += SetIsInAttackRangePlayer;
             #endregion
 
         }
@@ -172,10 +171,10 @@ namespace Enemies
             // new System (26.06.24)
             PlayerStats.OnPlayerDeath -= SetIsPlayerDead;
 
-            VisualPerception.OnPlayerDetection -= SetIsPlayerDetected;
-            AuditivePerception.OnSomethingAlarmingIsHappening -= SetAlarmingEventValues;
-            TactilePerception.OnCollidingWithOtherEnemy -= SetIsCollidingWithOtherEnemy;
-            TactilePerception.OnMeleeAttack += SetIsInAttackRangePlayer;
+            NPCPerception.OnTargetDetection -= SetIsPlayerDetected;
+            NPCPerception.OnSomethingAlarmingIsHappening -= SetAlarmingEventValues;
+            NPCPerception.OnCollidingWithOtherObject -= SetIsCollidingWithOtherEnemy;
+            NPCPerception.OnInMeleeAttackRange -= SetIsInAttackRangePlayer;
             #endregion
 
         }

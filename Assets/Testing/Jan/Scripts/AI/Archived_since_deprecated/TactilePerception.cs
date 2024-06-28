@@ -1,9 +1,8 @@
 using NaughtyAttributes;
-using NPCPerception;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Perception
+namespace ArchivedSinceDeprecated
 {
     public class TactilePerception : BasePerception
     {
@@ -21,32 +20,24 @@ namespace Perception
         // - - - - -  V A R I A B L E S  - - - - 
         //--------------------------------------
 
-        [Header("Monitoring Values")]
+        //[Header("Monitoring Values")]
+        #region Tooltip
+        [Tooltip("The object whis is targeted by this enemy, repsective to the 'Target Detection Mask'.")]
+        #endregion
+        [SerializeField, ReadOnly] private GameObject _targetObject;
         [SerializeField, ReadOnly] private bool _isInAttackRange;
-        //[SerializeField, ReadOnly] private bool _isDead;
-        //[SerializeField, ReadOnly] private bool _isPlayerDead;
         [SerializeField, ReadOnly] private bool _isCollidingWithOtherEnemy;
 
         // - - - Properties - - -
         public bool IsInAttackRange { get => _isInAttackRange; private set => _isInAttackRange = value; }
+        public GameObject TargetObject { get => _targetObject; set => _targetObject = value; }
 
         #endregion
 
         #region Methods
         //----------------------------------
         // - - - - -  M E T H O D S  - - - - 
-        //----------------------------------
-        //private void OnEnable()
-        //{
-        //    PlayerStats.OnPlayerDeath += SetIsPlayerDead;
-        //    EnemyStats.OnEnemyDeathEvent += SetIsDead;
-
-        //}
-        //private void OnDisable()
-        //{
-        //    PlayerStats.OnPlayerDeath -= SetIsPlayerDead;
-        //    EnemyStats.OnEnemyDeathEvent -= SetIsDead;
-        //}
+        //----------------------------------        
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
@@ -64,22 +55,12 @@ namespace Perception
                 _isCollidingWithOtherEnemy = false;
         }
 
-        //private void OnCollisionStay2D(Collision2D collision)
-        //{
-        //    // not implemented yet
-        //}
-
-        //private void OnCollisionExit2D(Collision2D collision)
-        //{
-        //    // not implemented yet
-        //}
-
         private void OnTriggerStay2D(Collider2D collision)
         {
             // when Player is alive invoke MeleeAttack Event for informing, that Player is in Attack Range
             if (IsTargetDead)
                 return;
-            else if (collision.gameObject == TargetObject)
+            else if (collision.gameObject == _targetObject)
             {
                 IsInAttackRange = true;
                 OnMeleeAttack?.Invoke(IsInAttackRange, collision.gameObject);
@@ -91,27 +72,11 @@ namespace Perception
             // when Player is alive invoke MeleeAttack Event for informing, that Player is not in Attack Range anymore
             if (IsTargetDead)
                 return;
-            else if (collision.gameObject == TargetObject)
+            else if (collision.gameObject == _targetObject)
             {
                 IsInAttackRange = false;
                 OnMeleeAttack?.Invoke(IsInAttackRange, collision.gameObject);
             }
-
-            //private void SetIsPlayerDead(bool playerDeadStatus)
-            //{
-            //    _isPlayerDead = playerDeadStatus;
-            //}
-
-            ///// <summary>
-            ///// Sets the bool <see cref="_isDead"/> respective to transmitted parameter 'isDeadStatus' if this gameobject is equal to the transmitted gameObject.
-            ///// </summary>
-            ///// <param name="isDeadStatus"></param>
-            ///// <param name="affectedNPCObject"></param>
-            //private void SetIsDead(bool isDeadStatus, GameObject affectedNPCObject)
-            //{
-            //    if (this.gameObject == affectedNPCObject)
-            //        _isDead = isDeadStatus;
-            //}
             #endregion
         }
     }

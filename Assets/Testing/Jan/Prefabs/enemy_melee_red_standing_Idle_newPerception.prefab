@@ -114,9 +114,7 @@ GameObject:
   - component: {fileID: 5927879777554231649}
   - component: {fileID: 8584657945339164868}
   - component: {fileID: 5118319569479040826}
-  - component: {fileID: 6495155309656917150}
-  - component: {fileID: 9217962957026928474}
-  - component: {fileID: 3982366321536414803}
+  - component: {fileID: 7120387268323903199}
   - component: {fileID: 378967618739238392}
   - component: {fileID: 8329460373295778464}
   - component: {fileID: 4905708932010437200}
@@ -344,7 +342,7 @@ MonoBehaviour:
   _positionOfAlarmingEvent: {x: 0, y: 0, z: 0}
   _collisionObjectPos: {x: 0, y: 0}
   _lastKnownPlayerPos: {x: 0, y: 0, z: 0}
---- !u!114 &6495155309656917150
+--- !u!114 &7120387268323903199
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -353,49 +351,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 7981138669945753168}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3bdc3cdc2574ea4cb560ebe1ce4b08d, type: 3}
+  m_Script: {fileID: 11500000, guid: 7eefb39540d66ce4194ff09bd3babcf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _raycastingCollider: {fileID: 7981138669945753175}
-  _fOVRadius: 8.89
-  _fOVAngle: 180
   _targetDetectionMask:
     serializedVersion: 2
     m_Bits: 256
   _obstructionMask:
     serializedVersion: 2
     m_Bits: 1088
+  _raycastingCollider: {fileID: 0}
+  _fOVRadius: 0
+  _fOVAngle: 180
   _targetObject: {fileID: 0}
-  _isPlayerDetected: 0
-  _isEnemyDead: 0
-  _isPlayerDead: 0
---- !u!114 &9217962957026928474
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7981138669945753168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 254a966adec70da4f8f918c5f776cde7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3982366321536414803
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7981138669945753168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e846988463247043b0fe4226a85ae32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _isTargetDetected: 0
+  _isTargetDead: 0
+  _isThisNPCDead: 0
   _isInAttackRange: 0
-  _isPlayerDead: 0
-  _isCollidingWithOtherEnemy: 0
+  _isCollidingWithOtherObject: 0
 --- !u!114 &378967618739238392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -422,7 +395,7 @@ MonoBehaviour:
   - {x: 0.07000017, y: -0.12999988, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 59350
+  m_InstanceId: 58026
   m_LocalBounds:
     m_Center: {x: 0, y: 0.00000011920929, z: 0}
     m_Extent: {x: 0.07000017, y: 0.13, z: 0}
