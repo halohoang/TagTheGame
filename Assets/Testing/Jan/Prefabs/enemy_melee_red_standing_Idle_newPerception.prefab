@@ -303,8 +303,8 @@ MonoBehaviour:
   - {fileID: 7784901274924939644, guid: 78e9458eac6487141921a0fda951a639, type: 3}
   - {fileID: 5169151268200698254, guid: da58d847e6380c44eb0a2b2a58ee2b1e, type: 3}
   - {fileID: 1387189892773440931, guid: 6b10275c7991d6e4fb30a507d922ef24, type: 3}
-  _audioSource: {fileID: 0}
-  _audioClip: {fileID: 0}
+  _audioSource: {fileID: 8329460373295778464}
+  _receiveDamageSound: {fileID: 8300000, guid: ab8606f911b06b84884a725ba313a76e, type: 3}
   _maximumHealth: 0
   _currentHealth: 0
   _flashingSpeed: 0
@@ -327,12 +327,13 @@ MonoBehaviour:
   _playerObject: {fileID: 0}
   _condPlayerDetectionCheck: {fileID: 0}
   _condMeleeAttackCheck: {fileID: 0}
-  _baseEnemyIdleStateSO: {fileID: 11400000, guid: e2f9122969f405a488f70f90701d3d7d, type: 2}
-  _baseEnemyAlertStateSO: {fileID: 11400000, guid: 3846a16cac923194dad85324de682020, type: 2}
-  _baseEnemyChaseStateSO: {fileID: 11400000, guid: b58cbcaeb70b8064e8441b42b8985050, type: 2}
-  _baseEnemyAttackStateSO: {fileID: 11400000, guid: 6ebc51d86238c4e4ea025132c0e68de9, type: 2}
+  _baseIdleStateSO: {fileID: 11400000, guid: e2f9122969f405a488f70f90701d3d7d, type: 2}
+  _baseAlertStateSO: {fileID: 11400000, guid: 3846a16cac923194dad85324de682020, type: 2}
+  _baseChaseStateSO: {fileID: 11400000, guid: b58cbcaeb70b8064e8441b42b8985050, type: 2}
+  _baseAttackStateSO: {fileID: 11400000, guid: 6ebc51d86238c4e4ea025132c0e68de9, type: 2}
   _movementSpeed: 3.5
   _chasingSpeed: 12
+  _isThisNPCDead: 0
   _isPlayerDead: 0
   _isPlayerDetected: 0
   _isSomethingAlarmingHappening: 0
@@ -354,6 +355,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eefb39540d66ce4194ff09bd3babcf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enableVisualPerception: 1
+  _enableAuditivePerception: 1
+  _enableTactilePerception: 1
   _targetDetectionMask:
     serializedVersion: 2
     m_Bits: 256
@@ -395,7 +399,7 @@ MonoBehaviour:
   - {x: 0.07000017, y: -0.12999988, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 58026
+  m_InstanceId: 40124
   m_LocalBounds:
     m_Center: {x: 0, y: 0.00000011920929, z: 0}
     m_Extent: {x: 0.07000017, y: 0.13, z: 0}

@@ -55,7 +55,7 @@ namespace ScriptableObjects
             SettingValues();
 
             // Play shooting animation
-            _baseEnemyBehaviour.Animator.SetBool("Engage", IsAttacking);
+            _behaviourCtrl.Animator.SetBool("Engage", IsAttacking);
         }        
 
         public override void ExecuteExitLogic()
@@ -65,7 +65,7 @@ namespace ScriptableObjects
             IsAttacking = false;
 
             // Stop shooting animation
-            _baseEnemyBehaviour.Animator.SetBool("Engage", IsAttacking);
+            _behaviourCtrl.Animator.SetBool("Engage", IsAttacking);
         }
 
         public override void ExecuteFrameUpdateLogic()
@@ -74,14 +74,14 @@ namespace ScriptableObjects
 
             // shoot logic:
             // 1) Caching PlayerPosition and Transitioncheck (is player still detected, if not -> switch to chase state (running towards last known position of player))
-            if (_baseEnemyBehaviour.IsPlayerDetected)
+            if (_behaviourCtrl.IsPlayerDetected)
             {
-                _baseEnemyBehaviour.CacheLastKnownPlayerPosition();
+                _behaviourCtrl.CacheLastKnownPlayerPosition();
             }
             else
             {
-                _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.ChaseState);
-                Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>RangeAttack (Shooting)</color>' to '<color=orange>Chase</color>' should have been happend now!");
+                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.ChaseState);
+                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>RangeAttack (Shooting)</color>' to '<color=orange>Chase</color>' should have been happend now!");
                 return;
             }
 
@@ -107,7 +107,7 @@ namespace ScriptableObjects
 
             // reset boxcollider size
             _boxCollider2D.size = _colliderSizeCache;
-            Debug.Log($"<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>: The Size of the Boxcollider was set to its original previously cached values. ressetted values: " +
+            Debug.Log($"<color=orange>{_behaviourCtrl.gameObject.name}</color>: The Size of the Boxcollider was set to its original previously cached values. ressetted values: " +
                 $"('<color=lime>{_boxCollider2D.size}</color>') | previously cached values: ('<color=lime>{_colliderSizeCache}</color>').");
 
             // reset timer
@@ -125,12 +125,12 @@ namespace ScriptableObjects
         /// </summary>
         private void SettingReferences()
         {
-            _boxCollider2D = _baseEnemyBehaviour.gameObject.GetComponent<BoxCollider2D>();
+            _boxCollider2D = _behaviourCtrl.gameObject.GetComponent<BoxCollider2D>();
 
             // Get Bullet Spawn Position
-            for (int i = 0; i < _baseEnemyBehaviour.gameObject.transform.childCount; i++)
+            for (int i = 0; i < _behaviourCtrl.gameObject.transform.childCount; i++)
             {
-                GameObject objChild = _baseEnemyBehaviour.gameObject.transform.GetChild(i).gameObject;
+                GameObject objChild = _behaviourCtrl.gameObject.transform.GetChild(i).gameObject;
 
                 if (objChild.name == "BulletSpawnPoint")
                 {
@@ -156,7 +156,7 @@ namespace ScriptableObjects
 
             // caching actual Size-Values of Boxcollider
             _colliderSizeCache = _boxCollider2D.size;
-            Debug.Log($"<color=cyan>{_baseEnemyBehaviour.gameObject.name}</color>: The Size of the Boxcollider was cached. Cached Value: ('<color=lime>{_colliderSizeCache}</color>').");
+            Debug.Log($"<color=cyan>{_behaviourCtrl.gameObject.name}</color>: The Size of the Boxcollider was cached. Cached Value: ('<color=lime>{_colliderSizeCache}</color>').");
         }
 
         /// <summary>
@@ -185,7 +185,7 @@ namespace ScriptableObjects
                 // bullet activateion timer tick
                 _bulletActivationTimer = _bulletActivationDelay;
 
-                Debug.Log($"<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>: Bullet Obj from EnemyBulletObjectPool was activated. (Amounts of Bullets activated: " +
+                Debug.Log($"<color=orange>{_behaviourCtrl.gameObject.name}</color>: Bullet Obj from EnemyBulletObjectPool was activated. (Amounts of Bullets activated: " +
                     $"'<color=cyan>{_amountOfBulletsShot}</color>'. Bullet Activation Timer: '<color=cyan>{_bulletActivationTimer}'</color>\")");
             }
             // tick the Bullet salve interval timer when more than or equal to the max Bullet Salve amount was activated and the salve bullet timer is stil running
@@ -193,7 +193,7 @@ namespace ScriptableObjects
             {
                 // timer tick
                 _salveIntervalTimer += Time.deltaTime;
-                Debug.Log($"<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>: Shooting Interval Timer: '<color=cyan>{_salveIntervalTimer}'</color>");
+                Debug.Log($"<color=orange>{_behaviourCtrl.gameObject.name}</color>: Shooting Interval Timer: '<color=cyan>{_salveIntervalTimer}'</color>");
             }
             // if the salve interval timer reached its end reset it to 0 (for anew ticking possibility)
             else if (_salveIntervalTimer > _TimeBetweenBursts)
@@ -203,7 +203,7 @@ namespace ScriptableObjects
 
                 // reset amount of Bullets that where shot
                 _amountOfBulletsShot = 0;
-                Debug.Log($"<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>: Timer for Salve Interval was reset to: '{_salveIntervalTimer}' and Amounts of Bullets shot was reset to: " +
+                Debug.Log($"<color=orange>{_behaviourCtrl.gameObject.name}</color>: Timer for Salve Interval was reset to: '{_salveIntervalTimer}' and Amounts of Bullets shot was reset to: " +
                     $"{_amountOfBulletsShot}");
             }
             // tick the bullet acitvation timer when it is less equal than the bullet activation delay it is set to (so basically this condition is allways true atm); since this conditionis allways true check the whole query for its logic regarding the single conditions again for a proper integrity. so far the behaviour works as intended so at this point I don't see any need to change the query logic but nonetheless it seems fishy, that this condition is actually allways true but I'm also kinda tired right now (today is saturday and I'm sitting on it since like straight 5 hours again but I also had a 13 h work day yesterday already so I actually just want to quit for today and get a bit freetime on the Weekend); JM (11.11.2023)
@@ -212,7 +212,7 @@ namespace ScriptableObjects
                 // reset bulletactivation timer
                 _bulletActivationTimer -= Time.deltaTime;
 
-                Debug.Log($"<color=orange>{_baseEnemyBehaviour.gameObject.name}</color>: Bullet Activation Timer: '<color=cyan>{_bulletActivationTimer}'</color>");
+                Debug.Log($"<color=orange>{_behaviourCtrl.gameObject.name}</color>: Bullet Activation Timer: '<color=cyan>{_bulletActivationTimer}'</color>");
             }
         }
     }

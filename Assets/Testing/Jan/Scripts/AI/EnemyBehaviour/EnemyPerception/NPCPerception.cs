@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 namespace Perception
 {
+    [DisallowMultipleComponent]
     public class NPCPerception : MonoBehaviour
     {
         #region Events
@@ -31,6 +32,19 @@ namespace Perception
 
         [Header("General Perception Settings")]
         #region Tooltip
+        [Tooltip("En-/disable visual perception for this NPC.")]
+        #endregion
+        [SerializeField] private bool _enableVisualPerception = true;
+        #region Tooltip
+        [Tooltip("En-/disable auditive perception for this NPC.")]
+        #endregion
+        [SerializeField] private bool _enableAuditivePerception = true;
+        #region Tooltip
+        [Tooltip("En-/disable tactile perception for this NPC.")]
+        #endregion
+        [SerializeField] private bool _enableTactilePerception = true;
+        [Space(3)]
+        #region Tooltip
         [Tooltip("The LayerMask of the object that shall be recognized as target by this enemy.")]
         #endregion
         [SerializeField] private LayerMask _targetDetectionMask;
@@ -46,12 +60,12 @@ namespace Perception
         [Tooltip("The collider the the physics ray shall be casted from for object detection. Usually it should be the collider attached to this object.")]
         #endregion
         [SerializeField] private Collider2D _raycastingCollider;
-        [Space(3)]        
+        [Space(3)]
         [Header("Visual Perception Settings")]
         #region Tooltip
         [Tooltip("The overall radius of the field of view. Equals the dinstance of the field of view.")]
         #endregion
-        [SerializeField, Range(0.0f, 20.0f)] private float _fOVRadius;        
+        [SerializeField, Range(0.0f, 20.0f)] private float _fOVRadius;
         #region Tooltip
         [Tooltip("Angle of the field of view.")]
         #endregion
@@ -65,15 +79,15 @@ namespace Perception
         //[Space(5)]
 
         [Header("Monitoring Values")]
-        
+
         #region Tooltip
         [Tooltip("The object whis is targeted by this enemy, repsective to the 'Target Detection Mask'.")]
         #endregion
-        [SerializeField] private GameObject _targetObject;        
+        [SerializeField] private GameObject _targetObject;
         #region Tooltip
         [Tooltip("Depicts if the player character is currently detected by this enemy.")]
         #endregion
-        [SerializeField] private bool _isTargetDetected = false;        
+        [SerializeField] private bool _isTargetDetected = false;
         #region Tooltip
         [Tooltip("Depicts if the player character is currently dead or not.")]
         #endregion
@@ -143,7 +157,7 @@ namespace Perception
         private void FixedUpdate()
         {
             // Execute logic for visual Perception
-            if (IsThisNPCDead || IsTargetDead)
+            if (_isThisNPCDead || _isTargetDead || !_enableVisualPerception)
                 return;
             else
                 TargetDetectionCheck();
@@ -158,7 +172,9 @@ namespace Perception
         /// <param name="collision"></param>
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (collision.gameObject.CompareTag("Enemy"))
+            if (_enableTactilePerception)
+                return;
+            else if (collision.gameObject.CompareTag("Enemy"))
             {
                 _isCollidingWithOtherObject = true;
                 //NavAgent.isStopped = true;
@@ -178,8 +194,8 @@ namespace Perception
         /// <param name="collision"></param>
         private void OnTriggerStay2D(Collider2D collision)
         {
-            // when Player is alive invoke MeleeAttack Event for informing, that Player is in Attack Range
-            if (IsTargetDead)
+            // when Player is alive and tactile peception logic enabled invoke MeleeAttack Event for informing, that Player is in Attack Range
+            if (IsTargetDead || _enableTactilePerception)
                 return;
             else if (collision.gameObject == _targetObject)
             {
@@ -194,8 +210,8 @@ namespace Perception
         /// <param name="collision"></param>
         private void OnTriggerExit2D(Collider2D collision)
         {
-            // when Player is alive invoke MeleeAttack Event for informing, that Player is not in Attack Range anymore
-            if (IsTargetDead)
+            // when Player is alive and tactile peception logic enabled invoke MeleeAttack Event for informing, that Player is not in Attack Range anymore
+            if (IsTargetDead || _enableTactilePerception)
                 return;
             else if (collision.gameObject == _targetObject)
             {
@@ -211,16 +227,26 @@ namespace Perception
         // Methods related to visual Perception
 
         /// <summary>
-        /// Checks if the target object is inside the Field ov view (<see cref="FOVRadius"/>, <see cref="FOVAngle"/>) and therefore detected by this npc object. Respectiv to the check result
-        /// an event will be fired which carrys/transmitts result-respective values for informing about the outcome of the detection check.
+        /// Checks if the target object is inside the field of view (<see cref="FOVRadius"/>, <see cref="FOVAngle"/>) and therefore detected by this npc object. Respective to the check result
+        /// an event will be fired which transmitts result-respective values for informing about the outcome of the detection check. This Check will be only executed as long as this NPC is 
+        /// not marked 'dead' (<see cref="_isThisNPCDead"/>), the target object is not marked 'dead' (<see cref="_isTargetDead"/>) and this visual perception is enabled
+        /// (<see cref="_enableVisualPerception"/>).
         /// </summary>
         private void TargetDetectionCheck()
         {
+            Debug.Log($"<color=orange> AI-Behav: </color> entered 'TargetDetectionCheck()' in {this}.");
+
+            if (_isThisNPCDead || _isTargetDead || !_enableVisualPerception)
+                return;
+
             // storing the collider of the target object (e.g. the collider of the player object)
             Collider2D targetCollider = Physics2D.OverlapCircle(transform.position, FOVRadius, _targetDetectionMask);
 
             if (targetCollider != false)   // if there is a target detected
             {
+                //todo:!!! continue here with debugging! (JM 01.07.24)
+                Debug.Log($"<color=orange> AI-Behav: </color> entered; target({targetCollider.gameObject.name}) overlaps with FoV in {this}.");            
+
                 // 1.: set the _targetObject to the object the target collider is attached to
                 _targetObject = targetCollider.gameObject;
 
@@ -256,6 +282,8 @@ namespace Perception
                 _isTargetDetected = false;
                 InformAboutPlayerDetectionStatus();
             }
+
+            Debug.Log($"<color=orange> AI-Behav: </color> executed 'TargetDetectionCheck()' in {this}. Result of target detection check: '<color=silver>{_isTargetDetected}</color>'");
         }
 
         /// <summary>
@@ -280,13 +308,17 @@ namespace Perception
         // Methods related to auditive Perception
 
         /// <summary>
-        /// Checks if this enemy object is affected by alarming event like Door-KickIn or 'hearing' shooting noises etc.
+        /// Checks if this enemy object is affected by alarming event like Door-KickIn or 'hearing' shooting noises etc. This Check will only be executed if auditice perception is eneabeld
+        /// (<see cref="_enableAuditivePerception"/>).
         /// </summary>
         /// <param name="isSomethinAlarmingHappening"></param>
         /// <param name="positionOfAlarmingEvent"></param>
         /// <param name="CollidersWithinRange"></param>
         private void CheckIfAffected(bool isSomethinAlarmingHappening, Vector3 positionOfAlarmingEvent, Collider2D[] CollidersWithinRange)
         {
+            if (!_enableAuditivePerception)
+                return;
+
             Collider2D thisCollider = GetComponent<Collider2D>();
 
             // check if this object is among the enemy objects that are actually affected by the alarming event
@@ -295,6 +327,8 @@ namespace Perception
                 if (thisCollider == CollidersWithinRange[i])
                     OnSomethingAlarmingIsHappening?.Invoke(isSomethinAlarmingHappening, positionOfAlarmingEvent);
             }
+            Debug.Log($"<color=orange> AI-Bahv: </color> 'CheckIfAffected()' was caled in '{this}'. {gameObject.name} should have checked if it is affected by shooting noise range of " +
+                $"player char. Also the Event 'OnSomethingAlarmingInHappening' should have been fired to inform behaviour controller of {gameObject}");
         }
         #endregion
 

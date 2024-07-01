@@ -1,20 +1,21 @@
 using Enemies;
 using EnumLibrary;
-using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 namespace StateMashine
 {
     public class ChaseState : BaseState
     {
-        public ChaseState(NPCBehaviourController enemyBehav, EnemyStateMachine enemyStaMa) : base(enemyBehav, enemyStaMa)
+        public ChaseState(NPCBehaviourController behavCtrl, NPCStateMachine enemyStaMa) : base(behavCtrl, enemyStaMa)
         {
+            StateName = "ChaseState";
         }
-        public ChaseState(MeleeEnemyBehaviour meleeEnemyBehav, EnemyStateMachine enemySM) : base(meleeEnemyBehav, enemySM)
+        public ChaseState(MeleeEnemyBehaviour meleeEnemyBehav, NPCStateMachine enemySM) : base(meleeEnemyBehav, enemySM)
         {
+            StateName = "ChaseState";
         }
-        public ChaseState(RangeEnemyBehaviour rangeEnemyBehav, EnemyStateMachine enemySM) : base(rangeEnemyBehav, enemySM)
+        public ChaseState(RangeEnemyBehaviour rangeEnemyBehav, NPCStateMachine enemySM) : base(rangeEnemyBehav, enemySM)
         {
+            StateName = "ChasetState";
         }
 
         public override void EnterState()
@@ -22,7 +23,7 @@ namespace StateMashine
             base.EnterState();
 
             // caling the actual Behaviour of the State-ScriptableObjects
-            _enemyBehaviour.BaseEnemyChaseStateSOInstance.ExecuteEnterLogic();
+            _behaviourCtrl.BaseEnemyChaseStateSOInstance.ExecuteEnterLogic();
             #region OldCode
             //// setup NavMeshAgent Properties
             //_enemyBehaviour.NavAgent.speed = _enemyBehaviour.ChasingSpeed;
@@ -37,7 +38,7 @@ namespace StateMashine
             base.ExitState();
 
             // caling the actual Behaviour of the State-ScriptableObjects
-            _enemyBehaviour.BaseEnemyChaseStateSOInstance.ExecuteExitLogic();
+            _behaviourCtrl.BaseEnemyChaseStateSOInstance.ExecuteExitLogic();
 
             #region OldCode
             //// setup NavMeshAgent Properties
@@ -53,7 +54,7 @@ namespace StateMashine
             base.FrameUpdate();
 
             // caling the actual Behaviour of the State-ScriptableObjects
-            _enemyBehaviour.BaseEnemyChaseStateSOInstance.ExecuteFrameUpdateLogic();
+            _behaviourCtrl.BaseEnemyChaseStateSOInstance.ExecuteFrameUpdateLogic();
 
             #region OldCode
             //// Set Movement-Destination for NavMeshAgent
@@ -82,7 +83,7 @@ namespace StateMashine
             base.PhysicsUpdate();
 
             // caling the actual Behaviour of the State-ScriptableObjects
-            _enemyBehaviour.BaseEnemyChaseStateSOInstance.ExecutePhysicsUpdateLogic();
+            _behaviourCtrl.BaseEnemyChaseStateSOInstance.ExecutePhysicsUpdateLogic();
         }
 
         public override void AnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerType)
@@ -90,7 +91,7 @@ namespace StateMashine
             base.AnimationTriggerEvent(animTriggerType);
 
             // caling the actual Behaviour of the State-ScriptableObjects
-            _enemyBehaviour.BaseEnemyChaseStateSOInstance.ExecuteAnimationTriggerEventLogic(animTriggerType);
+            _behaviourCtrl.BaseEnemyChaseStateSOInstance.ExecuteAnimationTriggerEventLogic(animTriggerType);
         }
     }
 }

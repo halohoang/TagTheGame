@@ -9,14 +9,17 @@ namespace StateMashine
     {
         private PlayerStats _playerStatsScript;
 
-        public AttackState(NPCBehaviourController enemyBehav, EnemyStateMachine enemyStaMa) : base(enemyBehav, enemyStaMa)
-        {            
-        }
-        public AttackState(MeleeEnemyBehaviour meleeEnemyBehav, EnemyStateMachine enemySM) : base(meleeEnemyBehav, enemySM)
+        public AttackState(NPCBehaviourController behavCtrl, NPCStateMachine enemyStaMa) : base(behavCtrl, enemyStaMa)
         {
+            StateName = "AttackState";
         }
-        public AttackState(RangeEnemyBehaviour rangeEnemyBehav, EnemyStateMachine enemySM) : base(rangeEnemyBehav, enemySM)
+        public AttackState(MeleeEnemyBehaviour meleeEnemyBehav, NPCStateMachine enemySM) : base(meleeEnemyBehav, enemySM)
         {
+            StateName = "AttackState";
+        }
+        public AttackState(RangeEnemyBehaviour rangeEnemyBehav, NPCStateMachine enemySM) : base(rangeEnemyBehav, enemySM)
+        {
+            StateName = "AttackState";
         }
 
         public override void EnterState()
@@ -24,7 +27,7 @@ namespace StateMashine
             base.EnterState();
 
             // caling the actual Behaviour of the State-ScriptableObjects
-            _enemyBehaviour.BaseEnemyAttackStateSOInstance.ExecuteEnterLogic();
+            _behaviourCtrl.BaseEnemyAttackStateSOInstance.ExecuteEnterLogic();
 
             #region OldCode
             //// setup NavMeshAgent Properties
@@ -43,7 +46,7 @@ namespace StateMashine
             base.ExitState();
 
             // caling the actual Behaviour of the State-ScriptableObjects
-            _enemyBehaviour.BaseEnemyAttackStateSOInstance.ExecuteExitLogic();
+            _behaviourCtrl.BaseEnemyAttackStateSOInstance.ExecuteExitLogic();
             #region OldCode
             //// setup NavMeshAgent Properties
             ////_enemyBehaviour.NavAgent.speed = _enemyBehaviour.MovementSpeed;
@@ -58,7 +61,7 @@ namespace StateMashine
             base.FrameUpdate();
 
             // caling the actual Behaviour of the State-ScriptableObjects
-            _enemyBehaviour.BaseEnemyAttackStateSOInstance.ExecuteFrameUpdateLogic();
+            _behaviourCtrl.BaseEnemyAttackStateSOInstance.ExecuteFrameUpdateLogic();
 
             #region OldCode
             //if (_enemyBehaviour.IsInAttackRange)
@@ -79,7 +82,7 @@ namespace StateMashine
             base.PhysicsUpdate();
 
             // caling the actual Behaviour of the State-ScriptableObjects
-            _enemyBehaviour.BaseEnemyAttackStateSOInstance.ExecutePhysicsUpdateLogic();
+            _behaviourCtrl.BaseEnemyAttackStateSOInstance.ExecutePhysicsUpdateLogic();
         }
 
         public override void AnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerType)
@@ -87,7 +90,7 @@ namespace StateMashine
             base.AnimationTriggerEvent(animTriggerType);
 
             // caling the actual Behaviour of the State-ScriptableObjects
-            _enemyBehaviour.BaseEnemyAttackStateSOInstance.ExecuteAnimationTriggerEventLogic(animTriggerType);
+            _behaviourCtrl.BaseEnemyAttackStateSOInstance.ExecuteAnimationTriggerEventLogic(animTriggerType);
         }
     }
 }

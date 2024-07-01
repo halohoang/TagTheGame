@@ -31,10 +31,10 @@ namespace ScriptableObjects
             //_enemyBehaviour.NavAgent.speed = _enemyBehaviour.ChasingSpeed;
 
             // set proper animation
-            _baseEnemyBehaviour.Animator.SetBool("Attack", true);
+            _behaviourCtrl.Animator.SetBool("Attack", true);
 
             // set PlayerGameObject reference
-            _playerStatsScript = _baseEnemyBehaviour.PlayerObject.GetComponent<PlayerStats>();
+            _playerStatsScript = _behaviourCtrl.PlayerObject.GetComponent<PlayerStats>();
         }
 
         public override void ExecuteExitLogic()
@@ -45,22 +45,22 @@ namespace ScriptableObjects
             //_enemyBehaviour.NavAgent.speed = _enemyBehaviour.MovementSpeed;
 
             // set proper animation
-            _baseEnemyBehaviour.Animator.SetBool("Attack", false);
+            _behaviourCtrl.Animator.SetBool("Attack", false);
         }
 
         public override void ExecuteFrameUpdateLogic()
         {
             base.ExecuteFrameUpdateLogic();
 
-            if (_baseEnemyBehaviour.IsInAttackRange)
+            if (_behaviourCtrl.IsInAttackRange)
             {
                 // dealing Damage
                 _playerStatsScript.GetDamage();
             }
             else
             {
-                _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.ChaseState);
-                Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>MeleeAttack</color>' to '<color=orange>Chase</color>' should have been happend now!");
+                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.ChaseState);
+                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>MeleeAttack</color>' to '<color=orange>Chase</color>' should have been happend now!");
                 return;
             }
         }

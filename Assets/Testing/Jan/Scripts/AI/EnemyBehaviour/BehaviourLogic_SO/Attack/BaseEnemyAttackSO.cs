@@ -6,7 +6,7 @@ namespace ScriptableObjects
 {
     public class BaseEnemyAttackSO : ScriptableObject
     {
-        protected NPCBehaviourController _baseEnemyBehaviour;
+        protected NPCBehaviourController _behaviourCtrl;
         //protected MeleeEnemyBehaviour _meleeEnemyBehaviour;
         //protected RangeEnemyBehaviour _rangeEnemyBehaviour;
         protected Transform _transform;
@@ -19,7 +19,7 @@ namespace ScriptableObjects
         {
             this._gameObject = enemyObj;
             this._transform = enemyObj.transform;
-            this._baseEnemyBehaviour = enemyBehav;
+            this._behaviourCtrl = enemyBehav;
 
             _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
@@ -43,7 +43,7 @@ namespace ScriptableObjects
         public virtual void ExecuteEnterLogic() 
         {
             // get references
-            _thisEnemyRB2D = _baseEnemyBehaviour.gameObject.GetComponent<Rigidbody2D>();
+            _thisEnemyRB2D = _behaviourCtrl.gameObject.GetComponent<Rigidbody2D>();
         }
 
         public virtual void ExecuteExitLogic()
@@ -54,7 +54,7 @@ namespace ScriptableObjects
         public virtual void ExecuteFrameUpdateLogic() 
         {
             // facing Player Position
-            Vector2 direction = (_baseEnemyBehaviour.PlayerObject.transform.position - _baseEnemyBehaviour.transform.position).normalized;
+            Vector2 direction = (_behaviourCtrl.PlayerObject.transform.position - _behaviourCtrl.transform.position).normalized;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             _thisEnemyRB2D.rotation = angle;
             #region altern rotation for facing direction

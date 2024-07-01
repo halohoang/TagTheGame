@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 2263879138077958913}
   - component: {fileID: 8490934405458039553}
   - component: {fileID: 6270790012663500567}
+  - component: {fileID: 3039468714080421447}
   m_Layer: 9
   m_Name: enemy_melee_red_standing_Idle
   m_TagString: Enemy
@@ -286,17 +287,18 @@ MonoBehaviour:
   _playerObject: {fileID: 0}
   _condPlayerDetectionCheck: {fileID: 0}
   _condMeleeAttackCheck: {fileID: 0}
-  _baseEnemyIdleStateSO: {fileID: 11400000, guid: e2f9122969f405a488f70f90701d3d7d, type: 2}
-  _baseEnemyAlertStateSO: {fileID: 11400000, guid: 3846a16cac923194dad85324de682020, type: 2}
-  _baseEnemyChaseStateSO: {fileID: 11400000, guid: b58cbcaeb70b8064e8441b42b8985050, type: 2}
-  _baseEnemyAttackStateSO: {fileID: 11400000, guid: 6ebc51d86238c4e4ea025132c0e68de9, type: 2}
+  _baseIdleStateSO: {fileID: 11400000, guid: e2f9122969f405a488f70f90701d3d7d, type: 2}
+  _baseAlertStateSO: {fileID: 11400000, guid: 3846a16cac923194dad85324de682020, type: 2}
+  _baseChaseStateSO: {fileID: 11400000, guid: b58cbcaeb70b8064e8441b42b8985050, type: 2}
+  _baseAttackStateSO: {fileID: 11400000, guid: 6ebc51d86238c4e4ea025132c0e68de9, type: 2}
   _movementSpeed: 3.5
   _chasingSpeed: 7
+  _isThisNPCDead: 0
   _isPlayerDead: 0
   _isPlayerDetected: 0
   _isSomethingAlarmingHappening: 0
   _isInAttackRange: 0
-  _isCollidingWithObstacle: 0
+  _isCollidingWithObject: 0
   _noiseRangeOfAlarmingEvent: 0
   _positionOfAlarmingEvent: {x: 0, y: 0, z: 0}
   _collisionObjectPos: {x: 0, y: 0}
@@ -394,10 +396,40 @@ MonoBehaviour:
   - {x: 0.07000017, y: -0.12999988, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 62478
+  m_InstanceId: 40326
   m_LocalBounds:
     m_Center: {x: 0, y: 0.00000011920929, z: 0}
     m_Extent: {x: 0.07000017, y: 0.13, z: 0}
+--- !u!114 &3039468714080421447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4361380091175105727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7eefb39540d66ce4194ff09bd3babcf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enableVisualPerception: 1
+  _enableAuditivePerception: 1
+  _enableTactilePerception: 1
+  _targetDetectionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _obstructionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _raycastingCollider: {fileID: 0}
+  _fOVRadius: 0
+  _fOVAngle: 180
+  _targetObject: {fileID: 0}
+  _isTargetDetected: 0
+  _isTargetDead: 0
+  _isThisNPCDead: 0
+  _isInAttackRange: 0
+  _isCollidingWithOtherObject: 0
 --- !u!1 &9160041209398809142
 GameObject:
   m_ObjectHideFlags: 0

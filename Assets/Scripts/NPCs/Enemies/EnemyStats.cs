@@ -1,6 +1,4 @@
-using Enemies;
 using NaughtyAttributes;
-using StateMashine;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -29,7 +27,10 @@ public class EnemyStats : MonoBehaviour
     #endregion
     [SerializeField] private List<GameObject> _bloodPrefabPool;  // Spawning pool of blood when hit (randomly out of list)    
     [SerializeField] private AudioSource _audioSource;
-    [SerializeField] private AudioClip _audioClip;
+    #region Tooltip
+    [Tooltip("The audioclip that shall be played when enemy is receives damage.")]
+    #endregion
+    [SerializeField] private AudioClip _receiveDamageSound;
     [Space(5)]
 
     [Header("Settings")]
@@ -98,7 +99,7 @@ public class EnemyStats : MonoBehaviour
             CurrentHealth -= damage;
 
             // sound effects on taking damage
-            _audioSource.PlayOneShot(_audioClip);
+            _audioSource?.PlayOneShot(_receiveDamageSound);
 
             // Visual effects on taking damage
             StartCoroutine(_damageVFX?.FlashAndRevert());

@@ -7,10 +7,11 @@ using ScriptableObjects;
 using StateMashine;
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 
 namespace Enemies
 {
-    [RequireComponent(typeof(NavMeshAgent))]
+    [RequireComponent(typeof(NavMeshAgent), typeof(NPCPerception))]
     [DisallowMultipleComponent]
     public class NPCBehaviourController : MonoBehaviour
     {
@@ -28,10 +29,10 @@ namespace Enemies
         [Space(5)]
 
         [Header("References to Behaviour ScriptableObjects")]
-        [SerializeField] private BaseEnemyIdleSO _baseEnemyIdleStateSO;
-        [SerializeField] private BaseEnemyAlertSO _baseEnemyAlertStateSO;
-        [SerializeField] private BaseEnemyChaseSO _baseEnemyChaseStateSO;
-        [SerializeField] private BaseEnemyAttackSO _baseEnemyAttackStateSO;
+        [SerializeField] private BaseEnemyIdleSO _baseIdleStateSO;
+        [SerializeField] private BaseEnemyAlertSO _baseAlertStateSO;
+        [SerializeField] private BaseEnemyChaseSO _baseChaseStateSO;
+        [SerializeField] private BaseEnemyAttackSO _baseAttackStateSO;
 
         // properties for Base behaviour scriptable objects to store copies of the respective above referenced ones
         public BaseEnemyIdleSO BaseEnemyIdleStateSOInstance { get; set; }
@@ -47,6 +48,7 @@ namespace Enemies
         [Space(5)]
 
         [Header("Monitoring of importang values")]
+        [SerializeField, ReadOnly] private bool _isThisNPCDead;
         [SerializeField, ReadOnly] private bool _isPlayerDead;
         [SerializeField, ReadOnly] private bool _isPlayerDetected;
         [SerializeField, ReadOnly] private bool _isSomethingAlarmingHappening;
@@ -56,10 +58,11 @@ namespace Enemies
         [SerializeField, ReadOnly] private Vector3 _positionOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector2 _collisionObjectPos;
         [SerializeField, ReadOnly] private Vector3 _lastKnownPlayerPos;
+        [SerializeField, ReadOnly] private string _currentActiveBehaviourState;
 
 
         // StateMachine-Related Variables
-        private EnemyStateMachine _stateMachine;
+        private NPCStateMachine _stateMachine;
         private IdleState _idleState;
         private AlertState _alertState;
         private ChaseState _chaseState;
@@ -90,7 +93,7 @@ namespace Enemies
         public Vector3 LastKnownPlayerPos { get => _lastKnownPlayerPos; private set => _lastKnownPlayerPos = value; }
 
         // StateMachine-Related
-        public EnemyStateMachine StateMachine { get => _stateMachine; set => _stateMachine = value; }
+        public NPCStateMachine StateMachine { get => _stateMachine; set => _stateMachine = value; }
         public IdleState IdleState { get => _idleState; set => _idleState = value; }
         public AlertState AlertState { get => _alertState; set => _alertState = value; }
         public ChaseState ChaseState { get => _chaseState; set => _chaseState = value; }
@@ -120,13 +123,13 @@ namespace Enemies
             CondMeleeAttackCheck = GetComponent<ConditionIsInMeleeAttackRangeCheck>(); // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
 
             // Instantiating Copys of the Behaviour-ScriptableObjects (so every Enemy has its own beahviour and not all Enemies will share the same reference of an behaviour)
-            BaseEnemyIdleStateSOInstance = Instantiate(_baseEnemyIdleStateSO);
-            BaseEnemyAlertStateSOInstance = Instantiate(_baseEnemyAlertStateSO);
-            BaseEnemyChaseStateSOInstance = Instantiate(_baseEnemyChaseStateSO);
-            BaseEnemyAttackStateSOInstance = Instantiate(_baseEnemyAttackStateSO);
+            BaseEnemyIdleStateSOInstance = Instantiate(_baseIdleStateSO);
+            BaseEnemyAlertStateSOInstance = Instantiate(_baseAlertStateSO);
+            BaseEnemyChaseStateSOInstance = Instantiate(_baseChaseStateSO);
+            BaseEnemyAttackStateSOInstance = Instantiate(_baseAttackStateSO);
 
             // Variable Initialization
-            StateMachine = new EnemyStateMachine();
+            StateMachine = new NPCStateMachine();
             IdleState = new IdleState(this, StateMachine);
             AlertState = new AlertState(this, StateMachine);
             ChaseState = new ChaseState(this, StateMachine);
@@ -147,11 +150,15 @@ namespace Enemies
             #region new System (26.06.)
             // new System (26.06.24)
             PlayerStats.OnPlayerDeath += SetIsPlayerDead;
+            EnemyStats.OnEnemyDeathEvent += SetIsThisNPCDead;
 
             NPCPerception.OnTargetDetection += SetIsPlayerDetected;
             NPCPerception.OnSomethingAlarmingIsHappening += SetAlarmingEventValues;
             NPCPerception.OnCollidingWithOtherObject += SetIsCollidingWithOtherEnemy;
             NPCPerception.OnInMeleeAttackRange += SetIsInAttackRangePlayer;
+
+            //StateMachine related
+            NPCStateMachine.OnStateTransition += SetCurrentActiveState;
             #endregion
 
         }
@@ -170,11 +177,15 @@ namespace Enemies
             #region new system (26.06.)
             // new System (26.06.24)
             PlayerStats.OnPlayerDeath -= SetIsPlayerDead;
+            EnemyStats.OnEnemyDeathEvent -= SetIsThisNPCDead;
 
             NPCPerception.OnTargetDetection -= SetIsPlayerDetected;
             NPCPerception.OnSomethingAlarmingIsHappening -= SetAlarmingEventValues;
             NPCPerception.OnCollidingWithOtherObject -= SetIsCollidingWithOtherEnemy;
             NPCPerception.OnInMeleeAttackRange -= SetIsInAttackRangePlayer;
+
+            //StateMachine related
+            NPCStateMachine.OnStateTransition -= SetCurrentActiveState;
             #endregion
 
         }
@@ -198,6 +209,9 @@ namespace Enemies
 
         private void FixedUpdate()
         {
+            if (_isThisNPCDead)
+                return;
+
             // reset to Idle State if Player was killed
             if (_isPlayerDead && StateMachine.CurrentState != IdleState)
                 StateMachine.Transition(IdleState);
@@ -222,7 +236,10 @@ namespace Enemies
 
         // Update is called once per frame
         void Update()
-        {
+        {            
+            if (_isThisNPCDead)
+                return;            
+
             // reset to Idle State if Player was killed
             if (_isPlayerDead && StateMachine.CurrentState != IdleState)
                 StateMachine.Transition(IdleState);
@@ -303,6 +320,26 @@ namespace Enemies
         private void SetIsPlayerDead(bool isPlayerDead)
         {
             _isPlayerDead = isPlayerDead;
+        }
+
+        /// <summary>
+        /// Sets the bool <see cref="_isThisNPCDead"/> if this gameobject is the object that run out of health.
+        /// </summary>
+        /// <param name="isDeadStatus"></param>
+        /// <param name="deadObject"></param>
+        private void SetIsThisNPCDead(bool isDeadStatus, GameObject deadObject)
+        {
+            if (this.gameObject == deadObject)
+                _isThisNPCDead = isDeadStatus;
+        }
+
+        /// <summary>
+        /// Sets the string <see cref="_currentActiveBehaviourState"/> according to the transmitted parameter. Only for monitoring/debugging reasons.
+        /// </summary>
+        /// <param name="nameOfCurrentState"></param>
+        private void SetCurrentActiveState(string nameOfCurrentState)
+        {
+            _currentActiveBehaviourState = nameOfCurrentState;
         }
 
         /// <summary>

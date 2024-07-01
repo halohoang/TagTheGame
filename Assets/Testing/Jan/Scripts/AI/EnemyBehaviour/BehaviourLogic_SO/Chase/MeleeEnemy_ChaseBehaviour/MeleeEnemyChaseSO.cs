@@ -26,7 +26,7 @@ namespace ScriptableObjects
             base.ExecuteEnterLogic();
 
             // Set proper Animation
-            _baseEnemyBehaviour.Animator.SetBool("Engage", true);
+            _behaviourCtrl.Animator.SetBool("Engage", true);
         }
 
         public override void ExecuteExitLogic()
@@ -34,44 +34,44 @@ namespace ScriptableObjects
             base.ExecuteExitLogic();
 
             // Set proper Animation
-            _baseEnemyBehaviour.Animator.SetBool("Engage", false);
+            _behaviourCtrl.Animator.SetBool("Engage", false);
         }
 
         public override void ExecuteFrameUpdateLogic()
         {
             // Transition-Condition-Check (if no Player is detected anymore -> switch to IdleState again)
-            if (!_baseEnemyBehaviour.IsPlayerDetected)
+            if (!_behaviourCtrl.IsPlayerDetected)
             {
-                _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.IdleState);
-                Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>Idle</color>' should have been happend now!");
+                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.IdleState);
+                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>Idle</color>' should have been happend now!");
                 return;
             }
             // 1.1) if agent reached last known position of player and player can't be detected anymore -> switch to idle/alert state            
-            else if (!_baseEnemyBehaviour.IsPlayerDetected && (Vector2)_baseEnemyBehaviour.gameObject.transform.position == (Vector2)_baseEnemyBehaviour.LastKnownPlayerPos)
+            else if (!_behaviourCtrl.IsPlayerDetected && (Vector2)_behaviourCtrl.gameObject.transform.position == (Vector2)_behaviourCtrl.LastKnownPlayerPos)
             {
-                _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.IdleState);
-                Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>Idle</color>' should have been happend now!");
+                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.IdleState);
+                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>Idle</color>' should have been happend now!");
                 return;
             }
-            else if (!_baseEnemyBehaviour.IsPlayerDetected && (Vector2)_baseEnemyBehaviour.gameObject.transform.position != (Vector2)_baseEnemyBehaviour.LastKnownPlayerPos)
+            else if (!_behaviourCtrl.IsPlayerDetected && (Vector2)_behaviourCtrl.gameObject.transform.position != (Vector2)_behaviourCtrl.LastKnownPlayerPos)
             {
-                _baseEnemyBehaviour.NavAgent.SetDestination(_baseEnemyBehaviour.LastKnownPlayerPos);
+                _behaviourCtrl.NavAgent.SetDestination(_behaviourCtrl.LastKnownPlayerPos);
             }
             
-            if (_baseEnemyBehaviour.IsPlayerDetected)
+            if (_behaviourCtrl.IsPlayerDetected)
             {
                 // set facing direection via calling 'base.baseFrameUpdate()'
                 base.ExecuteFrameUpdateLogic();
 
                 // Set Movement-Destination for NavMeshAgent
-                _baseEnemyBehaviour.NavAgent.SetDestination(_baseEnemyBehaviour.PlayerObject.transform.position);
+                _behaviourCtrl.NavAgent.SetDestination(_behaviourCtrl.PlayerObject.transform.position);
             }
 
             // Transition-Condition-Check (if Player is in AttackRange -> switch to Attack-State)          
-            if (_baseEnemyBehaviour.IsInAttackRange)
+            if (_behaviourCtrl.IsInAttackRange)
             {
-                _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.AttackState);
-                Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>MeleeAttack</color>' should have been happend now!");
+                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.AttackState);
+                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>MeleeAttack</color>' should have been happend now!");
                 return;
             }
         }

@@ -35,10 +35,10 @@ namespace ScriptableObjects
             base.ExecuteFrameUpdateLogic();
 
             // Transition-Check; If Player is detected change to Attack State (shooting)
-            if (_baseEnemyBehaviour.IsPlayerDetected)
+            if (_behaviourCtrl.IsPlayerDetected)
             {
-                _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.AttackState);
-                Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Attack (Shooting)</color>' should have been happend now!");
+                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.AttackState);
+                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Attack (Shooting)</color>' should have been happend now!");
                 return;
             }
         }

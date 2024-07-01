@@ -1,9 +1,11 @@
-using UnityEngine;
+using System;
 
 namespace StateMashine
 {
-    public class EnemyStateMachine
+    public class NPCStateMachine
     {
+        public static event Action<string> OnStateTransition;
+
         private BaseState _currentState;
 
         public BaseState CurrentState { get => _currentState; set => _currentState = value; }
@@ -16,6 +18,8 @@ namespace StateMashine
         {
             CurrentState = initialState;
             CurrentState.EnterState();
+
+            OnStateTransition?.Invoke(CurrentState.StateName);
         }
 
         /// <summary>
@@ -27,6 +31,8 @@ namespace StateMashine
             CurrentState.ExitState();
             CurrentState = nextState;
             CurrentState.EnterState();
+
+            OnStateTransition?.Invoke(CurrentState.StateName);
         }
     }
 }

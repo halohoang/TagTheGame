@@ -6,7 +6,7 @@ namespace ScriptableObjects
 {    
     public class BaseEnemyIdleSO : ScriptableObject
     {
-        protected NPCBehaviourController _baseEnemyBehaviour;
+        protected NPCBehaviourController _behaviourCtrl;
         protected MeleeEnemyBehaviour _meleeEnemyBehaviour;
         protected RangeEnemyBehaviour _rangeEnemyBehaviour;
         protected Transform _transform;
@@ -18,7 +18,7 @@ namespace ScriptableObjects
         {
             this._gameObject = enemyObj;
             this._transform = enemyObj.transform;
-            this._baseEnemyBehaviour = enemyBehav;
+            this._behaviourCtrl = enemyBehav;
 
             _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
@@ -49,10 +49,10 @@ namespace ScriptableObjects
         {
             // Transitionchecks 
             // Switch State from Idle to AlertState when something alarming is happening (e.g. door kick in, player shoots etc.) and Agent is in noise range
-            if (_baseEnemyBehaviour.IsSomethingAlarmingHappening)
+            if (_behaviourCtrl.IsSomethingAlarmingHappening)
             {
-                _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.AlertState);
-                Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Alert</color>' should have been happend now!");
+                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.AlertState);
+                Debug.Log($"<color=orange> AI-Behav: </color> {_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Alert</color>' should have been happend now!");
             }
         }
 

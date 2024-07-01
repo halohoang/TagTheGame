@@ -3,10 +3,15 @@ using EnumLibrary;
 using UnityEngine;
 
 namespace ScriptableObjects
-{    
+{
     public class BaseEnemyAlertSO : ScriptableObject
     {
-        protected NPCBehaviourController _baseEnemyBehaviour;
+        #region Variables
+        //--------------------------------------
+        // - - - - -  V A R I A B L E S  - - - - 
+        //--------------------------------------
+
+        protected NPCBehaviourController _behaviourCtrl;
         //protected MeleeEnemyBehaviour _meleeEnemyBehaviour;
         //protected RangeEnemyBehaviour _rangeEnemyBehaviour;
         protected Transform _transform;
@@ -14,11 +19,14 @@ namespace ScriptableObjects
 
         protected Transform _playerTransform;
 
+        private Vector3 _previousEventPosition;
+        #endregion
+
         public virtual void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
             this._gameObject = enemyObj;
             this._transform = enemyObj.transform;
-            this._baseEnemyBehaviour = enemyBehav;
+            this._behaviourCtrl = enemyBehav;
 
             _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
@@ -39,44 +47,55 @@ namespace ScriptableObjects
         //    _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         //}
 
-        public virtual void ExecuteEnterLogic() { }
+
+        #region Methods
+        //----------------------------------
+        // - - - - -  M E T H O D S  - - - - 
+        //----------------------------------
+
+        public virtual void ExecuteEnterLogic()
+        {
+            FaceAgentTowardsAlarmingEvent(_behaviourCtrl.PositionOfAlarmingEvent, _behaviourCtrl.NoiseRangeOfAlarmingEvent);            
+        }
+
         public virtual void ExecuteExitLogic()
         {
-            _baseEnemyBehaviour.SetIsSomethingAlarmingHappening(false);
-
             ResetValues();
         }
 
         public virtual void ExecuteFrameUpdateLogic()
         {
             // todo: if implementing more ALert-Behaviour maybe move following logic to 'EnemyAlertStandingSO'; JM (02.11.2023)
-            FaceAgentTowardsAlarmingEvent(_baseEnemyBehaviour.PositionOfAlarmingEvent, _baseEnemyBehaviour.NoiseRangeOfAlarmingEvent);
+            if (_previousEventPosition != _behaviourCtrl.PositionOfAlarmingEvent)    // if the Position of Larming event changed (new/other alarming event set NPC rotation respectively)
+                FaceAgentTowardsAlarmingEvent(_behaviourCtrl.PositionOfAlarmingEvent, _behaviourCtrl.NoiseRangeOfAlarmingEvent);
         }
 
         public virtual void ExecutePhysicsUpdateLogic() { }
         public virtual void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe) { }
-        public virtual void ResetValues() { }
+
+        public virtual void ResetValues()
+        {
+            _behaviourCtrl.SetIsSomethingAlarmingHappening(false);  // reset value to false on leaving state
+        }
 
         // todo: if implementing more ALert-Behaviour maybe move following logic to 'EnemyAlertStandingSO'; JM (02.11.2023)
         /// <summary>
-        /// Sets the Facing direction of the enemy-object towards the position of an alarming Event that is happening (e.g. door kick in)
-        /// if the enemy-object is within the noise-range of the alarming event
+        /// Stores the Position of the alarming event and sets the facing direction of the npc-object towards the position of the alarming event that is happening (e.g. door kick in or 
+        /// player shooting around).
         /// </summary>
         /// <param name="positionOfAlarmingEvent"></param>
         /// <param name="noiseRangeOfAlarmingEvent"></param>
         private void FaceAgentTowardsAlarmingEvent(Vector3 positionOfAlarmingEvent, float noiseRangeOfAlarmingEvent)
         {
-            // Rotate the Enemy-Object so it's facing the Kicked in Door Object when Door was kicked in 
-            Collider2D[] enemieColliders = Physics2D.OverlapCircleAll(positionOfAlarmingEvent, noiseRangeOfAlarmingEvent, LayerMask.GetMask("Enemy"));
-            for (int i = 0; i < enemieColliders.Length; i++)
-            {
-                //enemieColliders[i].gameObject.transform.right = positionOfAlarmingEvent - enemieColliders[i].gameObject.transform.position;
+            // storing event position
+            _previousEventPosition = positionOfAlarmingEvent;
 
-                // setting facing to walk direction if walking timer has ended and was setup anew
-                Vector2 direction = (positionOfAlarmingEvent - enemieColliders[i].gameObject.transform.position).normalized;
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                enemieColliders[i].gameObject.GetComponent<Rigidbody2D>().rotation = angle;
-            }
+            // setting facing direction towards alarming event
+            //_behaviourCtrl.gameObject.transform.right = positionOfAlarmingEvent - enemieColliders[i].gameObject.transform.position;
+            Vector2 direction = (positionOfAlarmingEvent - _behaviourCtrl.gameObject.transform.position).normalized;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            _behaviourCtrl.gameObject.GetComponent<Rigidbody2D>().rotation = angle;
         }
+        #endregion
     }
 }

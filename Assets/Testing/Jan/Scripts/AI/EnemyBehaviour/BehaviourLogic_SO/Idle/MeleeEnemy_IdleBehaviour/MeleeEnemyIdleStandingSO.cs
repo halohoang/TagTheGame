@@ -36,10 +36,10 @@ namespace ScriptableObjects
 
             // Transitionchecks 
             // Switch State from Idle to ChaseState when Player is Detected
-            if (_baseEnemyBehaviour.IsPlayerDetected)
+            if (_behaviourCtrl.IsPlayerDetected)
             {
-                _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.ChaseState);
-                Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
+                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.ChaseState);
+                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
                 return;
             }
         }

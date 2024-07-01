@@ -127,9 +127,9 @@ namespace Player
         #endregion
         [SerializeField] private bool _showNoiseRangeGizmo = true;
         #region Tooltip
-        [Tooltip("The game Objects of this layer mask that shall be affected, when this Interactable is interacted with. E.g. Enemies that are within the noise range of this object.")]
+        [Tooltip("The game Objects of this layer mask that shall be affected, when the player character is causing noise (e.g. shoots). E.g. Enemies that are within the noise range of this object.")]
         #endregion
-        [SerializeField] private LayerMask _affectedObjectsOnInteraction;
+        [SerializeField] private LayerMask _affectedObjectsOnNoiseEmission;
         [Space(3)]
 
         /* Camera Shake Settings*/
@@ -361,12 +361,13 @@ namespace Player
         public void InformObjectsInNoiseRange(bool isSomethinHappening, Vector3 positionOfEvent, float noiseRange)
         {
             // for every Enemy that actually is in the noise range of the AlertEvent set the appropriate values
-            Collider2D[] CollidersWithinRange = Physics2D.OverlapCircleAll(positionOfEvent, noiseRange, _affectedObjectsOnInteraction);
+            Collider2D[] CollidersWithinRange = Physics2D.OverlapCircleAll(positionOfEvent, noiseRange, _affectedObjectsOnNoiseEmission);
             for (int i = 0; i < CollidersWithinRange.Length; i++)
             {
                 // todo: remove this event after completing AI-Rework; JM (26.06.24)
                 OnPlayerShoot?.Invoke(isSomethinHappening, positionOfEvent, CollidersWithinRange); // Event for Informing Enemies that Door was Kicked in to react to
             }
+            Debug.Log($"<color=cyan> Player WeaponHandling: </color> 'OnPlayerShoot'.Event was fired. All NPC-Objects whithin noise range ('<color=silver>{CollidersWithinRange.Length}</color>' in Num) should have been informed");
         }
 
         private void ReadAttackinput(Enum_Lib.ELeftMouseButton lMBPressStatus)

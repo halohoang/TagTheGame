@@ -600,9 +600,9 @@ MonoBehaviour:
   _whenDeviationKicksIn: 0
   _shootingNoiseRange: 10
   _showNoiseRangeGizmo: 1
-  _affectedObjectsOnInteraction:
+  _affectedObjectsOnNoiseEmission:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   _camShakeDuration: 0.05
   _camShakeAmount: 0.08
   _maximumBulletCount: 0
@@ -656,7 +656,7 @@ MonoBehaviour:
   - {x: 0.07000017, y: -0.12999988, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -582624
+  m_InstanceId: 79658
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.07000017, y: 0.12999988, z: 0}
