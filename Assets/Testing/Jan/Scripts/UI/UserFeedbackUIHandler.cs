@@ -57,6 +57,6 @@ public class UserFeedbackUIHandler : MonoBehaviour
         // disableing the Interaction-UI-Marker
         for (int i = 0; i < _interactionFeedbackUI.Count; i++)
             _interactionFeedbackUI[i].SetActive(false);
-        Debug.Log($"interactionFeedbackUI was disabled in {this}");
+        //Debug.Log($"interactionFeedbackUI was disabled in {this}");
     }
 }

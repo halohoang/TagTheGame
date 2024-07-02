@@ -102,7 +102,7 @@ namespace Player
             _inputReaderSO.OnFastMovementInput += ReadSprintInput;
             PlayerStats.OnPlayerDeath += SetIsPlayerDead;
             PlayerStats.OnPlayerDeath += DisablePlayerInput;
-            Debug.Log($"<color=magenta> OnEnable() was called in {this} </color>");
+            //Debug.Log($"<color=magenta> OnEnable() was called in {this} </color>");
         }
         private void OnDisable()
         {
@@ -111,7 +111,7 @@ namespace Player
             _inputReaderSO.OnFastMovementInput -= ReadSprintInput;
             PlayerStats.OnPlayerDeath -= SetIsPlayerDead;
             PlayerStats.OnPlayerDeath -= DisablePlayerInput;
-            Debug.Log($"<color=magenta> OnDisable() was called in {this} </color>");
+            //Debug.Log($"<color=magenta> OnDisable() was called in {this} </color>");
         }
 
         void Start()

@@ -70,7 +70,7 @@ namespace DataPersistence
 
         public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
         {
-            Debug.Log($"'OnSceneLoaded()' was called in '{this}'");
+            //Debug.Log($"'OnSceneLoaded()' was called in '{this}'");
             // instatiate List for Objects that implement the IGameDataPersistence.cs
             _gameDataPersistenceObjects = FindAllGameDataPersistenceObjects();
 

@@ -172,7 +172,7 @@ namespace DataPersistence
                     //deserialize the Data from Json back into the C# object
                     //loadedData = JsonUtility.FromJson<OptionsSettingsData>(dataToLoad);
 
-                    Debug.Log($"DeserializeGameData() was called in {this}; OptionsData that should have been stored -> MasterVolume: '<color=cyan>{loadedData.MasterVolumeValue}</color>' | MusicVolume: '<color=cyan>{loadedData.MusicVolumeValue}</color>' | EffectsVolume: '<color=cyan>{loadedData.EffectsVolumeValue}</color>'");
+                    //Debug.Log($"DeserializeGameData() was called in {this}; OptionsData that should have been stored -> MasterVolume: '<color=cyan>{loadedData.MasterVolumeValue}</color>' | MusicVolume: '<color=cyan>{loadedData.MusicVolumeValue}</color>' | EffectsVolume: '<color=cyan>{loadedData.EffectsVolumeValue}</color>'");
                     OnUserFeedback?.Invoke($"Loading...");
                 }
                 catch (Exception ex)

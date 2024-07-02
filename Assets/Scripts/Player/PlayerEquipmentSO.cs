@@ -156,10 +156,10 @@ namespace ScriptableObjects
             BlankHands.SetWeaponValues(0, 0.5f, 0, 0, 0, -1);                        // set default values for Blank Hands
 
 
-            // monitoring for deugging reasons
-            for (int i = 0; i < _weapons.Count; i++)
-                Debug.Log($"Content´and element values of '_weapons' List in '{this}': Idx:'<color=lime>{i}</color>', \nContent: '<color=lime>{_weapons[i].WeaponType}</color>, \n" +
-                    $"weapon damage: '<color=lime>{_weaponValues[i].WeaponDamage}</color>', \nfire rate: '<color=lime>{_weaponValues[i].FireRate}</color>', \nmagazine size: '<color=lime>{_weaponValues[i].MagazineSize}</color>', \nrounds in magazine: '<color=lime>{_weaponValues[i].CurrentRoundsInMag}</color>', \nsimulaneously spawned bullets: '<color=lime>{_weaponValues[i].SpawnedBullets}</color>', \nreload hint threshold: '<color=lime>{_weaponValues[i].ReloadHintThreshhold}</color>'");
+            //// monitoring for deugging reasons
+            //for (int i = 0; i < _weapons.Count; i++)
+            //    Debug.Log($"Content and element values of '_weapons' List in '{this}': Idx:'<color=lime>{i}</color>', \nContent: '<color=lime>{_weapons[i].WeaponType}</color>, \n" +
+            //        $"weapon damage: '<color=lime>{_weaponValues[i].WeaponDamage}</color>', \nfire rate: '<color=lime>{_weaponValues[i].FireRate}</color>', \nmagazine size: '<color=lime>{_weaponValues[i].MagazineSize}</color>', \nrounds in magazine: '<color=lime>{_weaponValues[i].CurrentRoundsInMag}</color>', \nsimulaneously spawned bullets: '<color=lime>{_weaponValues[i].SpawnedBullets}</color>', \nreload hint threshold: '<color=lime>{_weaponValues[i].ReloadHintThreshhold}</color>'");
         }
         #endregion
 

@@ -103,7 +103,7 @@ namespace Perception
         #region Tooltip
         [Tooltip("Is this NPC colliding with another object e.g. another NPC or an obstacle?")]
         #endregion
-        [SerializeField] private bool _isCollidingWithOtherObject;
+        [SerializeField] private bool _isCollidingWithOtherObject;        
 
         // - - - Properties - - -
         public float FOVAngle { get => _fOVAngle; private set => _fOVAngle = value; }
@@ -234,7 +234,7 @@ namespace Perception
         /// </summary>
         private void TargetDetectionCheck()
         {
-            Debug.Log($"<color=orange> AI-Behav: </color> entered 'TargetDetectionCheck()' in {this}.");
+            Debug.Log($"<color=lime> AI-Perc: </color> entered 'TargetDetectionCheck()' in {this}.");
 
             if (_isThisNPCDead || _isTargetDead || !_enableVisualPerception)
                 return;
@@ -245,14 +245,21 @@ namespace Perception
             if (targetCollider != false)   // if there is a target detected
             {
                 //todo:!!! continue here with debugging! (JM 01.07.24)
-                Debug.Log($"<color=orange> AI-Behav: </color> entered; target({targetCollider.gameObject.name}) overlaps with FoV in {this}.");            
+                Debug.Log($"<color=lime> AI-Perc: </color> target ({targetCollider.gameObject.name}) overlaps with FoV-Circle of {gameObject.name}.");            
 
                 // 1.: set the _targetObject to the object the target collider is attached to
                 _targetObject = targetCollider.gameObject;
 
                 // 2.: get the direction and distance to the target object
                 Vector2 directionToTarget = (targetCollider.transform.position - transform.position).normalized;
-                float distanceToTarget = (transform.position - targetCollider.transform.position).sqrMagnitude;
+                #region PerformanceTest on distanceToTarget
+                /*Note V2.sqrtMagnitude seems to be faster than v2.Distance(), at least on mobile devices as far as this discussion can be trusted (https://discussions.unity.com/t/vector-distance-performance/22411) but since I need the exact distance between the two vectors at this point only v3.Distance() works here so far*/
+
+                //float distanceToTarget = (transform.position - targetCollider.transform.position).sqrMagnitude;
+                //Debug.Log($"<color=lime> AI-Perc: </color> distance to Target (calculated via sqrtMagnitude): '<color=silver> {distanceToTarget} </color>'.");
+                #endregion
+                float distanceToTarget = Vector2.Distance(transform.position, targetCollider.transform.position);
+                //Debug.Log($"<color=lime> AI-Perc: </color> distance to Target (calculated via Vector2.Distance()): '<color=silver> {distanceToTarget} </color>'.");
 
                 // 3.: Check if target object is inside field of view
                 // if target object is not inside the field of view fire event with according values and return from this method
@@ -260,6 +267,7 @@ namespace Perception
                 {
                     _isTargetDetected = false;
                     InformAboutPlayerDetectionStatus();
+                    Debug.Log($"<color=lime> AI-Perc: </color> target ({targetCollider.gameObject.name}) is not whithin FoV-Angle. Quitting TargetDetectionCheck(); Result of target detection check: '<color=silver>{_isTargetDetected}</color>'.");
                     return;
                 }
 
@@ -269,12 +277,14 @@ namespace Perception
                 {
                     _isTargetDetected = false;
                     InformAboutPlayerDetectionStatus();
+                    Debug.Log($"<color=lime> AI-Perc: </color> Obstacle between {gameObject.name} and target ({targetCollider.gameObject.name}) detected. Quitting TargetDetectionCheck()Result of target detection check: '<color=silver>{_isTargetDetected}</color>'.");
                     return;
                 }
 
                 // 5.: if target object is inside the field of view and there is no obstacle object detected between this and the target object, fire Event with according values
                 _isTargetDetected = true;
                 InformAboutPlayerDetectionStatus();
+                Debug.Log($"<color=lime> AI-Perc: </color> target ({targetCollider.gameObject.name}) is inside FoV and no Obstacle between {gameObject.name} and target is detected. -> Cahnged '_isTargetDetected' to: '<color=silver>{_isTargetDetected}</color>' and fired respective event to inform 'NPCBehaviourController'.");
 
             }
             else if (IsTargetDetected) // set '_isTargetDetected' to false if it is not already set to false and there is no target detected
@@ -282,8 +292,10 @@ namespace Perception
                 _isTargetDetected = false;
                 InformAboutPlayerDetectionStatus();
             }
+            else 
+                Debug.Log($"<color=lime> AI-Perc: </color> target ({targetCollider?.gameObject.name}) does not overlap with FoV-Circle of {gameObject.name}.");
 
-            Debug.Log($"<color=orange> AI-Behav: </color> executed 'TargetDetectionCheck()' in {this}. Result of target detection check: '<color=silver>{_isTargetDetected}</color>'");
+            Debug.Log($"<color=lime> AI-Perc: </color> executed 'TargetDetectionCheck()' in {this}. Result of target detection check: '<color=silver>{_isTargetDetected}</color>'.");
         }
 
         /// <summary>

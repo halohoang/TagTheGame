@@ -40,7 +40,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
 
         GameInput.UI.SetCallbacks(this);
         GameInput.UI.Enable();
-        Debug.Log($"<color=magenta> OnEnable() was called in {this} </color>");
+        //Debug.Log($"<color=magenta> OnEnable() was called in {this} </color>");
     }
 
     private void OnDisable()
@@ -49,7 +49,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
         GameInput.Player.Disable();
 
         GameInput.UI.Disable();
-        Debug.Log($"<color=magenta> OnDisable() was called in {this} </color>");
+        //Debug.Log($"<color=magenta> OnDisable() was called in {this} </color>");
     }
 
 
@@ -79,7 +79,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
         if (isLMBReleased)
             OnAttackInputStop?.Invoke(Enum_Lib.ELeftMouseButton.Released);
             
-        Debug.Log($"is left mouse butten pressed? {isLMBHeld}");
+        //Debug.Log($"is left mouse butten pressed? {isLMBHeld}");
     }
 
     public void OnSprinting(InputAction.CallbackContext context)
@@ -117,7 +117,7 @@ public class InputReaderSO : ScriptableObject, GameInput.IPlayerActions, GameInp
         if (context.started)
         {
             OnEscPress?.Invoke();
-            Debug.Log($"<color=orange> 'Esc'-Key was pressed </color>");
+            //Debug.Log($"<color=orange> 'Esc'-Key was pressed </color>");
         }
     }
 

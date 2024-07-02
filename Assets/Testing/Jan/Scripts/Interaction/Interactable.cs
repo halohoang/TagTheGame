@@ -79,7 +79,7 @@ namespace Interactables
                 _isInInteractableTriggerzone = true;
                 _inputReaderSO.OnInteractionInput += ReadInteractionInput;
                 OnEnterInteractableTriggerZone?.Invoke(_isInInteractableTriggerzone);
-                Debug.Log($"<color=lime>Player entered interactable zone -> Interaction posibillity activated</color>");
+                //Debug.Log($"<color=lime>Player entered interactable zone -> Interaction posibillity activated</color>");
             }
         }
 

@@ -58,7 +58,7 @@ public class PauseMenu : MonoBehaviour
 
             OnTogglePauseScene?.Invoke(IsGamePaused);
 
-            Debug.Log("PauseMenu was enabled, Game is paused");
+            //Debug.Log("PauseMenu was enabled, Game is paused");
         }
         else if (IsGamePaused && _optionsMenu.activeSelf) // Disable PauseMenu and optionsMenu if that is open
         {

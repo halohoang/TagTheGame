@@ -377,7 +377,7 @@ namespace Player
             if (lMBPressStatus == Enum_Lib.ELeftMouseButton.Released)
             {
                 _mouseButtonReleaseTime = Time.time; // Record the time when the mouse button was released
-                Debug.Log($"Mousbutton was released.");
+                //Debug.Log($"Mousbutton was released.");
             }
 
             #region obsolete for now
@@ -665,13 +665,13 @@ namespace Player
         /// <param name="weaponType">The Weapontype spcified by Enum_Lib.EWeapnType</param>
         private void EquipWeaponAnimation(bool playAnimation, Enum_Lib.EWeaponType weaponType)
         {
-            Debug.Log($"'<color=yellow>EquipWeaponAnimation() was called</color>'.");
+            //Debug.Log($"'<color=yellow>EquipWeaponAnimation() was called</color>'.");
             if (playAnimation)
             {
                 switch (weaponType)
                 {
                     case Enum_Lib.EWeaponType.Handcannon:
-                        Debug.Log($"'<color=yellow>Entered Case for Handgun</color>'.");
+                        //Debug.Log($"'<color=yellow>Entered Case for Handgun</color>'.");
                         SetAnimation("Canon");
                         #region alternative
                         //if (_playerCtrl.IsPlayerMoving)
@@ -688,22 +688,22 @@ namespace Player
                         break;
 
                     case Enum_Lib.EWeaponType.SMG:
-                        Debug.Log($"'<color=yellow>Entered Case for SMG</color>'.");
+                        //Debug.Log($"'<color=yellow>Entered Case for SMG</color>'.");
                         SetAnimation("SMG");
                         break;
 
                     case Enum_Lib.EWeaponType.Shotgun:
-                        Debug.Log($"'<color=yellow>Entered Case for Shotgun</color>'.");
+                        //Debug.Log($"'<color=yellow>Entered Case for Shotgun</color>'.");
                         SetAnimation("Shotgun");
                         break;
 
                     case Enum_Lib.EWeaponType.EnergyLauncher:
-                        Debug.Log($"'<color=yellow>Entered Case for ELauncher</color>'.");
+                        //Debug.Log($"'<color=yellow>Entered Case for ELauncher</color>'.");
                         SetAnimation("Launcher");
                         break;
 
                     case Enum_Lib.EWeaponType.Blank:
-                        Debug.Log($"'<color=yellow>Entered Case for Blank</color>'.");
+                        //Debug.Log($"'<color=yellow>Entered Case for Blank</color>'.");
                         _animatorCtrl.SetBool("Armed", false);
                         _isArmed = false;
                         break;
@@ -723,12 +723,12 @@ namespace Player
             if (_playerCtrl.IsPlayerMoving) // Set Animation parameter for Moving animation with weapon
             {
                 _animatorCtrl.SetTrigger($"{nameOfWeapon}_Walk");
-                Debug.Log($"'<color=yellow>SetAnimation() was called</color>' -> '<color=yellow>walking weapon animation</color>' should have been set up.");
+                //Debug.Log($"'<color=yellow>SetAnimation() was called</color>' -> '<color=yellow>walking weapon animation</color>' should have been set up.");
             }
             else                            // set animation parameter for idle with weapon
             {
                 _animatorCtrl.SetTrigger($"{nameOfWeapon}_Idle");
-                Debug.Log($"'<color=yellow>SetAnimation() was called</color>' -> '<color=yellow>idle weapon animation</color>' should have been set up.");
+                //Debug.Log($"'<color=yellow>SetAnimation() was called</color>' -> '<color=yellow>idle weapon animation</color>' should have been set up.");
             }
 
         }

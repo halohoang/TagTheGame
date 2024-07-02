@@ -69,12 +69,12 @@ namespace Interactables
             if (controledObj.activeSelf)
             {
                 controledObj.SetActive(false);
-                Debug.Log($"<color=lime>{gameObject.name}</color>: was used, '{controledObj.name}' should have been _opend_. New NavMesh should have been baked.");
+                //Debug.Log($"<color=lime>{gameObject.name}</color>: was used, '{controledObj.name}' should have been _opend_. New NavMesh should have been baked.");
             }
             else if (!controledObj.activeSelf)
             {
                 controledObj.SetActive(true);
-                Debug.Log($"<color=lime>{gameObject.name}</color>: was used, '{controledObj.name}' should have been _closed_. New NavMesh should have been baked.");
+                //Debug.Log($"<color=lime>{gameObject.name}</color>: was used, '{controledObj.name}' should have been _closed_. New NavMesh should have been baked.");
             }
         }
     }
