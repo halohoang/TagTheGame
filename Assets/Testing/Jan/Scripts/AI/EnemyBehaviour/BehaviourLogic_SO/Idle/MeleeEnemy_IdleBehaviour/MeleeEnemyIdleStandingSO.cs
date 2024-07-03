@@ -7,6 +7,11 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "MeleeEnemy_Idle_Standing", menuName = "Scriptable Objects/Enemy Logic/Idle Logic/MeleeEnemy Standing (Just Standing Idle)")]
     public class MeleeEnemyIdleStandingSO : BaseEnemyIdleSO
     {
+        #region Methods
+        //----------------------------------
+        // - - - - -  M E T H O D S  - - - - 
+        //----------------------------------
+
         public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
             base.Initialize(enemyObj, enemyBehav);
@@ -32,16 +37,7 @@ namespace ScriptableObjects
 
         public override void ExecuteFrameUpdateLogic()
         {
-            base.ExecuteFrameUpdateLogic();
-
-            // Transitionchecks 
-            // Switch State from Idle to ChaseState when Player is Detected
-            if (_behaviourCtrl.IsPlayerDetected)
-            {
-                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.ChaseState);
-                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
-                return;
-            }
+            base.ExecuteFrameUpdateLogic();            
         }
 
         public override void ExecutePhysicsUpdateLogic()
@@ -58,5 +54,6 @@ namespace ScriptableObjects
         {
             base.ResetValues();
         }
+        #endregion
     }
 }

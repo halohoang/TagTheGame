@@ -74,9 +74,9 @@ namespace ScriptableObjects
 
             // shoot logic:
             // 1) Caching PlayerPosition and Transitioncheck (is player still detected, if not -> switch to chase state (running towards last known position of player))
-            if (_behaviourCtrl.IsPlayerDetected)
+            if (_behaviourCtrl.IsTargetDetected)
             {
-                _behaviourCtrl.CacheLastKnownPlayerPosition();
+                _behaviourCtrl.CacheLastKnownTargetPosition(); // obsolete, since it's cached automatically every frame the the 'visual-perception'-check detects the target; JM (03.07.2024)
             }
             else
             {

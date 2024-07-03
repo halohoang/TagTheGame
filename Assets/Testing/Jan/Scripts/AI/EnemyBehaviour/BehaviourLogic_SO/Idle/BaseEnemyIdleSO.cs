@@ -6,6 +6,11 @@ namespace ScriptableObjects
 {    
     public class BaseEnemyIdleSO : ScriptableObject
     {
+        #region Variables
+        //--------------------------------------
+        // - - - - -  V A R I A B L E S  - - - - 
+        //--------------------------------------
+
         protected NPCBehaviourController _behaviourCtrl;
         protected MeleeEnemyBehaviour _meleeEnemyBehaviour;
         protected RangeEnemyBehaviour _rangeEnemyBehaviour;
@@ -13,12 +18,18 @@ namespace ScriptableObjects
         protected GameObject _gameObject;
 
         protected Transform _playerTransform;
+        #endregion
 
-        public virtual void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
+        #region Methods
+        //----------------------------------
+        // - - - - -  M E T H O D S  - - - - 
+        //----------------------------------
+
+        public virtual void Initialize(GameObject enemyObj, NPCBehaviourController behavCtrl)
         {
             this._gameObject = enemyObj;
             this._transform = enemyObj.transform;
-            this._behaviourCtrl = enemyBehav;
+            this._behaviourCtrl = behavCtrl;
 
             _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
@@ -54,10 +65,20 @@ namespace ScriptableObjects
                 _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.AlertState);
                 Debug.Log($"<color=orange> AI-Behav: </color> {_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Alert</color>' should have been happend now!");
             }
+            
+            // Switch State from Idle to ChaseState when Player is Detected
+            if (_behaviourCtrl.IsTargetDetected)
+            {
+                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.ChaseState);
+                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
+                return;
+            }
         }
 
         public virtual void ExecutePhysicsUpdateLogic() { }
         public virtual void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe) { }
         public virtual void ResetValues() { }
+
+        #endregion
     }
 }

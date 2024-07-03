@@ -45,12 +45,10 @@ GameObject:
   - component: {fileID: 4946409443939015606}
   - component: {fileID: 5460508917974972451}
   - component: {fileID: 5460508917974972450}
+  - component: {fileID: 7261021601441348265}
   - component: {fileID: 8186740957436439527}
-  - component: {fileID: 4074790928737441142}
-  - component: {fileID: 5460508918029972001}
-  - component: {fileID: 6743236711494416351}
-  - component: {fileID: 5460508919579393430}
   - component: {fileID: 44742040624873929}
+  - component: {fileID: 6743236711494416351}
   - component: {fileID: 6502080774576616679}
   - component: {fileID: 1394480337494009578}
   m_Layer: 9
@@ -59,7 +57,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4946409443939015607
 Transform:
   m_ObjectHideFlags: 0
@@ -221,6 +219,28 @@ NavMeshAgent:
   m_BaseOffset: 0.13
   m_WalkableMask: 1
   m_ObstacleAvoidanceType: 4
+--- !u!114 &7261021601441348265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4946409443939015602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 467dd186c8a19664285183459634343c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _light2d: {fileID: 5460508918527720044}
+  _animator: {fileID: 4946409443939015605}
+  _bloodPrefabPool: []
+  _audioSource: {fileID: 6502080774576616679}
+  _receiveDamageSound: {fileID: 8300000, guid: ab8606f911b06b84884a725ba313a76e, type: 3}
+  _maximumHealth: 0
+  _currentHealth: 0
+  _flashingSpeed: 0
+  _flashDuration: 0.1
+  _isDead: 0
 --- !u!114 &8186740957436439527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,104 +274,8 @@ MonoBehaviour:
   _positionOfAlarmingEvent: {x: 0, y: 0, z: 0}
   _collisionObjectPos: {x: 0, y: 0}
   _lastKnownPlayerPos: {x: 0, y: 0, z: 0}
+  _currentActiveBehaviourState: 
   _isPlayerInShootingRange: 0
---- !u!114 &4074790928737441142
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4946409443939015602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a554ffcfba2869d419d8c1d29c93216e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isPlayerDead: 0
-  _playerObj: {fileID: 0}
-  _viewDirectionHelperTrans: {fileID: 5460508918234286131}
-  _raycastingCollider: {fileID: 4946409443939015606}
-  _fOVRadius: 9.7
-  _fOVAngle: 58
-  _targetDetectionMask:
-    serializedVersion: 2
-    m_Bits: 256
-  _obstructionMask:
-    serializedVersion: 2
-    m_Bits: 1088
-  _isPlayerDetected: 0
-  _isEnemyDead: 0
---- !u!114 &5460508918029972001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4946409443939015602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a6b19f4a116f9441899304199b75be9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _light2d: {fileID: 5460508918527720044}
-  _animator: {fileID: 4946409443939015605}
-  _bloodPrefabPool:
-  - {fileID: 3044862607823702276, guid: ef5550f6add88d942b04d90e365378c4, type: 3}
-  - {fileID: 7784901274924939644, guid: 78e9458eac6487141921a0fda951a639, type: 3}
-  - {fileID: 5169151268200698254, guid: da58d847e6380c44eb0a2b2a58ee2b1e, type: 3}
-  - {fileID: 1387189892773440931, guid: 6b10275c7991d6e4fb30a507d922ef24, type: 3}
-  _onDeathBloodPrefab: {fileID: 5459322947420741018, guid: 56f040fc343074640ba7ce86ec08968c, type: 3}
-  _audioSource: {fileID: 0}
-  _audioClip: {fileID: 8300000, guid: ab8606f911b06b84884a725ba313a76e, type: 3}
-  _maximumHealth: 10
-  _currentHealth: 0
-  _flashingSpeed: 0
-  _flashDuration: 0.1
-  _isDead: 0
---- !u!114 &6743236711494416351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4946409443939015602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShadowGroup: 0
-  m_ComponentVersion: 1
-  m_HasRenderer: 1
-  m_UseRendererSilhouette: 1
-  m_CastsShadows: 1
-  m_SelfShadows: 0
-  m_ApplyToSortingLayers: 00000000d9eb6cc76da6e1d871ed875c19067c27ed1827b32d17e682171cbb51e7540cb041c8ec54fd35591bc7e39ca611f28f01
-  m_ShapePath:
-  - {x: -0.12999998, y: -0.07000002, z: 0}
-  - {x: -0.12999998, y: 0.06999999, z: 0}
-  - {x: 0.13, y: 0.06999999, z: 0}
-  - {x: 0.13, y: -0.07000002, z: 0}
-  m_ShapePathHash: 0
-  m_Mesh: {fileID: 0}
-  m_InstanceId: -9888
-  m_LocalBounds:
-    m_Center: {x: 0.000000014901161, y: -0.000000014901161, z: 0}
-    m_Extent: {x: 0.13, y: 0.07000001, z: 0}
---- !u!114 &5460508919579393430
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4946409443939015602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27da4b982688fbd4db3434f7615018fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isPlayerDead: 0
-  _isInAttackRange: 0
 --- !u!114 &44742040624873929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -382,6 +306,36 @@ MonoBehaviour:
   _isThisNPCDead: 0
   _isInAttackRange: 0
   _isCollidingWithOtherObject: 0
+--- !u!114 &6743236711494416351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4946409443939015602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_ComponentVersion: 1
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_ApplyToSortingLayers: 00000000d9eb6cc76da6e1d871ed875c19067c27ed1827b32d17e682171cbb51e7540cb041c8ec54fd35591bc7e39ca611f28f01
+  m_ShapePath:
+  - {x: -0.12999998, y: -0.07000002, z: 0}
+  - {x: -0.12999998, y: 0.06999999, z: 0}
+  - {x: 0.13, y: 0.06999999, z: 0}
+  - {x: 0.13, y: -0.07000002, z: 0}
+  m_ShapePathHash: 0
+  m_Mesh: {fileID: 0}
+  m_InstanceId: 54502
+  m_LocalBounds:
+    m_Center: {x: 0.000000014901161, y: -0.000000014901161, z: 0}
+    m_Extent: {x: 0.13, y: 0.07000001, z: 0}
 --- !u!82 &6502080774576616679
 AudioSource:
   m_ObjectHideFlags: 0

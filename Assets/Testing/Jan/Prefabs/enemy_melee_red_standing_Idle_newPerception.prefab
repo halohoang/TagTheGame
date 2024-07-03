@@ -295,8 +295,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 467dd186c8a19664285183459634343c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _light2d: {fileID: 0}
-  _animator: {fileID: 0}
+  _light2d: {fileID: 3268223215718377689}
+  _animator: {fileID: 5927879777554231649}
   _bloodPrefabPool:
   - {fileID: 5459322947420741018, guid: 56f040fc343074640ba7ce86ec08968c, type: 3}
   - {fileID: 3044862607823702276, guid: ef5550f6add88d942b04d90e365378c4, type: 3}
@@ -343,6 +343,7 @@ MonoBehaviour:
   _positionOfAlarmingEvent: {x: 0, y: 0, z: 0}
   _collisionObjectPos: {x: 0, y: 0}
   _lastKnownPlayerPos: {x: 0, y: 0, z: 0}
+  _currentActiveBehaviourState: 
 --- !u!114 &7120387268323903199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -399,7 +400,7 @@ MonoBehaviour:
   - {x: 0.07000017, y: -0.12999988, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 40124
+  m_InstanceId: 52482
   m_LocalBounds:
     m_Center: {x: 0, y: 0.00000011920929, z: 0}
     m_Extent: {x: 0.07000017, y: 0.13, z: 0}

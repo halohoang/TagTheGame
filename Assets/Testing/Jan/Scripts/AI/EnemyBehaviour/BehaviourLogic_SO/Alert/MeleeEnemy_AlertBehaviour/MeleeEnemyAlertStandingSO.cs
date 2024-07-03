@@ -7,9 +7,21 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "MeleeEnemy_Alert_Stading", menuName = "Scriptable Objects/Enemy Logic/Alert Logic/MeleeEnemy Alert Standing")]
     public class MeleeEnemyAlertStandingSO : BaseEnemyAlertSO
     {
+        #region Variables
+        //--------------------------------------
+        // - - - - -  V A R I A B L E S  - - - - 
+        //--------------------------------------
+
         //[SerializeField, Range(0.5f, 10.0f)] private float _stayAlertTime;
 
         //private float _timer = 0.0f;
+        #endregion
+        
+
+        #region Methods
+        //----------------------------------
+        // - - - - -  M E T H O D S  - - - - 
+        //----------------------------------
 
         public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
@@ -24,12 +36,6 @@ namespace ScriptableObjects
         //    base.Initialize(enemyObj, rangeEnemyBehav);
         //}
 
-
-        #region Methods
-        //----------------------------------
-        // - - - - -  M E T H O D S  - - - - 
-        //----------------------------------
-
         public override void ExecuteEnterLogic()
         {
             base.ExecuteEnterLogic();
@@ -43,15 +49,8 @@ namespace ScriptableObjects
         public override void ExecuteFrameUpdateLogic()
         {
             base.ExecuteFrameUpdateLogic();
-
-            // Transition-Condition-Check
-            if (_behaviourCtrl.IsPlayerDetected)
-            {
-                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.ChaseState);
-                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
-                return;
-            }
-
+                       
+            // Timer to return to Idle State after certain time has passed
             //_timer += Time.deltaTime;            
 
             //if (_timer > _stayAlertTime)

@@ -22,6 +22,12 @@ namespace ScriptableObjects
         private Vector3 _previousEventPosition;
         #endregion
 
+
+        #region Methods
+        //----------------------------------
+        // - - - - -  M E T H O D S  - - - - 
+        //----------------------------------
+
         public virtual void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
             this._gameObject = enemyObj;
@@ -47,12 +53,6 @@ namespace ScriptableObjects
         //    _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         //}
 
-
-        #region Methods
-        //----------------------------------
-        // - - - - -  M E T H O D S  - - - - 
-        //----------------------------------
-
         public virtual void ExecuteEnterLogic()
         {
             FaceAgentTowardsAlarmingEvent(_behaviourCtrl.PositionOfAlarmingEvent, _behaviourCtrl.NoiseRangeOfAlarmingEvent);            
@@ -65,6 +65,14 @@ namespace ScriptableObjects
 
         public virtual void ExecuteFrameUpdateLogic()
         {
+            // Transition-Condition-Check
+            if (_behaviourCtrl.IsTargetDetected)
+            {
+                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.ChaseState);
+                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
+                return;
+            }
+
             // todo: if implementing more ALert-Behaviour maybe move following logic to 'EnemyAlertStandingSO'; JM (02.11.2023)
             if (_previousEventPosition != _behaviourCtrl.PositionOfAlarmingEvent)    // if the Position of Larming event changed (new/other alarming event set NPC rotation respectively)
                 FaceAgentTowardsAlarmingEvent(_behaviourCtrl.PositionOfAlarmingEvent, _behaviourCtrl.NoiseRangeOfAlarmingEvent);

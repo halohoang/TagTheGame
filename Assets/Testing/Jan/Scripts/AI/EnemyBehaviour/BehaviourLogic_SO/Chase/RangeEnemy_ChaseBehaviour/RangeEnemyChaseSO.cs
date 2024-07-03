@@ -43,29 +43,29 @@ namespace ScriptableObjects
             base.ExecuteFrameUpdateLogic();                       
 
             // Set Movement-Destination for NavMeshAgent
-            _behaviourCtrl.NavAgent.SetDestination(_behaviourCtrl.LastKnownPlayerPos);
+            _behaviourCtrl.NavAgent.SetDestination(_behaviourCtrl.LastKnowntargetPos);
             #region debuggers little helper
-            Debug.Log($"<color=orange>{_behaviourCtrl.gameObject.name}</color>: Last Known Player Position is: ('<color=lime>{_behaviourCtrl.LastKnownPlayerPos}</color>') " +
+            Debug.Log($"<color=orange>{_behaviourCtrl.gameObject.name}</color>: Last Known Player Position is: ('<color=lime>{_behaviourCtrl.LastKnowntargetPos}</color>') " +
                 $"| Own Position is: ('<color=lime>{_behaviourCtrl.gameObject.transform.position}</color>')");
             #endregion
 
             // 1) Transition check (if player is detected -> switch to attack state (shooting))
-            if (_behaviourCtrl.IsPlayerDetected)
+            if (_behaviourCtrl.IsTargetDetected)
             {
                 _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.AttackState);
                 Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>Attack (Shooting)</color>' should have been happend now!");
                 return;
             }
             // 1.1) if agent reached last known position of player and player can't be detected anymore -> switch to idle/alert state            
-            else if ((Vector2)_behaviourCtrl.gameObject.transform.position == (Vector2)_behaviourCtrl.LastKnownPlayerPos && !_behaviourCtrl.IsPlayerDetected)
+            else if ((Vector2)_behaviourCtrl.gameObject.transform.position == (Vector2)_behaviourCtrl.LastKnowntargetPos && !_behaviourCtrl.IsTargetDetected)
             {
                 _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.IdleState);
                 Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>Idle</color>' should have been happend now!");
                 return;
             }
-            else if ((Vector2)_behaviourCtrl.gameObject.transform.position != (Vector2)_behaviourCtrl.LastKnownPlayerPos && !_behaviourCtrl.IsPlayerDetected)
+            else if ((Vector2)_behaviourCtrl.gameObject.transform.position != (Vector2)_behaviourCtrl.LastKnowntargetPos && !_behaviourCtrl.IsTargetDetected)
             {
-                _behaviourCtrl.NavAgent.SetDestination(_behaviourCtrl.LastKnownPlayerPos);
+                _behaviourCtrl.NavAgent.SetDestination(_behaviourCtrl.LastKnowntargetPos);
             }
         }
 

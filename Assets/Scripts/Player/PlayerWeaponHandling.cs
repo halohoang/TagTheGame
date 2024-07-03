@@ -536,7 +536,6 @@ namespace Player
             Debug.Log("Shake");
         }
 
-
         private bool CanFire()
         {
             return Time.time > _nextFireTime && !_isGamePaused;
@@ -893,10 +892,12 @@ namespace Player
             _isPlayerDead = playerDeadStatus;
         }
 
+        #region currently not used
         private void SetIsArmed(bool isArmedStatus)
         {
             _isArmed = isArmedStatus;
         }
+
         private void Shoot()
         {
             if (CanFire() && _isArmed)
@@ -930,6 +931,7 @@ namespace Player
                 Debug.Log($"CurrentShakeDuration: '{_camShakeDuration}' | CurrentShakeAmount: '{_camShakeAmount}'");
             }
         }
+
         private void SwitchWeapon()
         {
             // only enabling weapon swap, if _isArmed and if both weapon slots actually contain weapons
@@ -945,7 +947,9 @@ namespace Player
                 // Enable proper Animation (if Player is armed) accordingly to equipped weapon
                 EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
             }
-        }        
+        }
+        #endregion
+
         #endregion
 
         #endregion

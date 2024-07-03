@@ -54,7 +54,7 @@ namespace ScriptableObjects
         public virtual void ExecuteFrameUpdateLogic() 
         {
             // facing Player Position
-            Vector2 direction = (_behaviourCtrl.PlayerObject.transform.position - _behaviourCtrl.transform.position).normalized;
+            Vector2 direction = (_behaviourCtrl.TargetObject.transform.position - _behaviourCtrl.transform.position).normalized;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             _thisEnemyRB2D.rotation = angle;
             #region altern rotation for facing direction

@@ -34,7 +34,7 @@ namespace ScriptableObjects
             _behaviourCtrl.Animator.SetBool("Attack", true);
 
             // set PlayerGameObject reference
-            _playerStatsScript = _behaviourCtrl.PlayerObject.GetComponent<PlayerStats>();
+            _playerStatsScript = _behaviourCtrl.TargetObject.GetComponent<PlayerStats>();
         }
 
         public override void ExecuteExitLogic()

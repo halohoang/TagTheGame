@@ -7,7 +7,6 @@ using ScriptableObjects;
 using StateMashine;
 using UnityEngine;
 using UnityEngine.AI;
-using System;
 
 namespace Enemies
 {
@@ -23,7 +22,7 @@ namespace Enemies
         [Header("Needed References")]
         [SerializeField, ReadOnly] private NavMeshAgent _navAgent;
         [SerializeField, ReadOnly] private Animator _animator;
-        [SerializeField, ReadOnly] private GameObject _playerObject;
+        [SerializeField, ReadOnly] private GameObject _targetObject;
         [SerializeField, ReadOnly] private ConditionPlayerDetectionCheck _condPlayerDetectionCheck;
         [SerializeField, ReadOnly] private ConditionIsInMeleeAttackRangeCheck _condMeleeAttackCheck;    // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
         [Space(5)]
@@ -49,15 +48,15 @@ namespace Enemies
 
         [Header("Monitoring of importang values")]
         [SerializeField, ReadOnly] private bool _isThisNPCDead;
-        [SerializeField, ReadOnly] private bool _isPlayerDead;
-        [SerializeField, ReadOnly] private bool _isPlayerDetected;
+        [SerializeField, ReadOnly] private bool _isTargetDead;
+        [SerializeField, ReadOnly] private bool _isTargetDetected;
         [SerializeField, ReadOnly] private bool _isSomethingAlarmingHappening;
         [SerializeField, ReadOnly] private bool _isInAttackRange;                   // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
         [SerializeField, ReadOnly] private bool _isCollidingWithObject;
         [SerializeField, ReadOnly] private float _noiseRangeOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector3 _positionOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector2 _collisionObjectPos;
-        [SerializeField, ReadOnly] private Vector3 _lastKnownPlayerPos;
+        [SerializeField, ReadOnly] private Vector3 _lastKnownTargetPos;
         [SerializeField, ReadOnly] private string _currentActiveBehaviourState;
 
 
@@ -75,7 +74,7 @@ namespace Enemies
         // References
         public NavMeshAgent NavAgent { get => _navAgent; private set => _navAgent = value; }
         public Animator Animator { get => _animator; private set => _animator = value; }
-        public GameObject PlayerObject { get => _playerObject; protected set => _playerObject = value; }
+        public GameObject TargetObject { get => _targetObject; protected set => _targetObject = value; }
         public ConditionPlayerDetectionCheck PlayerDetectionCheck { get => _condPlayerDetectionCheck; private set => _condPlayerDetectionCheck = value; }
 
         // Behaviourrelated-Settings
@@ -83,14 +82,14 @@ namespace Enemies
         public float ChasingSpeed { get => _chasingSpeed; private set => _chasingSpeed = value; }
         //public Vector3[] DirectionsToCheckToAvoidObstacle { get => _directionsToCheckToAvoidObstacle; private set => _directionsToCheckToAvoidObstacle = value; }
 
-        public bool IsPlayerDead { get => _isPlayerDead; private set => _isPlayerDead = value; }
-        public bool IsPlayerDetected { get => _isPlayerDetected; private set => _isPlayerDetected = value; }
+        public bool IsTargetDead { get => _isTargetDead; private set => _isTargetDead = value; }
+        public bool IsTargetDetected { get => _isTargetDetected; private set => _isTargetDetected = value; }
         public bool IsSomethingAlarmingHappening { get => _isSomethingAlarmingHappening; private set => _isSomethingAlarmingHappening = value; }
         public bool IsCollidingWithObject { get => _isCollidingWithObject; private set => _isCollidingWithObject = value; }
         public float NoiseRangeOfAlarmingEvent { get => _noiseRangeOfAlarmingEvent; private set => _noiseRangeOfAlarmingEvent = value; }
         public Vector3 PositionOfAlarmingEvent { get => _positionOfAlarmingEvent; private set => _positionOfAlarmingEvent = value; }
         public Vector2 CollisionObjectPos { get => _collisionObjectPos; private set => _collisionObjectPos = value; }
-        public Vector3 LastKnownPlayerPos { get => _lastKnownPlayerPos; private set => _lastKnownPlayerPos = value; }
+        public Vector3 LastKnowntargetPos { get => _lastKnownTargetPos; private set => _lastKnownTargetPos = value; }
 
         // StateMachine-Related
         public NPCStateMachine StateMachine { get => _stateMachine; set => _stateMachine = value; }
@@ -149,10 +148,10 @@ namespace Enemies
 
             #region new System (26.06.)
             // new System (26.06.24)
-            PlayerStats.OnPlayerDeath += SetIsPlayerDead;
+            PlayerStats.OnPlayerDeath += SetIsTargetDead;
             EnemyStats.OnEnemyDeathEvent += SetIsThisNPCDead;
 
-            NPCPerception.OnTargetDetection += SetIsPlayerDetected;
+            NPCPerception.OnTargetDetection += SetIsTargetDetected;
             NPCPerception.OnSomethingAlarmingIsHappening += SetAlarmingEventValues;
             NPCPerception.OnCollidingWithOtherObject += SetIsCollidingWithOtherEnemy;
             NPCPerception.OnInMeleeAttackRange += SetIsInAttackRangePlayer;
@@ -176,10 +175,10 @@ namespace Enemies
 
             #region new system (26.06.)
             // new System (26.06.24)
-            PlayerStats.OnPlayerDeath -= SetIsPlayerDead;
+            PlayerStats.OnPlayerDeath -= SetIsTargetDead;
             EnemyStats.OnEnemyDeathEvent -= SetIsThisNPCDead;
 
-            NPCPerception.OnTargetDetection -= SetIsPlayerDetected;
+            NPCPerception.OnTargetDetection -= SetIsTargetDetected;
             NPCPerception.OnSomethingAlarmingIsHappening -= SetAlarmingEventValues;
             NPCPerception.OnCollidingWithOtherObject -= SetIsCollidingWithOtherEnemy;
             NPCPerception.OnInMeleeAttackRange -= SetIsInAttackRangePlayer;
@@ -213,7 +212,7 @@ namespace Enemies
                 return;
 
             // reset to Idle State if Player was killed
-            if (_isPlayerDead && StateMachine.CurrentState != IdleState)
+            if (_isTargetDead && StateMachine.CurrentState != IdleState)
                 StateMachine.Transition(IdleState);
 
             StateMachine.CurrentState.PhysicsUpdate();
@@ -241,7 +240,7 @@ namespace Enemies
                 return;            
 
             // reset to Idle State if Player was killed
-            if (_isPlayerDead && StateMachine.CurrentState != IdleState)
+            if (_isTargetDead && StateMachine.CurrentState != IdleState)
                 StateMachine.Transition(IdleState);
 
             StateMachine.CurrentState.FrameUpdate();
@@ -263,12 +262,12 @@ namespace Enemies
         }
 
         /// <summary>
-        /// Sets the Value for '<see cref="LastKnownPlayerPos"/>'.
+        /// Sets the Value for '<see cref="LastKnowntargetPos"/>'.
         /// </summary>
         /// <param name="lastKnownPlayerPosition"></param>
-        internal void CacheLastKnownPlayerPosition()
+        internal void CacheLastKnownTargetPosition()
         {
-            _lastKnownPlayerPos = PlayerObject.transform.position;
+            _lastKnownTargetPos = _targetObject.transform.position;
         }
 
         internal void SetIsSomethingAlarmingHappening(bool isSomethinAlarmingHappening)
@@ -308,18 +307,19 @@ namespace Enemies
             }
         }
 
-        private void SetIsPlayerDetected(bool isPlayerDetected, GameObject playerObj)
+        private void SetIsTargetDetected(bool isTargetDetected, GameObject targetObj)
         {
-            _isPlayerDetected = isPlayerDetected;
-            _playerObject = playerObj;
+            _isTargetDetected = isTargetDetected;
+            _targetObject = targetObj;
+            CacheLastKnownTargetPosition();
         }
 
         /// <summary>
-        /// Sets the bool <see cref="IsPlayerDead"/>
+        /// Sets the bool <see cref="IsTargetDead"/>
         /// </summary>
-        private void SetIsPlayerDead(bool isPlayerDead)
+        private void SetIsTargetDead(bool isTargetDead)
         {
-            _isPlayerDead = isPlayerDead;
+            _isTargetDead = isTargetDead;
         }
 
         /// <summary>
@@ -360,7 +360,7 @@ namespace Enemies
         private void SetIsInAttackRangePlayer(bool isAttackingPlayer, GameObject playerObj)
         {
             _isInAttackRange = isAttackingPlayer;
-            _playerObject = playerObj;
+            _targetObject = playerObj;
         }
 
         private void AnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerType)
