@@ -9,7 +9,18 @@ namespace ScriptableObjects
     // todo: (!) if Time create a Parent Class 'BaseIdleRandomWanderSO'  that derives from 'BaseIdleSO' and is parent to the specific 'EnemyIdleRandomWanderSO' (Melee/Range) since they differ just in the Transition-Check but are equal coding wise beside that; JM (09.11.2023)
     public class MeleeEnemyIdleRandomWanderSO : BaseEnemyIdleSO
     {
+        #region Events
+        //--------------------------------
+        // - - - - -  E V E N T S  - - - - 
+        //--------------------------------
+
         public static event UnityAction<Vector3> OnObstacleAvoidance;
+        #endregion
+
+        #region Variables
+        //--------------------------------------
+        // - - - - -  V A R I A B L E S  - - - - 
+        //--------------------------------------
 
         [Header("Behaviour Settings")]
         [SerializeField] private float _wanderSpeed = 1.0f;
@@ -47,6 +58,13 @@ namespace ScriptableObjects
         public bool IsMoving { get => _isMoving; private set => _isMoving = value; }
         public bool IsMovingToCloseToObstacle { get => _isMovingTOCloseToObstacle; private set => _isMovingTOCloseToObstacle = value; }
         public Vector3 WalkTargetPos { get => _walkTargedPos; private set => _walkTargedPos = value; }
+        #endregion
+
+
+        #region Methods
+        //----------------------------------
+        // - - - - -  M E T H O D S  - - - - 
+        //----------------------------------
 
         public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
@@ -260,5 +278,6 @@ namespace ScriptableObjects
                     _currentObstacleAvoidanceVector = currentDirectionToCheck.normalized;
             }
         }
+        #endregion
     }
 }

@@ -45,46 +45,32 @@ namespace ScriptableObjects
         public override void ExecuteFrameUpdateLogic()
         {
             #region new Solution (03.07.24)
-            //todo: !!!! continue here (on 03.07.24)
+
+            // 1. Is target detected?
             if (_behaviourCtrl.IsTargetDetected)
             {
                 // set facing direection via calling 'base.baseFrameUpdate()'
                 base.ExecuteFrameUpdateLogic();
 
                 // Set Movement-Destination for NavMeshAgent
-                _behaviourCtrl.NavAgent.SetDestination(_behaviourCtrl.TargetObject.transform.position);                
+                _behaviourCtrl.NavAgent.SetDestination(_behaviourCtrl.TargetObject.transform.position);
+
+                // Attack-State-Transitioncheck
+                AttackStateTransitionCheck();
             }
-
-            // Transition-Condition-Check (if Player is in AttackRange -> switch to Attack-State)          
-            if (_behaviourCtrl.IsInAttackRange)
-            {
-                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.AttackState);
-                Debug.Log($"<color=orange> AI-Melee-Behav: </color> {_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>MeleeAttack</color>' should have been happend now!");
-                return;
-            }
-
-
-            // 1. If Player is not detected -> go to last known player Position
-            if (!_behaviourCtrl.IsTargetDetected)
+            else if (!_behaviourCtrl.IsTargetDetected)  // If Player is not detected -> go to last known player Position
             {
                 _behaviourCtrl.NavAgent.SetDestination(_behaviourCtrl.LastKnowntargetPos);
                 Debug.Log($"<color=orange> Melee-AI-Behav: </color> Target is not detectad anymore -> '<color=silver>{_behaviourCtrl.gameObject.name}</color>' is moving towards last known posiition of target ('<color=silver>{_behaviourCtrl.LastKnowntargetPos}</color>').");
-                return;
             }
-            
+
             // 2. If Player reached last known target postition and target is still not detected -> switch to Idle/alert state            
             if (!_behaviourCtrl.IsTargetDetected && (Vector2)_behaviourCtrl.gameObject.transform.position == (Vector2)_behaviourCtrl.LastKnowntargetPos)
             {
                 _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.IdleState);
                 Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>Idle</color>' should have been happend now!");
-                return;
             }
-            else if (!_behaviourCtrl.IsTargetDetected && (Vector2)_behaviourCtrl.gameObject.transform.position != (Vector2)_behaviourCtrl.LastKnowntargetPos)
-            {
-                _behaviourCtrl.NavAgent.SetDestination(_behaviourCtrl.LastKnowntargetPos);
-                Debug.Log($"<color=orange> Melee-AI-Behav: </color> Target is not detectad anymore -> '<color=silver>{_behaviourCtrl.gameObject.name}</color>' is moving towards last known posiition of target ('<color=silver>{_behaviourCtrl.LastKnowntargetPos}</color>').");
-            }
-            // 3. 
+
             #endregion
 
             #region Old Solution (before Jul. 2024)
@@ -106,7 +92,7 @@ namespace ScriptableObjects
             //{
             //    _behaviourCtrl.NavAgent.SetDestination(_behaviourCtrl.LastKnowntargetPos);
             //}
-            
+
             //if (_behaviourCtrl.IsTargetDetected)
             //{
             //    // set facing direection via calling 'base.baseFrameUpdate()'
@@ -124,6 +110,19 @@ namespace ScriptableObjects
             //    return;
             //}
             #endregion
+        }
+
+        /// <summary>
+        /// Checks if this NPC is in attack range to its target object, if so a state transition to the respective attack state will be executed.
+        /// </summary>
+        private void AttackStateTransitionCheck()
+        {
+            // Transition-Condition-Check (if Player is in AttackRange -> switch to Attack-State)          
+            if (_behaviourCtrl.IsInAttackRange)
+            {
+                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.AttackState);
+                Debug.Log($"<color=orange> AI-Melee-Behav: </color> {_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Chase</color>' to '<color=orange>MeleeAttack</color>' should have been happend now!");
+            }
         }
 
         public override void ExecutePhysicsUpdateLogic()

@@ -195,7 +195,7 @@ namespace Perception
         private void OnTriggerStay2D(Collider2D collision)
         {
             // when Player is alive and tactile peception logic enabled invoke MeleeAttack Event for informing, that Player is in Attack Range
-            if (IsTargetDead || _enableTactilePerception)
+            if (IsTargetDead || !_enableTactilePerception)
                 return;
             else if (collision.gameObject == _targetObject)
             {
@@ -211,7 +211,7 @@ namespace Perception
         private void OnTriggerExit2D(Collider2D collision)
         {
             // when Player is alive and tactile peception logic enabled invoke MeleeAttack Event for informing, that Player is not in Attack Range anymore
-            if (IsTargetDead || _enableTactilePerception)
+            if (IsTargetDead || !_enableTactilePerception)
                 return;
             else if (collision.gameObject == _targetObject)
             {

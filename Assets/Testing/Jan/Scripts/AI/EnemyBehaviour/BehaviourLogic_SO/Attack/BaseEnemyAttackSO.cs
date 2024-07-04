@@ -6,6 +6,11 @@ namespace ScriptableObjects
 {
     public class BaseEnemyAttackSO : ScriptableObject
     {
+        #region Variables
+        //--------------------------------------
+        // - - - - -  V A R I A B L E S  - - - - 
+        //--------------------------------------
+
         protected NPCBehaviourController _behaviourCtrl;
         //protected MeleeEnemyBehaviour _meleeEnemyBehaviour;
         //protected RangeEnemyBehaviour _rangeEnemyBehaviour;
@@ -14,6 +19,13 @@ namespace ScriptableObjects
 
         protected Transform _playerTransform;
         private Rigidbody2D _thisEnemyRB2D;
+        #endregion
+
+
+        #region Methods
+        //----------------------------------
+        // - - - - -  M E T H O D S  - - - - 
+        //----------------------------------
 
         public virtual void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
@@ -67,5 +79,6 @@ namespace ScriptableObjects
         public virtual void ExecutePhysicsUpdateLogic() { }
         public virtual void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe) { }
         public virtual void ResetValues() { }
+        #endregion
     }
 }

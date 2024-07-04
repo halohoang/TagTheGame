@@ -37,7 +37,7 @@ namespace Player
         #region Tooltip
         [Tooltip("The damage the PlayerCharacter will take on any attack impact, no matter if bullet or melee attack.")]
         #endregion
-        [SerializeField, Range(0.1f, 100.0f)] internal int _takenDamage;            // todo: for more variability on taken damage this might need to be changed yet
+        [SerializeField, Range(0.1f, 100.0f)] private int _takenDamage;            // todo: for more variability on taken damage this might need to be changed yet
         [SerializeField] private float _chargeSpeed = 1;                            // The rate at which bar depletes or charges    
         [SerializeField] private float _regenCooldown = 2f;                         // Adjust the duration as needed
         /*Flashing Effect */
@@ -67,6 +67,7 @@ namespace Player
         public bool IsSprinting { get => _isSprinting; private set => _isSprinting = value; }
         public float CurrentHealth { get => _currentHealth; private set => _currentHealth = value; }
         public bool IsPlayerInvincible { get => _isPlayerInvincible; private set => _isPlayerInvincible = value; }
+        internal int TakenDamage { get => _takenDamage; private set => _takenDamage = value; }
         #endregion
 
 

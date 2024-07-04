@@ -8,7 +8,19 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "Melee-Attack State", menuName = "Scriptable Objects/Enemy Logic/Attack Logic/Melee Attack")]
     public class MeleeEnemyAttackSO : BaseEnemyAttackSO
     {
-        private PlayerStats _playerStatsScript;
+        #region Variables
+        //--------------------------------------
+        // - - - - -  V A R I A B L E S  - - - - 
+        //--------------------------------------
+
+        private PlayerStats _playerStatsComp;
+        #endregion
+
+
+        #region Methods
+        //----------------------------------
+        // - - - - -  M E T H O D S  - - - - 
+        //----------------------------------
 
         public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
@@ -34,7 +46,7 @@ namespace ScriptableObjects
             _behaviourCtrl.Animator.SetBool("Attack", true);
 
             // set PlayerGameObject reference
-            _playerStatsScript = _behaviourCtrl.TargetObject.GetComponent<PlayerStats>();
+            _playerStatsComp = _behaviourCtrl.TargetObject.GetComponent<PlayerStats>();
         }
 
         public override void ExecuteExitLogic()
@@ -55,9 +67,11 @@ namespace ScriptableObjects
             if (_behaviourCtrl.IsInAttackRange)
             {
                 // dealing Damage
-                _playerStatsScript.GetDamage();
+                _playerStatsComp.GetDamage();
+                Debug.Log($"<color=orange> AI-Melee-Behav: </color> '<color=FFD700>{_behaviourCtrl.gameObject.name}</color>' attacks its target Object " +
+                    $"(<color=white>{_behaviourCtrl.TargetObject.name}</color>) and deals '<color=white>{_playerStatsComp.TakenDamage}</color>'");
             }
-            else
+            else    // State transition back to chase ctate
             {
                 _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.ChaseState);
                 Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>MeleeAttack</color>' to '<color=orange>Chase</color>' should have been happend now!");
@@ -79,5 +93,6 @@ namespace ScriptableObjects
         {
             base.ResetValues();
         }
+        #endregion
     }
 }
