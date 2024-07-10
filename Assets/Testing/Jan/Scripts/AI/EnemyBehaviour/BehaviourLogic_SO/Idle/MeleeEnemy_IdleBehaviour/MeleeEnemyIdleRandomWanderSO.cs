@@ -83,8 +83,10 @@ namespace ScriptableObjects
         {
             base.ExecuteEnterLogic();
 
+            // referencing
             _thisEnemyRB2D = _behaviourCtrl.gameObject.GetComponent<Rigidbody2D>();
 
+            // Setup values
             _isMoving = true;
 
             // Setup the time the Agent shall walk max in one direction
@@ -96,7 +98,7 @@ namespace ScriptableObjects
             // Setup NavMeshAgent-Properties
             _behaviourCtrl.NavAgent.speed = _wanderSpeed;
 
-            // setup walking animation
+            // Setup walking animation
             _behaviourCtrl.Animator.SetBool("Engage", true);
         }
 
@@ -112,16 +114,7 @@ namespace ScriptableObjects
 
         public override void ExecuteFrameUpdateLogic()
         {
-            base.ExecuteFrameUpdateLogic();
-
-            // Transitionchecks 
-            // Switch State from Idle to ChaseState when Player is Detected
-            if (_behaviourCtrl.IsTargetDetected)
-            {
-                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.ChaseState);
-                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
-                return;
-            }
+            base.ExecuteFrameUpdateLogic();            
 
             // Setup Timer
             Timer += Time.deltaTime;
@@ -166,7 +159,7 @@ namespace ScriptableObjects
 
         /// <summary>
         /// Checks if '<see cref="_timer"/>' is running or not and if the maximum walk range was reached while '<see cref="_timer"/>' is still running or if Agent 
-        /// is moving to close towards and Obatacle-Object. According to Status of the Checks the walk-target-pos and or the animations etc. will be set accordingly.
+        /// is moving to close towards an Obatacle-Object. According to Status of the Checks the walk-target-pos and or the animations etc. will be set accordingly.
         /// Also implements logic for movement direction changes if collision with other enemy-agent-object was detected.
         /// </summary>
         private void WalkingConditionCheck()
