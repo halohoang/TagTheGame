@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 5927879779157621965}
   - component: {fileID: 5927879777554231649}
   - component: {fileID: 8584657945339164868}
-  - component: {fileID: 5118319569479040826}
+  - component: {fileID: 2010341089386687789}
   - component: {fileID: 7120387268323903199}
   - component: {fileID: 378967618739238392}
   - component: {fileID: 8329460373295778464}
@@ -310,7 +310,7 @@ MonoBehaviour:
   _flashingSpeed: 0
   _flashDuration: 0.1
   _isDead: 0
---- !u!114 &5118319569479040826
+--- !u!114 &2010341089386687789
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -319,30 +319,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 7981138669945753168}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16a0aac8c349f9640b75925e03496c71, type: 3}
+  m_Script: {fileID: 11500000, guid: 98f45d57d37316648affe34160f293a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _navAgent: {fileID: 0}
   _animator: {fileID: 0}
-  _playerObject: {fileID: 0}
+  _targetObject: {fileID: 0}
   _condPlayerDetectionCheck: {fileID: 0}
   _condMeleeAttackCheck: {fileID: 0}
   _baseIdleStateSO: {fileID: 11400000, guid: e2f9122969f405a488f70f90701d3d7d, type: 2}
   _baseAlertStateSO: {fileID: 11400000, guid: 3846a16cac923194dad85324de682020, type: 2}
   _baseChaseStateSO: {fileID: 11400000, guid: b58cbcaeb70b8064e8441b42b8985050, type: 2}
   _baseAttackStateSO: {fileID: 11400000, guid: 6ebc51d86238c4e4ea025132c0e68de9, type: 2}
-  _movementSpeed: 3.5
-  _chasingSpeed: 12
+  _movementSpeed: 15
+  _chasingSpeed: 20
   _isThisNPCDead: 0
-  _isPlayerDead: 0
-  _isPlayerDetected: 0
+  _isTargetDead: 0
+  _isTargetDetected: 0
   _isSomethingAlarmingHappening: 0
   _isInAttackRange: 0
   _isCollidingWithObject: 0
   _noiseRangeOfAlarmingEvent: 0
   _positionOfAlarmingEvent: {x: 0, y: 0, z: 0}
   _collisionObjectPos: {x: 0, y: 0}
-  _lastKnownPlayerPos: {x: 0, y: 0, z: 0}
+  _lastKnownTargetPos: {x: 0, y: 0, z: 0}
   _currentActiveBehaviourState: 
 --- !u!114 &7120387268323903199
 MonoBehaviour:
@@ -400,7 +400,7 @@ MonoBehaviour:
   - {x: 0.07000017, y: -0.12999988, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 52482
+  m_InstanceId: 35044
   m_LocalBounds:
     m_Center: {x: 0, y: 0.00000011920929, z: 0}
     m_Extent: {x: 0.07000017, y: 0.13, z: 0}

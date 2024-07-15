@@ -9,11 +9,11 @@ namespace StateMashine
         {
             StateName = "ChaseState";
         }
-        public ChaseState(MeleeEnemyBehaviour meleeEnemyBehav, NPCStateMachine enemySM) : base(meleeEnemyBehav, enemySM)
+        public ChaseState(MeleeEnemyBehavCtrl meleeEnemyBehav, NPCStateMachine enemySM) : base(meleeEnemyBehav, enemySM)
         {
             StateName = "ChaseState";
         }
-        public ChaseState(RangeEnemyBehaviour rangeEnemyBehav, NPCStateMachine enemySM) : base(rangeEnemyBehav, enemySM)
+        public ChaseState(RangeEnemyBehavCtrl rangeEnemyBehav, NPCStateMachine enemySM) : base(rangeEnemyBehav, enemySM)
         {
             StateName = "ChasetState";
         }

@@ -4,7 +4,7 @@ using NaughtyAttributes;
 
 namespace Enemies
 {
-    public class MeleeEnemyBehaviour : NPCBehaviourController
+    public class MeleeEnemyBehavCtrl : NPCBehaviourController
     {
         //todo: find a solution for a proper defining of the MeleeEnemyBehaviour-Class and seperating the specific logic form it sparent class, make proper usage of polymorphism
         // ---------- Fields ----------

@@ -13,11 +13,11 @@ namespace StateMashine
         {
             StateName = "AttackState";
         }
-        public AttackState(MeleeEnemyBehaviour meleeEnemyBehav, NPCStateMachine enemySM) : base(meleeEnemyBehav, enemySM)
+        public AttackState(MeleeEnemyBehavCtrl meleeEnemyBehav, NPCStateMachine enemySM) : base(meleeEnemyBehav, enemySM)
         {
             StateName = "AttackState";
         }
-        public AttackState(RangeEnemyBehaviour rangeEnemyBehav, NPCStateMachine enemySM) : base(rangeEnemyBehav, enemySM)
+        public AttackState(RangeEnemyBehavCtrl rangeEnemyBehav, NPCStateMachine enemySM) : base(rangeEnemyBehav, enemySM)
         {
             StateName = "AttackState";
         }

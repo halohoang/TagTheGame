@@ -12,8 +12,8 @@ namespace ScriptableObjects
         //--------------------------------------
 
         protected NPCBehaviourController _behaviourCtrl;
-        protected MeleeEnemyBehaviour _meleeEnemyBehaviour;
-        protected RangeEnemyBehaviour _rangeEnemyBehaviour;
+        protected MeleeEnemyBehavCtrl _meleeEnemyBehaviour;
+        protected RangeEnemyBehavCtrl _rangeEnemyBehaviour;
         protected Transform _transform;
         protected GameObject _gameObject;
 
@@ -33,7 +33,7 @@ namespace ScriptableObjects
 
             _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
-        public virtual void Initialize(GameObject enemyObj, MeleeEnemyBehaviour meleeEnemyBehav)
+        public virtual void Initialize(GameObject enemyObj, MeleeEnemyBehavCtrl meleeEnemyBehav)
         {
             this._gameObject = enemyObj;
             this._transform = enemyObj.transform;
@@ -41,7 +41,7 @@ namespace ScriptableObjects
 
             _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
-        public virtual void Initialize(GameObject enemyObj, RangeEnemyBehaviour rangeEnemyBehav)
+        public virtual void Initialize(GameObject enemyObj, RangeEnemyBehavCtrl rangeEnemyBehav)
         {
             this._gameObject = enemyObj;
             this._transform = enemyObj.transform;

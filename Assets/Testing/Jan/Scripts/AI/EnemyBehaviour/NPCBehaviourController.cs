@@ -46,7 +46,7 @@ namespace Enemies
         //[SerializeField] private Vector3[] _directionsToCheckToAvoidObstacle;
         [Space(5)]
 
-        [Header("Monitoring of importang values")]
+        [Header("Monitoring Values")]
         [SerializeField, ReadOnly] private bool _isThisNPCDead;
         [SerializeField, ReadOnly] private bool _isTargetDead;
         [SerializeField, ReadOnly] private bool _isTargetDetected;

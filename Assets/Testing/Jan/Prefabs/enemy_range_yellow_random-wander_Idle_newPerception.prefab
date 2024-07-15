@@ -255,7 +255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _navAgent: {fileID: 0}
   _animator: {fileID: 0}
-  _playerObject: {fileID: 0}
+  _targetObject: {fileID: 0}
   _condPlayerDetectionCheck: {fileID: 0}
   _condMeleeAttackCheck: {fileID: 0}
   _baseIdleStateSO: {fileID: 11400000, guid: e04edc38682cb82418accab793b0a20b, type: 2}
@@ -265,15 +265,15 @@ MonoBehaviour:
   _movementSpeed: 3.5
   _chasingSpeed: 7
   _isThisNPCDead: 0
-  _isPlayerDead: 0
-  _isPlayerDetected: 0
+  _isTargetDead: 0
+  _isTargetDetected: 0
   _isSomethingAlarmingHappening: 0
   _isInAttackRange: 0
   _isCollidingWithObject: 0
   _noiseRangeOfAlarmingEvent: 0
   _positionOfAlarmingEvent: {x: 0, y: 0, z: 0}
   _collisionObjectPos: {x: 0, y: 0}
-  _lastKnownPlayerPos: {x: 0, y: 0, z: 0}
+  _lastKnownTargetPos: {x: 0, y: 0, z: 0}
   _currentActiveBehaviourState: 
   _isPlayerInShootingRange: 0
 --- !u!114 &44742040624873929
@@ -332,7 +332,7 @@ MonoBehaviour:
   - {x: 0.13, y: -0.07000002, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 54502
+  m_InstanceId: 35444
   m_LocalBounds:
     m_Center: {x: 0.000000014901161, y: -0.000000014901161, z: 0}
     m_Extent: {x: 0.13, y: 0.07000001, z: 0}
