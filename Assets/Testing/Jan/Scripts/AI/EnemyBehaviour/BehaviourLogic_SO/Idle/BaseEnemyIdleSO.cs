@@ -66,12 +66,11 @@ namespace ScriptableObjects
                 Debug.Log($"<color=orange> AI-Behav: </color> {_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Alert</color>' should have been happend now!");
             }
             
-            // Switch State from Idle to ChaseState when Player is Detected
+            // Switch State from Idle to ChaseState when target object is Detected
             if (_behaviourCtrl.IsTargetDetected)
             {
                 _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.ChaseState);
-                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
-                return;
+                Debug.Log($"<color=orange> AI-Behav: </color> {_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
             }
         }
 

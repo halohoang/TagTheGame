@@ -244,7 +244,6 @@ namespace Perception
 
             if (targetCollider != false)   // if there is a target detected
             {
-                //todo:!!! continue here with debugging! (JM 01.07.24)
                 Debug.Log($"<color=lime> AI-Perc: </color> target ({targetCollider.gameObject.name}) overlaps with FoV-Circle of {gameObject.name}.");            
 
                 // 1.: set the _targetObject to the object the target collider is attached to
@@ -320,7 +319,7 @@ namespace Perception
         // Methods related to auditive Perception
 
         /// <summary>
-        /// Checks if this enemy object is affected by alarming event like Door-KickIn or 'hearing' shooting noises etc. This Check will only be executed if auditice perception is eneabeld
+        /// Checks if this enemy object is affected by alarming event like Door-KickIn or 'hearing' shooting noises etc. This Check will only be executed if auditive perception is eneabeld
         /// (<see cref="_enableAuditivePerception"/>).
         /// </summary>
         /// <param name="isSomethinAlarmingHappening"></param>

@@ -66,7 +66,6 @@ namespace Enemies
         private AlertState _alertState;
         private ChaseState _chaseState;
         private AttackState _attackState;
-        #endregion
         
         
         // - - - Properties - - -         
@@ -102,6 +101,7 @@ namespace Enemies
         // put that later inside the 'MeleeEnemyBehaviour.cs': ; JM (31.10.2023)
         public ConditionIsInMeleeAttackRangeCheck CondMeleeAttackCheck { get => _condMeleeAttackCheck; private set => _condMeleeAttackCheck = value; }
         public bool IsInAttackRange { get => _isInAttackRange; private set => _isInAttackRange = value; }
+        #endregion
 
 
         #region Methods
@@ -189,8 +189,7 @@ namespace Enemies
 
         }
 
-        // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             // fixing buggy rotation and transform that happens due to NavMeshAgent on EnemyObjects
             _navAgent.updateRotation = false;
@@ -218,7 +217,8 @@ namespace Enemies
             StateMachine.CurrentState.PhysicsUpdate();
         }
 
-        // todo: move this logic to TactilePerception.cs; JM (26.06.24)
+        #region Testing
+        // todo: move this logic once perception-system is fully implemented and out of testphase; JM (18.07.24)
         private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.gameObject.CompareTag("Enemy"))
@@ -232,9 +232,9 @@ namespace Enemies
             else
                 _isCollidingWithObject = false;
         }
-
-        // Update is called once per frame
-        void Update()
+        #endregion
+                
+        private void Update()
         {            
             if (_isThisNPCDead)
                 return;            
