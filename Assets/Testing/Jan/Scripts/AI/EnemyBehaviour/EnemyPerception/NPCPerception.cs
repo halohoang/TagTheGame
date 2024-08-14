@@ -172,9 +172,9 @@ namespace Perception
         /// <param name="collision"></param>
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (_enableTactilePerception)
+            if (!_enableTactilePerception)
                 return;
-            else if (collision.gameObject.CompareTag("Enemy"))
+            else if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Door"))
             {
                 _isCollidingWithOtherObject = true;
                 //NavAgent.isStopped = true;

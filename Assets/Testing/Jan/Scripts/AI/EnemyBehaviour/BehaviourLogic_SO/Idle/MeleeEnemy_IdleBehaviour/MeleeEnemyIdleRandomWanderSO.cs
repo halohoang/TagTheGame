@@ -164,7 +164,6 @@ namespace ScriptableObjects
         /// </summary>
         private void WalkingConditionCheck()
         {
-
             // controll structures regarding walking behaviour
             if (_behaviourCtrl.IsCollidingWithObject)
             {
