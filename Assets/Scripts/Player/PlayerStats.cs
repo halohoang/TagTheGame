@@ -208,7 +208,7 @@ namespace Player
                 {
                     gameobject.SetActive(false);
                 }
-                _animator.SetTrigger("Dead");
+                _animator.SetTrigger("Dead");   // Todo: deprectated clean animator later; JM (11.09.24)
                 _animator.enabled = false;
                 _spriteRenderer.sprite = _deadOverlay.GetComponent<SpriteRenderer>().sprite;
                 _spriteRenderer.sortingLayerName = "default";
@@ -229,7 +229,7 @@ namespace Player
                 {
                     gameobject.SetActive(false);
                 }
-                _animator.SetTrigger("Dead");
+                _animator.SetTrigger("Dead");   // Todo: deprectated clean animator later; JM (11.09.24)
                 _animator.enabled = false;
                 _spriteRenderer.sprite = _deadOverlay.GetComponent<SpriteRenderer>().sprite;
                 _spriteRenderer.sortingLayerName = "default";
