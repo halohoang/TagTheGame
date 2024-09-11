@@ -1,6 +1,7 @@
 using EnumLibrary;
 using NaughtyAttributes;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -57,6 +58,7 @@ namespace Player
         [SerializeField, ReadOnly] private bool _isPlayerDead;
         [SerializeField, ReadOnly] private bool _canRegen = true;
         [SerializeField, ReadOnly] private bool _isSprinting;
+        [SerializeField, ReadOnly] private BoxCollider2D[] _colliderToDisableOnDeath;
         //[SerializeField, ReadOnly] private bool isFlashing = false;
 
         private Color defaultColor = Color.white;
@@ -94,6 +96,9 @@ namespace Player
 
             if (_animator == null)
                 _animator = GetComponent<Animator>();
+
+            _colliderToDisableOnDeath = new BoxCollider2D[GetComponents<BoxCollider2D>().Length];
+            _colliderToDisableOnDeath = GetComponents<BoxCollider2D>();
         }
 
         private void OnEnable()
@@ -204,6 +209,13 @@ namespace Player
                     gameobject.SetActive(false);
                 }
                 _animator.SetTrigger("Dead");
+                _animator.enabled = false;
+                _spriteRenderer.sprite = _deadOverlay.GetComponent<SpriteRenderer>().sprite;
+                _spriteRenderer.sortingLayerName = "default";
+
+                // disableing Boxcollider to avoid collision after player death
+                for (int i = 0; i < _colliderToDisableOnDeath.Length; i++)
+                    _colliderToDisableOnDeath[i].enabled = false;
 
                 OnPlayerDeath?.Invoke(IsPlayerDead);
 
@@ -218,8 +230,17 @@ namespace Player
                     gameobject.SetActive(false);
                 }
                 _animator.SetTrigger("Dead");
+                _animator.enabled = false;
+                _spriteRenderer.sprite = _deadOverlay.GetComponent<SpriteRenderer>().sprite;
+                _spriteRenderer.sortingLayerName = "default";
+
                 _deadOverlay.SetActive(true);
                 _audioSource.PlayOneShot(_deadSound);
+
+                // disableing Boxcollider to avoid collision after player death
+                for (int i = 0; i < _colliderToDisableOnDeath.Length; i++)
+                    _colliderToDisableOnDeath[i].enabled = false;
+
                 OnPlayerDeath?.Invoke(IsPlayerDead);
             }
 

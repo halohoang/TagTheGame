@@ -320,6 +320,8 @@ namespace Enemies
         private void SetIsTargetDead(bool isTargetDead)
         {
             _isTargetDead = isTargetDead;
+            _isTargetDetected = false;
+            _isInAttackRange = false;
         }
 
         /// <summary>

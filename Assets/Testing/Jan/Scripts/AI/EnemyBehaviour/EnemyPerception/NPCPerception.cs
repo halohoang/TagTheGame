@@ -354,6 +354,8 @@ namespace Perception
         private void SetIsTargetDead(bool targetDeadStatus)
         {
             _isTargetDead = targetDeadStatus;
+            _isTargetDetected = false;
+            _isInAttackRange = false;            
         }
 
         /// <summary>
@@ -364,7 +366,11 @@ namespace Perception
         private void SetIsDead(bool isDeadStatus, GameObject affectedNPCObject)
         {
             if (this.gameObject == affectedNPCObject)
+            {
                 _isThisNPCDead = isDeadStatus;
+                _isTargetDetected = false;
+                _isInAttackRange = false;
+            }
         }
         #endregion
 
