@@ -25,7 +25,7 @@ namespace Player
         [SerializeField] private InputReaderSO _inputReader;
         [SerializeField] private Rigidbody2D _rb2D;
         [SerializeField] private SpriteRenderer _spriteRenderer;
-        [SerializeField] private GameObject _deadOverlay;
+        [SerializeField] private Sprite _deadOverlaySprite;
         [SerializeField] private Transform _chargeBarTransform;                     // Reference to the scale of the bar
         [SerializeField] private Animator _animator;
         [SerializeField] private AudioSource _audioSource;
@@ -97,6 +97,9 @@ namespace Player
             if (_animator == null)
                 _animator = GetComponent<Animator>();
 
+            if (_deadOverlaySprite == null)
+                _deadOverlaySprite = Resources.Load<Sprite>("Sprites/Player/PlayerDead");
+
             _colliderToDisableOnDeath = new BoxCollider2D[GetComponents<BoxCollider2D>().Length];
             _colliderToDisableOnDeath = GetComponents<BoxCollider2D>();
         }
@@ -124,19 +127,7 @@ namespace Player
         {
             // Health Calculations
             ReduceHP();
-
-            if (CurrentHealth <= 0)    // Logic for Player Death
-            {
-                IsPlayerDead = true;
-
-                foreach (GameObject gameobject in _disableGameObject)
-                {
-                    gameobject.SetActive(false);
-                }
-                _animator.SetTrigger("Dead");
-
-                OnPlayerDeath?.Invoke(IsPlayerDead);
-            }
+            
             if (_canRegen && CurrentHealth < 100) // only call this logic if Health is below 100
             {
                 RegenHP();
@@ -202,49 +193,47 @@ namespace Player
             // Logic for Player Death
             if (IsSprinting && CurrentHealth <= 1.5f)
             {
-                IsPlayerDead = true;
-
-                foreach (GameObject gameobject in _disableGameObject)
-                {
-                    gameobject.SetActive(false);
-                }
-                _animator.SetTrigger("Dead");   // Todo: deprectated clean animator later; JM (11.09.24)
-                _animator.enabled = false;
-                _spriteRenderer.sprite = _deadOverlay.GetComponent<SpriteRenderer>().sprite;
-                _spriteRenderer.sortingLayerName = "default";
-
-                // disableing Boxcollider to avoid collision after player death
-                for (int i = 0; i < _colliderToDisableOnDeath.Length; i++)
-                    _colliderToDisableOnDeath[i].enabled = false;
-
-                OnPlayerDeath?.Invoke(IsPlayerDead);
+                ExecutePlayerDeadLogic();
 
                 IsSprinting = false;
             }
             else if (!IsSprinting && CurrentHealth <= 0)
             {
-                IsPlayerDead = true;
-
-                foreach (GameObject gameobject in _disableGameObject)
-                {
-                    gameobject.SetActive(false);
-                }
-                _animator.SetTrigger("Dead");   // Todo: deprectated clean animator later; JM (11.09.24)
-                _animator.enabled = false;
-                _spriteRenderer.sprite = _deadOverlay.GetComponent<SpriteRenderer>().sprite;
-                _spriteRenderer.sortingLayerName = "default";
-
-                _deadOverlay.SetActive(true);
-                _audioSource.PlayOneShot(_deadSound);
-
-                // disableing Boxcollider to avoid collision after player death
-                for (int i = 0; i < _colliderToDisableOnDeath.Length; i++)
-                    _colliderToDisableOnDeath[i].enabled = false;
-
-                OnPlayerDeath?.Invoke(IsPlayerDead);
+                ExecutePlayerDeadLogic();
             }
 
             //Debug.LogError($"_GetDamage()_: -> CurrentPlayerHealth: {_currentHealth}");
+        }
+
+        /// <summary>
+        /// Executes all necessary logic on player death event like setting specific values, disabling objects and components and eventually firing the 'OnPlayerDeath'-Event
+        /// to inform other Classes about PlayerDead
+        /// </summary>
+        private void ExecutePlayerDeadLogic()
+        {
+            // 1. Set PlayerDead value
+            IsPlayerDead = true;
+
+            // 2. disable all Childobjects of Player-Obj on Death (Goggle Light etc.) 
+            foreach (GameObject gameobject in _disableGameObject)
+            {
+                gameobject.SetActive(false);
+            }
+
+            // 3. Exchange Sprite for Player to Dead-Sprite
+            _animator.enabled = false;      // Disable Animator to avoid interference (Todo: rework later and clean this later; JM (12.09.24))
+            _spriteRenderer.sprite = _deadOverlaySprite;
+            _spriteRenderer.sortingLayerName = "default";   // reset sorting layer of sprite so enemies walk over dead player
+
+            // 4. play dead sound
+            _audioSource.PlayOneShot(_deadSound);   
+            
+            // 5. disable all Boxcollider-components on Player-Objec to avoid interaction with still living Enemies
+            for (int i = 0; i < _colliderToDisableOnDeath.Length; i++)
+                _colliderToDisableOnDeath[i].enabled = false;
+
+            // 6. Fire 'OnPlayerDeath'-Event to inform other Classes about Player Dead
+            OnPlayerDeath?.Invoke(IsPlayerDead);
         }
 
         private void ReduceHP()
