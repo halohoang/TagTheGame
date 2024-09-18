@@ -4,8 +4,9 @@ using UnityEngine.Events;
 
 public class CheatInput : MonoBehaviour
 {
-    public static event UnityAction OnResetDoors;   // for sending message to NavMeshBuilder.cs to update NavMeshSurface
-    public static event UnityAction<bool> OnSetGodMode;   // informin UI-Manager on GodMode Set
+    public static event UnityAction OnResetDoors;               // for sending message to NavMeshBuilder.cs to update NavMeshSurface
+    public static event UnityAction<bool> OnSetGodMode;         // informing UI-Manager on GodMode Set
+    public static event UnityAction<float> OnTimeScaleChange;   // inforng UI-Manager if TimeSclae was manipulated
 
     [Header("References")]
     [Space(2)]
@@ -26,6 +27,28 @@ public class CheatInput : MonoBehaviour
 
     private void Update()
     {
+        // decrease TimeScale on pressing 'Plus-Key' on NumPad -> TimeLapse
+        if (Input.GetKeyDown(KeyCode.KeypadPlus))
+        {
+            Time.timeScale += 0.1f;
+            OnTimeScaleChange?.Invoke(Time.timeScale);
+        }
+
+        // decrease TimeScale on pressing 'Minus-Key' on NumPad -> Slowmotion
+        if (Input.GetKeyDown(KeyCode.KeypadMinus))
+        {
+            if (Time.timeScale > 0.09999999f)   // check for avoiding the timeScale get out of range
+                Time.timeScale -= 0.1f;
+            OnTimeScaleChange?.Invoke(Time.timeScale);
+        }
+
+        // Reset Timescale to normal on pressing 'Multiply-Key' on Numpad
+        if (Input.GetKeyDown(KeyCode.KeypadMultiply))
+        {
+            Time.timeScale = 1.0f;
+            OnTimeScaleChange?.Invoke(Time.timeScale);
+        }
+
         // If '0' ond NumPad is Pressed all disabled Doors will be enabled again
         if (Input.GetKeyDown(KeyCode.Keypad0))
         {

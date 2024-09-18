@@ -1,6 +1,7 @@
 using JansLittleHelper;
 using NaughtyAttributes;
 using Player;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,6 +40,10 @@ namespace UI
         [Tooltip("GodMode TMP (Found in Hierarchy -> /UI/Ingame-UI_Canvas/Testing_&_Debug_Panel/ActiveCheats_Panel/GodMode_Text (TMP))")]
         #endregion
         [SerializeField] private TextMeshProUGUI _godeModeTxt;
+        #region Tooltip
+        [Tooltip("timeScale TMP (Found in Hierarchy -> /UI/Ingame-UI_Canvas/Testing_&_Debug_Panel/ActiveCheats_Panel/TimeScaleInfo_Text (TMP))")]
+        #endregion
+        [SerializeField] private TextMeshProUGUI _timeScleTxt;
         [Space(5)]
 
         [Header("Monitoring Values")]
@@ -62,6 +67,10 @@ namespace UI
         [Tooltip("Is the god mode currently enabled and player invincible?")]
         #endregion
         [SerializeField, ReadOnly] private bool _isGodModeEnabled;
+        #region Tooltip
+        [Tooltip("Is the TimeScale currently manipulated (increased or decreased)?")]
+        #endregion
+        [SerializeField, ReadOnly] private bool _isTimeScaleManipulated;
 
         private GameObject[] _uITextObjects;                                        // stores the UI-Text-Objects for quicker referencing and access
         [SerializeField, ReadOnly] private Sprite[] _weaponSprites;                 // stores the Weapon Sprites for quicker referencing and access
@@ -105,6 +114,7 @@ namespace UI
 
             // Cheat Panel related
             CheatInput.OnSetGodMode += SetGodModeHint;
+            CheatInput.OnTimeScaleChange += SetTimeScaleHint;
         }
         private void OnDisable()
         {
@@ -115,6 +125,7 @@ namespace UI
 
             // Cheat Panel related
             CheatInput.OnSetGodMode -= SetGodModeHint;
+            CheatInput.OnTimeScaleChange -= SetTimeScaleHint;
         }
 
         void Start()
@@ -196,6 +207,21 @@ namespace UI
         {
             _godeModeTxt.enabled = godModeStatus;
             _isGodModeEnabled = godModeStatus;
+        }
+
+        /// <summary>
+        /// Enables TimeScaleHint-Text in Cheat-Console-UI to inform about current TimeScaleSetting on TimeScale-Manipulation
+        /// </summary>
+        /// <param name="arg0"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void SetTimeScaleHint(float curTSSetting)
+        {
+            _timeScleTxt.enabled = true;
+            _isTimeScaleManipulated = true;
+            _timeScleTxt.text = $"TimeScale: {curTSSetting}";
+
+            if (curTSSetting == 1)
+                _isTimeScaleManipulated = false;
         }
 
         #endregion

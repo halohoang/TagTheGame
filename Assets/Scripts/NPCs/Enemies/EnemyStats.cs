@@ -46,6 +46,7 @@ public class EnemyStats : MonoBehaviour
     // private Variables
     private SpriteRenderer _spriteRenderer;
     private BoxCollider2D _boxCollider2D;
+    private Rigidbody2D _rb2d;
     private ShadowCaster2D _shadowCaster2D;
     private TakingDamageVFX _damageVFX;
 
@@ -72,6 +73,9 @@ public class EnemyStats : MonoBehaviour
 
         if (_boxCollider2D == null)
             _boxCollider2D = GetComponent<BoxCollider2D>();
+
+        if (_rb2d == null)
+            _rb2d = GetComponent<Rigidbody2D>();
 
         if (_shadowCaster2D == null)
             _shadowCaster2D = GetComponent<ShadowCaster2D>();
@@ -112,6 +116,8 @@ public class EnemyStats : MonoBehaviour
             CurrentHealth = 0;
             _isDead = true;
             _boxCollider2D.isTrigger = true;    // set collider to trigger to ensure no collision is possible any more
+            _rb2d.simulated = false;            // turn off simulation so the bodys won't slide over the ground by physics force after death
+            
 
             // 2. Randomize dead rotation and enable dead animation sprite
             this.transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));

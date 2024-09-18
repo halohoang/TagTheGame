@@ -52,7 +52,7 @@ namespace Enemies
         [SerializeField, ReadOnly] private bool _isTargetDetected;
         [SerializeField, ReadOnly] private bool _isSomethingAlarmingHappening;
         [SerializeField, ReadOnly] private bool _isInAttackRange;                   // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
-        [SerializeField, ReadOnly] private bool _isCollidingWithObject;
+        [SerializeField] private bool _isCollidingWithObject;
         [SerializeField, ReadOnly] private float _noiseRangeOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector3 _positionOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector2 _collisionObjectPos;

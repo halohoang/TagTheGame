@@ -214,19 +214,20 @@ namespace Player
             // 1. Set PlayerDead value
             IsPlayerDead = true;
 
-            // 2. disable all Childobjects of Player-Obj on Death (Goggle Light etc.) 
-            foreach (GameObject gameobject in _disableGameObject)
-            {
-                gameobject.SetActive(false);
-            }
-
-            // 3. Exchange Sprite for Player to Dead-Sprite
+            // 2.  Disable rigidbody-simulation and exchange Sprite for Player to Dead-Sprite
+            _rb2D.simulated = false;                        // turn of physics simulation on rigidbody so the body won'T slide over the ground if any force was applied shortly before death
             _animator.enabled = false;      // Disable Animator to avoid interference (Todo: rework later and clean this later; JM (12.09.24))
             _spriteRenderer.sprite = _deadOverlaySprite;
             _spriteRenderer.sortingLayerName = "default";   // reset sorting layer of sprite so enemies walk over dead player
 
-            // 4. play dead sound
+            // 3. play dead sound
             _audioSource.PlayOneShot(_deadSound);   
+
+            // 4. disable all Childobjects of Player-Obj on Death (Goggle Light etc.) 
+            foreach (GameObject gameobject in _disableGameObject)
+            {
+                gameobject.SetActive(false);
+            }
             
             // 5. disable all Boxcollider-components on Player-Objec to avoid interaction with still living Enemies
             for (int i = 0; i < _colliderToDisableOnDeath.Length; i++)
