@@ -65,7 +65,7 @@ public class BaseObjectPool : MonoBehaviour
 
     //---------- Custom Methods ----------
     /// <summary>
-    /// Returns the disabled Objects stored to the Object-Pool-List
+    /// Returns the first disabled Object stored to the Object-Pool-List
     /// </summary>
     /// <returns></returns>
     public GameObject GetInactivePooledObject()
@@ -79,7 +79,7 @@ public class BaseObjectPool : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the enabled Objects stored to the Object-Pool-List
+    /// Returns the first enabled Object stored to the Object-Pool-List
     /// </summary>
     /// <returns></returns>
     public GameObject GetActivePooledObject()

@@ -20,15 +20,14 @@ public class BulletCasing : MonoBehaviour
 		}
 	}
 
-	private void Update()
-	{
-		// Destroy the casing after a set amount of time
-		Invoke("DeactiveObject", _despawnTime);
-	}
+	//private void Update()
+	//{
+	//	// Destroy the casing after a set amount of time
+	//	Invoke("DeactiveObject", _despawnTime);
+	//}
 
-	void DeactiveObject()
-	{
-		gameObject.SetActive(false);
-	}
-
+	//void DeactiveObject()
+	//{
+	//	gameObject.SetActive(false);
+	//}
 }

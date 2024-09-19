@@ -493,10 +493,11 @@ namespace Player
             Debug.Log($"'SpawnBulletCasing()' was called in '{this}'");
 
             // Instantiate a bullet casing at the specified spawn point with random rotation
-            GameObject casing = BulletCasingObjectPool.Instance.GetInactivePooledObject();
-            casing.transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
-            casing.transform.position = _casingSpawnPosition.position;
-            casing.SetActive(true);
+            ActivateFromObjectPool(BulletCasingObjectPool.Instance.GetInactivePooledObject(), _casingSpawnPosition.position, Quaternion.Euler(0f, 0f, Random.Range(0, 360f)));
+            //GameObject casing = BulletCasingObjectPool.Instance.GetInactivePooledObject();
+            //casing.transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
+            //casing.transform.position = _casingSpawnPosition.position;
+            //casing.SetActive(true);
 
             #region old prefab instatnitation
             //Quaternion casingRotation = Quaternion.Euler(0f, 0f, Random.Range(0, 360f));
