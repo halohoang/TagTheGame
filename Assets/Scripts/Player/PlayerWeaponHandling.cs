@@ -19,6 +19,7 @@ namespace Player
 
         public static event UnityAction<bool, Vector3, Collider2D[]> OnPlayerShoot;     // invoked in 'PlayerAttackOnInput()' (when projectile is instantiated); JM (08.05.24)
         public static event UnityAction<int, int> OnSetBulletCount;                     // invoked in 'SetBulletCount()' (when new bullet counts are (re)setted, e.g. on weapon switch/pickup); JM (08.05.24)
+        public static event UnityAction<int> OnSetMagazineCount;                        // invoked in 'SetMagazineCount()' (when amount of weapons magazines are (re)setted, e.g. on weapon switch or magazine-pickup)
         public static event UnityAction<int> OnBulletsInstantiated;                     // invoked in 'SpawnProjectile()' (respective during execution of 'PlayerAttackOnInput()'); JM (08.05.24)
         public static event UnityAction<int> OnReload;                                  // invoked in 'Realoding()' (respective when Reload-Input was detected); JM (08.05.24)
         public static event UnityAction<BaseWeapon> OnWeaponEquip;                      // invoked in 'FirstWeaponEquip()', 'SecondWEaponEquip()', 'HolsterWeapon()' and 'OnCollisionEnter2D()'; JM (10.05.24)
@@ -154,6 +155,10 @@ namespace Player
         [Tooltip("The current amount of bullets of the currently selected weapon.")]
         #endregion
         [SerializeField, ReadOnly] internal int _currentBulletCount;
+        #region Tooltip
+        [Tooltip("The current amount of Magazines for the currently selected weapon.")]
+        #endregion
+        [SerializeField, ReadOnly] internal int _currentAmountOfMags;
 
         /* Firerate Settings*/
         #region Tooltip
@@ -542,10 +547,24 @@ namespace Player
             return Time.time > _nextFireTime && !_isGamePaused;
         }
 
+        /// <summary>
+        /// Executes Reloading logic if specific criterias are fulfilled: 1. is not already reloading. 2. is currently not shooting. 3. player must be alive. 
+        /// 4. there still must be magazines available for the currently held weapon. 5.) The current amount of rounds in the mag must be less than the max. amout of the weapons loaded magazine
+        /// </summary>
         private void Realoding()
-        {
-            if (_isReloading == false && !_isShooting && !_isPlayerDead)
+        {            
+            if (_isReloading == false && !_isShooting && !_isPlayerDead && _currentAmountOfMags > 0)
             {
+                // 1. decrease number of magazines and ensure that it can't be less than '0'
+                _currentAmountOfMags--;
+                if (_currentAmountOfMags < 0)
+                    _currentAmountOfMags = 0;
+
+                // 2. update amount of magazines
+                _playerEquipmentSO.UpdateAmountOfMags(
+                    _isFirstWeaponSelected ? Enum_Lib.ESelectedWeapon.FirstWeapon : Enum_Lib.ESelectedWeapon.SecondWeapon, _currentAmountOfMags);
+
+                // 3. play reload sound and execute actual rounds-reloading logic
                 if (_currentBulletCount < _maximumBulletCount)
                 {
                     _audioSource.PlayOneShot(_reloadSound);
@@ -754,6 +773,7 @@ namespace Player
         private void SetWeaponRespectiveValues(BaseWeapon weaponSlot)
         {
             // Set bullet count and fire rate
+            SetMagazineCount(weaponSlot);
             SetBulletCount(weaponSlot);
             _fireRate = weaponSlot.FireRate;
 
@@ -800,6 +820,18 @@ namespace Player
                                                                                 //_ammoCounter.CurrentAmmo = _currentBulletCount;
                                                                                 //_ammoCounter.MagazineSize = _maximumBulletCount;
                                                                                 //_ammoCounter.SetUIAmmoToActiveWeaponAmmo();
+        }
+
+        /// <summary>
+        /// Sets the <see cref="_currentAmountOfMags"/> to the stored amount of magazins of the transmitted BaseWeapon type (First/SecondWeaponSlot)
+        /// </summary>
+        /// <param name="weaponSlot"></param>
+        private void SetMagazineCount(BaseWeapon weaponSlot)
+        {
+            _currentAmountOfMags = weaponSlot.AmountOfMagazines;
+
+            // Informing for Updating weapon UI to current amount of magazines
+            OnSetMagazineCount?.Invoke(_currentAmountOfMags);
         }
 
         private float CalculateDeviation()
