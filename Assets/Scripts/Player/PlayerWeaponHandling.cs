@@ -18,8 +18,8 @@ namespace Player
         //--------------------------------
 
         public static event UnityAction<bool, Vector3, Collider2D[]> OnPlayerShoot;     // invoked in 'PlayerAttackOnInput()' (when projectile is instantiated); JM (08.05.24)
-        public static event UnityAction<int, int> OnSetBulletCount;                     // invoked in 'SetBulletCount()' (when new bullet counts are (re)setted, e.g. on weapon switch/pickup); JM (08.05.24)
-        public static event UnityAction<int> OnSetMagazineCount;                        // invoked in 'SetMagazineCount()' (when amount of weapons magazines are (re)setted, e.g. on weapon switch or magazine-pickup)
+        public static event UnityAction<int/*, int*/> OnSetBulletCount;                     // invoked in 'SetBulletCount()' (when new bullet counts are (re)setted, e.g. on weapon switch/pickup); JM (08.05.24)
+        public static event UnityAction<int> OnSetStoredAmmoCount;                        // invoked in 'SetMagazineCount()' (when amount of weapons magazines are (re)setted, e.g. on weapon switch or magazine-pickup)
         public static event UnityAction<int> OnBulletsInstantiated;                     // invoked in 'SpawnProjectile()' (respective during execution of 'PlayerAttackOnInput()'); JM (08.05.24)
         public static event UnityAction<int> OnReload;                                  // invoked in 'Realoding()' (respective when Reload-Input was detected); JM (08.05.24)
         public static event UnityAction<BaseWeapon> OnWeaponEquip;                      // invoked in 'FirstWeaponEquip()', 'SecondWEaponEquip()', 'HolsterWeapon()' and 'OnCollisionEnter2D()'; JM (10.05.24)
@@ -158,7 +158,7 @@ namespace Player
         #region Tooltip
         [Tooltip("The current amount of Magazines for the currently selected weapon.")]
         #endregion
-        [SerializeField, ReadOnly] internal int _currentAmountOfMags;
+        [SerializeField, ReadOnly] internal int _currentStoredAmmo;
 
         /* Firerate Settings*/
         #region Tooltip
@@ -553,16 +553,17 @@ namespace Player
         /// </summary>
         private void Realoding()
         {            
-            if (_isReloading == false && !_isShooting && !_isPlayerDead && _currentAmountOfMags > 0)
+            if (_isReloading == false && !_isShooting && !_isPlayerDead && _currentStoredAmmo > 0)
             {
-                // 1. decrease number of magazines and ensure that it can't be less than '0'
-                _currentAmountOfMags--;
-                if (_currentAmountOfMags < 0)
-                    _currentAmountOfMags = 0;
+                // Todo: continue here to fix the bug regarding the wrong ammo calculation and thus buggy reloading system
+                //// 1. decrease number of stored ammo and ensure that it can't be less than '0'
+                //_currentStoredAmmo -= _maximumBulletCount - _currentBulletCount;
+                //if (_currentStoredAmmo < 0)
+                //    _currentStoredAmmo = 0;
 
-                // 2. update amount of magazines
-                _playerEquipmentSO.UpdateAmountOfMags(
-                    _isFirstWeaponSelected ? Enum_Lib.ESelectedWeapon.FirstWeapon : Enum_Lib.ESelectedWeapon.SecondWeapon, _currentAmountOfMags);
+                //// 2. update amount of magazines
+                //_playerEquipmentSO.UpdateAmountOfStoredAmmo(
+                //    _isFirstWeaponSelected ? Enum_Lib.ESelectedWeapon.FirstWeapon : Enum_Lib.ESelectedWeapon.SecondWeapon, _currentStoredAmmo);
 
                 // 3. play reload sound and execute actual rounds-reloading logic
                 if (_currentBulletCount < _maximumBulletCount)
@@ -578,10 +579,12 @@ namespace Player
             float timePerBullet = 1.0f / (float)_maximumBulletCount;           // Time for each bullet to enable
 
             // Play reload animation
+            Debug.Log($"For loop in Reaload Enumerator was called");
 
-            for (int i = _currentBulletCount; i < _maximumBulletCount; i++)
+            for (int i = _currentBulletCount; i < _maximumBulletCount && _currentStoredAmmo > 0; i++)  // execute For as long as rounds in Mag are less than magazineSize and there is still ammo stored by the player
             {
                 _currentBulletCount++;
+                Debug.Log($"For loop in Reaload Enumerator was called <color=lime>{_currentBulletCount}</color> times");
                 yield return new WaitForSeconds(timePerBullet);
                 OnReload?.Invoke(_currentBulletCount);         // informing UIManager about Reloading
 
@@ -816,22 +819,22 @@ namespace Player
             }
 
             // Set UI-AmmoCounter to amount of current bullets
-            OnSetBulletCount?.Invoke(_currentBulletCount, _maximumBulletCount); // informing ammocounter about changes of the max- and current bullet count
+            OnSetBulletCount?.Invoke(_currentBulletCount/*, _maximumBulletCount*/); // informing ammocounter about changes of the max- and current bullet count
                                                                                 //_ammoCounter.CurrentAmmo = _currentBulletCount;
                                                                                 //_ammoCounter.MagazineSize = _maximumBulletCount;
                                                                                 //_ammoCounter.SetUIAmmoToActiveWeaponAmmo();
         }
 
         /// <summary>
-        /// Sets the <see cref="_currentAmountOfMags"/> to the stored amount of magazins of the transmitted BaseWeapon type (First/SecondWeaponSlot)
+        /// Sets the <see cref="_currentStoredAmmo"/> to the stored amount of magazins of the transmitted BaseWeapon type (First/SecondWeaponSlot)
         /// </summary>
         /// <param name="weaponSlot"></param>
         private void SetMagazineCount(BaseWeapon weaponSlot)
         {
-            _currentAmountOfMags = weaponSlot.AmountOfMagazines;
+            _currentStoredAmmo = weaponSlot.StoredAmmo;
 
             // Informing for Updating weapon UI to current amount of magazines
-            OnSetMagazineCount?.Invoke(_currentAmountOfMags);
+            OnSetStoredAmmoCount?.Invoke(_currentStoredAmmo);
         }
 
         private float CalculateDeviation()

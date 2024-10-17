@@ -77,9 +77,9 @@ namespace ScriptableObjects
             #endregion            
             [SerializeField] private int _currentRoundsInMag;
             #region Tooltip
-            [Tooltip("The amount magazine the player bears currently. If set to bigger than '0' the player will start with that amount of magazines equipped.")]
+            [Tooltip("The amount ammo (rounds) the player has stored (reserve ammo). If set to bigger than '0' the player will start with that amount of ammo equipped.")]
             #endregion  
-            [SerializeField] private int _amountOfMagazines;
+            [SerializeField] private int _storedAmmo;
             #region Tooltip
             [Tooltip("The Amount of Bullets that will be spawned simultaneously (e.g. for the Shotgun it might be '5' and for the Handgun '1').")]
             #endregion
@@ -98,7 +98,7 @@ namespace ScriptableObjects
             internal float FireRate { get => _fireRate; set => _fireRate = value; }
             internal int MagazineSize { get => _magazineSize; set => _magazineSize = value; }
             internal int CurrentRoundsInMag { get => _currentRoundsInMag; set => _currentRoundsInMag = value; }
-            internal int AmountOfMagazines { get => _amountOfMagazines; set => _amountOfMagazines = value; }
+            internal int StoredAmmo { get => _storedAmmo; set => _storedAmmo = value; }
             internal int SpawnedBullets { get => _spawnedBullets; set => _spawnedBullets = value; }
             internal int ReloadHintThreshhold { get => _reloadHintThreshhold; set => _reloadHintThreshhold = value; }
         }
@@ -114,9 +114,9 @@ namespace ScriptableObjects
         private void OnEnable()
         {
             // 1. initializing single weapon objects with standard values automatically
-            _handCannon = new HandCannon("Handcannon", Enum_Lib.EWeaponType.Handcannon, 1, 1.5f, 6, 6, 3, 1, 3);
-            _sMG = new SubMachineGun("SMG", Enum_Lib.EWeaponType.SMG, 1, 0.5f, 30, 30, 2, 1, 15);
-            _shotgun = new ShotGun("Shotgun", Enum_Lib.EWeaponType.Shotgun, 1, 1, 8, 8, 1, 5, 4);
+            _handCannon = new HandCannon("Handcannon", Enum_Lib.EWeaponType.Handcannon, 1, 1.5f, 6, 6, 18, 1, 3);
+            _sMG = new SubMachineGun("SMG", Enum_Lib.EWeaponType.SMG, 1, 0.5f, 30, 30, 60, 1, 15);
+            _shotgun = new ShotGun("Shotgun", Enum_Lib.EWeaponType.Shotgun, 1, 1, 8, 8, 8, 5, 4);
             _eLauncher = new EnergyLauncher("Energy Launcher", Enum_Lib.EWeaponType.EnergyLauncher, 1, 1, 1, 1, 5, 1, 1);
 
             // 2. initializing the List with the specific weapon objects and their standard values
@@ -136,19 +136,19 @@ namespace ScriptableObjects
                 // todo: see if that can be optimized yet, does not look soo nice; (JM, 05.02.2024)
                 if (_weaponValues[i].WeaponType == Enum_Lib.EWeaponType.Handcannon)
                 {
-                    _handCannon.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].AmountOfMagazines, _weaponValues[i].SpawnedBullets, _weaponValues[i].ReloadHintThreshhold);
+                    _handCannon.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].StoredAmmo, _weaponValues[i].SpawnedBullets, _weaponValues[i].ReloadHintThreshhold);
                 }
                 else if (_weaponValues[i].WeaponType == Enum_Lib.EWeaponType.SMG)
                 {
-                    _sMG.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].AmountOfMagazines, _weaponValues[i].SpawnedBullets, _weaponValues[i].ReloadHintThreshhold);
+                    _sMG.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].StoredAmmo, _weaponValues[i].SpawnedBullets, _weaponValues[i].ReloadHintThreshhold);
                 }
                 else if (_weaponValues[i].WeaponType == Enum_Lib.EWeaponType.Shotgun)
                 {
-                    _shotgun.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].AmountOfMagazines, _weaponValues[i].SpawnedBullets, _weaponValues[i].ReloadHintThreshhold);
+                    _shotgun.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].StoredAmmo, _weaponValues[i].SpawnedBullets, _weaponValues[i].ReloadHintThreshhold);
                 }
                 else if (_weaponValues[i].WeaponType == Enum_Lib.EWeaponType.EnergyLauncher)
                 {
-                    _eLauncher.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].AmountOfMagazines, _weaponValues[i].SpawnedBullets, _weaponValues[i].ReloadHintThreshhold);
+                    _eLauncher.SetWeaponValues(_weaponValues[i].WeaponDamage, _weaponValues[i].FireRate, _weaponValues[i].MagazineSize, _weaponValues[i].CurrentRoundsInMag, _weaponValues[i].StoredAmmo, _weaponValues[i].SpawnedBullets, _weaponValues[i].ReloadHintThreshhold);
                 }
             }
 
@@ -233,20 +233,20 @@ namespace ScriptableObjects
         }
 
         /// <summary>
-        /// Updates the the Value for <see cref="BaseWeapon.AmountOfMagazines"/> according to transmitted values for the specific WeaponHand (First or Second WEapon) currently selected.
+        /// Updates the the Value for <see cref="BaseWeapon.StoredAmmo"/> according to transmitted values for the specific WeaponHand (First or Second WEapon) currently selected.
         /// </summary>
-        /// <param name="newAmountOfMags">The actual amount of round to be in the mag</param>
-        internal void UpdateAmountOfMags(Enum_Lib.ESelectedWeapon selectedWeapon, int newAmountOfMags)
+        /// <param name="newAmountOfAmmo">The actual amount of round to be in the mag</param>
+        internal void UpdateAmountOfStoredAmmo(Enum_Lib.ESelectedWeapon selectedWeapon, int newAmountOfAmmo)
         {
             // update amount of magazines
             switch (selectedWeapon)
             {
                 case Enum_Lib.ESelectedWeapon.FirstWeapon:
-                    FirstWeapon.AmountOfMagazines = newAmountOfMags;
+                    FirstWeapon.StoredAmmo = newAmountOfAmmo;
                     break;
 
                 case Enum_Lib.ESelectedWeapon.SecondWeapon:
-                    SecondWeapon.AmountOfMagazines = newAmountOfMags;
+                    SecondWeapon.StoredAmmo = newAmountOfAmmo;
                     break;
             }
         }

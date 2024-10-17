@@ -25,9 +25,13 @@ namespace UI
         //--------------------------------------
         [Header("References")]
         #region Tooltip
-        [Tooltip("The TextMeshPro-Component of the AmmoDisplay UI (Found in Hierarchy -> /UI/Ingame-UI_Canvas/WeaponUI_Panel/AmmoDisplay_Panel/AmmoDisplay_Text (TMP))")]
+        [Tooltip("The TextMeshPro-Component of the RoundsDisplay UI (Found in Hierarchy -> /UI/Ingame-UI_Canvas/WeaponUI_Panel/AmmoDisplay_Panel/RoundsDisplay_Text (TMP))")]
         #endregion
-        [SerializeField] private TextMeshProUGUI _ammoDisplayTxt;
+        [SerializeField] private TextMeshProUGUI _roundsInMagDisplayTxt;
+        #region Tooltip
+        [Tooltip("The TextMeshPro-Component of the StoredAmmoDisplay UI (Found in Hierarchy -> /UI/Ingame-UI_Canvas/WeaponUI_Panel/AmmoDisplay_Panel/StoredAmmoDisplay_Text (TMP))")]
+        #endregion
+        [SerializeField] private TextMeshProUGUI _storedAmmoDisplayTxt;
         #region Tooltip
         [Tooltip("The TextMeshPro-Component of the ReloadHint UI (Found in Hierarchy -> /UI/Ingame-UI_Canvas/WeaponUI_Panel/AmmoDisplay_Panel/ReloadHint_Text (TMP))")]
         #endregion
@@ -48,9 +52,13 @@ namespace UI
 
         [Header("Monitoring Values")]
         #region Tooltip
-        [Tooltip("The actual current ammount of ammo, should be updated according to when the player is shooting or reloading.")]
+        [Tooltip("The actual current ammount of rounds in the selected guns magazine, should be updated according to when the player is shooting or reloading.")]
         #endregion
-        [SerializeField, ReadOnly] private int _currentAmmo;
+        [SerializeField, ReadOnly] private int _currentRoundsInMag;
+        #region Tooltip
+        [Tooltip("The actual current ammount of ammo, which is stored in the players inventory for the currently selected Gun. Should be updated according to when the player is shooting or reloading.")]
+        #endregion
+        [SerializeField, ReadOnly] private int _currentStoredAmmo;
         #region Tooltip
         [Tooltip("The maximum Ammo should be equal to the Magazine Size of the currently selected Weapon.")]
         #endregion
@@ -93,8 +101,11 @@ namespace UI
             _weaponSprites = Resources.LoadAll<Sprite>("Sprites/WeaponSprites");
 
             // Autoreferencing
-            if (_ammoDisplayTxt == null)
-                _ammoDisplayTxt = NullChecksAndAutoReferencing.GetTMPFromTagList(_uITextObjects, "AmmoDisplay_Text (TMP)");
+            if (_roundsInMagDisplayTxt == null)
+                _roundsInMagDisplayTxt = NullChecksAndAutoReferencing.GetTMPFromTagList(_uITextObjects, "RoundsInMagDisplay_Text (TMP)");
+
+            if (_storedAmmoDisplayTxt == null)
+                _storedAmmoDisplayTxt = NullChecksAndAutoReferencing.GetTMPFromTagList(_uITextObjects, "StoredAmmoDisplay_Text (TMP)");
 
             if (_reloadHintTxt == null)
                 _reloadHintTxt = NullChecksAndAutoReferencing.GetTMPFromTagList(_uITextObjects, "ReloadHint_Text (TMP)");
@@ -107,9 +118,10 @@ namespace UI
 
         private void OnEnable()
         {
-            PlayerWeaponHandling.OnSetBulletCount += UpdateAmmoDisplay;
-            PlayerWeaponHandling.OnBulletsInstantiated += UpdateAmmoDisplay;
-            PlayerWeaponHandling.OnReload += UpdateAmmoDisplay;
+            PlayerWeaponHandling.OnSetBulletCount += UpdateRoundsDisplay;
+            PlayerWeaponHandling.OnBulletsInstantiated += UpdateRoundsDisplay;
+            PlayerWeaponHandling.OnSetStoredAmmoCount += UpdateStoredAmmoDisplay;
+            PlayerWeaponHandling.OnReload += UpdateRoundsDisplay;
             PlayerWeaponHandling.OnWeaponEquip += UpdateWeaponDisplay;
 
             // Cheat Panel related
@@ -118,9 +130,10 @@ namespace UI
         }
         private void OnDisable()
         {
-            PlayerWeaponHandling.OnSetBulletCount -= UpdateAmmoDisplay;
-            PlayerWeaponHandling.OnBulletsInstantiated -= UpdateAmmoDisplay;
-            PlayerWeaponHandling.OnReload -= UpdateAmmoDisplay;
+            PlayerWeaponHandling.OnSetBulletCount -= UpdateRoundsDisplay;
+            PlayerWeaponHandling.OnBulletsInstantiated -= UpdateRoundsDisplay;
+            PlayerWeaponHandling.OnSetStoredAmmoCount -= UpdateStoredAmmoDisplay;
+            PlayerWeaponHandling.OnReload -= UpdateRoundsDisplay;
             PlayerWeaponHandling.OnWeaponEquip -= UpdateWeaponDisplay;
 
             // Cheat Panel related
@@ -145,27 +158,38 @@ namespace UI
         /// Updates the Ammo Display in the ingame UI-Panel respectively to the transmitted 'currentAmmo'-value.
         /// Also checks on Updating if ReloadHintThereshold was reached.
         /// </summary>
-        /// <param name="currentAmmo"></param>
-        private void UpdateAmmoDisplay(int currentAmmo)
+        /// <param name="currentRounds"></param>
+        private void UpdateRoundsDisplay(int currentRounds)
         {
-            _currentAmmo = currentAmmo;
-            _ammoDisplayTxt.text = $"{_currentAmmo}|{_maxAmmo}";
+            _currentRoundsInMag = currentRounds;
+            _roundsInMagDisplayTxt.text = $"{_currentRoundsInMag}";
 
             EnableDisableRealoadHintObj(_selectedWeaponReloadThreshold);
         }
+        ///// <summary>
+        ///// Updates the Ammo Display in the ingame UI-Panel respectively to the transmitted 'currentAmmo'- and 'maxAmmo'-values.
+        ///// Also checks on Updating if ReloadHintThereshold was reached.
+        ///// </summary>
+        ///// <param name="currentAmmo"></param>
+        ///// <param name="maxAmmo"></param>
+        //private void UpdateRoundsDisplay(int currentAmmo, int maxAmmo)
+        //{
+        //    _currentRoundsInMag = currentAmmo;
+        //    _maxAmmo = maxAmmo;
+        //    _roundsInMagDisplayTxt.text = $"{_currentRoundsInMag}";
+
+        //    EnableDisableRealoadHintObj(_selectedWeaponReloadThreshold);
+        //}
+
         /// <summary>
-        /// Updates the Ammo Display in the ingame UI-Panel respectively to the transmitted 'currentAmmo'- and 'maxAmmo'-values.
+        /// Updates the Ammo Display in the ingame UI-Panel respectively to the transmitted '_currentStoredAmmo'-value.
         /// Also checks on Updating if ReloadHintThereshold was reached.
         /// </summary>
         /// <param name="currentAmmo"></param>
-        /// <param name="maxAmmo"></param>
-        private void UpdateAmmoDisplay(int currentAmmo, int maxAmmo)
+        private void UpdateStoredAmmoDisplay(int currentAmmo)
         {
-            _currentAmmo = currentAmmo;
-            _maxAmmo = maxAmmo;
-            _ammoDisplayTxt.text = $"{_currentAmmo}|{_maxAmmo}";
-
-            EnableDisableRealoadHintObj(_selectedWeaponReloadThreshold);
+            _currentStoredAmmo = currentAmmo;
+            _storedAmmoDisplayTxt.text = $"{_currentStoredAmmo}";
         }
 
         /// <summary>
@@ -193,7 +217,7 @@ namespace UI
         /// <param name="reloadHintThreshold"></param>
         private void EnableDisableRealoadHintObj(int reloadHintThreshold)
         {
-            if (_currentAmmo <= reloadHintThreshold)
+            if (_currentRoundsInMag <= reloadHintThreshold)
                 _reloadHintTxt.enabled = true;
             else
                 _reloadHintTxt.enabled = false;

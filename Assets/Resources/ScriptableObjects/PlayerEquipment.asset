@@ -20,7 +20,7 @@ MonoBehaviour:
     _fireRate: 0.8
     _magazineSize: 6
     _currentRoundsInMag: 6
-    _amountOfMagazines: 3
+    _storedAmmo: 18
     _spawnedBullets: 1
     _reloadHintThreshhold: 3
   - _inspectorTitle: SMG Values
@@ -30,7 +30,7 @@ MonoBehaviour:
     _fireRate: 0.1
     _magazineSize: 30
     _currentRoundsInMag: 30
-    _amountOfMagazines: 2
+    _storedAmmo: 60
     _spawnedBullets: 1
     _reloadHintThreshhold: 15
   - _inspectorTitle: Shotgun Values
@@ -40,7 +40,7 @@ MonoBehaviour:
     _fireRate: 1
     _magazineSize: 8
     _currentRoundsInMag: 8
-    _amountOfMagazines: 1
+    _storedAmmo: 8
     _spawnedBullets: 5
     _reloadHintThreshhold: 4
   - _inspectorTitle: EnergyLauncher Values
@@ -50,7 +50,7 @@ MonoBehaviour:
     _fireRate: 1
     _magazineSize: 1
     _currentRoundsInMag: 1
-    _amountOfMagazines: 5
+    _storedAmmo: 5
     _spawnedBullets: 1
     _reloadHintThreshhold: 0
   _isPlayerArmed: 0
