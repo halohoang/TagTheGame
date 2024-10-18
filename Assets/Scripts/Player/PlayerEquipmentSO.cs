@@ -32,6 +32,7 @@ namespace ScriptableObjects
         [SerializeField, ReadOnly] private bool _isPlayerArmed;
 
         private List<BaseWeapon> _weapons;
+        private Dictionary<Enum_Lib.EWeaponType, int> _storedAmmoDict;
 
 
         // --- Properties ---
@@ -39,6 +40,7 @@ namespace ScriptableObjects
         internal BaseWeapon SecondWeapon { get => _secondWeapon; private set => _secondWeapon = value; }
         internal BaseWeapon BlankHands { get => _blankHands; private set => _blankHands = value; }
         internal bool IsPlayerArmed { get => _isPlayerArmed; private set => _isPlayerArmed = value; }
+        internal Dictionary<Enum_Lib.EWeaponType, int> StoredAmmoDict { get => _storedAmmoDict; private set => _storedAmmoDict = value; }
         #endregion
 
 
@@ -121,6 +123,17 @@ namespace ScriptableObjects
 
             // 2. initializing the List with the specific weapon objects and their standard values
             _weapons = new List<BaseWeapon>() { _handCannon, _sMG, _shotgun, _eLauncher };
+
+            // 2.1. initializing dictionary for stored ammo
+            StoredAmmoDict = new Dictionary<Enum_Lib.EWeaponType, int>()
+            {
+                {Enum_Lib.EWeaponType.Handcannon, _weaponValues[0].StoredAmmo},
+                {Enum_Lib.EWeaponType.SMG, _weaponValues[1].StoredAmmo},
+                {Enum_Lib.EWeaponType.Shotgun, _weaponValues[2].StoredAmmo},
+                {Enum_Lib.EWeaponType.EnergyLauncher, _weaponValues[3].StoredAmmo},
+            };
+            Debug.Log($"Stored Ammo Dictionary should have been initialized with following values: Idx 0: '{StoredAmmoDict[Enum_Lib.EWeaponType.Handcannon]}', idx 1: '{StoredAmmoDict[Enum_Lib.EWeaponType.SMG]}', " +
+                $"idx 2: '{StoredAmmoDict[Enum_Lib.EWeaponType.Shotgun]}', idx 3: {StoredAmmoDict[Enum_Lib.EWeaponType.EnergyLauncher]}");
 
             // 3. Setting the Weapons Name and Type to the '_weaponValues'-array in the inspector (accordingly to the previously instantiated List '_weaops')            
             for (int i = 0; i < _weaponValues.Length; i++) // Sets the name and weapon type of the specific array-fields in the Inspector for the Weapon
@@ -215,6 +228,24 @@ namespace ScriptableObjects
         }
 
         /// <summary>
+        /// Set the Values of the dictionary <see cref="_storedAmmoDict"/> to the ammount of picked up ammo -> add the picked up ammo to the dictionary for the specific weapons.
+        /// </summary>
+        /// <param name="weaponTyeOfAmmo">The Weapontype the pickedup ammo is for</param>
+        /// <param name="ammountofPickedUpAmmo">The actual amount of picked up ammo</param>
+        internal void AmmoPickup(Enum_Lib.EWeaponType weaponTyeOfAmmo, int ammountofPickedUpAmmo)
+        {
+            // 1. update Dictionary
+            StoredAmmoDict[weaponTyeOfAmmo] += ammountofPickedUpAmmo;
+            Debug.Log($"Stored Ammo Dictionary should have been updated with following values: Idx 0: '<color=lime>{StoredAmmoDict[Enum_Lib.EWeaponType.Handcannon]}</color>', idx 1: '<color=lime>{StoredAmmoDict[Enum_Lib.EWeaponType.SMG]}</color>', idx 2: '<color=lime>{StoredAmmoDict[Enum_Lib.EWeaponType.Shotgun]}</color>', idx 3: '<color=lime>{StoredAmmoDict[Enum_Lib.EWeaponType.EnergyLauncher]}</color>'");
+
+            // 2. update stored ammo value of first and second weapon accordingly to the respective new dictionary values only if weapon slots are not empty
+            if (FirstWeapon.WeaponType != Enum_Lib.EWeaponType.Blank)
+                FirstWeapon.StoredAmmo = StoredAmmoDict[FirstWeapon.WeaponType];
+            if (SecondWeapon.WeaponType != Enum_Lib.EWeaponType.Blank)
+                SecondWeapon.StoredAmmo = StoredAmmoDict[SecondWeapon.WeaponType];
+        }
+
+        /// <summary>
         /// Updates the the Value for <see cref="BaseWeapon.CurrentRoundsInMag"/> according to transmitted values for the specific WeaponHand (First or Second WEapon) currently selected.
         /// </summary>
         /// <param name="newRoundsInMag">The actual amount of round to be in the mag</param>
@@ -243,12 +274,16 @@ namespace ScriptableObjects
             {
                 case Enum_Lib.ESelectedWeapon.FirstWeapon:
                     FirstWeapon.StoredAmmo = newAmountOfAmmo;
+                    StoredAmmoDict[FirstWeapon.WeaponType] = newAmountOfAmmo;
                     break;
 
                 case Enum_Lib.ESelectedWeapon.SecondWeapon:
                     SecondWeapon.StoredAmmo = newAmountOfAmmo;
+                    StoredAmmoDict[SecondWeapon.WeaponType] = newAmountOfAmmo;
                     break;
             }
+
+            Debug.Log($"Stored Ammo Dictionary should have been updated with following values: Idx 0: '<color=lime>{StoredAmmoDict[Enum_Lib.EWeaponType.Handcannon]}</color>', idx 1: '<color=lime>{StoredAmmoDict[Enum_Lib.EWeaponType.SMG]}</color>', idx 2: '<color=lime>{StoredAmmoDict[Enum_Lib.EWeaponType.Shotgun]}</color>', idx 3: '<color=lime>{StoredAmmoDict[Enum_Lib.EWeaponType.EnergyLauncher]}</color>'");
         }
 
         /// <summary>
@@ -269,6 +304,20 @@ namespace ScriptableObjects
             //Debug.Log($"SwitchWeapon() was called in '{this}': Holstered Weapon: <color=magenta>'{HolsteredWeapon.WeaponType}'</color>");
             #endregion
             Debug.Log($"Equiped waepons are swapped: Weapon in Hand: <color=cyan>'{FirstWeapon.WeaponType}'</color> | Holstered Weapon: <color=magenta>'{SecondWeapon.WeaponName}'</color> | Cached Weapon (previously holsterd): <color=yellow>'{cacheWeapon.WeaponType}'</color>.");
+        }
+
+        /// <summary>
+        /// Checks and updates values for stored ammo. (checks if values for <see cref="FirstWeapon"/> and <see cref="SecondWeapon"/> are matching the respective values in <see cref="StoredAmmoDict"/>)
+        /// </summary>
+        internal void CheckAndUpdateStoredAmmoValues()
+        {   
+            // check for First Weapon
+            if (FirstWeapon.WeaponType != Enum_Lib.EWeaponType.Blank && FirstWeapon.StoredAmmo != StoredAmmoDict[FirstWeapon.WeaponType])
+                FirstWeapon.StoredAmmo = StoredAmmoDict[FirstWeapon.WeaponType];
+
+            // Check for second Weapon
+            if (SecondWeapon.WeaponType != Enum_Lib.EWeaponType.Blank && SecondWeapon.StoredAmmo != StoredAmmoDict[SecondWeapon.WeaponType])
+                SecondWeapon.StoredAmmo = StoredAmmoDict[SecondWeapon.WeaponType];
         }
 
         internal void SetIsPlayerArmed(bool isPlayerArmedStatus)

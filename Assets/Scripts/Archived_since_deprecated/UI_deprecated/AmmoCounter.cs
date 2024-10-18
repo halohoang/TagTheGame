@@ -55,13 +55,13 @@ namespace ArchivedSinceDeprecated
         {
             //PlayerWeaponHandling.OnSetBulletCount += OnBulletCountChange;
             PlayerWeaponHandling.OnBulletsInstantiated += DecreaseAmmoUI;
-            PlayerWeaponHandling.OnReload += Reload;
+            //PlayerWeaponHandling.OnReload += Reload;
         }
         private void OnDisable()
         {
             //PlayerWeaponHandling.OnSetBulletCount -= OnBulletCountChange;
             PlayerWeaponHandling.OnBulletsInstantiated -= DecreaseAmmoUI;
-            PlayerWeaponHandling.OnReload -= Reload;
+            //PlayerWeaponHandling.OnReload -= Reload;
         }
 
         private void Start()

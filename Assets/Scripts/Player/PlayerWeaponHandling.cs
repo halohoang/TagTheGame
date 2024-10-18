@@ -21,7 +21,7 @@ namespace Player
         public static event UnityAction<int/*, int*/> OnSetBulletCount;                     // invoked in 'SetBulletCount()' (when new bullet counts are (re)setted, e.g. on weapon switch/pickup); JM (08.05.24)
         public static event UnityAction<int> OnSetStoredAmmoCount;                        // invoked in 'SetMagazineCount()' (when amount of weapons magazines are (re)setted, e.g. on weapon switch or magazine-pickup)
         public static event UnityAction<int> OnBulletsInstantiated;                     // invoked in 'SpawnProjectile()' (respective during execution of 'PlayerAttackOnInput()'); JM (08.05.24)
-        public static event UnityAction<int> OnReload;                                  // invoked in 'Realoding()' (respective when Reload-Input was detected); JM (08.05.24)
+        public static event UnityAction<int, int> OnReload;                                  // invoked in 'Realoding()' (respective when Reload-Input was detected); JM (08.05.24)
         public static event UnityAction<BaseWeapon> OnWeaponEquip;                      // invoked in 'FirstWeaponEquip()', 'SecondWEaponEquip()', 'HolsterWeapon()' and 'OnCollisionEnter2D()'; JM (10.05.24)
         #endregion
 
@@ -245,7 +245,7 @@ namespace Player
             _inputReader.OnSecondWeaponEquipInput += SecondWeaponEquip;
             _inputReader.OnAttackInput += ReadAttackinput;
             _inputReader.OnAttackInputStop += ReadAttackinput;
-            _inputReader.OnReloadingInput += Realoding;            
+            _inputReader.OnReloadingInput += Realoding;
             PlayerStats.OnPlayerDeath += SetIsPlayerDead;
             PauseMenu.OnTogglePauseScene += SetIsGamePaused;
         }
@@ -332,26 +332,44 @@ namespace Player
             // Check if collision is a of Type Baseweapon, if so trigger pickup weapon
             if (collision.gameObject.TryGetComponent(out WeaponTypeObject weapon))
             {
-                // set armed boolians
-                SetWeaponEquipBools(true, true, false);
+                if (!weapon.IsAmmo) // if is weapon type object and not ammo execute logic for weapon pickup
+                {
+                    // set armed boolians
+                    SetWeaponEquipBools(true, true, false);
 
-                // set animation
-                _animatorCtrl.SetBool("Armed", _isArmed);
+                    // set animation
+                    _animatorCtrl.SetBool("Armed", _isArmed);
 
-                // call weapon pickup
-                _playerEquipmentSO.WeaponPickup(weapon.WeaponType);
+                    // call weapon pickup
+                    _playerEquipmentSO.WeaponPickup(weapon.WeaponType);
 
-                SetWeaponRespectiveValues(_playerEquipmentSO.FirstWeapon);
+                    SetWeaponRespectiveValues(_playerEquipmentSO.FirstWeapon);
 
-                // Set Animation            
-                EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
+                    // Set Animation            
+                    EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
 
-                Destroy(weapon.gameObject);
+                    // Destroy Obj
+                    Destroy(weapon.gameObject);
 
-                OnWeaponEquip?.Invoke(_playerEquipmentSO.FirstWeapon); // fire event e.g. to inform UIManager for updating UI respectively to pickedup weapon
+                    OnWeaponEquip?.Invoke(_playerEquipmentSO.FirstWeapon); // fire event e.g. to inform UIManager for updating UI respectively to pickedup weapon
 
-                _wasWeaponPickedUp = true;
-            }
+                    _wasWeaponPickedUp = true;
+                }
+                else if (weapon.IsAmmo) // if weapon type object is ammo execute logic for ammo pickup
+                {
+                    // call ammo pickup
+                    _playerEquipmentSO.AmmoPickup(weapon.WeaponType, weapon.AmountOfAmmo);
+
+                    // Destroy Obj
+                    Destroy(weapon.gameObject);
+
+                    // set values accordingly to the currently seleeted weapon for proper updating the values.
+                    if (_isFirstWeaponSelected)
+                        SetWeaponRespectiveValues(_playerEquipmentSO.FirstWeapon);
+                    else if (_isSecondWeaponSelected)
+                        SetWeaponRespectiveValues(_playerEquipmentSO.SecondWeapon);
+                }
+            }            
         }
         #endregion
 
@@ -552,20 +570,10 @@ namespace Player
         /// 4. there still must be magazines available for the currently held weapon. 5.) The current amount of rounds in the mag must be less than the max. amout of the weapons loaded magazine
         /// </summary>
         private void Realoding()
-        {            
+        {
             if (_isReloading == false && !_isShooting && !_isPlayerDead && _currentStoredAmmo > 0)
             {
-                // Todo: continue here to fix the bug regarding the wrong ammo calculation and thus buggy reloading system
-                //// 1. decrease number of stored ammo and ensure that it can't be less than '0'
-                //_currentStoredAmmo -= _maximumBulletCount - _currentBulletCount;
-                //if (_currentStoredAmmo < 0)
-                //    _currentStoredAmmo = 0;
-
-                //// 2. update amount of magazines
-                //_playerEquipmentSO.UpdateAmountOfStoredAmmo(
-                //    _isFirstWeaponSelected ? Enum_Lib.ESelectedWeapon.FirstWeapon : Enum_Lib.ESelectedWeapon.SecondWeapon, _currentStoredAmmo);
-
-                // 3. play reload sound and execute actual rounds-reloading logic
+                // play reload sound and execute actual rounds-reloading logic
                 if (_currentBulletCount < _maximumBulletCount)
                 {
                     _audioSource.PlayOneShot(_reloadSound);
@@ -579,14 +587,15 @@ namespace Player
             float timePerBullet = 1.0f / (float)_maximumBulletCount;           // Time for each bullet to enable
 
             // Play reload animation
-            Debug.Log($"For loop in Reaload Enumerator was called");
-
             for (int i = _currentBulletCount; i < _maximumBulletCount && _currentStoredAmmo > 0; i++)  // execute For as long as rounds in Mag are less than magazineSize and there is still ammo stored by the player
             {
+                _currentStoredAmmo--;
                 _currentBulletCount++;
-                Debug.Log($"For loop in Reaload Enumerator was called <color=lime>{_currentBulletCount}</color> times");
                 yield return new WaitForSeconds(timePerBullet);
-                OnReload?.Invoke(_currentBulletCount);         // informing UIManager about Reloading
+                OnReload?.Invoke(_currentBulletCount, _currentStoredAmmo);         // informing UIManager about Reloading
+
+                _playerEquipmentSO.UpdateAmountOfStoredAmmo(
+                    _isFirstWeaponSelected ? Enum_Lib.ESelectedWeapon.FirstWeapon : Enum_Lib.ESelectedWeapon.SecondWeapon, _currentStoredAmmo);
 
                 // storing the current amount of rounds in mag in ScriptableObject respective to wether First or Second Weapon is Selected
                 _playerEquipmentSO.UpdateRoundsInMag(
@@ -776,7 +785,7 @@ namespace Player
         private void SetWeaponRespectiveValues(BaseWeapon weaponSlot)
         {
             // Set bullet count and fire rate
-            SetMagazineCount(weaponSlot);
+            SetCurrentStoredAmmo(weaponSlot);
             SetBulletCount(weaponSlot);
             _fireRate = weaponSlot.FireRate;
 
@@ -820,17 +829,20 @@ namespace Player
 
             // Set UI-AmmoCounter to amount of current bullets
             OnSetBulletCount?.Invoke(_currentBulletCount/*, _maximumBulletCount*/); // informing ammocounter about changes of the max- and current bullet count
-                                                                                //_ammoCounter.CurrentAmmo = _currentBulletCount;
-                                                                                //_ammoCounter.MagazineSize = _maximumBulletCount;
-                                                                                //_ammoCounter.SetUIAmmoToActiveWeaponAmmo();
+                                                                                    //_ammoCounter.CurrentAmmo = _currentBulletCount;
+                                                                                    //_ammoCounter.MagazineSize = _maximumBulletCount;
+                                                                                    //_ammoCounter.SetUIAmmoToActiveWeaponAmmo();
         }
 
         /// <summary>
         /// Sets the <see cref="_currentStoredAmmo"/> to the stored amount of magazins of the transmitted BaseWeapon type (First/SecondWeaponSlot)
         /// </summary>
         /// <param name="weaponSlot"></param>
-        private void SetMagazineCount(BaseWeapon weaponSlot)
+        private void SetCurrentStoredAmmo(BaseWeapon weaponSlot)
         {
+            // check if needed values are updated properly
+            _playerEquipmentSO.CheckAndUpdateStoredAmmoValues();
+
             _currentStoredAmmo = weaponSlot.StoredAmmo;
 
             // Informing for Updating weapon UI to current amount of magazines

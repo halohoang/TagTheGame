@@ -121,7 +121,7 @@ namespace UI
             PlayerWeaponHandling.OnSetBulletCount += UpdateRoundsDisplay;
             PlayerWeaponHandling.OnBulletsInstantiated += UpdateRoundsDisplay;
             PlayerWeaponHandling.OnSetStoredAmmoCount += UpdateStoredAmmoDisplay;
-            PlayerWeaponHandling.OnReload += UpdateRoundsDisplay;
+            PlayerWeaponHandling.OnReload += UpdateRoundsAndStoredAmmoDisplay;
             PlayerWeaponHandling.OnWeaponEquip += UpdateWeaponDisplay;
 
             // Cheat Panel related
@@ -133,7 +133,7 @@ namespace UI
             PlayerWeaponHandling.OnSetBulletCount -= UpdateRoundsDisplay;
             PlayerWeaponHandling.OnBulletsInstantiated -= UpdateRoundsDisplay;
             PlayerWeaponHandling.OnSetStoredAmmoCount -= UpdateStoredAmmoDisplay;
-            PlayerWeaponHandling.OnReload -= UpdateRoundsDisplay;
+            PlayerWeaponHandling.OnReload -= UpdateRoundsAndStoredAmmoDisplay;
             PlayerWeaponHandling.OnWeaponEquip -= UpdateWeaponDisplay;
 
             // Cheat Panel related
@@ -166,20 +166,6 @@ namespace UI
 
             EnableDisableRealoadHintObj(_selectedWeaponReloadThreshold);
         }
-        ///// <summary>
-        ///// Updates the Ammo Display in the ingame UI-Panel respectively to the transmitted 'currentAmmo'- and 'maxAmmo'-values.
-        ///// Also checks on Updating if ReloadHintThereshold was reached.
-        ///// </summary>
-        ///// <param name="currentAmmo"></param>
-        ///// <param name="maxAmmo"></param>
-        //private void UpdateRoundsDisplay(int currentAmmo, int maxAmmo)
-        //{
-        //    _currentRoundsInMag = currentAmmo;
-        //    _maxAmmo = maxAmmo;
-        //    _roundsInMagDisplayTxt.text = $"{_currentRoundsInMag}";
-
-        //    EnableDisableRealoadHintObj(_selectedWeaponReloadThreshold);
-        //}
 
         /// <summary>
         /// Updates the Ammo Display in the ingame UI-Panel respectively to the transmitted '_currentStoredAmmo'-value.
@@ -188,6 +174,23 @@ namespace UI
         /// <param name="currentAmmo"></param>
         private void UpdateStoredAmmoDisplay(int currentAmmo)
         {
+            _currentStoredAmmo = currentAmmo;
+            _storedAmmoDisplayTxt.text = $"{_currentStoredAmmo}";
+        }
+
+        /// <summary>
+        /// Updates the Ammo Display in the ingame UI-Panel respectively to the transmitted 'currentAmmo'-value.
+        /// Also checks on Updating if ReloadHintThereshold was reached.
+        /// Updates the Ammo Display in the ingame UI-Panel respectively to the transmitted '_currentStoredAmmo'-value.
+        /// </summary>
+        /// <param name="currentRounds"></param>
+        /// <param name="currentAmmo"></param>
+        private void UpdateRoundsAndStoredAmmoDisplay(int currentRounds, int currentAmmo)
+        {
+            _currentRoundsInMag = currentRounds;
+            _roundsInMagDisplayTxt.text = $"{_currentRoundsInMag}";
+            EnableDisableRealoadHintObj(_selectedWeaponReloadThreshold);
+
             _currentStoredAmmo = currentAmmo;
             _storedAmmoDisplayTxt.text = $"{_currentStoredAmmo}";
         }
