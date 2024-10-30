@@ -231,11 +231,11 @@ namespace ScriptableObjects
         /// Set the Values of the dictionary <see cref="_storedAmmoDict"/> to the ammount of picked up ammo -> add the picked up ammo to the dictionary for the specific weapons.
         /// </summary>
         /// <param name="weaponTyeOfAmmo">The Weapontype the pickedup ammo is for</param>
-        /// <param name="ammountofPickedUpAmmo">The actual amount of picked up ammo</param>
-        internal void AmmoPickup(Enum_Lib.EWeaponType weaponTyeOfAmmo, int ammountofPickedUpAmmo)
+        /// <param name="ammountOfPickedUpAmmo">The actual amount of picked up ammo</param>
+        internal void AmmoPickup(Enum_Lib.EWeaponType weaponTyeOfAmmo, int ammountOfPickedUpAmmo)
         {
             // 1. update Dictionary
-            StoredAmmoDict[weaponTyeOfAmmo] += ammountofPickedUpAmmo;
+            StoredAmmoDict[weaponTyeOfAmmo] += ammountOfPickedUpAmmo;
             Debug.Log($"Stored Ammo Dictionary should have been updated with following values: Idx 0: '<color=lime>{StoredAmmoDict[Enum_Lib.EWeaponType.Handcannon]}</color>', idx 1: '<color=lime>{StoredAmmoDict[Enum_Lib.EWeaponType.SMG]}</color>', idx 2: '<color=lime>{StoredAmmoDict[Enum_Lib.EWeaponType.Shotgun]}</color>', idx 3: '<color=lime>{StoredAmmoDict[Enum_Lib.EWeaponType.EnergyLauncher]}</color>'");
 
             // 2. update stored ammo value of first and second weapon accordingly to the respective new dictionary values only if weapon slots are not empty

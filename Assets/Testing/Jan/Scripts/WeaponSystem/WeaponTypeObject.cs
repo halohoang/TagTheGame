@@ -21,5 +21,5 @@ public class WeaponTypeObject : MonoBehaviour
     // --- Properties ---
     internal Enum_Lib.EWeaponType WeaponType { get => _weaponType; private set => _weaponType = value; }    // for getting the Name of the specific weapon object
     internal bool IsAmmo { get => _isAmmo; private set => _isAmmo = value; }
-    public int AmountOfAmmo { get => _amountOfAmmo; private set => _amountOfAmmo = value; }
+    internal int AmountOfAmmo { get => _amountOfAmmo; private set => _amountOfAmmo = value; }
 }

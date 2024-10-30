@@ -324,10 +324,10 @@ namespace Player
         }
 
         /// <summary>
-        /// CollisionCheck for recognizing collision with WeaponObject
+        /// Works actually as a CollisionCheck for recognizing collision with WeaponObject or AmmoObjects
         /// </summary>
         /// <param name="collision"></param>
-        private void OnCollisionEnter2D(Collision2D collision)
+        private void OnTriggerEnter2D(Collider2D collision)
         {
             // Check if collision is a of Type Baseweapon, if so trigger pickup weapon
             if (collision.gameObject.TryGetComponent(out WeaponTypeObject weapon))
@@ -369,8 +369,60 @@ namespace Player
                     else if (_isSecondWeaponSelected)
                         SetWeaponRespectiveValues(_playerEquipmentSO.SecondWeapon);
                 }
-            }            
+            }
         }
+
+        #region OldCollisionCheck
+        /// <summary>
+        /// CollisionCheck for recognizing collision with WeaponObject
+        /// </summary>
+        /// <param name="collision"></param>
+        //private void OnCollisionEnter2D(Collision2D collision)
+        //{
+        //    // Check if collision is a of Type Baseweapon, if so trigger pickup weapon
+        //    if (collision.gameObject.TryGetComponent(out WeaponTypeObject weapon))
+        //    {
+        //        if (!weapon.IsAmmo) // if is weapon type object and not ammo execute logic for weapon pickup
+        //        {
+        //            // set armed boolians
+        //            SetWeaponEquipBools(true, true, false);
+
+        //            // set animation
+        //            _animatorCtrl.SetBool("Armed", _isArmed);
+
+        //            // call weapon pickup
+        //            _playerEquipmentSO.WeaponPickup(weapon.WeaponType);
+
+        //            SetWeaponRespectiveValues(_playerEquipmentSO.FirstWeapon);
+
+        //            // Set Animation            
+        //            EquipWeaponAnimation(_isArmed, _playerEquipmentSO.FirstWeapon.WeaponType);
+
+        //            // Destroy Obj
+        //            Destroy(weapon.gameObject);
+
+        //            OnWeaponEquip?.Invoke(_playerEquipmentSO.FirstWeapon); // fire event e.g. to inform UIManager for updating UI respectively to pickedup weapon
+
+        //            _wasWeaponPickedUp = true;
+        //        }
+        //        else if (weapon.IsAmmo) // if weapon type object is ammo execute logic for ammo pickup
+        //        {
+        //            // call ammo pickup
+        //            _playerEquipmentSO.AmmoPickup(weapon.WeaponType, weapon.AmountOfAmmo);
+
+        //            // Destroy Obj
+        //            Destroy(weapon.gameObject);
+
+        //            // set values accordingly to the currently seleeted weapon for proper updating the values.
+        //            if (_isFirstWeaponSelected)
+        //                SetWeaponRespectiveValues(_playerEquipmentSO.FirstWeapon);
+        //            else if (_isSecondWeaponSelected)
+        //                SetWeaponRespectiveValues(_playerEquipmentSO.SecondWeapon);
+        //        }
+        //    }            
+        //}
+        #endregion
+
         #endregion
 
         #region Custom Methods
