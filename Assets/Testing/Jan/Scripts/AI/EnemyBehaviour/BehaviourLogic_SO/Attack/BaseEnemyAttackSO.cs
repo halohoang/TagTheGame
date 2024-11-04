@@ -52,18 +52,18 @@ namespace ScriptableObjects
         //    _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         //}
 
-        public virtual void ExecuteEnterLogic() 
+        public virtual void ExecuteOnEnterState() 
         {
             // get references
             _thisEnemyRB2D = _behaviourCtrl.gameObject.GetComponent<Rigidbody2D>();
         }
 
-        public virtual void ExecuteExitLogic()
+        public virtual void ExecuteOnExitState()
         {
             ResetValues();
         }
 
-        public virtual void ExecuteFrameUpdateLogic() 
+        public virtual void ExecuteFrameUpdate() 
         {
             // facing Player Position
             Vector2 direction = (_behaviourCtrl.TargetObject.transform.position - _behaviourCtrl.transform.position).normalized;
@@ -76,8 +76,8 @@ namespace ScriptableObjects
             #endregion
         }
 
-        public virtual void ExecutePhysicsUpdateLogic() { }
-        public virtual void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe) { }
+        public virtual void ExecutePhysicsUpdate() { }
+        public virtual void ExecuteOnAnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerTyoe) { }
         public virtual void ResetValues() { }
         #endregion
     }

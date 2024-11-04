@@ -8,18 +8,19 @@ namespace StateMashine
     {
         protected NPCStateMachine _enemyStateMachine;
         protected NPCBehaviourController _behaviourCtrl;
-        private string stateName;
+        private string _stateName;
 
-        public string StateName { get => stateName; protected set => stateName = value; }
+        public string StateName { get => _stateName; protected set => _stateName = value; }
 
         //protected MeleeEnemyBehaviour _meleeEnemyBehav;
         //protected RangeEnemyBehaviour _rangeEnemyBehav;
 
-        public BaseState(NPCBehaviourController enemyBehav, NPCStateMachine enemyStaMa)
+        public BaseState(NPCBehaviourController enemyBehav, NPCStateMachine enemyStaMa, string stateName)
         {
             // setup Variables (using 'this'-Keyword just for visible clarification and simpler understanding)
             this._behaviourCtrl = enemyBehav;
             this._enemyStateMachine = enemyStaMa;
+            this._stateName = stateName;
         }
 
         //public BaseState(MeleeEnemyBehaviour meleeEnemyBehaviour, EnemyStateMachine enemyStaMa)

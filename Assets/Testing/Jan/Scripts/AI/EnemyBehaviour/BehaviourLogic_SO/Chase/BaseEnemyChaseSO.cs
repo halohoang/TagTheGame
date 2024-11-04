@@ -52,7 +52,7 @@ namespace ScriptableObjects
         //    _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         //}
 
-        public virtual void ExecuteEnterLogic()
+        public virtual void ExecuteOnEnterState()
         {
             // get references
             if (_thisEnemyRB2D == null)
@@ -62,7 +62,7 @@ namespace ScriptableObjects
             _behaviourCtrl.NavAgent.speed = _behaviourCtrl.ChasingSpeed;
         }
 
-        public virtual void ExecuteExitLogic()
+        public virtual void ExecuteOnExitState()
         {
             // setup NavMeshAgent Properties
             _behaviourCtrl.NavAgent.speed = _behaviourCtrl.MovementSpeed;
@@ -70,7 +70,7 @@ namespace ScriptableObjects
             ResetValues();
         }
 
-        public virtual void ExecuteFrameUpdateLogic()
+        public virtual void ExecuteFrameUpdate()
         {
             // facing towards Player Position
             Vector2 direction = (_behaviourCtrl.TargetObject.transform.position - _behaviourCtrl.transform.position).normalized;
@@ -83,8 +83,8 @@ namespace ScriptableObjects
             #endregion                        
         }
 
-        public virtual void ExecutePhysicsUpdateLogic() { }
-        public virtual void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe) { }
+        public virtual void ExecutePhysicsUpdate() { }
+        public virtual void ExecuteOnAnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerTyoe) { }
         public virtual void ResetValues() { }
         #endregion
     }

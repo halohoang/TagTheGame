@@ -1,4 +1,4 @@
-using Enemies;
+﻿using Enemies;
 using EnumLibrary;
 
 namespace StateMashine
@@ -9,41 +9,41 @@ namespace StateMashine
     /// </summary>
     public class IdleState : BaseState
     {
-        public IdleState(NPCBehaviourController behavCtrl, NPCStateMachine enemySM) : base(behavCtrl, enemySM)
+        public IdleState(NPCBehaviourController behavCtrl, NPCStateMachine enemySM) : base(behavCtrl, enemySM, "IdleState")
         {
-            StateName = "IdleState";
+            
         }
-        public IdleState(MeleeEnemyBehavCtrl meleeEnemyBehav, NPCStateMachine enemySM) : base (meleeEnemyBehav, enemySM) 
+        public IdleState(MeleeEnemyBehavCtrl meleeEnemyBehav, NPCStateMachine enemySM) : base (meleeEnemyBehav, enemySM, "IdleState") 
         {
-            StateName = "IdleState";
+            
         }
-        public IdleState(RangeEnemyBehavCtrl rangeEnemyBehav, NPCStateMachine enemySM) : base(rangeEnemyBehav, enemySM)
+        public IdleState(RangeEnemyBehavCtrl rangeEnemyBehav, NPCStateMachine enemySM) : base(rangeEnemyBehav, enemySM, "IdleState")
         {
-            StateName = "IdleState";
+            
         }
 
         public override void EnterState()
         {
             base.EnterState();
 
-            // caling the actual Behaviour of the State-ScriptableObjects
-            _behaviourCtrl.BaseEnemyIdleStateSOInstance.ExecuteEnterLogic();
+            // calling the actual Behaviour of the State-ScriptableObjects
+            _behaviourCtrl.BaseEnemyIdleStateSOInstance.ExecuteOnE﻿nterState();
         }
 
         public override void ExitState()
         {
             base.ExitState();
 
-            // caling the actual Behaviour of the State-ScriptableObjects
-            _behaviourCtrl.BaseEnemyIdleStateSOInstance.ExecuteExitLogic();
+            // calling the actual Behaviour of the State-ScriptableObjects
+            _behaviourCtrl.BaseEnemyIdleStateSOInstance.ExecuteOnExitState();
         }
 
         public override void FrameUpdate()
         {
             base.FrameUpdate();
 
-            // caling the actual Behaviour of the State-ScriptableObjects
-            _behaviourCtrl.BaseEnemyIdleStateSOInstance.ExecuteFrameUpdateLogic();
+            // calling the actual Behaviour of the State-ScriptableObjects
+            _behaviourCtrl.BaseEnemyIdleStateSOInstance.ExecuteFrameUpdate();
 
             #region OldCode
             //// Switch State from Idle to ChaseState when Player is Detected
@@ -59,16 +59,16 @@ namespace StateMashine
         {
             base.PhysicsUpdate();
 
-            // caling the actual Behaviour of the State-ScriptableObjects
-            _behaviourCtrl.BaseEnemyIdleStateSOInstance.ExecutePhysicsUpdateLogic();
+            // calling the actual Behaviour of the State-ScriptableObjects
+            _behaviourCtrl.BaseEnemyIdleStateSOInstance.ExecutePhysicsUpdate();
         }
 
         public override void AnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerType)
         {
             base.AnimationTriggerEvent(animTriggerType);
 
-            // caling the actual Behaviour of the State-ScriptableObjects
-            _behaviourCtrl.BaseEnemyIdleStateSOInstance.ExecuteAnimationTriggerEventLogic(animTriggerType);
+            // calling the actual Behaviour of the State-ScriptableObjects
+            _behaviourCtrl.BaseEnemyIdleStateSOInstance.ExecuteOnAnim﻿﻿ationTriggerEvent(animTriggerType);
         }
     }
 }

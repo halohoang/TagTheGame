@@ -19,7 +19,7 @@ namespace StateMashine
             CurrentState = initialState;
             CurrentState.EnterState();
 
-            OnStateTransition?.Invoke(CurrentState.StateName);
+            OnStateTransition?.Invoke(CurrentState.StateName);  // transmit StateName to BehavCtrl for showing in isnpector which state the enemyObj, is currently in
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-using Enemies;
+﻿using Enemies;
 using EnumLibrary;
 using UnityEngine;
 
@@ -53,17 +53,17 @@ namespace ScriptableObjects
         //    _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         //}
 
-        public virtual void ExecuteEnterLogic()
+        public virtual void ExecuteOnE﻿nterState()
         {
             FaceAgentTowardsAlarmingEvent(_behaviourCtrl.PositionOfAlarmingEvent, _behaviourCtrl.NoiseRangeOfAlarmingEvent);            
         }
 
-        public virtual void ExecuteExitLogic()
+        public virtual void ExecuteOnExitState()
         {
             ResetValues();
         }
 
-        public virtual void ExecuteFrameUpdateLogic()
+        public virtual void Execute﻿FrameUpdate()
         {
             // Transition-Condition-Check
             if (_behaviourCtrl.IsTargetDetected)
@@ -78,8 +78,8 @@ namespace ScriptableObjects
                 FaceAgentTowardsAlarmingEvent(_behaviourCtrl.PositionOfAlarmingEvent, _behaviourCtrl.NoiseRangeOfAlarmingEvent);
         }
 
-        public virtual void ExecutePhysicsUpdateLogic() { }
-        public virtual void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe) { }
+        public virtual void ExecutePhysicsUpdate() { }
+        public virtual void ExecuteOnAnim﻿ationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerTyoe) { }
 
         public virtual void ResetValues()
         {

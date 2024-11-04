@@ -1,4 +1,4 @@
-using Enemies;
+﻿using Enemies;
 using EnumLibrary;
 using UnityEngine;
 using UnityEngine.Events;
@@ -79,9 +79,9 @@ namespace ScriptableObjects
         //    base.Initialize(enemyObj, rangeEnemyBehav);
         //}
 
-        public override void ExecuteEnterLogic()
+        public override void ExecuteOnE﻿nterState()
         {
-            base.ExecuteEnterLogic();
+            base.ExecuteOnE﻿nterState();
 
             // referencing
             _thisEnemyRB2D = _behaviourCtrl.gameObject.GetComponent<Rigidbody2D>();
@@ -102,9 +102,9 @@ namespace ScriptableObjects
             _behaviourCtrl.Animator.SetBool("Engage", true);
         }
 
-        public override void ExecuteExitLogic()
+        public override void ExecuteOnExitState()
         {
-            base.ExecuteExitLogic();
+            base.ExecuteOnExitState();
 
             _isMoving = false;
 
@@ -112,9 +112,9 @@ namespace ScriptableObjects
             _behaviourCtrl.Animator.SetBool("Engage", false);
         }
 
-        public override void ExecuteFrameUpdateLogic()
+        public override void ExecuteFrameUpdate()
         {
-            base.ExecuteFrameUpdateLogic();            
+            base.ExecuteFrameUpdate();            
 
             // Setup Timer
             Timer += Time.deltaTime;
@@ -129,9 +129,9 @@ namespace ScriptableObjects
             _behaviourCtrl.SetIsCollidingWithObject(false);    // reset bool is collidion with other enemy so at the end of an update cycly so the AI actually has a chance to wolk another direction
         }
 
-        public override void ExecutePhysicsUpdateLogic()
+        public override void ExecutePhysicsUpdate()
         {
-            base.ExecutePhysicsUpdateLogic();
+            base.ExecutePhysicsUpdate();
 
             if (Physics2D.Raycast(_behaviourCtrl.transform.position, WalkTargetPos - _behaviourCtrl.transform.position, _distanceToCheckForObstacles, _obstacleMask))
             {
@@ -147,9 +147,9 @@ namespace ScriptableObjects
                 IsMovingToCloseToObstacle = false;
         }        
 
-        public override void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe)
+        public override void ExecuteOnAnim﻿﻿ationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerTyoe)
         {
-            base.ExecuteAnimationTriggerEventLogic(animTriggerTyoe);
+            base.ExecuteOnAnim﻿﻿ationTriggerEvent(animTriggerTyoe);
         }
 
         public override void ResetValues()
@@ -172,7 +172,7 @@ namespace ScriptableObjects
                 _behaviourCtrl.Animator.SetBool("Engage", false);
                 _walkTargedPos = _behaviourCtrl.gameObject.transform.position;
 
-                Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': since EnemyObj collided with�an obstacle, movement was stoped currently. new movementdirection will be calculated");
+                Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': since EnemyObj collided with´an obstacle, movement was stoped currently. new movementdirection will be calculated");
             }
             else if (Timer > _rndWalktime)               // is Timmer out of Time
             {

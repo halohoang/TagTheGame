@@ -29,6 +29,21 @@ public class BaseWeapon
     internal int ReloadHintThreshhold { get => _reloadHintThreshhold; set => _reloadHintThreshhold = value; }
 
 
+    // ---------- Constructor ----------
+    // Todo: creaete Base-Class Constructor and do the Value-Initializing via the ': base(...)'
+    //public BaseWeapon(string weaponName, Enum_Lib.EWeaponType weaponType, float weaponDamage, float fireRate, int magazineSize, int currentRoundsInMag, int storedAmmo, int spawnedBullets, int reloadHintThreshold)
+    //{
+    //    _weaponName = weaponName;
+    //    _weaponType = weaponType;
+    //    _weaponDamage = weaponDamage;
+    //    _fireRate = fireRate;
+    //    _magazineSize = magazineSize;
+    //    _currentRoundsInMag = currentRoundsInMag;
+    //    _storedAmmo = storedAmmo;
+    //    _spawnedBullets = spawnedBullets;
+    //    _reloadHintThreshhold = reloadHintThreshold;
+    //}
+
     // ---------- Methods ----------
     /// <summary>
     /// Sets the Values for weapon name and weapon type

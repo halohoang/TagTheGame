@@ -23,18 +23,20 @@ namespace Enemies
         [SerializeField, ReadOnly] private NavMeshAgent _navAgent;
         [SerializeField, ReadOnly] private Animator _animator;
         [SerializeField, ReadOnly] private GameObject _targetObject;
-        [SerializeField, ReadOnly] private ConditionPlayerDetectionCheck _condPlayerDetectionCheck;
-        [SerializeField, ReadOnly] private ConditionIsInMeleeAttackRangeCheck _condMeleeAttackCheck;    // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
+        [SerializeField, ReadOnly] private ConditionPlayerDetectionCheck _condPlayerDetectionCheck;     // Todo: obsolete with new perception System, remove as soon as completely changed to new system
+        [SerializeField, ReadOnly] private ConditionIsInMeleeAttackRangeCheck _condMeleeAttackCheck;    // Todo: obsolete with new perception System, remove as soon as completely changed to new system
         [Space(5)]
 
-        [Header("References to Behaviour ScriptableObjects")]
+        [Header("References to Behaviour ScriptableObjects")] // Todo: think about bool -> _isPatrolingEnemy that enables/disables patroling state; JM (04.11.24)
         [SerializeField] private BaseEnemyIdleSO _baseIdleStateSO;
+        //[SerializeField] private ... _baseMovemenStateSO;
         [SerializeField] private BaseEnemyAlertSO _baseAlertStateSO;
         [SerializeField] private BaseEnemyChaseSO _baseChaseStateSO;
         [SerializeField] private BaseEnemyAttackSO _baseAttackStateSO;
 
         // properties for Base behaviour scriptable objects to store copies of the respective above referenced ones
         public BaseEnemyIdleSO BaseEnemyIdleStateSOInstance { get; set; }
+        //public ... BaseEnemyMovementStateSOInstance { get; set; }
         public BaseEnemyAlertSO BaseEnemyAlertStateSOInstance { get; set; }
         public BaseEnemyChaseSO BaseEnemyChaseStateSOInstance { get; set; }
         public BaseEnemyAttackSO BaseEnemyAttackStateSOInstance { get; set; }
@@ -63,6 +65,7 @@ namespace Enemies
         // StateMachine-Related Variables
         private NPCStateMachine _stateMachine;
         private IdleState _idleState;
+        private MovementState _movementState;
         private AlertState _alertState;
         private ChaseState _chaseState;
         private AttackState _attackState;
@@ -93,6 +96,7 @@ namespace Enemies
         // StateMachine-Related
         public NPCStateMachine StateMachine { get => _stateMachine; set => _stateMachine = value; }
         public IdleState IdleState { get => _idleState; set => _idleState = value; }
+        public MovementState MovementState { get => _movementState; set => _movementState= value; }
         public AlertState AlertState { get => _alertState; set => _alertState = value; }
         public ChaseState ChaseState { get => _chaseState; set => _chaseState = value; }
         public AttackState AttackState { get => _attackState; set => _attackState = value; }
@@ -130,6 +134,7 @@ namespace Enemies
             // Variable Initialization
             StateMachine = new NPCStateMachine();
             IdleState = new IdleState(this, StateMachine);
+            MovementState = new MovementState(this, StateMachine);
             AlertState = new AlertState(this, StateMachine);
             ChaseState = new ChaseState(this, StateMachine);
             AttackState = new AttackState(this, StateMachine);

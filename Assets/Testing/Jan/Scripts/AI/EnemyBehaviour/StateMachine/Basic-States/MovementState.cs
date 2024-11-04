@@ -3,19 +3,19 @@ using EnumLibrary;
 
 namespace StateMashine
 {
-    public class AlertState : BaseState
+    public class MovementState : BaseState
     {
-        public AlertState(NPCBehaviourController behavCtrl, NPCStateMachine enemySM) : base(behavCtrl, enemySM, "AlertState")
+        public MovementState(NPCBehaviourController behavCtrl, NPCStateMachine enemySM) : base(behavCtrl, enemySM, "MovementState")
+        {
+            
+        }
+        public MovementState(MeleeEnemyBehavCtrl meleeEnemyBehav, NPCStateMachine enemySM) : base(meleeEnemyBehav, enemySM, "MovementState")
+        {
+            
+        }
+        public MovementState(RangeEnemyBehavCtrl rangeEnemyBehav, NPCStateMachine enemySM) : base(rangeEnemyBehav, enemySM, "MovementState")
         {
            
-        }
-        public AlertState(MeleeEnemyBehavCtrl meleeEnemyBehav, NPCStateMachine enemySM) : base(meleeEnemyBehav, enemySM, "AlertState")
-        {
-            
-        }
-        public AlertState(RangeEnemyBehavCtrl rangeEnemyBehav, NPCStateMachine enemySM) : base(rangeEnemyBehav, enemySM, "AlertState")
-        {
-            
         }
 
         public override void EnterState()
@@ -23,7 +23,7 @@ namespace StateMashine
             base.EnterState();
 
             // calling the actual Behaviour of the State-ScriptableObjects
-            _behaviourCtrl.BaseEnemyAlertStateSOInstance.ExecuteOnEnterState();
+            _behaviourCtrl.BaseEnemyIdleStateSOInstance.ExecuteOnE﻿nterState();
         }
 
         public override void ExitState()
@@ -31,7 +31,7 @@ namespace StateMashine
             base.ExitState();
 
             // calling the actual Behaviour of the State-ScriptableObjects
-            _behaviourCtrl.BaseEnemyAlertStateSOInstance.ExecuteOnExitState();
+            _behaviourCtrl.BaseEnemyIdleStateSOInstance.ExecuteOnExitState();
         }
 
         public override void FrameUpdate()
@@ -39,7 +39,7 @@ namespace StateMashine
             base.FrameUpdate();
 
             // calling the actual Behaviour of the State-ScriptableObjects
-            _behaviourCtrl.BaseEnemyAlertStateSOInstance.Execute﻿FrameUpdate();
+            _behaviourCtrl.BaseEnemyIdleStateSOInstance.ExecuteFrameUpdate();
         }
 
         public override void PhysicsUpdate()
@@ -47,7 +47,7 @@ namespace StateMashine
             base.PhysicsUpdate();
 
             // calling the actual Behaviour of the State-ScriptableObjects
-            _behaviourCtrl.BaseEnemyAlertStateSOInstance.ExecutePhysicsUpdate();
+            _behaviourCtrl.BaseEnemyIdleStateSOInstance.ExecutePhysicsUpdate();
         }
 
         public override void AnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerType)
@@ -55,7 +55,7 @@ namespace StateMashine
             base.AnimationTriggerEvent(animTriggerType);
 
             // calling the actual Behaviour of the State-ScriptableObjects
-            _behaviourCtrl.BaseEnemyAlertStateSOInstance.ExecuteOnAnim﻿ationTriggerEvent(animTriggerType);
+            _behaviourCtrl.BaseEnemyIdleStateSOInstance.ExecuteOnAnim﻿﻿ationTriggerEvent(animTriggerType);
         }
     }
 }

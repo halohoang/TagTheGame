@@ -2,7 +2,9 @@ using EnumLibrary;
 
 public class ShotGun : BaseWeapon
 {
-    public ShotGun(string weaponName, Enum_Lib.EWeaponType weaponType, float weaponDamage, float fireRate, int magazineSize, int currentRoundsInMag, int storedAmmo, int spawnedBullets, int reloadHintThreshold)
+    // Todo: creaete Base-Class Constructor and do the Value-Initializing via the ': base(...)'
+    public ShotGun(string weaponName, Enum_Lib.EWeaponType weaponType, float weaponDamage, float fireRate, int magazineSize, int currentRoundsInMag, int storedAmmo, int spawnedBullets, int reloadHintThreshold) 
+        //: base(weaponName, weaponType, weaponDamage, fireRate, magazineSize, currentRoundsInMag, storedAmmo, spawnedBullets, reloadHintThreshold)
     {
         _weaponName = weaponName;
         _weaponType = weaponType;

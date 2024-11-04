@@ -1,4 +1,4 @@
-using Enemies;
+﻿using Enemies;
 using EnumLibrary;
 using UnityEngine;
 
@@ -20,19 +20,19 @@ namespace ScriptableObjects
         //    base.Initialize(enemyObj, rangeEnemyBehav);
         //}
 
-        public override void ExecuteEnterLogic()
+        public override void ExecuteOnEnterState()
         {
-            base.ExecuteEnterLogic();
+            base.ExecuteOnEnterState();
         }
 
-        public override void ExecuteExitLogic()
+        public override void ExecuteOnExitState()
         {
-            base.ExecuteExitLogic();
+            base.ExecuteOnExitState();
         }
 
-        public override void ExecuteFrameUpdateLogic()
+        public override void Execute﻿FrameUpdate()
         {
-            base.ExecuteFrameUpdateLogic();
+            base.Execute﻿FrameUpdate();
 
             // Transition-Check; If Player is detected change to Attack State (shooting)
             if (_behaviourCtrl.IsTargetDetected)
@@ -43,14 +43,14 @@ namespace ScriptableObjects
             }
         }
 
-        public override void ExecutePhysicsUpdateLogic()
+        public override void ExecutePhysicsUpdate()
         {
-            base.ExecutePhysicsUpdateLogic();
+            base.ExecutePhysicsUpdate();
         }
         
-        public override void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe)
+        public override void ExecuteOnAnim﻿ationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerTyoe)
         {
-            base.ExecuteAnimationTriggerEventLogic(animTriggerTyoe);
+            base.ExecuteOnAnim﻿ationTriggerEvent(animTriggerTyoe);
         }
 
         public override void ResetValues()

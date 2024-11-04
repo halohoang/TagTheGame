@@ -35,9 +35,9 @@ namespace ScriptableObjects
         //    base.Initialize(enemyObj, rangeEnemyBehav);
         //}
 
-        public override void ExecuteEnterLogic()
+        public override void ExecuteOnEnterState()
         {
-            base.ExecuteEnterLogic();
+            base.ExecuteOnEnterState();
 
             // setup NavMeshAgent Properties
             //_enemyBehaviour.NavAgent.speed = _enemyBehaviour.ChasingSpeed;
@@ -49,9 +49,9 @@ namespace ScriptableObjects
             _playerStatsComp = _behaviourCtrl.TargetObject.GetComponent<PlayerStats>();
         }
 
-        public override void ExecuteExitLogic()
+        public override void ExecuteOnExitState()
         {
-            base.ExecuteExitLogic();
+            base.ExecuteOnExitState();
 
             // setup NavMeshAgent Properties
             //_enemyBehaviour.NavAgent.speed = _enemyBehaviour.MovementSpeed;
@@ -60,9 +60,9 @@ namespace ScriptableObjects
             _behaviourCtrl.Animator.SetBool("Attack", false);
         }
 
-        public override void ExecuteFrameUpdateLogic()
+        public override void ExecuteFrameUpdate()
         {
-            base.ExecuteFrameUpdateLogic();
+            base.ExecuteFrameUpdate();
 
             if (_behaviourCtrl.IsInAttackRange)
             {
@@ -79,14 +79,14 @@ namespace ScriptableObjects
             }
         }
 
-        public override void ExecutePhysicsUpdateLogic()
+        public override void ExecutePhysicsUpdate()
         {
-            base.ExecutePhysicsUpdateLogic();
+            base.ExecutePhysicsUpdate();
         }
 
-        public override void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe)
+        public override void ExecuteOnAnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerTyoe)
         {
-            base.ExecuteAnimationTriggerEventLogic(animTriggerTyoe);
+            base.ExecuteOnAnimationTriggerEvent(animTriggerTyoe);
         }
 
         public override void ResetValues()

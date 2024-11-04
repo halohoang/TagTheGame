@@ -21,26 +21,26 @@ namespace ScriptableObjects
         //    base.Initialize(enemyObj, rangeEnemyBehav);
         //}
 
-        public override void ExecuteEnterLogic()
+        public override void ExecuteOnEnterState()
         {
-            base.ExecuteEnterLogic();
+            base.ExecuteOnEnterState();
 
             // Set proper Animation
             _behaviourCtrl.Animator.SetBool("Patrol", true);
         }
 
-        public override void ExecuteExitLogic()
+        public override void ExecuteOnExitState()
         {
-            base.ExecuteExitLogic();
+            base.ExecuteOnExitState();
 
             // Set proper Animation
             _behaviourCtrl.Animator.SetBool("Patrol", false);
         }
 
-        public override void ExecuteFrameUpdateLogic()
+        public override void ExecuteFrameUpdate()
         {
             // set facing direection via calling 'base.baseFrameUpdate()'
-            base.ExecuteFrameUpdateLogic();                       
+            base.ExecuteFrameUpdate();                       
 
             // Set Movement-Destination for NavMeshAgent
             _behaviourCtrl.NavAgent.SetDestination(_behaviourCtrl.LastKnowntargetPos);
@@ -69,14 +69,14 @@ namespace ScriptableObjects
             }
         }
 
-        public override void ExecutePhysicsUpdateLogic()
+        public override void ExecutePhysicsUpdate()
         {
-            base.ExecutePhysicsUpdateLogic();
+            base.ExecutePhysicsUpdate();
         }
                 
-        public override void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe)
+        public override void ExecuteOnAnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerTyoe)
         {
-            base.ExecuteAnimationTriggerEventLogic(animTriggerTyoe);
+            base.ExecuteOnAnimationTriggerEvent(animTriggerTyoe);
         }
 
         public override void ResetValues()

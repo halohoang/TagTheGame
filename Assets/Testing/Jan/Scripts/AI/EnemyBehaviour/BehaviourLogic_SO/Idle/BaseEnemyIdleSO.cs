@@ -1,4 +1,4 @@
-using Enemies;
+﻿using Enemies;
 using EnumLibrary;
 using UnityEngine;
 
@@ -12,8 +12,8 @@ namespace ScriptableObjects
         //--------------------------------------
 
         protected NPCBehaviourController _behaviourCtrl;
-        protected MeleeEnemyBehavCtrl _meleeEnemyBehaviour;
-        protected RangeEnemyBehavCtrl _rangeEnemyBehaviour;
+        //protected MeleeEnemyBehavCtrl _meleeEnemyBehaviour;
+        //protected RangeEnemyBehavCtrl _rangeEnemyBehaviour;
         protected Transform _transform;
         protected GameObject _gameObject;
 
@@ -33,30 +33,30 @@ namespace ScriptableObjects
 
             _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         }
-        public virtual void Initialize(GameObject enemyObj, MeleeEnemyBehavCtrl meleeEnemyBehav)
-        {
-            this._gameObject = enemyObj;
-            this._transform = enemyObj.transform;
-            this._meleeEnemyBehaviour = meleeEnemyBehav;
+        //public virtual void Initialize(GameObject enemyObj, MeleeEnemyBehavCtrl meleeEnemyBehav)
+        //{
+        //    this._gameObject = enemyObj;
+        //    this._transform = enemyObj.transform;
+        //    this._meleeEnemyBehaviour = meleeEnemyBehav;
 
-            _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        }
-        public virtual void Initialize(GameObject enemyObj, RangeEnemyBehavCtrl rangeEnemyBehav)
-        {
-            this._gameObject = enemyObj;
-            this._transform = enemyObj.transform;
-            this._rangeEnemyBehaviour = rangeEnemyBehav;
+        //    _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        //}
+        //public virtual void Initialize(GameObject enemyObj, RangeEnemyBehavCtrl rangeEnemyBehav)
+        //{
+        //    this._gameObject = enemyObj;
+        //    this._transform = enemyObj.transform;
+        //    this._rangeEnemyBehaviour = rangeEnemyBehav;
 
-            _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        }
+        //    _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        //}
 
-        public virtual void ExecuteEnterLogic() { }
-        public virtual void ExecuteExitLogic()
+        public virtual void ExecuteOnE﻿nterState() { }
+        public virtual void ExecuteOnExitState()
         {
             ResetValues();
         }
 
-        public virtual void ExecuteFrameUpdateLogic()
+        public virtual void ExecuteFrameUpdate()
         {
             // Transitionchecks 
             // Switch State from Idle to AlertState when something alarming is happening (e.g. door kick in, player shoots etc.) and Agent is in noise range
@@ -74,8 +74,8 @@ namespace ScriptableObjects
             }
         }
 
-        public virtual void ExecutePhysicsUpdateLogic() { }
-        public virtual void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe) { }
+        public virtual void ExecutePhysicsUpdate() { }
+        public virtual void ExecuteOnAnim﻿﻿ationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerTyoe) { }
         public virtual void ResetValues() { }
 
         #endregion

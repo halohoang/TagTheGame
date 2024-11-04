@@ -45,9 +45,9 @@ namespace ScriptableObjects
         //    base.Initialize(enemyObj, rangeEnemyBehav);
         //}
 
-        public override void ExecuteEnterLogic()
+        public override void ExecuteOnEnterState()
         {
-            base.ExecuteEnterLogic();
+            base.ExecuteOnEnterState();
 
             IsAttacking = true;
 
@@ -58,9 +58,9 @@ namespace ScriptableObjects
             _behaviourCtrl.Animator.SetBool("Engage", IsAttacking);
         }        
 
-        public override void ExecuteExitLogic()
+        public override void ExecuteOnExitState()
         {
-            base.ExecuteExitLogic();
+            base.ExecuteOnExitState();
 
             IsAttacking = false;
 
@@ -68,9 +68,9 @@ namespace ScriptableObjects
             _behaviourCtrl.Animator.SetBool("Engage", IsAttacking);
         }
 
-        public override void ExecuteFrameUpdateLogic()
+        public override void ExecuteFrameUpdate()
         {
-            base.ExecuteFrameUpdateLogic();
+            base.ExecuteFrameUpdate();
 
             // shoot logic:
             // 1) Caching PlayerPosition and Transitioncheck (is player still detected, if not -> switch to chase state (running towards last known position of player))
@@ -91,14 +91,14 @@ namespace ScriptableObjects
             // 4) reloading sequence (implementation maybe after Showcase on the 22.11.2023)
         }
 
-        public override void ExecutePhysicsUpdateLogic()
+        public override void ExecutePhysicsUpdate()
         {
-            base.ExecutePhysicsUpdateLogic();
+            base.ExecutePhysicsUpdate();
         }
 
-        public override void ExecuteAnimationTriggerEventLogic(Enum_Lib.EAnimationTriggerType animTriggerTyoe)
+        public override void ExecuteOnAnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerTyoe)
         {
-            base.ExecuteAnimationTriggerEventLogic(animTriggerTyoe);
+            base.ExecuteOnAnimationTriggerEvent(animTriggerTyoe);
         }
 
         public override void ResetValues()
