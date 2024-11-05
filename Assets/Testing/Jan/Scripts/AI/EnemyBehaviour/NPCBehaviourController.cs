@@ -7,6 +7,7 @@ using ScriptableObjects;
 using StateMashine;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections.Generic;
 
 namespace Enemies
 {
@@ -28,18 +29,24 @@ namespace Enemies
         [Space(5)]
 
         [Header("References to Behaviour ScriptableObjects")] // Todo: think about bool -> _isPatrolingEnemy that enables/disables patroling state; JM (04.11.24)
+        [SerializeField] private bool _isStandingIdleNPC;
         [SerializeField] private BaseEnemyIdleSO _baseIdleStateSO;
-        //[SerializeField] private ... _baseMovemenStateSO;
+        [SerializeField] private BaseEnemyMovementSO _baseMovemenStateSO;
         [SerializeField] private BaseEnemyAlertSO _baseAlertStateSO;
         [SerializeField] private BaseEnemyChaseSO _baseChaseStateSO;
         [SerializeField] private BaseEnemyAttackSO _baseAttackStateSO;
 
         // properties for Base behaviour scriptable objects to store copies of the respective above referenced ones
+        internal bool IsStandingIdle { get => _isStandingIdleNPC; private set => _isStandingIdleNPC = value; }
         public BaseEnemyIdleSO BaseEnemyIdleStateSOInstance { get; set; }
-        //public ... BaseEnemyMovementStateSOInstance { get; set; }
+        public BaseEnemyMovementSO BaseEnemyMovementStateSOInstance { get; set; }
         public BaseEnemyAlertSO BaseEnemyAlertStateSOInstance { get; set; }
         public BaseEnemyChaseSO BaseEnemyChaseStateSOInstance { get; set; }
         public BaseEnemyAttackSO BaseEnemyAttackStateSOInstance { get; set; }
+        [Space(5)]
+
+        [Header("Waypoints for patroling NPC"), ShowIf("_isThispatrolingNPC")]
+        [SerializeField] private List<GameObject> _wayPoints;
         [Space(5)]
 
         [Header("Behaviour-related Settings")]
@@ -49,12 +56,14 @@ namespace Enemies
         [Space(5)]
 
         [Header("Monitoring Values")]
+        [SerializeField, ReadOnly] private bool _isThisNPCPatroling;
+        [SerializeField, ReadOnly] private bool _isThisNPCRandomWandering;
         [SerializeField, ReadOnly] private bool _isThisNPCDead;
         [SerializeField, ReadOnly] private bool _isTargetDead;
         [SerializeField, ReadOnly] private bool _isTargetDetected;
         [SerializeField, ReadOnly] private bool _isSomethingAlarmingHappening;
         [SerializeField, ReadOnly] private bool _isInAttackRange;                   // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
-        [SerializeField] private bool _isCollidingWithObject;
+        [SerializeField, ReadOnly] private bool _isCollidingWithObject;
         [SerializeField, ReadOnly] private float _noiseRangeOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector3 _positionOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector2 _collisionObjectPos;
@@ -116,6 +125,21 @@ namespace Enemies
         #region Unity Methods
         // Unity provided Methods
 
+        private void OnValidate()   //Todo: does not work as intended -> shall be executed once a SO is draged and dropped into BehaviourScriptabel-Objects in inspector
+        {
+            // checking which movement type this Enemy is supposed to have for setting um inspector settings
+            if (BaseEnemyMovementStateSOInstance.MovementBehaviourType == Enum_Lib.ENPCMovementBehaviourType.PatrolBehavour)
+            {
+                _isThisNPCPatroling = true;
+                _isThisNPCRandomWandering = false;
+            }
+            else if (BaseEnemyMovementStateSOInstance.MovementBehaviourType == Enum_Lib.ENPCMovementBehaviourType.RandomWanderBehaviour)
+            {
+                _isThisNPCPatroling = false;
+                _isThisNPCRandomWandering = true;
+            }
+        }
+
         protected void Awake()
         {
             // Autoreferencing
@@ -127,6 +151,7 @@ namespace Enemies
 
             // Instantiating Copys of the Behaviour-ScriptableObjects (so every Enemy has its own beahviour and not all Enemies will share the same reference of an behaviour)
             BaseEnemyIdleStateSOInstance = Instantiate(_baseIdleStateSO);
+            BaseEnemyMovementStateSOInstance = Instantiate(_baseMovemenStateSO);
             BaseEnemyAlertStateSOInstance = Instantiate(_baseAlertStateSO);
             BaseEnemyChaseStateSOInstance = Instantiate(_baseChaseStateSO);
             BaseEnemyAttackStateSOInstance = Instantiate(_baseAttackStateSO);
@@ -202,9 +227,19 @@ namespace Enemies
 
             // initialize the SO-Instances with proper values
             BaseEnemyIdleStateSOInstance.Initialize(this.gameObject, this);
+            BaseEnemyMovementStateSOInstance.Initialize(this.gameObject, this);
             BaseEnemyAlertStateSOInstance.Initialize(this.gameObject, this);
             BaseEnemyChaseStateSOInstance.Initialize(this.gameObject, this);
-            BaseEnemyAttackStateSOInstance.Initialize(this.gameObject, this);   // todo: JM; rework Architecture since the Initializiation like that will allways put the specific EnemyBehaviour.cs into a BaseEnemyBehaviour (because of Polymorphism) regardless if MeleeEnemyBehaviour or RangeEnemyBehaviour. Accordingly simple Overloading the Initialization() to take Melee/RangeEnemyBehaviour woun't work since nonetheless the first Overload(BaseEnemyBehaviour will be used simply becaus it's possible) therefore outsourcing the MeleeAttack/chase Logic to MeleeEnemyBehaviour can't be called in the specific BehaviourScriptable Objects. -> find a Solution for this Problem(!). until then stick to the existing appraoch by handling all Attack/Chase-Logic and Queries (if 'isInAttackRange' etc) in the BaseEnemyBehaviour.cs even if it's no nice architecture and makes the MeleeEnemyBehaviour/RangeEnemyBehaviour.cs actually useless a the moment; (JM 10.11.2023)
+            BaseEnemyAttackStateSOInstance.Initialize(this.gameObject, this);
+            // todo: JM; rework Architecture since the Initializiation like that will allways put the specific EnemyBehaviourCtrl.cs into a NPCBahaviourController (because of Polymorphism) regardless if MeleeEnemyBehaviour or RangeEnemyBehaviour. Accordingly simple Overloading the Initialization() to take Melee/RangeEnemyBehaviour woun't work since nonetheless the first Overload(NPCBahaviourController will be used simply becaus it's possible) therefore outsourcing the MeleeAttack/chase Logic to MeleeEnemyBehaviour can't be called in the specific BehaviourScriptable Objects. -> find a Solution for this Problem(!). until then stick to the existing appraoch by handling all Attack/Chase-Logic and Queries (if 'isInAttackRange' etc) in the NPCBahaviourController.cs even if it's no nice architecture and makes the MeleeEnemyBehaviour/RangeEnemyBehaviour.cs actually useless a the moment; (JM 10.11.2023)            
+
+
+
+            // Setup behaviour-state-settings
+            if (_isStandingIdleNPC)
+            {
+                // fill with logic
+            }            
 
             // initialize Statemachine with initial State
             StateMachine.Initialize(IdleState);

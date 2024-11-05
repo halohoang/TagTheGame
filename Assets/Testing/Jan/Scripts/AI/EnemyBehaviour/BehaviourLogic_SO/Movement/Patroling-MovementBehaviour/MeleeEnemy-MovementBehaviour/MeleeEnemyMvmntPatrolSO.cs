@@ -1,30 +1,56 @@
 ﻿using Enemies;
 using EnumLibrary;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace ScriptableObjects
 {
-    [CreateAssetMenu(fileName = "RangeEnemy_Idle_RadomWander", menuName = "Scriptable Objects/Enemy Logic/Idle Logic/RangeEnemy Random Wander")]
-    // todo: (!) if Time create a Parent Class 'BaseIdleRandomWanderSO'  that derives from 'BaseIdleSO' and is parent to the specific 'EnemyIdleRandomWanderSO' (Melee/Range) since the differ just in the Transition-Check but are equal coding wise beside that; JM (09.11.2023)
-    public class RangeEnemyIdleRandomWanderSO : BaseEnemyIdleSO
+    [CreateAssetMenu(fileName = "MeleeEnemy_Mvmnt_Pantrol", menuName = "Scriptable Objects/Enemy Logic/Movement Logic/MeleeEnemy Patrol")]
+    public class MeleeEnemyMvmntPatrolSO : BaseEnemyMovementSO
     {
+        #region Events
+        //--------------------------------
+        // - - - - -  E V E N T S  - - - - 
+        //--------------------------------
+
+        public static event UnityAction<Vector3> OnObstacleAvoidance;
+        #endregion
+
+        #region Variables
+        //--------------------------------------
+        // - - - - -  V A R I A B L E S  - - - - 
+        //--------------------------------------
+
         [Header("Behaviour Settings")]
         [SerializeField] private float _wanderSpeed = 1.0f;
+        #region Tooltip
         [Tooltip("The minimum time the Enemy shall wander before choosing a new wander direction, note this will be set by random between min and max value")]
+        #endregion
         [SerializeField, Range(0.0f, 10.0f)] private float _minRandomWalkingTime = 2.0f;
+        #region Tooltip
         [Tooltip("The maximum time the Enemy shall wander before choosing a new wander direction, note this will be set by random between min and max value")]
+        #endregion
         [SerializeField, Range(0.0f, 10.0f)] private float _maxRandomWalkingTime = 6.0f;
+        #region Tooltip
         [Tooltip("The minimum range the Enemy shall be able to wander, note this will be set by random between min and max value")]
+        #endregion
         [SerializeField, Range(0.0f, 20.0f)] private float _minRandomWalkingRange = 1.0f;
+        #region Tooltip
         [Tooltip("The maximum range the Enemy shall be able to wander, note this will be set by random between min and max value")]
+        #endregion
         [SerializeField, Range(0.0f, 20.0f)] private float _maxRandomWalkingRange = 5.0f;
+        #region Tooltip
         [Tooltip("Defines the how far the EnemyObject shall check for obstacles in front of it")]
+        #endregion
         [SerializeField, Range(1.0f, 5.0f)] private float _distanceToCheckForObstacles = 2.0f;
         #region Tooltip
         [Tooltip("Defines the min Distance that needts to be clear of obstacles for chosing this direction for avoiding detected obstaacles. (needs to be higher than 'Distance to check for obstacles')")]
         #endregion
         [SerializeField, Range(1.0f, 5.0f)] private float _distanceForAvoidCheck = 5.0f;
+        #region Tooltip
         [Tooltip("The Objects the Enemy that shall be recognized as obstacles by the EnemyObject")]
+        #endregion
+
         [SerializeField] private LayerMask _obstacleMask;
         [SerializeField] private Vector3[] _directionsToCheckToAvoidObstacle;
 
@@ -39,17 +65,34 @@ namespace ScriptableObjects
         private bool _isWaitingForWalkTimerEnd;
         private bool _isMovingTOCloseToObstacle = false;
 
+        // prperties
         public float Timer { get => _timer; private set => _timer = value; }
         public float RndWalkRange { get => _rndWalkRange; private set => _rndWalkRange = value; }
         public bool IsMoving { get => _isMoving; private set => _isMoving = value; }
         public bool IsMovingToCloseToObstacle { get => _isMovingTOCloseToObstacle; private set => _isMovingTOCloseToObstacle = value; }
         public Vector3 WalkTargetPos { get => _walkTargedPos; private set => _walkTargedPos = value; }
+        #endregion
 
 
+        #region Methods
+        //----------------------------------
+        // - - - - -  M E T H O D S  - - - - 
+        //----------------------------------
+
+        #region Unity-provided Methods
+        private void OnEnable()
+        {
+            // declare that this is a patrol-movement-type for being able to check this in the NPCBehaviourController.cs to properly initialize the States and Behaviour or a NPC
+            MovementBehaviourType = Enum_Lib.ENPCMovementBehaviourType.PatrolBehavour;
+        }
+        #endregion
+
+        #region cusotm Methods
         public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
             base.Initialize(enemyObj, enemyBehav);
         }
+        #region not yet used constructors
         //public override void Initialize(GameObject enemyObj, MeleeEnemyBehaviour meleeEnemyBehav)
         //{
         //    base.Initialize(enemyObj, meleeEnemyBehav);
@@ -58,13 +101,16 @@ namespace ScriptableObjects
         //{
         //    base.Initialize(enemyObj, rangeEnemyBehav);
         //}
+        #endregion
 
         public override void ExecuteOnE﻿nterState()
         {
             base.ExecuteOnE﻿nterState();
 
+            // referencing
             _thisEnemyRB2D = _behaviourCtrl.gameObject.GetComponent<Rigidbody2D>();
 
+            // Setup values
             _isMoving = true;
 
             // Setup the time the Agent shall walk max in one direction
@@ -76,8 +122,8 @@ namespace ScriptableObjects
             // Setup NavMeshAgent-Properties
             _behaviourCtrl.NavAgent.speed = _wanderSpeed;
 
-            // setup walking animation
-            _behaviourCtrl.Animator.SetBool("Patrol", true);
+            // Setup walking animation
+            _behaviourCtrl.Animator.SetBool("Engage", true);
         }
 
         public override void ExecuteOnExitState()
@@ -87,21 +133,12 @@ namespace ScriptableObjects
             _isMoving = false;
 
             // setup walking animation
-            _behaviourCtrl.Animator.SetBool("Patrol", false);
+            _behaviourCtrl.Animator.SetBool("Engage", false);
         }
 
         public override void ExecuteFrameUpdate()
         {
             base.ExecuteFrameUpdate();
-
-            // Transitionchecks 
-            // Switch State from Idle to AttackState (Shooting) when Player is Detected
-            if (_behaviourCtrl.IsTargetDetected)
-            {
-                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.AttackState);
-                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Attack (Shooting)</color>' should have been happend now!");
-                return;
-            }
 
             // Setup Timer
             Timer += Time.deltaTime;
@@ -113,7 +150,7 @@ namespace ScriptableObjects
             _behaviourCtrl.NavAgent.isStopped = false;
             _behaviourCtrl.NavAgent.SetDestination(WalkTargetPos);
 
-            _behaviourCtrl.SetIsCollidingWithObject(false);      // reset bool is collision with other enemy so at the end of an update cycle so the AI actually has a chance to wolk another direction
+            _behaviourCtrl.SetIsCollidingWithObject(false);    // reset bool is collidion with other enemy so at the end of an update cycly so the AI actually has a chance to wolk another direction
         }
 
         public override void ExecutePhysicsUpdate()
@@ -146,18 +183,17 @@ namespace ScriptableObjects
 
         /// <summary>
         /// Checks if '<see cref="_timer"/>' is running or not and if the maximum walk range was reached while '<see cref="_timer"/>' is still running or if Agent 
-        /// is moving to close towards and Obatacle-Object. According to Status of the Checks the walk-target-pos and or the animations etc. will be set accordingly.
+        /// is moving to close towards an Obatacle-Object. According to Status of the Checks the walk-target-pos and or the animations etc. will be set accordingly.
         /// Also implements logic for movement direction changes if collision with other enemy-agent-object was detected.
         /// </summary>
         private void WalkingConditionCheck()
         {
-
             // controll structures regarding walking behaviour
             if (_behaviourCtrl.IsCollidingWithObject)
             {
                 // stop movement for this cycle
                 _behaviourCtrl.NavAgent.isStopped = true;
-                _behaviourCtrl.Animator.SetBool("Patrol", false);
+                _behaviourCtrl.Animator.SetBool("Engage", false);
                 _walkTargedPos = _behaviourCtrl.gameObject.transform.position;
 
                 Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': since EnemyObj collided with´an obstacle, movement was stoped currently. new movementdirection will be calculated");
@@ -174,7 +210,7 @@ namespace ScriptableObjects
                 WalkTargetPos = GetRndMoveDirection();
 
                 // Setup Walking Animation
-                _behaviourCtrl.Animator.SetBool("Patrol", true);
+                _behaviourCtrl.Animator.SetBool("Engage", true);
 
                 Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': rnd-Walking-Timer ended and was set to 0.0f again; New MovingDirection was calculated and set");
             }
@@ -185,14 +221,15 @@ namespace ScriptableObjects
 
                 _isWaitingForWalkTimerEnd = true;
                 _behaviourCtrl.NavAgent.isStopped = true;
-                _behaviourCtrl.Animator.SetBool("Patrol", false);
+                _behaviourCtrl.Animator.SetBool("Engage", false);
 
                 Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': rnd-Walking-Timer still running; rnd-Walking-Range was reached");
             }
             else if (IsMovingToCloseToObstacle)     // if Agent is walking to close towards an Obstacle, change walkin direction to the oposite
             {
                 WalkTargetPos = _currentObstacleAvoidanceVector;
-                Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': Walking Direction was Changed due to walking to close towards obstacle");
+                Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': Walking Direction was Changed due to walking to close towards obstacle; new direction: {_currentObstacleAvoidanceVector}");
+                OnObstacleAvoidance?.Invoke(_currentObstacleAvoidanceVector);
                 IsMovingToCloseToObstacle = false;
             }
         }
@@ -257,5 +294,8 @@ namespace ScriptableObjects
                     _currentObstacleAvoidanceVector = currentDirectionToCheck.normalized;
             }
         }
+        #endregion
+
+        #endregion
     }
 }

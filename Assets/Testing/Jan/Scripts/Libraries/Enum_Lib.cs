@@ -57,5 +57,11 @@ namespace EnumLibrary
             FirstWeapon,
             SecondWeapon
         }
+
+        public enum ENPCMovementBehaviourType
+        {
+            PatrolBehavour,
+            RandomWanderBehaviour
+        }
     }
 }
