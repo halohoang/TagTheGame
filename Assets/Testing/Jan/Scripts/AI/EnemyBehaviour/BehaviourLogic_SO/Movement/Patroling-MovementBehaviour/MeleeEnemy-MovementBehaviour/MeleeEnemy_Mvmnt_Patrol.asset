@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db49a4934455ff644b7d9ec537f9b99b, type: 3}
-  m_Name: MeleeEnemy_Mvmnt_Pantrol
+  m_Name: MeleeEnemy_Mvmnt_Patrol
   m_EditorClassIdentifier: 
   _wanderSpeed: 1
   _minRandomWalkingTime: 2

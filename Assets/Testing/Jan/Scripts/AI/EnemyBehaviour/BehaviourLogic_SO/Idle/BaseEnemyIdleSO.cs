@@ -52,9 +52,9 @@ namespace ScriptableObjects
 
         public virtual void ExecuteOnE﻿nterState() 
         {
-            // initial check if this NPC shall be actually an standing ore moving NPC. If it is not an standing idle NPC -> transit to Movement-State
-            if (!_behaviourCtrl.IsStandingIdle)
-                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.MovementState);
+            //// initial check if this NPC shall be actually an standing ore moving NPC. If it is not an standing idle NPC -> transit to Movement-State
+            //if (!_behaviourCtrl.IsStandingIdle)
+            //    _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.MovementState);
         }
 
 

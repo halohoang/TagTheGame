@@ -16,11 +16,7 @@ namespace ScriptableObjects
         protected Transform _transform;
         protected GameObject _gameObject;
 
-        protected Transform _playerTransform;
-
-        [SerializeField, ReadOnly] protected Enum_Lib.ENPCMovementBehaviourType _movementBehaviourType;
-
-        public Enum_Lib.ENPCMovementBehaviourType MovementBehaviourType { get => _movementBehaviourType; protected set => _movementBehaviourType = value; }
+        protected Transform _playerTransform;        
 
         #endregion
 

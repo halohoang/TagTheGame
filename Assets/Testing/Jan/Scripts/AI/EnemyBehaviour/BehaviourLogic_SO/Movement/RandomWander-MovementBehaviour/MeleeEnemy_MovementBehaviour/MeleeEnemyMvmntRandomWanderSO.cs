@@ -65,14 +65,7 @@ namespace ScriptableObjects
         // - - - - -  M E T H O D S  - - - - 
         //----------------------------------
 
-        #region Unity-provided Methods
-        private void OnEnable()
-        {
-            // declare that this is a randomWander-movement-type for being able to check this in the NPCBehaviourController.cs to properly initialize the States and Behaviour or a NPC
-            MovementBehaviourType = Enum_Lib.ENPCMovementBehaviourType.RandomWanderBehaviour;
-        }
-        #endregion
-
+        
         #region Custom Methods
         public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {

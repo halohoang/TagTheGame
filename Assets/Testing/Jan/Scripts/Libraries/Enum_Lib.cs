@@ -60,6 +60,7 @@ namespace EnumLibrary
 
         public enum ENPCMovementBehaviourType
         {
+            None,
             PatrolBehavour,
             RandomWanderBehaviour
         }

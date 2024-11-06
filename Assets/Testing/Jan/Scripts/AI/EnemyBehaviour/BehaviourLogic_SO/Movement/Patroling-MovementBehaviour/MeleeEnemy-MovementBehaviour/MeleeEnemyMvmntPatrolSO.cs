@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace ScriptableObjects
 {
-    [CreateAssetMenu(fileName = "MeleeEnemy_Mvmnt_Pantrol", menuName = "Scriptable Objects/Enemy Logic/Movement Logic/MeleeEnemy Patrol")]
+    [CreateAssetMenu(fileName = "MeleeEnemy_Mvmnt_Patrol", menuName = "Scriptable Objects/Enemy Logic/Movement Logic/MeleeEnemy Patrol")]
     public class MeleeEnemyMvmntPatrolSO : BaseEnemyMovementSO
     {
         #region Events
@@ -22,23 +22,15 @@ namespace ScriptableObjects
         //--------------------------------------
 
         [Header("Behaviour Settings")]
-        [SerializeField] private float _wanderSpeed = 1.0f;
+        [SerializeField] private float _patrolingSpeed = 1.0f;
         #region Tooltip
         [Tooltip("The minimum time the Enemy shall wander before choosing a new wander direction, note this will be set by random between min and max value")]
         #endregion
-        [SerializeField, Range(0.0f, 10.0f)] private float _minRandomWalkingTime = 2.0f;
+        [SerializeField, Range(0.0f, 10.0f)] private float _minTimeWaitingAtWaypoint = 2.0f;
         #region Tooltip
         [Tooltip("The maximum time the Enemy shall wander before choosing a new wander direction, note this will be set by random between min and max value")]
         #endregion
-        [SerializeField, Range(0.0f, 10.0f)] private float _maxRandomWalkingTime = 6.0f;
-        #region Tooltip
-        [Tooltip("The minimum range the Enemy shall be able to wander, note this will be set by random between min and max value")]
-        #endregion
-        [SerializeField, Range(0.0f, 20.0f)] private float _minRandomWalkingRange = 1.0f;
-        #region Tooltip
-        [Tooltip("The maximum range the Enemy shall be able to wander, note this will be set by random between min and max value")]
-        #endregion
-        [SerializeField, Range(0.0f, 20.0f)] private float _maxRandomWalkingRange = 5.0f;
+        [SerializeField, Range(0.0f, 10.0f)] private float _maxTimeWaitingAtWaypoint = 6.0f;       
         #region Tooltip
         [Tooltip("Defines the how far the EnemyObject shall check for obstacles in front of it")]
         #endregion
@@ -56,18 +48,18 @@ namespace ScriptableObjects
 
         private Rigidbody2D _thisEnemyRB2D;
         private Vector3 _walkTargedPos;
+        private Vector3 _nextWaypoint;
+        private Vector3 _previousWaypoint;
         private Vector3 _lookdirectionWhileWaitingForTimerEnd;
         private Vector3 _currentObstacleAvoidanceVector;
         private float _timer = 0.0f;
-        private float _rndWalktime;
-        private float _rndWalkRange;
+        private float _rndWaitAtWaypointTime;        
         private bool _isMoving;
-        private bool _isWaitingForWalkTimerEnd;
+        private bool _isWaitingForWaypointTimerEnd;
         private bool _isMovingTOCloseToObstacle = false;
 
         // prperties
         public float Timer { get => _timer; private set => _timer = value; }
-        public float RndWalkRange { get => _rndWalkRange; private set => _rndWalkRange = value; }
         public bool IsMoving { get => _isMoving; private set => _isMoving = value; }
         public bool IsMovingToCloseToObstacle { get => _isMovingTOCloseToObstacle; private set => _isMovingTOCloseToObstacle = value; }
         public Vector3 WalkTargetPos { get => _walkTargedPos; private set => _walkTargedPos = value; }
@@ -79,13 +71,6 @@ namespace ScriptableObjects
         // - - - - -  M E T H O D S  - - - - 
         //----------------------------------
 
-        #region Unity-provided Methods
-        private void OnEnable()
-        {
-            // declare that this is a patrol-movement-type for being able to check this in the NPCBehaviourController.cs to properly initialize the States and Behaviour or a NPC
-            MovementBehaviourType = Enum_Lib.ENPCMovementBehaviourType.PatrolBehavour;
-        }
-        #endregion
 
         #region cusotm Methods
         public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
@@ -114,13 +99,13 @@ namespace ScriptableObjects
             _isMoving = true;
 
             // Setup the time the Agent shall walk max in one direction
-            _rndWalktime = Random.Range(_minRandomWalkingTime, _maxRandomWalkingTime);
+            _rndWaitAtWaypointTime = Random.Range(_minTimeWaitingAtWaypoint, _maxTimeWaitingAtWaypoint);
 
             // Setup Walking Direction/Target Pos
-            WalkTargetPos = GetRndMoveDirection();
+            WalkTargetPos = _nextWaypoint;
 
             // Setup NavMeshAgent-Properties
-            _behaviourCtrl.NavAgent.speed = _wanderSpeed;
+            _behaviourCtrl.NavAgent.speed = _patrolingSpeed;
 
             // Setup walking animation
             _behaviourCtrl.Animator.SetBool("Engage", true);
@@ -157,6 +142,7 @@ namespace ScriptableObjects
         {
             base.ExecutePhysicsUpdate();
 
+            // Check for obstacle collision course
             if (Physics2D.Raycast(_behaviourCtrl.transform.position, WalkTargetPos - _behaviourCtrl.transform.position, _distanceToCheckForObstacles, _obstacleMask))
             {
                 IsMovingToCloseToObstacle = true;
@@ -186,7 +172,7 @@ namespace ScriptableObjects
         /// is moving to close towards an Obatacle-Object. According to Status of the Checks the walk-target-pos and or the animations etc. will be set accordingly.
         /// Also implements logic for movement direction changes if collision with other enemy-agent-object was detected.
         /// </summary>
-        private void WalkingConditionCheck()
+        private void WalkingConditionCheck()    // Todo: start working here
         {
             // controll structures regarding walking behaviour
             if (_behaviourCtrl.IsCollidingWithObject)
@@ -198,28 +184,28 @@ namespace ScriptableObjects
 
                 Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': since EnemyObj collided with´an obstacle, movement was stoped currently. new movementdirection will be calculated");
             }
-            else if (Timer > _rndWalktime)               // is Timmer out of Time
+            else if (Timer > _rndWaitAtWaypointTime)               // is Timmer out of Time
             {
-                _isWaitingForWalkTimerEnd = false;
+                _isWaitingForWaypointTimerEnd = false;
 
                 // Reset Timer and rnd WalkTime
                 Timer = 0.0f;
-                _rndWalktime = Random.Range(_minRandomWalkingTime, _maxRandomWalkingTime);
+                _rndWaitAtWaypointTime = Random.Range(_minTimeWaitingAtWaypoint, _maxTimeWaitingAtWaypoint);
 
                 // reset Walking Direction/TargetPos
-                WalkTargetPos = GetRndMoveDirection();
+                //WalkTargetPos = GetRndMoveDirection();
 
                 // Setup Walking Animation
                 _behaviourCtrl.Animator.SetBool("Engage", true);
 
                 Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': rnd-Walking-Timer ended and was set to 0.0f again; New MovingDirection was calculated and set");
             }
-            else if (Timer <= _rndWalktime && (Vector2)_behaviourCtrl.transform.position == (Vector2)WalkTargetPos)      // if Timer is still running but Walking-Taget-Position is reached
+            else if (Timer <= _rndWaitAtWaypointTime && (Vector2)_behaviourCtrl.transform.position == (Vector2)WalkTargetPos)      // if Timer is still running but Walking-Taget-Position is reached
             {
-                if (!_isWaitingForWalkTimerEnd)    // set random lookdirection if it is the first time entering this query
+                if (!_isWaitingForWaypointTimerEnd)    // set random lookdirection if it is the first time entering this query
                     _lookdirectionWhileWaitingForTimerEnd = Random.insideUnitCircle;
 
-                _isWaitingForWalkTimerEnd = true;
+                _isWaitingForWaypointTimerEnd = true;
                 _behaviourCtrl.NavAgent.isStopped = true;
                 _behaviourCtrl.Animator.SetBool("Engage", false);
 
@@ -235,24 +221,13 @@ namespace ScriptableObjects
         }
 
         /// <summary>
-        /// Returns a random direction for the Enemy-Agent to move to by using the '<see cref="_minRandomWalkingRange"/>' and '<see cref="_maxRandomWalkingRange"/>' as origin
-        /// for the 
-        /// </summary>
-        /// <returns></returns>
-        private Vector3 GetRndMoveDirection()
-        {
-            RndWalkRange = Random.Range(_minRandomWalkingRange, _maxRandomWalkingRange);
-            return _behaviourCtrl.transform.position + (Vector3)Random.insideUnitCircle * RndWalkRange;
-        }
-
-        /// <summary>
         /// Sets the facing direction of the Agent-Object according to its movement direction or randomly when 'standing' and 'waiting' til '<see cref="_timer"/>' ends
         /// when max walk-range was already reached
         /// </summary>
         private void SetFacingDirection()
         {
             // setting facing direction
-            if (_isWaitingForWalkTimerEnd)
+            if (_isWaitingForWaypointTimerEnd)
             {
                 // setting facing to random when walktimer is still running but walking range was already reached
                 Vector2 direction = _lookdirectionWhileWaitingForTimerEnd.normalized;

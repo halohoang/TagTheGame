@@ -28,8 +28,7 @@ namespace Enemies
         [SerializeField, ReadOnly] private ConditionIsInMeleeAttackRangeCheck _condMeleeAttackCheck;    // Todo: obsolete with new perception System, remove as soon as completely changed to new system
         [Space(5)]
 
-        [Header("References to Behaviour ScriptableObjects")] // Todo: think about bool -> _isPatrolingEnemy that enables/disables patroling state; JM (04.11.24)
-        [SerializeField] private bool _isStandingIdleNPC;
+        [Header("References to Behaviour ScriptableObjects"), InfoBox("These fields need to be checked and Set!", EInfoBoxType.Warning)] // Todo: think about bool -> _isPatrolingEnemy that enables/disables patroling state; JM (04.11.24)
         [SerializeField] private BaseEnemyIdleSO _baseIdleStateSO;
         [SerializeField] private BaseEnemyMovementSO _baseMovemenStateSO;
         [SerializeField] private BaseEnemyAlertSO _baseAlertStateSO;
@@ -45,7 +44,7 @@ namespace Enemies
         public BaseEnemyAttackSO BaseEnemyAttackStateSOInstance { get; set; }
         [Space(5)]
 
-        [Header("Waypoints for patroling NPC"), ShowIf("_isThispatrolingNPC")]
+        [Header("Waypoints for patroling NPC"), ShowIf("_isThisPatrolingNPC")]
         [SerializeField] private List<GameObject> _wayPoints;
         [Space(5)]
 
@@ -56,8 +55,9 @@ namespace Enemies
         [Space(5)]
 
         [Header("Monitoring Values")]
-        [SerializeField, ReadOnly] private bool _isThisNPCPatroling;
-        [SerializeField, ReadOnly] private bool _isThisNPCRandomWandering;
+        [SerializeField, ReadOnly] private bool _isStandingIdleNPC;
+        [SerializeField, ReadOnly] private bool _isThisPatrolingNPC;
+        [SerializeField, ReadOnly] private bool _isThisRandomWanderNPC;
         [SerializeField, ReadOnly] private bool _isThisNPCDead;
         [SerializeField, ReadOnly] private bool _isTargetDead;
         [SerializeField, ReadOnly] private bool _isTargetDetected;
@@ -78,8 +78,8 @@ namespace Enemies
         private AlertState _alertState;
         private ChaseState _chaseState;
         private AttackState _attackState;
-        
-        
+
+
         // - - - Properties - - -         
 
         // References
@@ -105,7 +105,7 @@ namespace Enemies
         // StateMachine-Related
         public NPCStateMachine StateMachine { get => _stateMachine; set => _stateMachine = value; }
         public IdleState IdleState { get => _idleState; set => _idleState = value; }
-        public MovementState MovementState { get => _movementState; set => _movementState= value; }
+        public MovementState MovementState { get => _movementState; set => _movementState = value; }
         public AlertState AlertState { get => _alertState; set => _alertState = value; }
         public ChaseState ChaseState { get => _chaseState; set => _chaseState = value; }
         public AttackState AttackState { get => _attackState; set => _attackState = value; }
@@ -124,19 +124,25 @@ namespace Enemies
 
         #region Unity Methods
         // Unity provided Methods
-
-        private void OnValidate()   //Todo: does not work as intended -> shall be executed once a SO is draged and dropped into BehaviourScriptabel-Objects in inspector
+        // 
+        private void OnValidate()
         {
-            // checking which movement type this Enemy is supposed to have for setting um inspector settings
-            if (BaseEnemyMovementStateSOInstance.MovementBehaviourType == Enum_Lib.ENPCMovementBehaviourType.PatrolBehavour)
+            // Check if there is a reference Set to the _baseMovementStateSO and set bollians respectively
+            if (_baseMovemenStateSO == null)
             {
-                _isThisNPCPatroling = true;
-                _isThisNPCRandomWandering = false;
+                _isThisPatrolingNPC = false;
+                _isThisRandomWanderNPC = false;
+                _isStandingIdleNPC = true;
             }
-            else if (BaseEnemyMovementStateSOInstance.MovementBehaviourType == Enum_Lib.ENPCMovementBehaviourType.RandomWanderBehaviour)
+            else if (_baseMovemenStateSO is MeleeEnemyMvmntPatrolSO)
             {
-                _isThisNPCPatroling = false;
-                _isThisNPCRandomWandering = true;
+                _isThisPatrolingNPC = true;
+                _isThisRandomWanderNPC = false;
+            }
+            else if (_baseMovemenStateSO is MeleeEnemyMvmntRandomWanderSO || _baseMovemenStateSO is RangeEnemyMvmntRandomWanderSO)
+            {
+                _isThisPatrolingNPC = false;
+                _isThisRandomWanderNPC = true;
             }
         }
 
@@ -189,7 +195,6 @@ namespace Enemies
             //StateMachine related
             NPCStateMachine.OnStateTransition += SetCurrentActiveState;
             #endregion
-
         }
 
         protected void OnDisable()
@@ -216,7 +221,6 @@ namespace Enemies
             //StateMachine related
             NPCStateMachine.OnStateTransition -= SetCurrentActiveState;
             #endregion
-
         }
 
         private void Start()
@@ -233,16 +237,30 @@ namespace Enemies
             BaseEnemyAttackStateSOInstance.Initialize(this.gameObject, this);
             // todo: JM; rework Architecture since the Initializiation like that will allways put the specific EnemyBehaviourCtrl.cs into a NPCBahaviourController (because of Polymorphism) regardless if MeleeEnemyBehaviour or RangeEnemyBehaviour. Accordingly simple Overloading the Initialization() to take Melee/RangeEnemyBehaviour woun't work since nonetheless the first Overload(NPCBahaviourController will be used simply becaus it's possible) therefore outsourcing the MeleeAttack/chase Logic to MeleeEnemyBehaviour can't be called in the specific BehaviourScriptable Objects. -> find a Solution for this Problem(!). until then stick to the existing appraoch by handling all Attack/Chase-Logic and Queries (if 'isInAttackRange' etc) in the NPCBahaviourController.cs even if it's no nice architecture and makes the MeleeEnemyBehaviour/RangeEnemyBehaviour.cs actually useless a the moment; (JM 10.11.2023)            
 
-
-
             // Setup behaviour-state-settings
-            if (_isStandingIdleNPC)
+            // additional secure check if there is a reference Set to the _baseMovementStateSO and set bollians respectively
+            if (_baseMovemenStateSO == null)
             {
-                // fill with logic
-            }            
+                _isThisPatrolingNPC = false;
+                _isThisRandomWanderNPC = false;
+                _isStandingIdleNPC = true;
+            }
+            else if (_baseMovemenStateSO is MeleeEnemyMvmntPatrolSO)
+            {
+                _isThisPatrolingNPC = true;
+                _isThisRandomWanderNPC = false;
+            }
+            else if (_baseMovemenStateSO is MeleeEnemyMvmntRandomWanderSO || _baseMovemenStateSO is RangeEnemyMvmntRandomWanderSO)
+            {
+                _isThisPatrolingNPC = false;
+                _isThisRandomWanderNPC = true;
+            }
 
             // initialize Statemachine with initial State
-            StateMachine.Initialize(IdleState);
+            if (_isThisRandomWanderNPC || _isThisPatrolingNPC)
+                StateMachine.Initialize(MovementState);
+            else
+                StateMachine.Initialize(IdleState);
         }
 
         private void FixedUpdate()
@@ -273,11 +291,11 @@ namespace Enemies
                 _isCollidingWithObject = false;
         }
         #endregion
-                
+
         private void Update()
-        {            
+        {
             if (_isThisNPCDead)
-                return;            
+                return;
 
             // reset to Idle State if Player was killed
             if (_isTargetDead && StateMachine.CurrentState != IdleState)
@@ -403,6 +421,15 @@ namespace Enemies
         {
             _isInAttackRange = isAttackingPlayer;
             _targetObject = playerObj;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="IsStandingIdle"/> field for this NPC.
+        /// </summary>
+        /// <param name="isStandingIdle"></param>
+        internal void SetIsStandingIdle(bool isStandingIdle)
+        {
+            IsStandingIdle = IsStandingIdle;
         }
 
         private void AnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerType)
