@@ -91,6 +91,7 @@ namespace Enemies
         // Behaviourrelated-Settings
         public float MovementSpeed { get => _movementSpeed; private set => _movementSpeed = value; }
         public float ChasingSpeed { get => _chasingSpeed; private set => _chasingSpeed = value; }
+        public List<GameObject> WayPoints { get => _wayPoints; private set => _wayPoints = value; }
         //public Vector3[] DirectionsToCheckToAvoidObstacle { get => _directionsToCheckToAvoidObstacle; private set => _directionsToCheckToAvoidObstacle = value; }
 
         public bool IsTargetDead { get => _isTargetDead; private set => _isTargetDead = value; }

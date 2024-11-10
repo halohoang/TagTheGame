@@ -30,38 +30,43 @@ namespace ScriptableObjects
         #region Tooltip
         [Tooltip("The maximum time the Enemy shall wander before choosing a new wander direction, note this will be set by random between min and max value")]
         #endregion
-        [SerializeField, Range(0.0f, 10.0f)] private float _maxTimeWaitingAtWaypoint = 6.0f;       
-        #region Tooltip
-        [Tooltip("Defines the how far the EnemyObject shall check for obstacles in front of it")]
-        #endregion
-        [SerializeField, Range(1.0f, 5.0f)] private float _distanceToCheckForObstacles = 2.0f;
-        #region Tooltip
-        [Tooltip("Defines the min Distance that needts to be clear of obstacles for chosing this direction for avoiding detected obstaacles. (needs to be higher than 'Distance to check for obstacles')")]
-        #endregion
-        [SerializeField, Range(1.0f, 5.0f)] private float _distanceForAvoidCheck = 5.0f;
-        #region Tooltip
-        [Tooltip("The Objects the Enemy that shall be recognized as obstacles by the EnemyObject")]
+        [SerializeField, Range(0.0f, 10.0f)] private float _maxTimeWaitingAtWaypoint = 6.0f;
+
+        #region ObstacleCheck
+        //#region Tooltip
+        //[Tooltip("Defines the how far the EnemyObject shall check for obstacles in front of it")]
+        //#endregion
+        //[SerializeField, Range(1.0f, 5.0f)] private float _distanceToCheckForObstacles = 2.0f;
+        //#region Tooltip
+        //[Tooltip("Defines the min Distance that needts to be clear of obstacles for chosing this direction for avoiding detected obstaacles. (needs to be higher than 'Distance to check for obstacles')")]
+        //#endregion
+        //[SerializeField, Range(1.0f, 5.0f)] private float _distanceForAvoidCheck = 5.0f;
+
+        //#region Tooltip
+        //[Tooltip("The Objects the Enemy that shall be recognized as obstacles by the EnemyObject")]
+        //#endregion
+        //[SerializeField] private LayerMask _obstacleMask;
+        //[SerializeField] private Vector3[] _directionsToCheckToAvoidObstacle;
         #endregion
 
-        [SerializeField] private LayerMask _obstacleMask;
-        [SerializeField] private Vector3[] _directionsToCheckToAvoidObstacle;
-
+        private GameObject _currentTargetWaypointObj;
         private Rigidbody2D _thisEnemyRB2D;
         private Vector3 _walkTargedPos;
         private Vector3 _nextWaypoint;
         private Vector3 _previousWaypoint;
         private Vector3 _lookdirectionWhileWaitingForTimerEnd;
-        private Vector3 _currentObstacleAvoidanceVector;
+        //private Vector3 _currentObstacleAvoidanceVector;
         private float _timer = 0.0f;
         private float _rndWaitAtWaypointTime;        
         private bool _isMoving;
         private bool _isWaitingForWaypointTimerEnd;
-        private bool _isMovingTOCloseToObstacle = false;
+        //private bool _isMovingTOCloseToObstacle = false;
 
         // prperties
+        public GameObject CurrentTargetWaypoint { get => _currentTargetWaypointObj; private set => _currentTargetWaypointObj = value; }
         public float Timer { get => _timer; private set => _timer = value; }
         public bool IsMoving { get => _isMoving; private set => _isMoving = value; }
-        public bool IsMovingToCloseToObstacle { get => _isMovingTOCloseToObstacle; private set => _isMovingTOCloseToObstacle = value; }
+        //public bool IsMovingToCloseToObstacle { get => _isMovingTOCloseToObstacle; private set => _isMovingTOCloseToObstacle = value; }
         public Vector3 WalkTargetPos { get => _walkTargedPos; private set => _walkTargedPos = value; }
         #endregion
 
@@ -88,8 +93,10 @@ namespace ScriptableObjects
         //}
         #endregion
 
-        public override void ExecuteOnE﻿nterState()
+        public override void ExecuteOnE﻿nterState() // Todo: find reason why this won't be executed
         {
+            Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': 'ExecuteOnEnterState()' is called");
+
             base.ExecuteOnE﻿nterState();
 
             // referencing
@@ -102,6 +109,21 @@ namespace ScriptableObjects
             _rndWaitAtWaypointTime = Random.Range(_minTimeWaitingAtWaypoint, _maxTimeWaitingAtWaypoint);
 
             // Setup Walking Direction/Target Pos
+            for (int i = 0; i < _behaviourCtrl.WayPoints.Count; i++)    // when already standing at a wayppoint-position, then Set 'WalkTargetPos' to next waypoint
+            {
+                if (_behaviourCtrl.gameObject.transform.position == _behaviourCtrl.WayPoints[i].transform.position)
+                {
+                    _nextWaypoint = _behaviourCtrl.WayPoints[i++].transform.position;
+                    _currentTargetWaypointObj = _behaviourCtrl.WayPoints[i++];
+                    break;
+                }
+                else
+                {
+                    _nextWaypoint = _behaviourCtrl.WayPoints[1].transform.position;
+                    _currentTargetWaypointObj = _behaviourCtrl.WayPoints[1];
+                    break;
+                }
+            }            
             WalkTargetPos = _nextWaypoint;
 
             // Setup NavMeshAgent-Properties
@@ -123,10 +145,9 @@ namespace ScriptableObjects
 
         public override void ExecuteFrameUpdate()
         {
-            base.ExecuteFrameUpdate();
+            Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': 'ExecuteOnFrameUpdate()' is called");
 
-            // Setup Timer
-            Timer += Time.deltaTime;
+            base.ExecuteFrameUpdate();
 
             WalkingConditionCheck();
             SetFacingDirection();
@@ -142,19 +163,21 @@ namespace ScriptableObjects
         {
             base.ExecutePhysicsUpdate();
 
-            // Check for obstacle collision course
-            if (Physics2D.Raycast(_behaviourCtrl.transform.position, WalkTargetPos - _behaviourCtrl.transform.position, _distanceToCheckForObstacles, _obstacleMask))
-            {
-                IsMovingToCloseToObstacle = true;
-                #region debuggers litte helper
-                Debug.DrawRay(_behaviourCtrl.transform.position, WalkTargetPos - _behaviourCtrl.transform.position, Color.cyan, 1.5f);
-                Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>' is moving to close to Obstacle: '<color=cyan>{IsMovingToCloseToObstacle}</color>'");
-                #endregion
+            #region ObstacleCheck
+            //// Check for obstacle collision course
+            //if (Physics2D.Raycast(_behaviourCtrl.transform.position, WalkTargetPos - _behaviourCtrl.transform.position, _distanceToCheckForObstacles, _obstacleMask))
+            //{
+            //    IsMovingToCloseToObstacle = true;
+            //    #region debuggers litte helper
+            //    Debug.DrawRay(_behaviourCtrl.transform.position, WalkTargetPos - _behaviourCtrl.transform.position, Color.cyan, 1.5f);
+            //    Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>' is moving to close to Obstacle: '<color=cyan>{IsMovingToCloseToObstacle}</color>'");
+            //    #endregion
 
-                CheckForObstacleAvoidanceVector();
-            }
-            else
-                IsMovingToCloseToObstacle = false;
+            //    CheckForObstacleAvoidanceVector();
+            //}
+            //else
+            //    IsMovingToCloseToObstacle = false;
+            #endregion
         }
 
         public override void ExecuteOnAnim﻿﻿ationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerTyoe)
@@ -172,7 +195,7 @@ namespace ScriptableObjects
         /// is moving to close towards an Obatacle-Object. According to Status of the Checks the walk-target-pos and or the animations etc. will be set accordingly.
         /// Also implements logic for movement direction changes if collision with other enemy-agent-object was detected.
         /// </summary>
-        private void WalkingConditionCheck()    // Todo: start working here
+        private void WalkingConditionCheck()
         {
             // controll structures regarding walking behaviour
             if (_behaviourCtrl.IsCollidingWithObject)
@@ -184,39 +207,94 @@ namespace ScriptableObjects
 
                 Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': since EnemyObj collided with´an obstacle, movement was stoped currently. new movementdirection will be calculated");
             }
-            else if (Timer > _rndWaitAtWaypointTime)               // is Timmer out of Time
+            else if (_behaviourCtrl.transform.position == WalkTargetPos) // if waypoit is reached -> wait
             {
-                _isWaitingForWaypointTimerEnd = false;
+                // 1. Setup Timer
+                Timer += Time.deltaTime;
 
-                // Reset Timer and rnd WalkTime
+                // 2. Halt movement for as long as timer runs
+                _isWaitingForWaypointTimerEnd = true;
+                _behaviourCtrl.Animator.SetBool("Engage", false);
+
+                // 3. check if Timer is out of time and set values respectively
+                SetNewWalkTargetPosOnTimerEnd();
+            }
+
+            // if last waypoint is reached
+            if (_currentTargetWaypointObj == _behaviourCtrl.WayPoints[_behaviourCtrl.WayPoints.Count] && _behaviourCtrl.gameObject.transform.position == WalkTargetPos)
+            {
+                // think about logic for going through waypoints backwards; JM (10.11.24)
+            }
+
+        #region Old Code from RndWalk-SO
+        // Todo: continue work here
+
+        //    else if (Timer > _rndWaitAtWaypointTime)               // is Timmer out of Time
+        //    {
+        //        _isWaitingForWaypointTimerEnd = false;
+
+        //        // Reset Timer and rnd WalkTime
+        //        Timer = 0.0f;
+        //        _rndWaitAtWaypointTime = Random.Range(_minTimeWaitingAtWaypoint, _maxTimeWaitingAtWaypoint);
+
+        //        // reset Walking Direction/TargetPos
+        //        //WalkTargetPos = GetRndMoveDirection();
+
+        //        // Setup Walking Animation
+        //        _behaviourCtrl.Animator.SetBool("Engage", true);
+
+        //        Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': rnd-Walking-Timer ended and was set to 0.0f again; New MovingDirection was calculated and set");
+        //    }
+        //    else if (Timer <= _rndWaitAtWaypointTime && (Vector2)_behaviourCtrl.transform.position == (Vector2)WalkTargetPos)      // if Timer is still running but Walking-Taget-Position is reached
+        //    {
+        //        if (!_isWaitingForWaypointTimerEnd)    // set random lookdirection if it is the first time entering this query
+        //            _lookdirectionWhileWaitingForTimerEnd = Random.insideUnitCircle;
+
+        //        _isWaitingForWaypointTimerEnd = true;
+        //        _behaviourCtrl.NavAgent.isStopped = true;
+        //        _behaviourCtrl.Animator.SetBool("Engage", false);
+
+        //        Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': rnd-Walking-Timer still running; rnd-Walking-Range was reached");
+        //    }
+        //    else if (IsMovingToCloseToObstacle)     // if Agent is walking to close towards an Obstacle, change walkin direction to the oposite
+        //    {
+        //        WalkTargetPos = _currentObstacleAvoidanceVector;
+        //        Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': Walking Direction was Changed due to walking to close towards obstacle; new direction: {_currentObstacleAvoidanceVector}");
+        //        OnObstacleAvoidance?.Invoke(_currentObstacleAvoidanceVector);
+        //        IsMovingToCloseToObstacle = false;
+        //    }
+        //}
+        #endregion
+        }
+
+        /// <summary>
+        /// Checks if <see cref="Timer"/> runs out of time and respectively sets the <see cref="WalkTargetPos"/> to the next waypoint (<see cref="_nextWaypoint"/>). Also sets
+        /// <see cref="_previousWaypoint"/> and <see cref="_currentTargetWaypointObj"/> respectively to new values.
+        /// </summary>
+        private void SetNewWalkTargetPosOnTimerEnd()
+        {
+            if (Timer > _rndWaitAtWaypointTime) // is Timer out of time
+            {
+                // reset Timer & new waiting Time
                 Timer = 0.0f;
                 _rndWaitAtWaypointTime = Random.Range(_minTimeWaitingAtWaypoint, _maxTimeWaitingAtWaypoint);
 
                 // reset Walking Direction/TargetPos
-                //WalkTargetPos = GetRndMoveDirection();
+                _previousWaypoint = WalkTargetPos;
 
-                // Setup Walking Animation
-                _behaviourCtrl.Animator.SetBool("Engage", true);
+                for (int i = 0; i < _behaviourCtrl.WayPoints.Count; i++)    // set _nexWaypoint and _currentTargetWaypoint to new values on Timer End
+                {
+                    if (_currentTargetWaypointObj == _behaviourCtrl.WayPoints[i])
+                    {
+                        _nextWaypoint = _behaviourCtrl.WayPoints[i++].transform.position;
+                        _currentTargetWaypointObj = _behaviourCtrl.WayPoints[i++];
+                        break;
+                    }
+                }
+                WalkTargetPos = _nextWaypoint;
 
-                Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': rnd-Walking-Timer ended and was set to 0.0f again; New MovingDirection was calculated and set");
-            }
-            else if (Timer <= _rndWaitAtWaypointTime && (Vector2)_behaviourCtrl.transform.position == (Vector2)WalkTargetPos)      // if Timer is still running but Walking-Taget-Position is reached
-            {
-                if (!_isWaitingForWaypointTimerEnd)    // set random lookdirection if it is the first time entering this query
-                    _lookdirectionWhileWaitingForTimerEnd = Random.insideUnitCircle;
-
-                _isWaitingForWaypointTimerEnd = true;
-                _behaviourCtrl.NavAgent.isStopped = true;
-                _behaviourCtrl.Animator.SetBool("Engage", false);
-
-                Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': rnd-Walking-Timer still running; rnd-Walking-Range was reached");
-            }
-            else if (IsMovingToCloseToObstacle)     // if Agent is walking to close towards an Obstacle, change walkin direction to the oposite
-            {
-                WalkTargetPos = _currentObstacleAvoidanceVector;
-                Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': Walking Direction was Changed due to walking to close towards obstacle; new direction: {_currentObstacleAvoidanceVector}");
-                OnObstacleAvoidance?.Invoke(_currentObstacleAvoidanceVector);
-                IsMovingToCloseToObstacle = false;
+                Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': waiting-on-waypoint-timer ended and was set to 0.0f again; " +
+                    $"next Waypoint('<color=orange>{_currentTargetWaypointObj.name}</color>') is set as WalkTargetPos");
             }
         }
 
@@ -253,22 +331,22 @@ namespace ScriptableObjects
             }
         }
 
-        /// <summary>
-        /// Checks all '<see cref="_directionsToCheckToAvoidObstacle"/>' for beeing clear of Obstacles inside the '<see cref="_distanceToCheckForObstacles"/>'. If so the
-        /// '<see cref="_currentObstacleAvoidanceVector"/>' will be set accordingly.
-        /// </summary>
-        private void CheckForObstacleAvoidanceVector()
-        {
-            for (int i = 0; i < _directionsToCheckToAvoidObstacle.Length; i++)
-            {
-                RaycastHit hit;
-                Vector3 currentDirectionToCheck = _behaviourCtrl.transform.TransformDirection(_directionsToCheckToAvoidObstacle[i].normalized);
+        ///// <summary>
+        ///// Checks all '<see cref="_directionsToCheckToAvoidObstacle"/>' for beeing clear of Obstacles inside the '<see cref="_distanceToCheckForObstacles"/>'. If so the
+        ///// '<see cref="_currentObstacleAvoidanceVector"/>' will be set accordingly.
+        ///// </summary>
+        //private void CheckForObstacleAvoidanceVector()
+        //{
+        //    for (int i = 0; i < _directionsToCheckToAvoidObstacle.Length; i++)
+        //    {
+        //        RaycastHit hit;
+        //        Vector3 currentDirectionToCheck = _behaviourCtrl.transform.TransformDirection(_directionsToCheckToAvoidObstacle[i].normalized);
 
-                // if no obstacle was detected in the checked direction -> set this direction to the desired avoidance direction
-                if (!Physics.Raycast(_behaviourCtrl.transform.position, currentDirectionToCheck, out hit, _distanceForAvoidCheck, _obstacleMask))
-                    _currentObstacleAvoidanceVector = currentDirectionToCheck.normalized;
-            }
-        }
+        //        // if no obstacle was detected in the checked direction -> set this direction to the desired avoidance direction
+        //        if (!Physics.Raycast(_behaviourCtrl.transform.position, currentDirectionToCheck, out hit, _distanceForAvoidCheck, _obstacleMask))
+        //            _currentObstacleAvoidanceVector = currentDirectionToCheck.normalized;
+        //    }
+        //}
         #endregion
 
         #endregion
