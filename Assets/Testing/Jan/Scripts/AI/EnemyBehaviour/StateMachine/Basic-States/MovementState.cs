@@ -23,7 +23,7 @@ namespace StateMashine
             base.EnterState();
 
             // calling the actual Behaviour of the State-ScriptableObjects
-            _behaviourCtrl.BaseEnemyIdleStateSOInstance.ExecuteOnE﻿nterState();
+            _behaviourCtrl.BaseEnemyMovementStateSOInstance.ExecuteOnE﻿nterState();
         }
 
         public override void ExitState()

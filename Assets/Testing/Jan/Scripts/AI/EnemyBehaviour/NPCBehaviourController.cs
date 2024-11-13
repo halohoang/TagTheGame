@@ -28,7 +28,7 @@ namespace Enemies
         [SerializeField, ReadOnly] private ConditionIsInMeleeAttackRangeCheck _condMeleeAttackCheck;    // Todo: obsolete with new perception System, remove as soon as completely changed to new system
         [Space(5)]
 
-        [Header("References to Behaviour ScriptableObjects"), InfoBox("These fields need to be checked and Set!", EInfoBoxType.Warning)] // Todo: think about bool -> _isPatrolingEnemy that enables/disables patroling state; JM (04.11.24)
+        [Header("References to Behaviour ScriptableObjects")] // Todo: think about bool -> _isPatrolingEnemy that enables/disables patroling state; JM (04.11.24)
         [SerializeField] private BaseEnemyIdleSO _baseIdleStateSO;
         [SerializeField] private BaseEnemyMovementSO _baseMovemenStateSO;
         [SerializeField] private BaseEnemyAlertSO _baseAlertStateSO;

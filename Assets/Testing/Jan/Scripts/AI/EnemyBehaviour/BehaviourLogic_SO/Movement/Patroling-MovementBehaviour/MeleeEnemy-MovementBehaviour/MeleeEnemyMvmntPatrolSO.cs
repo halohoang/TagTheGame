@@ -58,6 +58,7 @@ namespace ScriptableObjects
         //private Vector3 _currentObstacleAvoidanceVector;
         private float _timer = 0.0f;
         private float _rndWaitAtWaypointTime;
+        private bool _isPatrolingWaypointsInReverse;
         private bool _isMoving;
         private bool _isWaitingForWaypointTimerEnd;
         private bool _wasAlerted;
@@ -114,11 +115,17 @@ namespace ScriptableObjects
 
             if (_wasAlerted)
                 WalkTargetPos = _previousPosition;
-            else if (!_wasAlerted)
+            else
                 isWalkTargetPosEqualWayPoint = CompareEnemyObjPosWithItsWayPoints();
                         
             if (!_wasAlerted && !isWalkTargetPosEqualWayPoint)
+            {
                 WalkTargetPos = _behaviourCtrl.WayPoints[0].transform.position;
+                _currentTargetWaypointObj = _behaviourCtrl.WayPoints[0];
+            }
+            Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': Value of '_nextWaypoin': '<color=lime>{_nextWaypoint}</color>'");
+            Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': Value of '_currentTargetWaypoint': '<color=lime>{_currentTargetWaypointObj.name}</color>'");
+            Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': Called 'ExecuteOnEnterState' ->'WalkTargetPos': '<color=lime>{WalkTargetPos}</color>'");
 
             // Setup NavMeshAgent-Properties
             _behaviourCtrl.NavAgent.speed = _patrolingSpeed;
@@ -192,20 +199,20 @@ namespace ScriptableObjects
         /// </summary>
         private bool CompareEnemyObjPosWithItsWayPoints()
         {
-            Vector3 zeroVector = new Vector3(0, 0, 0);
-            _nextWaypoint = zeroVector;
+            // reste values
+            _nextWaypoint = Vector3.zero;
             _currentTargetWaypointObj = null;
 
             for (int i = 0; i < _behaviourCtrl.WayPoints.Count; i++)    // when already standing at a wayppoint-position, then Set 'WalkTargetPos' to next waypoint
             {
-                if (_behaviourCtrl.gameObject.transform.position == _behaviourCtrl.WayPoints[i].transform.position)
+                if (Physics2D.OverlapCircle(_behaviourCtrl.WayPoints[i].transform.position, 0.5f, _behaviourCtrl.gameObject.layer))
                 {
                     _nextWaypoint = _behaviourCtrl.WayPoints[i++].transform.position;
                     _currentTargetWaypointObj = _behaviourCtrl.WayPoints[i++];
-                    break;
+                    return true;
                 }
             }
-            return _nextWaypoint != zeroVector && _currentTargetWaypointObj != null;
+            return false;
         }
 
         /// <summary>
@@ -225,7 +232,7 @@ namespace ScriptableObjects
 
                 Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': since EnemyObj collided with´an obstacle, movement was stoped currently. new movementdirection will be calculated");
             }
-            else if (_behaviourCtrl.transform.position == WalkTargetPos) // if waypoit is reached -> wait
+            else if (Physics2D.OverlapCircle(WalkTargetPos, 0.5f, _behaviourCtrl.gameObject.layer)) // if waypoit is reached -> wait
             {
                 // 1. Setup Timer
                 Timer += Time.deltaTime;

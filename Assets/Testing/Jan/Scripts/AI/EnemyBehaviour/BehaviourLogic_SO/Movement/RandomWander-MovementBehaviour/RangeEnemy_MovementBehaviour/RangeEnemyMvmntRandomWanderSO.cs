@@ -1,5 +1,6 @@
 ﻿using Enemies;
 using EnumLibrary;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ScriptableObjects
@@ -51,7 +52,7 @@ namespace ScriptableObjects
         // - - - - -  M E T H O D S  - - - - 
         //----------------------------------
 
-
+        
         #region Custom Methods
         public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {
