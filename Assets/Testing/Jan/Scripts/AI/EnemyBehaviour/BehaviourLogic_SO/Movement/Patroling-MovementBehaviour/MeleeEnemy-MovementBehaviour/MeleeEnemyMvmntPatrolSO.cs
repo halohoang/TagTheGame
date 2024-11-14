@@ -249,6 +249,8 @@ namespace ScriptableObjects
 
                 // 3. check if Timer is out of time and set values respectively
                 SetNewWalkTargetPosOnTimerEnd();
+
+                // 4. check if last Waypoint was reached -> change to reverse patroling waypoints
             }
 
             //if last waypoint is reached
