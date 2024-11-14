@@ -1,5 +1,6 @@
 ﻿using Enemies;
 using EnumLibrary;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -55,6 +56,7 @@ namespace ScriptableObjects
         private Vector3 _nextWaypoint;
         private Vector3 _previousWaypoint;
         private Vector3 _lookdirectionWhileWaitingForTimerEnd;
+        private Vector2 _thisEnemyObjPos2D;
         //private Vector3 _currentObstacleAvoidanceVector;
         private float _timer = 0.0f;
         private float _rndWaitAtWaypointTime;
@@ -117,7 +119,7 @@ namespace ScriptableObjects
                 WalkTargetPos = _previousPosition;
             else
                 isWalkTargetPosEqualWayPoint = CompareEnemyObjPosWithItsWayPoints();
-                        
+
             if (!_wasAlerted && !isWalkTargetPosEqualWayPoint)
             {
                 WalkTargetPos = _behaviourCtrl.WayPoints[0].transform.position;
@@ -132,7 +134,7 @@ namespace ScriptableObjects
 
             // Setup walking animation
             _behaviourCtrl.Animator.SetBool("Engage", true);
-        }        
+        }
 
         public override void ExecuteOnExitState()
         {
@@ -156,7 +158,8 @@ namespace ScriptableObjects
             // execute actual walking according to previous checks and settings
             _behaviourCtrl.NavAgent.isStopped = false;
             _behaviourCtrl.NavAgent.SetDestination(WalkTargetPos);
-            Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': 'WalkTargetPos' was set and EnemyObject should move respectively to pos '<color=yellow>{WalkTargetPos}</color>'");
+            Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': 'WalkTargetPos': '<color=yellow>{WalkTargetPos}</color>' in 'Update()'");
+            Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': 'EnemyEntity-Pos': '<color=yellow>{_behaviourCtrl.transform.position}</color>' in 'Update()'");
 
             _behaviourCtrl.SetIsCollidingWithObject(false);    // reset bool is collidion with other enemy so at the end of an update cycly so the AI actually has a chance to wolk another direction
         }
@@ -205,7 +208,7 @@ namespace ScriptableObjects
 
             for (int i = 0; i < _behaviourCtrl.WayPoints.Count; i++)    // when already standing at a wayppoint-position, then Set 'WalkTargetPos' to next waypoint
             {
-                if (Physics2D.OverlapCircle(_behaviourCtrl.WayPoints[i].transform.position, 0.5f, _behaviourCtrl.gameObject.layer))
+                if ((Vector2)_behaviourCtrl.transform.position == (Vector2)_behaviourCtrl.WayPoints[i].transform.position)
                 {
                     _nextWaypoint = _behaviourCtrl.WayPoints[i++].transform.position;
                     _currentTargetWaypointObj = _behaviourCtrl.WayPoints[i++];
@@ -232,8 +235,11 @@ namespace ScriptableObjects
 
                 Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': since EnemyObj collided with´an obstacle, movement was stoped currently. new movementdirection will be calculated");
             }
-            else if (Physics2D.OverlapCircle(WalkTargetPos, 0.5f, _behaviourCtrl.gameObject.layer)) // if waypoit is reached -> wait
+            else if ((Vector2)_behaviourCtrl.transform.position == (Vector2)WalkTargetPos) // if waypoit is reached -> wait
             {
+                if (!_isWaitingForWaypointTimerEnd)     // set random lookdirection if it is the first time entering this query
+                    _lookdirectionWhileWaitingForTimerEnd = Random.insideUnitCircle;
+
                 // 1. Setup Timer
                 Timer += Time.deltaTime;
 
@@ -245,11 +251,21 @@ namespace ScriptableObjects
                 SetNewWalkTargetPosOnTimerEnd();
             }
 
-            // if last waypoint is reached
-            //if (_currentTargetWaypointObj == _behaviourCtrl.WayPoints[_behaviourCtrl.WayPoints.Count] && _behaviourCtrl.gameObject.transform.position == WalkTargetPos)
-            //{
-            //    // think about logic for going through waypoints backwards; JM (10.11.24)
-            //}
+            //if last waypoint is reached
+            if (_currentTargetWaypointObj == _behaviourCtrl.WayPoints[_behaviourCtrl.WayPoints.Count - 1] && (Vector2)_behaviourCtrl.gameObject.transform.position == (Vector2)WalkTargetPos)
+            {
+                //Todo: implement Code for reverse patroling the Waypoints
+
+                //// 1. Setup Timer
+                //Timer += Time.deltaTime;
+
+                //// 2. Halt movement for as long as timer runs
+                //_isWaitingForWaypointTimerEnd = true;
+                //_behaviourCtrl.Animator.SetBool("Engage", false);
+
+                //// 3. check if Timer is out of time and set values respectively
+                //SetNewWalkTargetPosOnTimerEnd();
+            }
 
             #region Old Code from RndWalk-SO
             // Todo: continue work here
@@ -307,16 +323,25 @@ namespace ScriptableObjects
                 // reset Walking Direction/TargetPos
                 _previousWaypoint = WalkTargetPos;
 
+
                 for (int i = 0; i < _behaviourCtrl.WayPoints.Count; i++)    // set _nexWaypoint and _currentTargetWaypoint to new values on Timer End
                 {
-                    if (_currentTargetWaypointObj == _behaviourCtrl.WayPoints[i])
+                    if (_currentTargetWaypointObj == _behaviourCtrl.WayPoints[i] && i < _behaviourCtrl.WayPoints.Count - 1)
                     {
                         _nextWaypoint = _behaviourCtrl.WayPoints[i++].transform.position;
                         _currentTargetWaypointObj = _behaviourCtrl.WayPoints[i++];
                         break;
                     }
+                    else if (_currentTargetWaypointObj == _behaviourCtrl.WayPoints[i] && i == _behaviourCtrl.WayPoints.Count - 1)
+                    {
+                        _nextWaypoint = _behaviourCtrl.WayPoints[i].transform.position;
+                        _currentTargetWaypointObj = _behaviourCtrl.WayPoints[i];
+                        break;
+                    }
                 }
                 WalkTargetPos = _nextWaypoint;
+                _behaviourCtrl.Animator.SetBool("Engage", true);
+                _isWaitingForWaypointTimerEnd = false;
 
                 Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': waiting-on-waypoint-timer ended and was set to 0.0f again; " +
                     $"next Waypoint('<color=orange>{_currentTargetWaypointObj.name}</color>') is set as WalkTargetPos");
@@ -356,7 +381,7 @@ namespace ScriptableObjects
                 //// a alternative way to manage the facing direction by applying the rotation to the transform instead of to the rigidbody
                 //Quaternion quart = Quaternion.AngleAxis(angle, Vector3.forward);
                 //_baseEnemyBehaviour.transform.rotation = quart;
-                #endregion                
+                #endregion
             }
         }
 

@@ -64,5 +64,11 @@ namespace EnumLibrary
             PatrolBehavour,
             RandomWanderBehaviour
         }
+
+        public enum EWaypointPatrolOrder
+        {
+            Forward,
+            Reverse
+        }
     }
 }
