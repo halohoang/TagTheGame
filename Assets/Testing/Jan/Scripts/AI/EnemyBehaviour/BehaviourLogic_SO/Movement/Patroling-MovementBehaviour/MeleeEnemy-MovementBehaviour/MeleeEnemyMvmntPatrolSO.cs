@@ -53,7 +53,7 @@ namespace ScriptableObjects
         private GameObject _currentTargetWaypointObj;
         private Rigidbody2D _thisEnemyRB2D;
         private Vector3 _walkTargedPos;
-        private Vector3 _nextWaypoint;
+        private Vector3 _nextWaypointPos;
         private Vector3 _previousWaypoint;
         private Vector3 _lookdirectionWhileWaitingForTimerEnd;
         private Vector2 _thisEnemyObjPos2D;
@@ -64,6 +64,7 @@ namespace ScriptableObjects
         private bool _isMoving;
         private bool _isWaitingForWaypointTimerEnd;
         private bool _wasAlerted;
+        private bool _reverseWaypointPatroling;
         //private bool _isMovingTOCloseToObstacle = false;
 
         // prperties
@@ -122,10 +123,10 @@ namespace ScriptableObjects
 
             if (!_wasAlerted && !isWalkTargetPosEqualWayPoint)
             {
-                WalkTargetPos = _behaviourCtrl.WayPoints[0].transform.position;
                 _currentTargetWaypointObj = _behaviourCtrl.WayPoints[0];
+                WalkTargetPos = _currentTargetWaypointObj.transform.position;
             }
-            Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': Value of '_nextWaypoin': '<color=lime>{_nextWaypoint}</color>'");
+            Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': Value of '_nextWaypoin': '<color=lime>{_nextWaypointPos}</color>'");
             Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': Value of '_currentTargetWaypoint': '<color=lime>{_currentTargetWaypointObj.name}</color>'");
             Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': Called 'ExecuteOnEnterState' ->'WalkTargetPos': '<color=lime>{WalkTargetPos}</color>'");
 
@@ -158,8 +159,8 @@ namespace ScriptableObjects
             // execute actual walking according to previous checks and settings
             _behaviourCtrl.NavAgent.isStopped = false;
             _behaviourCtrl.NavAgent.SetDestination(WalkTargetPos);
-            Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': 'WalkTargetPos': '<color=yellow>{WalkTargetPos}</color>' in 'Update()'");
-            Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': 'EnemyEntity-Pos': '<color=yellow>{_behaviourCtrl.transform.position}</color>' in 'Update()'");
+            //Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': 'WalkTargetPos': '<color=yellow>{WalkTargetPos}</color>' in 'Update()'");
+            //Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': 'EnemyEntity-Pos': '<color=yellow>{_behaviourCtrl.transform.position}</color>' in 'Update()'");
 
             _behaviourCtrl.SetIsCollidingWithObject(false);    // reset bool is collidion with other enemy so at the end of an update cycly so the AI actually has a chance to wolk another direction
         }
@@ -197,21 +198,21 @@ namespace ScriptableObjects
 
         /// <summary>
         /// Checks if the position of the game object attached to the <see cref="NPCBehaviourController"/> is equal to any of the waypoints in <see cref="NPCBehaviourController.WayPoints"/>.
-        /// If so the <see cref="_nextWaypoint"/> will be set to the position of the following Waypoint in the List. And the <see cref="_currentTargetWaypointObj"/> will be set to the 
-        /// respective Waypoint-Object. Returns true if the <see cref="_nextWaypoint"/> was set to a location other than (0,0,0) and <see cref="_currentTargetWaypointObj"/> is not null.
+        /// If so the <see cref="_nextWaypointPos"/> will be set to the position of the following Waypoint in the List. And the <see cref="_currentTargetWaypointObj"/> will be set to the 
+        /// respective Waypoint-Object. Returns true if the <see cref="_nextWaypointPos"/> was set to a location other than (0,0,0) and <see cref="_currentTargetWaypointObj"/> is not null.
         /// </summary>
         private bool CompareEnemyObjPosWithItsWayPoints()
         {
             // reste values
-            _nextWaypoint = Vector3.zero;
+            _nextWaypointPos = Vector3.zero;
             _currentTargetWaypointObj = null;
 
             for (int i = 0; i < _behaviourCtrl.WayPoints.Count; i++)    // when already standing at a wayppoint-position, then Set 'WalkTargetPos' to next waypoint
             {
                 if ((Vector2)_behaviourCtrl.transform.position == (Vector2)_behaviourCtrl.WayPoints[i].transform.position)
                 {
-                    _nextWaypoint = _behaviourCtrl.WayPoints[i++].transform.position;
                     _currentTargetWaypointObj = _behaviourCtrl.WayPoints[i++];
+                    _nextWaypointPos = _currentTargetWaypointObj.transform.position;
                     return true;
                 }
             }
@@ -247,26 +248,11 @@ namespace ScriptableObjects
                 _isWaitingForWaypointTimerEnd = true;
                 _behaviourCtrl.Animator.SetBool("Engage", false);
 
-                // 3. check if Timer is out of time and set values respectively
-                SetNewWalkTargetPosOnTimerEnd();
-
-                // 4. check if last Waypoint was reached -> change to reverse patroling waypoints
-            }
-
-            //if last waypoint is reached
-            if (_currentTargetWaypointObj == _behaviourCtrl.WayPoints[_behaviourCtrl.WayPoints.Count - 1] && (Vector2)_behaviourCtrl.gameObject.transform.position == (Vector2)WalkTargetPos)
-            {
-                //Todo: implement Code for reverse patroling the Waypoints
-
-                //// 1. Setup Timer
-                //Timer += Time.deltaTime;
-
-                //// 2. Halt movement for as long as timer runs
-                //_isWaitingForWaypointTimerEnd = true;
-                //_behaviourCtrl.Animator.SetBool("Engage", false);
-
-                //// 3. check if Timer is out of time and set values respectively
-                //SetNewWalkTargetPosOnTimerEnd();
+                // 3. check which waypoint patrolling order shall be executed -> forward or reverse and execute respective Logic
+                if (!_reverseWaypointPatroling)
+                    SetNewWalkTargetPosOnTimerEnd(Enum_Lib.EWaypointPatrolOrder.Forward);
+                else
+                    SetNewWalkTargetPosOnTimerEnd(Enum_Lib.EWaypointPatrolOrder.Reverse);
             }
 
             #region Old Code from RndWalk-SO
@@ -311,10 +297,10 @@ namespace ScriptableObjects
         }
 
         /// <summary>
-        /// Checks if <see cref="Timer"/> runs out of time and respectively sets the <see cref="WalkTargetPos"/> to the next waypoint (<see cref="_nextWaypoint"/>). Also sets
+        /// Checks if <see cref="Timer"/> runs out of time and respectively sets the <see cref="WalkTargetPos"/> to the next waypoint (<see cref="_nextWaypointPos"/>). Also sets
         /// <see cref="_previousWaypoint"/> and <see cref="_currentTargetWaypointObj"/> respectively to new values.
         /// </summary>
-        private void SetNewWalkTargetPosOnTimerEnd()
+        private void SetNewWalkTargetPosOnTimerEnd(Enum_Lib.EWaypointPatrolOrder waypointPatrolOrder)
         {
             if (Timer > _rndWaitAtWaypointTime) // is Timer out of time
             {
@@ -325,28 +311,76 @@ namespace ScriptableObjects
                 // reset Walking Direction/TargetPos
                 _previousWaypoint = WalkTargetPos;
 
-
-                for (int i = 0; i < _behaviourCtrl.WayPoints.Count; i++)    // set _nexWaypoint and _currentTargetWaypoint to new values on Timer End
+                switch (waypointPatrolOrder)
                 {
-                    if (_currentTargetWaypointObj == _behaviourCtrl.WayPoints[i] && i < _behaviourCtrl.WayPoints.Count - 1)
-                    {
-                        _nextWaypoint = _behaviourCtrl.WayPoints[i++].transform.position;
-                        _currentTargetWaypointObj = _behaviourCtrl.WayPoints[i++];
+                    case Enum_Lib.EWaypointPatrolOrder.Forward:
+                        SetNextWaypointInPatrolingOrderForward();
                         break;
-                    }
-                    else if (_currentTargetWaypointObj == _behaviourCtrl.WayPoints[i] && i == _behaviourCtrl.WayPoints.Count - 1)
-                    {
-                        _nextWaypoint = _behaviourCtrl.WayPoints[i].transform.position;
-                        _currentTargetWaypointObj = _behaviourCtrl.WayPoints[i];
+                    case Enum_Lib.EWaypointPatrolOrder.Reverse:
+                        SetNextWaypointInPatrolingOrderReverse();
                         break;
-                    }
                 }
-                WalkTargetPos = _nextWaypoint;
+
+                WalkTargetPos = _nextWaypointPos;
                 _behaviourCtrl.Animator.SetBool("Engage", true);
                 _isWaitingForWaypointTimerEnd = false;
 
                 Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': waiting-on-waypoint-timer ended and was set to 0.0f again; " +
-                    $"next Waypoint('<color=orange>{_currentTargetWaypointObj.name}</color>') is set as WalkTargetPos");
+                    $"next Waypoint('<color=orange>{_currentTargetWaypointObj.name}</color>') is set as WalkTargetPos | " +
+                    $"is patroling order reverse: '<color=cyan>{_reverseWaypointPatroling}</color>'");
+            }
+        }
+
+        /// <summary>
+        /// Iterates forward through <see cref="NPCBehaviourController.WayPoints"/>, starting from first waypoint, and sets <see cref="_nextWaypointPos"/> and 
+        /// <see cref="_currentTargetWaypointObj"/> respectively
+        /// </summary>
+        private void SetNextWaypointInPatrolingOrderForward()
+        {
+            for (int i = 0; i < _behaviourCtrl.WayPoints.Count; i++)    // set _nexWaypoint and _currentTargetWaypoint to new values on Timer End
+            {
+                // choose next waypoint in list if current target waypoint is not yet the last waypoint in list
+                if (_currentTargetWaypointObj == _behaviourCtrl.WayPoints[i] && i < _behaviourCtrl.WayPoints.Count - 1)
+                {
+                    _currentTargetWaypointObj = _behaviourCtrl.WayPoints[++i];
+                    _nextWaypointPos = _currentTargetWaypointObj.transform.position;
+                    Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': _currentWaypointObj = '<color=lime>{_currentTargetWaypointObj.name}</color>; set in Forward Logic");
+                    break;
+                }
+                // else if current target waypoint is the last waypoint in waypoint list 
+                else if (_currentTargetWaypointObj == _behaviourCtrl.WayPoints[_behaviourCtrl.WayPoints.Count - 1])
+                {
+                    Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': _currentWaypointObj = '<color=lime>{_currentTargetWaypointObj.name}</color>'; set in Forward Logic");
+                    _reverseWaypointPatroling = true;
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Iterates backwards through <see cref="NPCBehaviourController.WayPoints"/>, starting from Last Waypoint, and sets <see cref="_nextWaypointPos"/> and 
+        /// <see cref="_currentTargetWaypointObj"/> respectively
+        /// </summary>
+        private void SetNextWaypointInPatrolingOrderReverse()
+        {
+            for (int i = _behaviourCtrl.WayPoints.Count - 1; i > 0; --i)    // set _nexWaypoint and _currentTargetWaypoint to new values on Timer End
+            {
+                Debug.Log($"In Logic for Reverse Patrol Order: value of 'i' = '<color=cyan>{i}</color>'");
+                // choose next waypoint in list if current target waypoint is not yet the first waypoint in list
+                if (_currentTargetWaypointObj == _behaviourCtrl.WayPoints[i] && i > 0)
+                {
+                    _currentTargetWaypointObj = _behaviourCtrl.WayPoints[--i];
+                    _nextWaypointPos = _currentTargetWaypointObj.transform.position;
+                    Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': _currentWaypointObj = '<color=yellow>{_currentTargetWaypointObj.name}</color>'; set in Reverse Logic");
+                    break;
+                }
+                // else if current target waypoint is the first waypoint in waypoint list 
+                else if (_currentTargetWaypointObj == _behaviourCtrl.WayPoints[0])
+                {
+                    Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': _currentWaypointObj = '<color=yellow>{_currentTargetWaypointObj.name}</color>'; set in Reverse Logic");
+                    _reverseWaypointPatroling = false;
+                    break;
+                }
             }
         }
 
