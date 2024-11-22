@@ -81,7 +81,14 @@ namespace UI
         [SerializeField, ReadOnly] private bool _isTimeScaleManipulated;
 
         private GameObject[] _uITextObjects;                                        // stores the UI-Text-Objects for quicker referencing and access
+        #region Tooltip
+        [Tooltip("The stored Weapon-Sprites for quicker referencing and access")]
+        #endregion
         [SerializeField, ReadOnly] private Sprite[] _weaponSprites;                 // stores the Weapon Sprites for quicker referencing and access
+        #region Tooltip
+        [Tooltip("The Sprites used as icons to visualize enemy behaviour (AlertState/InvestigationiState), for quicker access")]
+        #endregion
+        [SerializeField, ReadOnly] private Sprite[] _enemyBehaviourFeedbackIcons;   // stores the Sprites used as icons to visualize enemy behaviour (AlertState/InvestigationiState)
 
         #endregion
 
@@ -99,6 +106,9 @@ namespace UI
 
             // instantiate and load Weapon Textures for UI-Weapondisplay
             _weaponSprites = Resources.LoadAll<Sprite>("Sprites/WeaponSprites");
+
+            // instatiate and load Enemy-Behaviour-Icons for Enemy-Behaviour-Feedback-Display
+            _enemyBehaviourFeedbackIcons = Resources.LoadAll<Sprite>("Sprites/EnemyBehavFeedbackSprites");
 
             // Autoreferencing
             if (_roundsInMagDisplayTxt == null)

@@ -1,20 +1,17 @@
 ﻿using Enemies;
 using EnumLibrary;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace ScriptableObjects
 {
-    [CreateAssetMenu(fileName = "MeleeEnemy_Mvmnt_Patrol", menuName = "Scriptable Objects/Enemy Logic/Movement Logic/MeleeEnemy Patrol")]
-    public class MeleeEnemyMvmntPatrolSO : BaseEnemyMovementSO
+    [CreateAssetMenu(fileName = "Enemy_Mvmnt_Patrol", menuName = "Scriptable Objects/Enemy Logic/Movement Logic/Enemy Patrol")]
+    public class EnemyMvmntPatrolSO : BaseEnemyMovementSO
     {
         #region Events
         //--------------------------------
         // - - - - -  E V E N T S  - - - - 
         //--------------------------------
-
-        public static event UnityAction<Vector3> OnObstacleAvoidance;
+        
         #endregion
 
         #region Variables

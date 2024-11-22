@@ -135,7 +135,7 @@ namespace Enemies
                 _isThisRandomWanderNPC = false;
                 _isStandingIdleNPC = true;
             }
-            else if (_baseMovemenStateSO is MeleeEnemyMvmntPatrolSO)
+            else if (_baseMovemenStateSO is EnemyMvmntPatrolSO)
             {
                 _isThisPatrolingNPC = true;
                 _isThisRandomWanderNPC = false;
@@ -246,7 +246,7 @@ namespace Enemies
                 _isThisRandomWanderNPC = false;
                 _isStandingIdleNPC = true;
             }
-            else if (_baseMovemenStateSO is MeleeEnemyMvmntPatrolSO)
+            else if (_baseMovemenStateSO is EnemyMvmntPatrolSO)
             {
                 _isThisPatrolingNPC = true;
                 _isThisRandomWanderNPC = false;
