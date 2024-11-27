@@ -32,6 +32,7 @@ namespace Enemies
         [SerializeField] private BaseEnemyIdleSO _baseIdleStateSO;
         [SerializeField] private BaseEnemyMovementSO _baseMovemenStateSO;
         [SerializeField] private BaseEnemyAlertSO _baseAlertStateSO;
+        [SerializeField] private BaseEnemyAlertSO _baseInvestigationStateSO;
         [SerializeField] private BaseEnemyChaseSO _baseChaseStateSO;
         [SerializeField] private BaseEnemyAttackSO _baseAttackStateSO;
 
@@ -40,6 +41,7 @@ namespace Enemies
         public BaseEnemyIdleSO BaseEnemyIdleStateSOInstance { get; set; }
         public BaseEnemyMovementSO BaseEnemyMovementStateSOInstance { get; set; }
         public BaseEnemyAlertSO BaseEnemyAlertStateSOInstance { get; set; }
+        public BaseEnemyAlertSO BaseEnemyInvestigationStateSOInstance { get; set; }
         public BaseEnemyChaseSO BaseEnemyChaseStateSOInstance { get; set; }
         public BaseEnemyAttackSO BaseEnemyAttackStateSOInstance { get; set; }
         [Space(5)]
@@ -76,6 +78,7 @@ namespace Enemies
         private IdleState _idleState;
         private MovementState _movementState;
         private AlertState _alertState;
+        private InvestigationState _investigationState;
         private ChaseState _chaseState;
         private AttackState _attackState;
 
@@ -108,6 +111,7 @@ namespace Enemies
         public IdleState IdleState { get => _idleState; set => _idleState = value; }
         public MovementState MovementState { get => _movementState; set => _movementState = value; }
         public AlertState AlertState { get => _alertState; set => _alertState = value; }
+        public InvestigationState InvestigationState { get => _investigationState; set => _investigationState = value; }
         public ChaseState ChaseState { get => _chaseState; set => _chaseState = value; }
         public AttackState AttackState { get => _attackState; set => _attackState = value; }
 
@@ -160,6 +164,7 @@ namespace Enemies
             BaseEnemyIdleStateSOInstance = Instantiate(_baseIdleStateSO);
             BaseEnemyMovementStateSOInstance = Instantiate(_baseMovemenStateSO);
             BaseEnemyAlertStateSOInstance = Instantiate(_baseAlertStateSO);
+            BaseEnemyInvestigationStateSOInstance = Instantiate(_baseInvestigationStateSO);
             BaseEnemyChaseStateSOInstance = Instantiate(_baseChaseStateSO);
             BaseEnemyAttackStateSOInstance = Instantiate(_baseAttackStateSO);
 
@@ -168,6 +173,7 @@ namespace Enemies
             IdleState = new IdleState(this, StateMachine);
             MovementState = new MovementState(this, StateMachine);
             AlertState = new AlertState(this, StateMachine);
+            InvestigationState = new InvestigationState(this, StateMachine);
             ChaseState = new ChaseState(this, StateMachine);
             AttackState = new AttackState(this, StateMachine);
         }
@@ -234,6 +240,7 @@ namespace Enemies
             BaseEnemyIdleStateSOInstance.Initialize(this.gameObject, this);
             BaseEnemyMovementStateSOInstance.Initialize(this.gameObject, this);
             BaseEnemyAlertStateSOInstance.Initialize(this.gameObject, this);
+            BaseEnemyInvestigationStateSOInstance.Initialize(this.gameObject, this);
             BaseEnemyChaseStateSOInstance.Initialize(this.gameObject, this);
             BaseEnemyAttackStateSOInstance.Initialize(this.gameObject, this);
             // todo: JM; rework Architecture since the Initializiation like that will allways put the specific EnemyBehaviourCtrl.cs into a NPCBahaviourController (because of Polymorphism) regardless if MeleeEnemyBehaviour or RangeEnemyBehaviour. Accordingly simple Overloading the Initialization() to take Melee/RangeEnemyBehaviour woun't work since nonetheless the first Overload(NPCBahaviourController will be used simply becaus it's possible) therefore outsourcing the MeleeAttack/chase Logic to MeleeEnemyBehaviour can't be called in the specific BehaviourScriptable Objects. -> find a Solution for this Problem(!). until then stick to the existing appraoch by handling all Attack/Chase-Logic and Queries (if 'isInAttackRange' etc) in the NPCBahaviourController.cs even if it's no nice architecture and makes the MeleeEnemyBehaviour/RangeEnemyBehaviour.cs actually useless a the moment; (JM 10.11.2023)            
