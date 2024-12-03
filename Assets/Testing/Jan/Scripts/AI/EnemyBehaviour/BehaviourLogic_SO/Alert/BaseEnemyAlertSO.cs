@@ -19,6 +19,12 @@ namespace ScriptableObjects
 
         protected Transform _playerTransform;
 
+        #region
+        [Tooltip("The time (in sec.) the target shall be detected until the state will chage to chase/atack-state. Standard is 1 sec.")]
+        #endregion
+        [SerializeField] private float _targetDetectionTime = 1.0f;
+
+        private float _detectionTimer;              // runs for checking how long the target is detected
         private Vector3 _previousEventPosition;
         #endregion
 
@@ -55,7 +61,10 @@ namespace ScriptableObjects
 
         public virtual void ExecuteOnE﻿nterState()
         {
-            FaceAgentTowardsAlarmingEvent(_behaviourCtrl.PositionOfAlarmingEvent, _behaviourCtrl.NoiseRangeOfAlarmingEvent);            
+            FaceAgentTowardsAlarmingEvent(_behaviourCtrl.PositionOfAlarmingEvent, _behaviourCtrl.NoiseRangeOfAlarmingEvent);
+
+            // set detection timer to '0'
+            _detectionTimer = 0.0f;
         }
 
         public virtual void ExecuteOnExitState()
@@ -68,8 +77,22 @@ namespace ScriptableObjects
             // Transition-Condition-Check
             if (_behaviourCtrl.IsTargetDetected)
             {
-                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.ChaseState);
-                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
+                _detectionTimer += Time.deltaTime;
+
+                // if timer runs out and target is still detected -> transit to CHaseState
+                if (_detectionTimer == _targetDetectionTime)
+                {
+                    _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.ChaseState);
+                    Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
+                    return;
+                }
+            }
+            else
+            {
+                // reset detection TImer
+                _detectionTimer = 0.0f;
+                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.InvestigationState);
+                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>InvestigationState</color>' should have been happend now!");
                 return;
             }
 

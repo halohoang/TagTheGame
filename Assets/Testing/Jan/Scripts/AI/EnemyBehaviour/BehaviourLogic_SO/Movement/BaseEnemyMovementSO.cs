@@ -56,8 +56,8 @@ namespace ScriptableObjects
             if (_behaviourCtrl.IsTargetDetected)
             {
                 _previousPosition = _behaviourCtrl.transform.position;  // store previos position of attached gameObj
-                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.ChaseState);
-                Debug.Log($"<color=orange> AI-Behav: </color> {_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
+                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.AlertState);
+                Debug.Log($"<color=orange> AI-Behav: </color> {_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Alert</color>' should have been happend now!");
             }
         }
 

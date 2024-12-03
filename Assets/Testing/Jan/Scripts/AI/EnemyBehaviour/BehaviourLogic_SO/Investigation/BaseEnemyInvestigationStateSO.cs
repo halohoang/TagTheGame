@@ -69,7 +69,11 @@ public class BaseEnemyInvestigationStateSO : MonoBehaviour
             _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.ChaseState);
             Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
             return;
-        }        
+        }
+        else
+        {
+
+        }
     }
 
     public virtual void ExecutePhysicsUpdate() { }
