@@ -61,8 +61,8 @@ namespace ScriptableObjects
 
         public virtual void ExecuteOnE﻿nterState()
         {
+            //Todo: Message to UI-Managr for BehaviourFeedback
             FaceAgentTowardsAlarmingEvent(_behaviourCtrl.PositionOfAlarmingEvent, _behaviourCtrl.NoiseRangeOfAlarmingEvent);
-
             // set detection timer to '0'
             _detectionTimer = 0.0f;
         }
@@ -82,6 +82,7 @@ namespace ScriptableObjects
                 // if timer runs out and target is still detected -> transit to CHaseState
                 if (_detectionTimer == _targetDetectionTime)
                 {
+                    //Todo: Message to UI-Managr for BehaviourFeedback
                     _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.ChaseState);
                     Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Chase</color>' should have been happend now!");
                     return;
@@ -89,6 +90,8 @@ namespace ScriptableObjects
             }
             else
             {
+                //Todo: Message to UI-Managr for BehaviourFeedback
+
                 // reset detection TImer
                 _detectionTimer = 0.0f;
                 _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.InvestigationState);
