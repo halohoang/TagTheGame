@@ -26,6 +26,7 @@ namespace ScriptableObjects
 
         private float _detectionTimer;              // runs for checking how long the target is detected
         private Vector3 _previousEventPosition;
+
         #endregion
 
 
@@ -77,6 +78,9 @@ namespace ScriptableObjects
             // Transition-Condition-Check
             if (_behaviourCtrl.IsTargetDetected)
             {
+                // caching target-position on detection time
+                _behaviourCtrl.CacheLastKnownTargetPosition();
+
                 _detectionTimer += Time.deltaTime;
 
                 // if timer runs out and target is still detected -> transit to CHaseState

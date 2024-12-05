@@ -299,7 +299,7 @@ namespace ScriptableObjects
         /// </summary>
         private void SetNewWalkTargetPosOnTimerEnd(Enum_Lib.EWaypointPatrolOrder waypointPatrolOrder)
         {
-            if (Timer > _rndWaitAtWaypointTime) // is Timer out of time
+            if (Timer >= _rndWaitAtWaypointTime) // is Timer out of time
             {
                 // reset Timer & new waiting Time
                 Timer = 0.0f;
