@@ -11,6 +11,7 @@ public class BaseEnemyInvestigationStateSO : MonoBehaviour
     //--------------------------------
 
     public static event UnityAction<Vector3> OnObstacleAvoidance;
+    public static event UnityAction<bool> OnExitInvestigationState;
     #endregion
 
     #region Variables
@@ -152,7 +153,7 @@ public class BaseEnemyInvestigationStateSO : MonoBehaviour
         else if (!_movedToLastKnownTargetPos)   // move to last known target position if not moved there yet
         {
             Debug.Log($"<color=orange>{_behaviourCtrl.gameObject.name}</color>: InvestigationState; " +
-                $"This NPC-Object did not reach last known target position and should still moove towards it");
+                $"This NPC-Object did not reach last known target position yet and should still moove towards it");
             return;
         }
         else // start investigation behaviour
@@ -180,8 +181,14 @@ public class BaseEnemyInvestigationStateSO : MonoBehaviour
             // if timer runs out
             if (_investTimer >= _investigationTime)
             {
-                // Todo: fill with logic
+                bool wasInvestigating = true;
 
+                OnExitInvestigationState?.Invoke(wasInvestigating);
+
+                if (_behaviourCtrl.IsStandingIdle)
+                    _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.IdleState);
+                else
+                    _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.MovementState);
                 // after timer runs out send event to inform, that state transition is coming from investigation State and transit to back to normal behaviour -> NPC walks to his last Idle-Position or last Waypoint
                 return;
             }
