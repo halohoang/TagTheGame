@@ -61,7 +61,7 @@ namespace ScriptableObjects
         //}
 
         public virtual void ExecuteOnE﻿nterState()
-        {
+        {  
             //Todo: Message to UI-Managr for BehaviourFeedback
             FaceAgentTowardsAlarmingEvent(_behaviourCtrl.PositionOfAlarmingEvent, _behaviourCtrl.NoiseRangeOfAlarmingEvent);
             // set detection timer to '0'

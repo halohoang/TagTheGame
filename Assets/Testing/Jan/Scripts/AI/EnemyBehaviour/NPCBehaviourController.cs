@@ -32,7 +32,7 @@ namespace Enemies
         [SerializeField] private BaseEnemyIdleSO _baseIdleStateSO;
         [SerializeField] private BaseEnemyMovementSO _baseMovemenStateSO;
         [SerializeField] private BaseEnemyAlertSO _baseAlertStateSO;
-        [SerializeField] private BaseEnemyAlertSO _baseInvestigationStateSO;
+        [SerializeField] private BaseEnemyInvestigationStateSO _baseInvestigationStateSO;
         [SerializeField] private BaseEnemyChaseSO _baseChaseStateSO;
         [SerializeField] private BaseEnemyAttackSO _baseAttackStateSO;
 
@@ -41,7 +41,7 @@ namespace Enemies
         public BaseEnemyIdleSO BaseEnemyIdleStateSOInstance { get; set; }
         public BaseEnemyMovementSO BaseEnemyMovementStateSOInstance { get; set; }
         public BaseEnemyAlertSO BaseEnemyAlertStateSOInstance { get; set; }
-        public BaseEnemyAlertSO BaseEnemyInvestigationStateSOInstance { get; set; }
+        public BaseEnemyInvestigationStateSO BaseEnemyInvestigationStateSOInstance { get; set; }
         public BaseEnemyChaseSO BaseEnemyChaseStateSOInstance { get; set; }
         public BaseEnemyAttackSO BaseEnemyAttackStateSOInstance { get; set; }
         [Space(5)]
@@ -66,6 +66,8 @@ namespace Enemies
         [SerializeField, ReadOnly] private bool _isSomethingAlarmingHappening;
         [SerializeField, ReadOnly] private bool _isInAttackRange;                   // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
         [SerializeField, ReadOnly] private bool _isCollidingWithObject;
+        [SerializeField, ReadOnly] private bool _wasInvestigating;
+        [SerializeField, ReadOnly] private bool _wasAlerted;
         [SerializeField, ReadOnly] private float _noiseRangeOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector3 _positionOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector2 _collisionObjectPos;
@@ -102,6 +104,8 @@ namespace Enemies
         public bool IsSomethingAlarmingHappening { get => _isSomethingAlarmingHappening; private set => _isSomethingAlarmingHappening = value; }
         public bool IsCollidingWithObject { get => _isCollidingWithObject; private set => _isCollidingWithObject = value; }
         public float NoiseRangeOfAlarmingEvent { get => _noiseRangeOfAlarmingEvent; private set => _noiseRangeOfAlarmingEvent = value; }
+        public bool WasInvestigating { get => _wasInvestigating; private set => _wasInvestigating = value; }
+        public bool WasAlerted { get => _wasAlerted; private set => _wasAlerted = value; }
         public Vector3 PositionOfAlarmingEvent { get => _positionOfAlarmingEvent; private set => _positionOfAlarmingEvent = value; }
         public Vector2 CollisionObjectPos { get => _collisionObjectPos; private set => _collisionObjectPos = value; }
         public Vector3 LastKnowntargetPos { get => _lastKnownTargetPos; private set => _lastKnownTargetPos = value; }
@@ -438,6 +442,24 @@ namespace Enemies
         internal void SetIsStandingIdle(bool isStandingIdle)
         {
             IsStandingIdle = IsStandingIdle;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="WasInvestigating"/> field for this NPC
+        /// </summary>
+        /// <param name="wasInvestigating"></param>
+        internal void SetWasInvestigating(bool wasInvestigating)
+        {
+            WasInvestigating = wasInvestigating;
+        }
+
+        /// <summary>
+        /// Sets the <see cref="WasAlerted"/> field for this NPC
+        /// </summary>
+        /// <param name="wasInvestigating"></param>
+        internal void SetWasAlerted(bool wasAlerted)
+        {
+            WasAlerted = wasAlerted;
         }
 
         private void AnimationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerType)

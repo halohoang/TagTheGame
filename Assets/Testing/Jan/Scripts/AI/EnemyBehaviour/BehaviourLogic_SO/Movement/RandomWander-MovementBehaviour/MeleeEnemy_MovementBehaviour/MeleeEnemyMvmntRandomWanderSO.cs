@@ -53,8 +53,8 @@ namespace ScriptableObjects
         private bool _isMovingTOCloseToObstacle = false;
 
         public float Timer { get => _timer; private set => _timer = value; }
-        public float RndWalkRange { get => _rndWalkRange; private set => _rndWalkRange = value; }
         public bool IsMoving { get => _isMoving; private set => _isMoving = value; }
+        public float RndWalkRange { get => _rndWalkRange; private set => _rndWalkRange = value; }
         public bool IsMovingToCloseToObstacle { get => _isMovingTOCloseToObstacle; private set => _isMovingTOCloseToObstacle = value; }
         public Vector3 WalkTargetPos { get => _walkTargedPos; private set => _walkTargedPos = value; }
         #endregion
@@ -65,7 +65,7 @@ namespace ScriptableObjects
         // - - - - -  M E T H O D S  - - - - 
         //----------------------------------
 
-        
+
         #region Custom Methods
         public override void Initialize(GameObject enemyObj, NPCBehaviourController enemyBehav)
         {

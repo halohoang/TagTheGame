@@ -15,7 +15,7 @@ namespace ScriptableObjects
         protected NPCBehaviourController _behaviourCtrl;
         protected Transform _transform;
         protected GameObject _gameObject;
-
+        
         protected Transform _playerTransform;
         protected Vector3 _previousPosition;
 
@@ -36,6 +36,7 @@ namespace ScriptableObjects
         }
 
         public virtual void ExecuteOnE﻿nterState() { }
+
         public virtual void ExecuteOnExitState()
         {
             ResetValues();

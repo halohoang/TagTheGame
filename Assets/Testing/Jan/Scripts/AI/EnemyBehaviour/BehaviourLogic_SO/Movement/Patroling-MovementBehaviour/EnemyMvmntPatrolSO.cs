@@ -54,21 +54,20 @@ namespace ScriptableObjects
         private Vector3 _previousWaypoint;
         private Vector3 _lookdirectionWhileWaitingForTimerEnd;
         private Vector2 _thisEnemyObjPos2D;
-        //private Vector3 _currentObstacleAvoidanceVector;
+        private Vector3 _currentObstacleAvoidanceVector;
         private float _timer = 0.0f;
         private float _rndWaitAtWaypointTime;
         private bool _isPatrolingWaypointsInReverse;
         private bool _isMoving;
         private bool _isWaitingForWaypointTimerEnd;
-        private bool _wasAlerted;
         private bool _reverseWaypointPatroling;
-        //private bool _isMovingTOCloseToObstacle = false;
+        private bool _isMovingTOCloseToObstacle = false;
 
-        // prperties
+        //properties
         public GameObject CurrentTargetWaypoint { get => _currentTargetWaypointObj; private set => _currentTargetWaypointObj = value; }
         public float Timer { get => _timer; private set => _timer = value; }
         public bool IsMoving { get => _isMoving; private set => _isMoving = value; }
-        //public bool IsMovingToCloseToObstacle { get => _isMovingTOCloseToObstacle; private set => _isMovingTOCloseToObstacle = value; }
+        public bool IsMovingToCloseToObstacle { get => _isMovingTOCloseToObstacle; private set => _isMovingTOCloseToObstacle = value; }
         public Vector3 WalkTargetPos { get => _walkTargedPos; private set => _walkTargedPos = value; }
         #endregion
 
@@ -113,12 +112,12 @@ namespace ScriptableObjects
             // Setup Walking Direction/Target Pos
             bool isWalkTargetPosEqualWayPoint = false;
 
-            if (_wasAlerted)
+            if (_behaviourCtrl.WasAlerted || _behaviourCtrl.WasInvestigating)
                 WalkTargetPos = _previousPosition;
             else
                 isWalkTargetPosEqualWayPoint = CompareEnemyObjPosWithItsWayPoints();
 
-            if (!_wasAlerted && !isWalkTargetPosEqualWayPoint)
+            if (!_behaviourCtrl.WasAlerted && !isWalkTargetPosEqualWayPoint)
             {
                 _currentTargetWaypointObj = _behaviourCtrl.WayPoints[0];
                 WalkTargetPos = _currentTargetWaypointObj.transform.position;
