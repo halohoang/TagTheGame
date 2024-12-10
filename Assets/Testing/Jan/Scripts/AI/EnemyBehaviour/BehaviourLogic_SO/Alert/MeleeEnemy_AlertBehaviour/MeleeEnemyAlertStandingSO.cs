@@ -12,11 +12,14 @@ namespace ScriptableObjects
         // - - - - -  V A R I A B L E S  - - - - 
         //--------------------------------------
 
-        //[SerializeField, Range(0.5f, 10.0f)] private float _stayAlertTime;
-
-        //private float _timer = 0.0f;
+        #region Tooltip
+        [Tooltip("Defines the amount of time (in seconds) how long the NPC shall stay alerted. Standard value is 5 seconds.")]
         #endregion
-        
+        [SerializeField] private float _stayAlertTime = 5.0f;
+
+        private float _timer = 0.0f;
+        #endregion
+
 
         #region Methods
         //----------------------------------
@@ -49,23 +52,28 @@ namespace ScriptableObjects
         public override void Execute﻿FrameUpdate()
         {
             base.Execute﻿FrameUpdate();
-                       
-            // Timer to return to Idle State after certain time has passed
-            //_timer += Time.deltaTime;            
 
-            //if (_timer > _stayAlertTime)
-            //{
-            //    _timer = 0.0f;
-            //    _baseEnemyBehaviour.StateMachine.Transition(_baseEnemyBehaviour.IdleState);
-            //    Debug.Log($"{_baseEnemyBehaviour.gameObject.name}: State-Transition from '<color=orange>Alert</color>' to '<color=orange>Idle</color>' should have been happend now!");
-            //}
+            //Timer to return to Idle State after certain time has passed
+            _timer += Time.deltaTime;
+
+            if (_timer >= _stayAlertTime)
+            {
+                _timer = 0.0f;
+
+                // actual state-transition respective to whether this is an standing Idle ore moving (e.g. patroling NPC)
+                if (_behaviourCtrl.IsStandingIdle)
+                    _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.IdleState);
+                else
+                    _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.MovementState);
+                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Alert</color>' to '<color=orange>{_behaviourCtrl.StateMachine.CurrentState.StateName}</color>' should have been happend now!");
+            }
         }
 
         public override void ExecutePhysicsUpdate()
         {
             base.ExecutePhysicsUpdate();
         }
-                
+
         public override void ExecuteOnAnim﻿ationTriggerEvent(Enum_Lib.EAnimationTriggerType animTriggerTyoe)
         {
             base.ExecuteOnAnim﻿ationTriggerEvent(animTriggerTyoe);

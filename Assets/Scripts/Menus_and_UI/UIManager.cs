@@ -1,7 +1,9 @@
 using JansLittleHelper;
 using NaughtyAttributes;
 using Player;
+using ScriptableObjects;
 using System;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -133,11 +135,13 @@ namespace UI
             PlayerWeaponHandling.OnSetStoredAmmoCount += UpdateStoredAmmoDisplay;
             PlayerWeaponHandling.OnReload += UpdateRoundsAndStoredAmmoDisplay;
             PlayerWeaponHandling.OnWeaponEquip += UpdateWeaponDisplay;
+            BaseEnemyAlertSO.OnAlertStateTransition += UpdateNPCUI;
 
             // Cheat Panel related
             CheatInput.OnSetGodMode += SetGodModeHint;
             CheatInput.OnTimeScaleChange += SetTimeScaleHint;
-        }
+        }        
+
         private void OnDisable()
         {
             PlayerWeaponHandling.OnSetBulletCount -= UpdateRoundsDisplay;
@@ -145,6 +149,7 @@ namespace UI
             PlayerWeaponHandling.OnSetStoredAmmoCount -= UpdateStoredAmmoDisplay;
             PlayerWeaponHandling.OnReload -= UpdateRoundsAndStoredAmmoDisplay;
             PlayerWeaponHandling.OnWeaponEquip -= UpdateWeaponDisplay;
+            BaseEnemyAlertSO.OnAlertStateTransition -= UpdateNPCUI;
 
             // Cheat Panel related
             CheatInput.OnSetGodMode -= SetGodModeHint;
@@ -222,6 +227,33 @@ namespace UI
             _selectedWeaponReloadThreshold = weapon.ReloadHintThreshhold;              // to get access to the ReloadTHreshold of the currently selected weaopn
 
             EnableDisableRealoadHintObj(weapon.ReloadHintThreshhold);
+        }
+
+        /// <summary>
+        /// Uodates the image of the icon shown over an enemy NPC when it enters/exits the alert/investigation state
+        /// </summary>
+        /// <param name="isExecutingState"></param>
+        /// <param name="behavFeedbackIcon"></param>
+        private void UpdateNPCUI(string state, bool isExecutingState, GameObject behavFeedbackIcon)
+        {
+            SpriteRenderer sprRend;
+            sprRend = behavFeedbackIcon.GetComponent<SpriteRenderer>();
+
+            if (state == "AlertState" && isExecutingState)
+            {
+                for (int i = 0; i < _enemyBehaviourFeedbackIcons.Length; i++)
+                {
+                    if (_enemyBehaviourFeedbackIcons[i].name == "ExclamationMark")
+                        sprRend.sprite = _enemyBehaviourFeedbackIcons[i];
+                }
+                sprRend.enabled = true;
+                Debug.Log($"'<color=cyan>UI-Manager</color>': Sprite Renderer of {behavFeedbackIcon.transform.parent.gameObject.name} was set to {sprRend.sprite} and enabled");
+            }
+            else
+            {
+                sprRend.enabled = false;
+                Debug.Log($"'<color=cyan>UI-Manager</color>': Sprite Renderer of '<color=cyan>{behavFeedbackIcon.transform.parent.gameObject.name}</color>' is set to '<color=cyan>{sprRend.sprite}</color>' and disabled");
+            }
         }
 
         /// <summary>

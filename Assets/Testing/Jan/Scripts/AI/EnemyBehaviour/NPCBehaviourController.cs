@@ -29,8 +29,10 @@ namespace Enemies
         [Space(5)]
 
         [Header("References to Behaviour ScriptableObjects")] // Todo: think about bool -> _isPatrolingEnemy that enables/disables patroling state; JM (04.11.24)
-        [SerializeField] private BaseEnemyIdleSO _baseIdleStateSO;
-        [SerializeField] private BaseEnemyMovementSO _baseMovemenStateSO;
+        [InfoBox("The following Checkbox needs to be whether checked or unchecked respective to whether this NPC shall be a standing Idle NPC or not", EInfoBoxType.Warning)]
+        [SerializeField] private bool _isStandingIdleNPC = false;
+        [SerializeField, ShowIf("_isStandingIdleNPC")] private BaseEnemyIdleSO _baseIdleStateSO;
+        [SerializeField, HideIf("_isStandingIdleNPC")] private BaseEnemyMovementSO _baseMovemenStateSO;
         [SerializeField] private BaseEnemyAlertSO _baseAlertStateSO;
         [SerializeField] private BaseEnemyInvestigationStateSO _baseInvestigationStateSO;
         [SerializeField] private BaseEnemyChaseSO _baseChaseStateSO;
@@ -57,7 +59,6 @@ namespace Enemies
         [Space(5)]
 
         [Header("Monitoring Values")]
-        [SerializeField, ReadOnly] private bool _isStandingIdleNPC;
         [SerializeField, ReadOnly] private bool _isThisPatrolingNPC;
         [SerializeField, ReadOnly] private bool _isThisRandomWanderNPC;
         [SerializeField, ReadOnly] private bool _isThisNPCDead;
@@ -137,19 +138,31 @@ namespace Enemies
         private void OnValidate()
         {
             // Check if there is a reference Set to the _baseMovementStateSO and set bollians respectively
-            if (_baseMovemenStateSO == null)
+            if (_isStandingIdleNPC)
             {
+                // Todo: find a better solution for this but if the BaseMovementStateSO-Field will be left null the Navemesh-Agent will do weird things, do not know why tho (yet)
+                // instantiate dummy-BaseEnemyMovementSO that will not be called/executed
+                _baseMovemenStateSO = new BaseEnemyMovementSO();
+
                 _isThisPatrolingNPC = false;
                 _isThisRandomWanderNPC = false;
                 _isStandingIdleNPC = true;
             }
             else if (_baseMovemenStateSO is EnemyMvmntPatrolSO)
             {
+                // Todo: find a better solution for this but if the BaseMovementStateSO-Field will be left null the Navemesh-Agent will do weird things, do not know why tho (yet)
+                // instantiate dummy-BaseEnemyMovementSO that will not be called/executed
+                _baseIdleStateSO = new BaseEnemyIdleSO();
+
                 _isThisPatrolingNPC = true;
                 _isThisRandomWanderNPC = false;
             }
             else if (_baseMovemenStateSO is MeleeEnemyMvmntRandomWanderSO || _baseMovemenStateSO is RangeEnemyMvmntRandomWanderSO)
             {
+                // Todo: find a better solution for this but if the BaseMovementStateSO-Field will be left null the Navemesh-Agent will do weird things, do not know why tho (yet)
+                // instantiate dummy-BaseEnemyMovementSO that will not be called/executed
+                _baseIdleStateSO = new BaseEnemyIdleSO();
+
                 _isThisPatrolingNPC = false;
                 _isThisRandomWanderNPC = true;
             }

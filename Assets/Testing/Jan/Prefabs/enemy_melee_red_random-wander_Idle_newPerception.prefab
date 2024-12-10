@@ -433,24 +433,26 @@ MonoBehaviour:
   _targetObject: {fileID: 0}
   _condPlayerDetectionCheck: {fileID: 0}
   _condMeleeAttackCheck: {fileID: 0}
+  _isStandingIdleNPC: 0
   _baseIdleStateSO: {fileID: 0}
-  _baseMovemenStateSO: {fileID: 0}
+  _baseMovemenStateSO: {fileID: 11400000, guid: 08cb1e5fb08d3e94cb8144af37805131, type: 2}
   _baseAlertStateSO: {fileID: 11400000, guid: 3846a16cac923194dad85324de682020, type: 2}
-  _baseInvestigationStateSO: {fileID: 0}
+  _baseInvestigationStateSO: {fileID: 11400000, guid: c49058d9f1d1e5745b0d48be53d7aff1, type: 2}
   _baseChaseStateSO: {fileID: 11400000, guid: b58cbcaeb70b8064e8441b42b8985050, type: 2}
   _baseAttackStateSO: {fileID: 11400000, guid: 6ebc51d86238c4e4ea025132c0e68de9, type: 2}
   _wayPoints: []
   _movementSpeed: 15
   _chasingSpeed: 20
-  _isStandingIdleNPC: 1
   _isThisPatrolingNPC: 0
-  _isThisRandomWanderNPC: 0
+  _isThisRandomWanderNPC: 1
   _isThisNPCDead: 0
   _isTargetDead: 0
   _isTargetDetected: 0
   _isSomethingAlarmingHappening: 0
   _isInAttackRange: 0
   _isCollidingWithObject: 0
+  _wasInvestigating: 0
+  _wasAlerted: 0
   _noiseRangeOfAlarmingEvent: 0
   _positionOfAlarmingEvent: {x: 0, y: 0, z: 0}
   _collisionObjectPos: {x: 0, y: 0}
@@ -512,7 +514,7 @@ MonoBehaviour:
   - {x: 0.07000005, y: -0.13, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 35416
+  m_InstanceId: 118174
   m_LocalBounds:
     m_Center: {x: 0.000000059604645, y: 0, z: 0}
     m_Extent: {x: 0.06999999, y: 0.13, z: 0}
