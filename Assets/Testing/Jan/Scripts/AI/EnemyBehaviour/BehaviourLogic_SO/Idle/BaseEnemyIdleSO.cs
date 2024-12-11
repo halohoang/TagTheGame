@@ -67,18 +67,20 @@ namespace ScriptableObjects
         {
             // Transitionchecks 
             // Switch State from Idle to AlertState when something alarming is happening (e.g. door kick in, player shoots etc.) and Agent is in noise range
-            if (_behaviourCtrl.IsSomethingAlarmingHappening)
+            if (_behaviourCtrl.IsSomethingAlarmingHappening || _behaviourCtrl.IsTargetDetected)
             {
                 _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.AlertState);
-                Debug.Log($"<color=orange> AI-Behav: </color> {_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Alert</color>' should have been happend now!");
+                Debug.Log($"<color=orange> AI-Behav: {_behaviourCtrl.gameObject.name}</color>: State-Transition from '<color=orange>Idle</color>' to '<color=orange>Alert</color>' should have been happend now!");
             }
-            
-            // Switch State from Idle to ChaseState when target object is Detected
-            if (_behaviourCtrl.IsTargetDetected)
-            {
-                _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.AlertState);
-                Debug.Log($"<color=orange> AI-Behav: </color> {_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Idle</color>' to '<color=orange>AlertState</color>' should have been happend now!");
-            }
+
+            #region old transiton to ChaseState
+            //// Switch State from Idle to ChaseState when target object is Detected
+            //if (_behaviourCtrl.IsTargetDetected)
+            //{
+            //    _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.ChaseState);
+            //    Debug.Log($"<color=orange> AI-Behav: {_behaviourCtrl.gameObject.name}</color>: State-Transition from '<color=orange>Idle</color>' to '<color=orange>AlertState</color>' should have been happend now!");
+            //}
+            #endregion
         }
 
         public virtual void ExecutePhysicsUpdate() { }

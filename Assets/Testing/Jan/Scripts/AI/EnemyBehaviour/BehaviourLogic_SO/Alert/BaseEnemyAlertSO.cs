@@ -88,14 +88,7 @@ namespace ScriptableObjects
             }
 
             // fire message to UI-Managr for BehaviourFeedback
-            OnAlertStateTransition?.Invoke(_behaviourCtrl.StateMachine.CurrentState.StateName, _behaviourCtrl.IsSomethingAlarmingHappening, _behaviourFeedbackIcon);
-
-            // stop movement if this is moving NPC
-            if (!_behaviourCtrl.IsStandingIdle)
-            {
-                _behaviourCtrl.NavAgent.isStopped = true;
-                _behaviourCtrl.NavAgent.SetDestination(_behaviourCtrl.transform.position);
-            }
+            OnAlertStateTransition?.Invoke(_behaviourCtrl.StateMachine.CurrentState.StateName, _behaviourCtrl.IsSomethingAlarmingHappening, _behaviourFeedbackIcon);            
 
             FaceAgentTowardsAlarmingEvent(_behaviourCtrl.PositionOfAlarmingEvent);
 

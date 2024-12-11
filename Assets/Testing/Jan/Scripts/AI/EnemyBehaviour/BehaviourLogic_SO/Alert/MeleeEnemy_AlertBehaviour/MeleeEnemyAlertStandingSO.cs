@@ -65,7 +65,7 @@ namespace ScriptableObjects
                     _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.IdleState);
                 else
                     _behaviourCtrl.StateMachine.Transition(_behaviourCtrl.MovementState);
-                Debug.Log($"{_behaviourCtrl.gameObject.name}: State-Transition from '<color=orange>Alert</color>' to '<color=orange>{_behaviourCtrl.StateMachine.CurrentState.StateName}</color>' should have been happend now!");
+                Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': State-Transition from '<color=orange>Alert</color>' to '<color=orange>{_behaviourCtrl.StateMachine.CurrentState.StateName}</color>' should have been happend now!");
             }
         }
 

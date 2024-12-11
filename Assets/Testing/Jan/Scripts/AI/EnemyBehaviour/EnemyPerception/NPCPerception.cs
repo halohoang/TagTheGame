@@ -336,7 +336,7 @@ namespace Perception
             for (int i = 0; i < CollidersWithinRange.Length; i++)
             {
                 if (thisCollider == CollidersWithinRange[i])
-                    OnSomethingAlarmingIsHappening?.Invoke(isSomethinAlarmingHappening, positionOfAlarmingEvent);
+                    OnSomethingAlarmingIsHappening?.Invoke(isSomethinAlarmingHappening, positionOfAlarmingEvent);   // Todo: this leads to a bug since all Listeners (BehavCtrl's) will execute connetcted code -> set the 'Is somtehingAlarming happening (JM, 11.12.24)
             }
             Debug.Log($"<color=orange> AI-Bahv: </color> 'CheckIfAffected()' was caled in '{this}'. {gameObject.name} should have checked if it is affected by shooting noise range of " +
                 $"player char. Also the Event 'OnSomethingAlarmingInHappening' should have been fired to inform behaviour controller of {gameObject}");

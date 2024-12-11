@@ -190,6 +190,14 @@ namespace ScriptableObjects
         public override void ResetValues()
         {
             base.ResetValues();
+
+            // stop movement if this is moving NPC
+            WalkTargetPos = _behaviourCtrl.transform.position;
+            _behaviourCtrl.NavAgent.isStopped = true;
+            //_behaviourCtrl.NavAgent.velocity = Vector3.zero;
+            //_behaviourCtrl.NavAgent.ResetPath();
+            _behaviourCtrl.Animator.SetBool("Engage", false);
+            Debug.Log($"<color=orange>AI-Behav of '{_behaviourCtrl.gameObject.name}'</color>: NavAgent should stop movement (<color=cyan>{_behaviourCtrl.NavAgent.isStopped}</color>), Animator should stop animate, NavAgent-Destination is set to: '<color=yellow>{_behaviourCtrl.NavAgent.destination}</color>', this should be similat to own position of NPC-Object <color=yellow>{_behaviourCtrl.transform.position}</color> | NavAgetn-Velocity: <color=lime>{_behaviourCtrl.NavAgent.velocity}</color>");
         }
 
         /// <summary>
@@ -234,6 +242,7 @@ namespace ScriptableObjects
             }
             else if ((Vector2)_behaviourCtrl.transform.position == (Vector2)WalkTargetPos) // if waypoit is reached -> wait
             {
+                Debug.Log($"<color=orange>AI-Behav of {_behaviourCtrl.gameObject.name}</color>: 'WalkingConditionCheck() was called and Logic for choosing next waypoint is executed'");
                 if (!_isWaitingForWaypointTimerEnd)     // set random lookdirection if it is the first time entering this query
                     _lookdirectionWhileWaitingForTimerEnd = Random.insideUnitCircle;
 
