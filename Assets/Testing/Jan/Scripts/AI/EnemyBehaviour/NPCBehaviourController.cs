@@ -24,6 +24,7 @@ namespace Enemies
         [SerializeField, ReadOnly] private NavMeshAgent _navAgent;
         [SerializeField, ReadOnly] private Animator _animator;
         [SerializeField, ReadOnly] private GameObject _targetObject;
+        [SerializeField, ReadOnly] private NPCPerception _agentPerception;
         [SerializeField, ReadOnly] private ConditionPlayerDetectionCheck _condPlayerDetectionCheck;     // Todo: obsolete with new perception System, remove as soon as completely changed to new system
         [SerializeField, ReadOnly] private ConditionIsInMeleeAttackRangeCheck _condMeleeAttackCheck;    // Todo: obsolete with new perception System, remove as soon as completely changed to new system
         [Space(5)]
@@ -73,6 +74,7 @@ namespace Enemies
         [SerializeField, ReadOnly] private Vector3 _positionOfAlarmingEvent;
         [SerializeField, ReadOnly] private Vector2 _collisionObjectPos;
         [SerializeField, ReadOnly] private Vector3 _lastKnownTargetPos;
+        [SerializeField, ReadOnly] private Vector3 _currentWalkTargetPos;
         [SerializeField, ReadOnly] private string _currentActiveBehaviourState;
 
 
@@ -124,6 +126,7 @@ namespace Enemies
         // put that later inside the 'MeleeEnemyBehaviour.cs': ; JM (31.10.2023)
         public ConditionIsInMeleeAttackRangeCheck CondMeleeAttackCheck { get => _condMeleeAttackCheck; private set => _condMeleeAttackCheck = value; }
         public bool IsInAttackRange { get => _isInAttackRange; private set => _isInAttackRange = value; }
+        public Vector3 CurrentWalkTargetPos { get => _currentWalkTargetPos; set => _currentWalkTargetPos = value; }
         #endregion
 
 
@@ -173,6 +176,7 @@ namespace Enemies
             // Autoreferencing
             _navAgent = GetComponent<NavMeshAgent>();
             _animator = GetComponent<Animator>();
+            _agentPerception = GetComponent<NPCPerception>();
             _condPlayerDetectionCheck = GetComponent<ConditionPlayerDetectionCheck>();
 
             CondMeleeAttackCheck = GetComponent<ConditionIsInMeleeAttackRangeCheck>(); // put that later inside the 'MeleeEnemyBehaviour.cs'; JM (31.10.2023)
@@ -211,10 +215,10 @@ namespace Enemies
             PlayerStats.OnPlayerDeath += SetIsTargetDead;
             EnemyStats.OnEnemyDeathEvent += SetIsThisNPCDead;
 
-            NPCPerception.OnTargetDetection += SetIsTargetDetected;
-            NPCPerception.OnSomethingAlarmingIsHappening += SetAlarmingEventValues;
-            NPCPerception.OnCollidingWithOtherObject += SetIsCollidingWithOtherEnemy;
-            NPCPerception.OnInMeleeAttackRange += SetIsInAttackRangePlayer;
+            _agentPerception.OnTargetDetection += SetIsTargetDetected;
+            _agentPerception.OnSomethingAlarmingIsHappening += SetAlarmingEventValues;
+            _agentPerception.OnCollidingWithOtherObject += SetIsCollidingWithOtherEnemy;
+            _agentPerception.OnInMeleeAttackRange += SetIsInAttackRangePlayer;
 
             //StateMachine related
             NPCStateMachine.OnStateTransition += SetCurrentActiveState;
@@ -237,10 +241,10 @@ namespace Enemies
             PlayerStats.OnPlayerDeath -= SetIsTargetDead;
             EnemyStats.OnEnemyDeathEvent -= SetIsThisNPCDead;
 
-            NPCPerception.OnTargetDetection -= SetIsTargetDetected;
-            NPCPerception.OnSomethingAlarmingIsHappening -= SetAlarmingEventValues;
-            NPCPerception.OnCollidingWithOtherObject -= SetIsCollidingWithOtherEnemy;
-            NPCPerception.OnInMeleeAttackRange -= SetIsInAttackRangePlayer;
+            _agentPerception.OnTargetDetection -= SetIsTargetDetected;
+            _agentPerception.OnSomethingAlarmingIsHappening -= SetAlarmingEventValues;
+            _agentPerception.OnCollidingWithOtherObject -= SetIsCollidingWithOtherEnemy;
+            _agentPerception.OnInMeleeAttackRange -= SetIsInAttackRangePlayer;
 
             //StateMachine related
             NPCStateMachine.OnStateTransition -= SetCurrentActiveState;
@@ -469,7 +473,7 @@ namespace Enemies
         /// <summary>
         /// Sets the <see cref="WasAlerted"/> field for this NPC
         /// </summary>
-        /// <param name="wasInvestigating"></param>
+        /// <param name="wasAlerted"></param>
         internal void SetWasAlerted(bool wasAlerted)
         {
             WasAlerted = wasAlerted;

@@ -236,7 +236,8 @@ namespace ScriptableObjects
                 // setting facing to random when walktimer is still running but walking range was already reached
                 Vector2 direction = _lookdirectionWhileWaitingForTimerEnd.normalized;
                 float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                _thisEnemyRB2D.rotation = angle;
+                //_thisEnemyRB2D.rotation = angle;
+                _behaviourCtrl.gameObject.transform.eulerAngles = new Vector3(0, 0, angle);
                 #region altern rotation for facing direction
                 //// a alternative way to manage the facing direction by applying the rotation to the transform instead of to the rigidbody
                 //Quaternion quart = Quaternion.AngleAxis(angle, Vector3.forward);
@@ -248,7 +249,8 @@ namespace ScriptableObjects
                 // setting facing to walk direction if walking timer has ended and was setup anew
                 Vector2 direction = (WalkTargetPos - _behaviourCtrl.transform.position).normalized;
                 float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                _thisEnemyRB2D.rotation = angle;
+                //_thisEnemyRB2D.rotation = angle;
+                _behaviourCtrl.gameObject.transform.eulerAngles = new Vector3(0, 0, angle);
                 #region altern rotation for facing direction
                 //// a alternative way to manage the facing direction by applying the rotation to the transform instead of to the rigidbody
                 //Quaternion quart = Quaternion.AngleAxis(angle, Vector3.forward);

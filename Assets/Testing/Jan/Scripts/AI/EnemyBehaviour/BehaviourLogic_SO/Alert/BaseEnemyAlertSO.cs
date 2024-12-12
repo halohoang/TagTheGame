@@ -99,6 +99,9 @@ namespace ScriptableObjects
         public virtual void ExecuteOnExitState()
         {
             ResetValues();
+
+            // inform BehavCtrl that Alert-State was executed
+            _behaviourCtrl.SetWasAlerted(true);
         }
 
         public virtual void Execute﻿FrameUpdate()
@@ -160,10 +163,10 @@ namespace ScriptableObjects
             // setting facing direction towards alarming event
             //_behaviourCtrl.gameObject.transform.right = positionOfAlarmingEvent - _behaviourCtrl.gameObject.transform.position;
 
-            //Following does not work for some mysterical reasons, JM (10.12.2024)
+            //Set facing direction
             Vector2 direction = (positionOfAlarmingEvent - _behaviourCtrl.gameObject.transform.position).normalized;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            _thisEnemyRB2D.rotation = angle;
+            _behaviourCtrl.gameObject.transform.eulerAngles = new Vector3(0, 0, angle);
         }
         #endregion
     }

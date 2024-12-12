@@ -14,14 +14,14 @@ namespace Perception
         //--------------------------------
 
         // visual perception related
-        public static event UnityAction<bool, GameObject> OnTargetDetection;
+        internal event UnityAction<bool, GameObject> OnTargetDetection;
 
         // auditive perception related
-        public static event UnityAction<bool, Vector3> OnSomethingAlarmingIsHappening;
+        internal event UnityAction<bool, Vector3> OnSomethingAlarmingIsHappening;
 
         // tactile perception related
-        public static event UnityAction<bool, GameObject> OnInMeleeAttackRange;
-        public static event UnityAction<bool, GameObject> OnCollidingWithOtherObject;
+        internal event UnityAction<bool, GameObject> OnInMeleeAttackRange;
+        internal event UnityAction<bool, GameObject> OnCollidingWithOtherObject;
 
         #endregion
 

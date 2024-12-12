@@ -98,11 +98,11 @@ GameObject:
   - component: {fileID: 8585744910163499964}
   - component: {fileID: 8666055161635321897}
   - component: {fileID: 8666055161635321896}
+  - component: {fileID: 7140940985462302752}
   - component: {fileID: 3818502030358424267}
   - component: {fileID: 825734055567498192}
   - component: {fileID: 3683214458794951107}
   - component: {fileID: 5884567333609140266}
-  - component: {fileID: 7140940985462302752}
   - component: {fileID: 2907379743569612923}
   m_Layer: 9
   m_Name: enemy_range_yellow_standing_Idle_newPerception
@@ -273,131 +273,6 @@ NavMeshAgent:
   m_BaseOffset: 0.13
   m_WalkableMask: 1
   m_ObstacleAvoidanceType: 4
---- !u!114 &3818502030358424267
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8585744910163499960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 467dd186c8a19664285183459634343c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _light2d: {fileID: 8666055161314200238}
-  _animator: {fileID: 8585744910163499967}
-  _bloodPrefabPool: []
-  _audioSource: {fileID: 7140940985462302752}
-  _receiveDamageSound: {fileID: 8300000, guid: ab8606f911b06b84884a725ba313a76e, type: 3}
-  _maximumHealth: 0
-  _currentHealth: 0
-  _flashingSpeed: 0
-  _flashDuration: 0.1
-  _isDead: 0
---- !u!114 &825734055567498192
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8585744910163499960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0ff2f52ca4a8a145a9d4acc457e3b0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _navAgent: {fileID: 0}
-  _animator: {fileID: 0}
-  _targetObject: {fileID: 0}
-  _condPlayerDetectionCheck: {fileID: 0}
-  _condMeleeAttackCheck: {fileID: 0}
-  _isStandingIdleNPC: 1
-  _baseIdleStateSO: {fileID: 11400000, guid: ff910bb86ca659b42ba994054c3cbd93, type: 2}
-  _baseMovemenStateSO: {fileID: 0}
-  _baseAlertStateSO: {fileID: 11400000, guid: 05c2ad8358f42734bbcb1c6c4c71dd95, type: 2}
-  _baseInvestigationStateSO: {fileID: 11400000, guid: c49058d9f1d1e5745b0d48be53d7aff1, type: 2}
-  _baseChaseStateSO: {fileID: 11400000, guid: 284c40c4efd132b408914f88cbb88be6, type: 2}
-  _baseAttackStateSO: {fileID: 11400000, guid: 2602bddca1d423c4da90614d4b5c146e, type: 2}
-  _wayPoints: []
-  _movementSpeed: 3.5
-  _chasingSpeed: 7
-  _isThisPatrolingNPC: 0
-  _isThisRandomWanderNPC: 0
-  _isThisNPCDead: 0
-  _isTargetDead: 0
-  _isTargetDetected: 0
-  _isSomethingAlarmingHappening: 0
-  _isInAttackRange: 0
-  _isCollidingWithObject: 0
-  _wasInvestigating: 0
-  _wasAlerted: 0
-  _noiseRangeOfAlarmingEvent: 0
-  _positionOfAlarmingEvent: {x: 0, y: 0, z: 0}
-  _collisionObjectPos: {x: 0, y: 0}
-  _lastKnownTargetPos: {x: 0, y: 0, z: 0}
-  _currentActiveBehaviourState: 
-  _isPlayerInShootingRange: 0
---- !u!114 &3683214458794951107
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8585744910163499960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7eefb39540d66ce4194ff09bd3babcf3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _enableVisualPerception: 1
-  _enableAuditivePerception: 1
-  _enableTactilePerception: 1
-  _targetDetectionMask:
-    serializedVersion: 2
-    m_Bits: 0
-  _obstructionMask:
-    serializedVersion: 2
-    m_Bits: 0
-  _raycastingCollider: {fileID: 0}
-  _fOVRadius: 0
-  _fOVAngle: 180
-  _targetObject: {fileID: 0}
-  _isTargetDetected: 0
-  _isTargetDead: 0
-  _isThisNPCDead: 0
-  _isInAttackRange: 0
-  _isCollidingWithOtherObject: 0
---- !u!114 &5884567333609140266
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8585744910163499960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShadowGroup: 0
-  m_ComponentVersion: 1
-  m_HasRenderer: 1
-  m_UseRendererSilhouette: 1
-  m_CastsShadows: 1
-  m_SelfShadows: 0
-  m_ApplyToSortingLayers: 00000000d9eb6cc76da6e1d871ed875c19067c27ed1827b32d17e682171cbb51e7540cb041c8ec54fd35591bc7e39ca611f28f01
-  m_ShapePath:
-  - {x: -0.12999998, y: -0.07000002, z: 0}
-  - {x: -0.12999998, y: 0.06999999, z: 0}
-  - {x: 0.13, y: 0.06999999, z: 0}
-  - {x: 0.13, y: -0.07000002, z: 0}
-  m_ShapePathHash: 0
-  m_Mesh: {fileID: 0}
-  m_InstanceId: 48832
-  m_LocalBounds:
-    m_Center: {x: 0.000000014901161, y: -0.000000014901161, z: 0}
-    m_Extent: {x: 0.13, y: 0.07000001, z: 0}
 --- !u!82 &7140940985462302752
 AudioSource:
   m_ObjectHideFlags: 0
@@ -494,6 +369,132 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3818502030358424267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8585744910163499960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 467dd186c8a19664285183459634343c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _light2d: {fileID: 8666055161314200238}
+  _animator: {fileID: 8585744910163499967}
+  _bloodPrefabPool: []
+  _audioSource: {fileID: 7140940985462302752}
+  _receiveDamageSound: {fileID: 8300000, guid: ab8606f911b06b84884a725ba313a76e, type: 3}
+  _maximumHealth: 0
+  _currentHealth: 0
+  _flashingSpeed: 0
+  _flashDuration: 0.1
+  _isDead: 0
+--- !u!114 &825734055567498192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8585744910163499960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0ff2f52ca4a8a145a9d4acc457e3b0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _navAgent: {fileID: 0}
+  _animator: {fileID: 0}
+  _targetObject: {fileID: 0}
+  _agentPerception: {fileID: 0}
+  _condPlayerDetectionCheck: {fileID: 0}
+  _condMeleeAttackCheck: {fileID: 0}
+  _isStandingIdleNPC: 1
+  _baseIdleStateSO: {fileID: 11400000, guid: ff910bb86ca659b42ba994054c3cbd93, type: 2}
+  _baseMovemenStateSO: {fileID: 0}
+  _baseAlertStateSO: {fileID: 11400000, guid: 05c2ad8358f42734bbcb1c6c4c71dd95, type: 2}
+  _baseInvestigationStateSO: {fileID: 11400000, guid: c49058d9f1d1e5745b0d48be53d7aff1, type: 2}
+  _baseChaseStateSO: {fileID: 11400000, guid: 284c40c4efd132b408914f88cbb88be6, type: 2}
+  _baseAttackStateSO: {fileID: 11400000, guid: 2602bddca1d423c4da90614d4b5c146e, type: 2}
+  _wayPoints: []
+  _movementSpeed: 3.5
+  _chasingSpeed: 7
+  _isThisPatrolingNPC: 0
+  _isThisRandomWanderNPC: 0
+  _isThisNPCDead: 0
+  _isTargetDead: 0
+  _isTargetDetected: 0
+  _isSomethingAlarmingHappening: 0
+  _isInAttackRange: 0
+  _isCollidingWithObject: 0
+  _wasInvestigating: 0
+  _wasAlerted: 0
+  _noiseRangeOfAlarmingEvent: 0
+  _positionOfAlarmingEvent: {x: 0, y: 0, z: 0}
+  _collisionObjectPos: {x: 0, y: 0}
+  _lastKnownTargetPos: {x: 0, y: 0, z: 0}
+  _currentActiveBehaviourState: 
+  _isPlayerInShootingRange: 0
+--- !u!114 &3683214458794951107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8585744910163499960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7eefb39540d66ce4194ff09bd3babcf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enableVisualPerception: 1
+  _enableAuditivePerception: 1
+  _enableTactilePerception: 1
+  _targetDetectionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _obstructionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _raycastingCollider: {fileID: 0}
+  _fOVRadius: 0
+  _fOVAngle: 180
+  _targetObject: {fileID: 0}
+  _isTargetDetected: 0
+  _isTargetDead: 0
+  _isThisNPCDead: 0
+  _isInAttackRange: 0
+  _isCollidingWithOtherObject: 0
+--- !u!114 &5884567333609140266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8585744910163499960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_ComponentVersion: 1
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_ApplyToSortingLayers: 00000000d9eb6cc76da6e1d871ed875c19067c27ed1827b32d17e682171cbb51e7540cb041c8ec54fd35591bc7e39ca611f28f01
+  m_ShapePath:
+  - {x: -0.12999998, y: -0.07000002, z: 0}
+  - {x: -0.12999998, y: 0.06999999, z: 0}
+  - {x: 0.13, y: 0.06999999, z: 0}
+  - {x: 0.13, y: -0.07000002, z: 0}
+  m_ShapePathHash: 0
+  m_Mesh: {fileID: 0}
+  m_InstanceId: 48832
+  m_LocalBounds:
+    m_Center: {x: 0.000000014901161, y: -0.000000014901161, z: 0}
+    m_Extent: {x: 0.13, y: 0.07000001, z: 0}
 --- !u!114 &2907379743569612923
 MonoBehaviour:
   m_ObjectHideFlags: 0

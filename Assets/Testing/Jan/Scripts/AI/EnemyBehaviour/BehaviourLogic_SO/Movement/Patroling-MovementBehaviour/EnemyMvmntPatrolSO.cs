@@ -11,7 +11,7 @@ namespace ScriptableObjects
         //--------------------------------
         // - - - - -  E V E N T S  - - - - 
         //--------------------------------
-        
+
         #endregion
 
         #region Variables
@@ -29,6 +29,10 @@ namespace ScriptableObjects
         [Tooltip("The maximum time the Enemy shall wander before choosing a new wander direction, note this will be set by random between min and max value")]
         #endregion
         [SerializeField, Range(0.0f, 10.0f)] private float _maxTimeWaitingAtWaypoint = 6.0f;
+        #region Tooltip
+        [Tooltip("The Game Objects that shall be recognized as obstacles by the agent")]
+        #endregion
+        [SerializeField] private LayerMask _obstacleMask;
 
         #region ObstacleCheck
         //#region Tooltip
@@ -112,25 +116,53 @@ namespace ScriptableObjects
             // Setup Walking Direction/Target Pos
             bool isWalkTargetPosEqualWayPoint = false;
 
+            Debug.Log($"<color=orange>AI-Behav of '{_behaviourCtrl.gameObject.name}'</color>: ExecuteOnEnterState() of Patrol-State is called, behavCtrl.WasAlerted = " +
+                $"<color=yellow>{_behaviourCtrl.WasAlerted}</color>");
+
             if (_behaviourCtrl.WasAlerted || _behaviourCtrl.WasInvestigating)
-                WalkTargetPos = _previousPosition;
+            {
+                if (_nextWaypointPos != null)
+                    WalkTargetPos = _nextWaypointPos;
+                else
+                    WalkTargetPos = _previousPosition;
+
+                Debug.Log($"<color=orange>AI-Behav of '{_behaviourCtrl.gameObject.name}'</color>: changed back from Alert or Investigate-State to Patroling -> WalkTagetPos was set to " +
+                    $"<color=yellow>{WalkTargetPos}</color>");
+            }
             else
                 isWalkTargetPosEqualWayPoint = CompareEnemyObjPosWithItsWayPoints();
 
+
             if (!_behaviourCtrl.WasAlerted && !isWalkTargetPosEqualWayPoint)
             {
-                _currentTargetWaypointObj = _behaviourCtrl.WayPoints[0];
+                _currentTargetWaypointObj = _behaviourCtrl.WayPoints[0];    // start at first Waypoint again
                 WalkTargetPos = _currentTargetWaypointObj.transform.position;
             }
-            Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': Value of '_nextWaypoin': '<color=lime>{_nextWaypointPos}</color>'");
-            Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': Value of '_currentTargetWaypoint': '<color=lime>{_currentTargetWaypointObj.name}</color>'");
-            Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': Called 'ExecuteOnEnterState' ->'WalkTargetPos': '<color=lime>{WalkTargetPos}</color>'");
+            Debug.Log($"<color=orange>AI-Behav of '{_behaviourCtrl.gameObject.name}'</color>: Value of '_nextWaypoin': '<color=lime>{_nextWaypointPos}</color>'");
+            Debug.Log($"<color=orange>AI-Behav of '{_behaviourCtrl.gameObject.name}'</color>: Value of '_currentTargetWaypoint': '<color=lime>{_currentTargetWaypointObj.name}</color>'");
+            Debug.Log($"<color=orange>AI-Behav of '{_behaviourCtrl.gameObject.name}'</color>: Called 'ExecuteOnEnterState' ->'WalkTargetPos': '<color=lime>{WalkTargetPos}</color>'");
+
+            // check if way to chosen WalkTargetPos is blocked by a obstacle
+            if (IsWayToBlocked(WalkTargetPos))  // check returns true if way is blocked
+            {
+                for (int i = 0; i < _behaviourCtrl.WayPoints.Count; i++)
+                {
+                    if (!IsWayToBlocked(_behaviourCtrl.WayPoints[i].transform.position))
+                    {
+                        _currentTargetWaypointObj = _behaviourCtrl.WayPoints[i];
+                        WalkTargetPos = _currentTargetWaypointObj.transform.position;
+                    }
+                }
+            }
 
             // Setup NavMeshAgent-Properties
             _behaviourCtrl.NavAgent.speed = _patrolingSpeed;
 
             // Setup walking animation
             _behaviourCtrl.Animator.SetBool("Engage", true);
+
+            // reset WasAlerted-Value in behavCtrl
+            _behaviourCtrl.SetWasAlerted(false);
         }
 
         public override void ExecuteOnExitState()
@@ -155,6 +187,7 @@ namespace ScriptableObjects
             // execute actual walking according to previous checks and settings
             _behaviourCtrl.NavAgent.isStopped = false;
             _behaviourCtrl.NavAgent.SetDestination(WalkTargetPos);
+            _behaviourCtrl.CurrentWalkTargetPos = WalkTargetPos;
             //Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': 'WalkTargetPos': '<color=yellow>{WalkTargetPos}</color>' in 'Update()'");
             //Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': 'EnemyEntity-Pos': '<color=yellow>{_behaviourCtrl.transform.position}</color>' in 'Update()'");
 
@@ -202,8 +235,8 @@ namespace ScriptableObjects
 
         /// <summary>
         /// Checks if the position of the game object attached to the <see cref="NPCBehaviourController"/> is equal to any of the waypoints in <see cref="NPCBehaviourController.WayPoints"/>.
-        /// If so the <see cref="_nextWaypointPos"/> will be set to the position of the following Waypoint in the List. And the <see cref="_currentTargetWaypointObj"/> will be set to the 
-        /// respective Waypoint-Object. Returns true if the <see cref="_nextWaypointPos"/> was set to a location other than (0,0,0) and <see cref="_currentTargetWaypointObj"/> is not null.
+        /// If so the <see cref="_nextWaypointPos"/> will be set to the position of the following Waypoint in the List, and the <see cref="_currentTargetWaypointObj"/> will be set to the 
+        /// respective Waypoint-Object. If everything was sett it will return true. (So to say if the <see cref="_nextWaypointPos"/> was set to a location other than (0,0,0) and <see cref="_currentTargetWaypointObj"/> is not null).´Otherwise will return false. 
         /// </summary>
         private bool CompareEnemyObjPosWithItsWayPoints()
         {
@@ -259,46 +292,6 @@ namespace ScriptableObjects
                 else
                     SetNewWalkTargetPosOnTimerEnd(Enum_Lib.EWaypointPatrolOrder.Reverse);
             }
-
-            #region Old Code from RndWalk-SO
-            // Todo: continue work here
-
-            //    else if (Timer > _rndWaitAtWaypointTime)               // is Timmer out of Time
-            //    {
-            //        _isWaitingForWaypointTimerEnd = false;
-
-            //        // Reset Timer and rnd WalkTime
-            //        Timer = 0.0f;
-            //        _rndWaitAtWaypointTime = Random.Range(_minTimeWaitingAtWaypoint, _maxTimeWaitingAtWaypoint);
-
-            //        // reset Walking Direction/TargetPos
-            //        //WalkTargetPos = GetRndMoveDirection();
-
-            //        // Setup Walking Animation
-            //        _behaviourCtrl.Animator.SetBool("Engage", true);
-
-            //        Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': rnd-Walking-Timer ended and was set to 0.0f again; New MovingDirection was calculated and set");
-            //    }
-            //    else if (Timer <= _rndWaitAtWaypointTime && (Vector2)_behaviourCtrl.transform.position == (Vector2)WalkTargetPos)      // if Timer is still running but Walking-Taget-Position is reached
-            //    {
-            //        if (!_isWaitingForWaypointTimerEnd)    // set random lookdirection if it is the first time entering this query
-            //            _lookdirectionWhileWaitingForTimerEnd = Random.insideUnitCircle;
-
-            //        _isWaitingForWaypointTimerEnd = true;
-            //        _behaviourCtrl.NavAgent.isStopped = true;
-            //        _behaviourCtrl.Animator.SetBool("Engage", false);
-
-            //        Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': rnd-Walking-Timer still running; rnd-Walking-Range was reached");
-            //    }
-            //    else if (IsMovingToCloseToObstacle)     // if Agent is walking to close towards an Obstacle, change walkin direction to the oposite
-            //    {
-            //        WalkTargetPos = _currentObstacleAvoidanceVector;
-            //        Debug.Log($"'<color=orange>{_behaviourCtrl.gameObject.name}</color>': Walking Direction was Changed due to walking to close towards obstacle; new direction: {_currentObstacleAvoidanceVector}");
-            //        OnObstacleAvoidance?.Invoke(_currentObstacleAvoidanceVector);
-            //        IsMovingToCloseToObstacle = false;
-            //    }
-            //}
-            #endregion
         }
 
         /// <summary>
@@ -405,7 +398,8 @@ namespace ScriptableObjects
                 // setting facing to random when walktimer is still running but walking range was already reached
                 Vector2 direction = _lookdirectionWhileWaitingForTimerEnd.normalized;
                 float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                _thisEnemyRB2D.rotation = angle;
+                //_thisEnemyRB2D.rotation = angle;
+                _behaviourCtrl.gameObject.transform.eulerAngles = new Vector3(0, 0, angle);
                 #region altern rotation for facing direction
                 //// a alternative way to manage the facing direction by applying the rotation to the transform instead of to the rigidbody
                 //Quaternion quart = Quaternion.AngleAxis(angle, Vector3.forward);
@@ -417,7 +411,8 @@ namespace ScriptableObjects
                 // setting facing to walk direction if walking timer has ended and was setup anew
                 Vector2 direction = (WalkTargetPos - _behaviourCtrl.transform.position).normalized;
                 float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                _thisEnemyRB2D.rotation = angle;
+                //_thisEnemyRB2D.rotation = angle;
+                _behaviourCtrl.gameObject.transform.eulerAngles = new Vector3(0, 0, angle);
                 #region altern rotation for facing direction
                 //// a alternative way to manage the facing direction by applying the rotation to the transform instead of to the rigidbody
                 //Quaternion quart = Quaternion.AngleAxis(angle, Vector3.forward);
@@ -426,22 +421,24 @@ namespace ScriptableObjects
             }
         }
 
-        ///// <summary>
-        ///// Checks all '<see cref="_directionsToCheckToAvoidObstacle"/>' for beeing clear of Obstacles inside the '<see cref="_distanceToCheckForObstacles"/>'. If so the
-        ///// '<see cref="_currentObstacleAvoidanceVector"/>' will be set accordingly.
-        ///// </summary>
-        //private void CheckForObstacleAvoidanceVector()
-        //{
-        //    for (int i = 0; i < _directionsToCheckToAvoidObstacle.Length; i++)
-        //    {
-        //        RaycastHit hit;
-        //        Vector3 currentDirectionToCheck = _behaviourCtrl.transform.TransformDirection(_directionsToCheckToAvoidObstacle[i].normalized);
+        /// <summary>
+        /// Checks for obstacles along the way from the current position of the NPC-Object towards the transmitted position 'posTowardsToCheck'. 
+        /// Returns true if an obstacle along the way to the current Walktargetposition was detected. 
+        /// Returns false if the Way is clear of obstacles
+        /// <param name="posTowardsToCheck"> The position towards</param>
+        /// </summary>
+        private bool IsWayToBlocked(Vector3 posTowardsToCheck)
+        {
+            RaycastHit hit;
+            Vector3 directionToCheck = (posTowardsToCheck - _behaviourCtrl.transform.position);
 
-        //        // if no obstacle was detected in the checked direction -> set this direction to the desired avoidance direction
-        //        if (!Physics.Raycast(_behaviourCtrl.transform.position, currentDirectionToCheck, out hit, _distanceForAvoidCheck, _obstacleMask))
-        //            _currentObstacleAvoidanceVector = currentDirectionToCheck.normalized;
-        //    }
-        //}
+            // if no obstacle was detected in the checked direction -> return true
+            Debug.DrawRay(_behaviourCtrl.transform.position, WalkTargetPos - _behaviourCtrl.transform.position, Color.cyan, 5f);
+            if (!Physics.Raycast(_behaviourCtrl.transform.position, directionToCheck.normalized, out hit, directionToCheck.sqrMagnitude, _obstacleMask))
+                return true;
+            else
+                return false;
+        }
         #endregion
 
         #endregion
