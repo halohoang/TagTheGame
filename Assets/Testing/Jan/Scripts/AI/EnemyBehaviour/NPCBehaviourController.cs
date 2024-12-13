@@ -151,7 +151,7 @@ namespace Enemies
                 _isThisRandomWanderNPC = false;
                 _isStandingIdleNPC = true;
             }
-            else if (_baseMovemenStateSO is EnemyMvmntPatrolSO)
+            else if (!_isStandingIdleNPC && _baseMovemenStateSO is EnemyMvmntPatrolSO)
             {
                 // Todo: find a better solution for this but if the BaseMovementStateSO-Field will be left null the Navemesh-Agent will do weird things, do not know why tho (yet)
                 // instantiate dummy-BaseEnemyMovementSO that will not be called/executed
@@ -160,7 +160,7 @@ namespace Enemies
                 _isThisPatrolingNPC = true;
                 _isThisRandomWanderNPC = false;
             }
-            else if (_baseMovemenStateSO is MeleeEnemyMvmntRandomWanderSO || _baseMovemenStateSO is RangeEnemyMvmntRandomWanderSO)
+            else if (!_isStandingIdleNPC && (_baseMovemenStateSO is MeleeEnemyMvmntRandomWanderSO || _baseMovemenStateSO is RangeEnemyMvmntRandomWanderSO))
             {
                 // Todo: find a better solution for this but if the BaseMovementStateSO-Field will be left null the Navemesh-Agent will do weird things, do not know why tho (yet)
                 // instantiate dummy-BaseEnemyMovementSO that will not be called/executed

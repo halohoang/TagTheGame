@@ -164,9 +164,26 @@ namespace ScriptableObjects
             //_behaviourCtrl.gameObject.transform.right = positionOfAlarmingEvent - _behaviourCtrl.gameObject.transform.position;
 
             //Set facing direction
-            Vector2 direction = (positionOfAlarmingEvent - _behaviourCtrl.gameObject.transform.position).normalized;
+            Vector2 direction = (positionOfAlarmingEvent - _behaviourCtrl.gameObject.transform.position);
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+            Debug.Log($"<color=magenta>AI-Behav | BaseAlertStateSO | {_behaviourCtrl.gameObject.name}</color>: original rotation of Agent-Object: '<color=yellow>{_behaviourCtrl.transform.eulerAngles}</color>' | in local euler agles: '<color=yellow>{_behaviourCtrl.transform.localEulerAngles}</color>'");
+
             _behaviourCtrl.gameObject.transform.eulerAngles = new Vector3(0, 0, angle);
+
+            Debug.Log($"<color=magenta>AI-Behav | BaseAlertStateSO | {_behaviourCtrl.gameObject.name}</color>: rotation of Agent-Object after applying claculated rotation angle: '<color=yellow>{_behaviourCtrl.transform.eulerAngles}</color>' | in local euler agles: '<color=yellow>{_behaviourCtrl.transform.localEulerAngles}</color>' | calculated anlge <color=yellow>{angle}</color> ");
+
+
+            Debug.DrawLine(_behaviourCtrl.transform.position, positionOfAlarmingEvent, Color.yellow, 6.0f);
+            Debug.DrawRay(_behaviourCtrl.transform.position, direction, Color.magenta, 3.0f);
+            Debug.Log($"<color=magenta>AI-Behav | BaseAlertStateSO | {_behaviourCtrl.gameObject.name}</color>: Pos of This NPC-Agent: '<color=yellow>{_behaviourCtrl.transform.position}" +
+                $"</color>' | Local Pos of This NPC-Agent: '<color=yellow>{_behaviourCtrl.transform.localPosition}</color>' | position of alarming Event: '<color=yellow>{positionOfAlarmingEvent}</color>'");
+
+            #region altern rotation for facing direction
+            //// a alternative way to manage the facing direction by applying the rotation to the transform instead of to the rigidbody
+            //Quaternion quart = Quaternion.AngleAxis(angle, Vector3.forward);
+            //_behaviourCtrl.transform.rotation = quart;
+            #endregion
         }
         #endregion
     }

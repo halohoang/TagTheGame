@@ -384,7 +384,7 @@ namespace ScriptableObjects
 
         /// <summary>
         /// Sets the facing direction of the Agent-Object according to its movement direction or randomly when 'standing' and 'waiting' til '<see cref="_timer"/>' ends
-        /// when max walk-range was already reached
+        /// when waiting at the current waypoint
         /// </summary>
         private void SetFacingDirection()
         {
@@ -398,12 +398,12 @@ namespace ScriptableObjects
                 // setting facing to random when walktimer is still running but walking range was already reached
                 Vector2 direction = _lookdirectionWhileWaitingForTimerEnd.normalized;
                 float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                //_thisEnemyRB2D.rotation = angle;
+                ////_thisEnemyRB2D.rotation = angle;
                 _behaviourCtrl.gameObject.transform.eulerAngles = new Vector3(0, 0, angle);
                 #region altern rotation for facing direction
                 //// a alternative way to manage the facing direction by applying the rotation to the transform instead of to the rigidbody
                 //Quaternion quart = Quaternion.AngleAxis(angle, Vector3.forward);
-                //_baseEnemyBehaviour.transform.rotation = quart;
+                //_behaviourCtrl.transform.rotation = quart;
                 #endregion
             }
             else
@@ -411,12 +411,12 @@ namespace ScriptableObjects
                 // setting facing to walk direction if walking timer has ended and was setup anew
                 Vector2 direction = (WalkTargetPos - _behaviourCtrl.transform.position).normalized;
                 float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                //_thisEnemyRB2D.rotation = angle;
+                ////_thisEnemyRB2D.rotation = angle;
                 _behaviourCtrl.gameObject.transform.eulerAngles = new Vector3(0, 0, angle);
                 #region altern rotation for facing direction
                 //// a alternative way to manage the facing direction by applying the rotation to the transform instead of to the rigidbody
                 //Quaternion quart = Quaternion.AngleAxis(angle, Vector3.forward);
-                //_baseEnemyBehaviour.transform.rotation = quart;
+                //_behaviourCtrl.transform.rotation = quart;
                 #endregion
             }
         }
